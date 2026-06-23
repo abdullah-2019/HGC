@@ -1,0 +1,8 @@
+# Ignore local environment files
+hgc-api/.env
+hgc-frontend/.env.local
+
+# Ignore dependencies
+hgc-api/vendor/
+hgc-frontend/node_modules/
+hgc-frontend/.next/
