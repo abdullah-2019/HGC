@@ -1,8 +1,14 @@
-# Ignore local environment files
-hgc-api/.env
-hgc-frontend/.env.local
-
-# Ignore dependencies
-hgc-api/vendor/
+# Next.js Frontend Ignores
 hgc-frontend/node_modules/
 hgc-frontend/.next/
+hgc-frontend/.env*.local
+
+# Laravel API Ignores
+hgc-api/vendor/
+hgc-api/.env
+hgc-api/bootstrap/cache/
+hgc-api/storage/*.key
+
+# OS Ignores
+.DS_Store
+Thumbs.db
