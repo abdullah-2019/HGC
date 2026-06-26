@@ -1,14 +1,23 @@
-# Next.js Frontend Ignores
-hgc-frontend/node_modules/
-hgc-frontend/.next/
-hgc-frontend/.env*.local
+# === Next.js / Node Templates ===
+node_modules/
+.next/
+out/
+build/
+.turbo/
+.env*.local
 
-# Laravel API Ignores
-hgc-api/vendor/
-hgc-api/.env
-hgc-api/bootstrap/cache/
-hgc-api/storage/*.key
-
-# OS Ignores
-.DS_Store
-Thumbs.db
+# === Laravel Templates ===
+/vendor/
+.env
+.env.backup
+.env.production
+composer.lock
+package-lock.json
+npm-debug.log
+yarn-error.log
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.phpunit.result.cache
+.vscdb
