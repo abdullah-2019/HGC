@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('contact_inquiries', function (Blueprint $table) {
+             $table->id();
+            $table->string('first_name', 100);
+            $table->string('last_name', 100)->nullable();
+            $table->string('email', 100);
+            $table->string('phone', 50)->nullable();
+            $table->string('subject', 200)->nullable();
+            $table->text('message');
+            $table->enum('interest_type', ['general', 'product', 'project', 'partnership', 'career', 'quote'])->default('general');
+            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null');
+            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null');
+            $table->enum('status', ['new', 'read', 'replied', 'archived'])->default('new');
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('ip_address', 45)->nullable();
+            $table->string('user_agent', 500)->nullable();
+            $table->timestamps();
+            
+            $table->index('status');
+            $table->index('created_at');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('contact_inquiries');
+    }
+};
