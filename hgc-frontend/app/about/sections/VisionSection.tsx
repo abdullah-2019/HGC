@@ -119,7 +119,7 @@ export default function VisionSection() {
           <div className={`relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden aspect-[3/4]">
-                <div className="absolute inset-0 bg-[url('/images/vision.jpg')] bg-cover bg-center img-zoom" />
+                <div className="absolute inset-0 bg-[url('/images/placeholder.png')] bg-cover bg-center img-zoom" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/50 via-transparent to-[#0A1628]/20" />
               </div>
 

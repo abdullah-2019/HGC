@@ -23,7 +23,12 @@ export default function AnimatedCounter({
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
       { threshold: 0.3 }
     );
     if (ref.current) observer.observe(ref.current);
@@ -36,8 +41,12 @@ export default function AnimatedCounter({
     const increment = end / (duration / 16);
     const timer = setInterval(() => {
       start += increment;
-      if (start >= end) { setCount(end); clearInterval(timer); }
-      else { setCount(Math.floor(start)); }
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
     }, 16);
     return () => clearInterval(timer);
   }, [isVisible, end, duration]);

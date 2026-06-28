@@ -6,31 +6,31 @@ import { useI18n } from "@/components/useI18nStore";
 
 const carouselImages = [
   {
-    src: "/images/carousel-1.jpg",
+    src: "/images/placeholder.png",
     title: "Kabul-Kandahar Highway",
     titleDari: "اساس سرک کابل-کندهار",
     location: "Kandahar Province",
   },
   {
-    src: "/images/carousel-2.jpg",
+    src: "/images/placeholder.png",
     title: "Badakhshan Mining Operations",
     titleDari: "عملیات استخراج بدخشان",
     location: "Badakhshan Province",
   },
   {
-    src: "/images/carousel-3.jpg",
+    src: "/images/placeholder.png",
     title: "Solar Power Installation",
     titleDari: "نصب برق خورشیدی",
     location: "Nangarhar Province",
   },
   {
-    src: "/images/carousel-4.jpg",
+    src: "/images/placeholder.png",
     title: "Construction Excellence",
     titleDari: "excellence ساختمان",
     location: "Kabul Province",
   },
   {
-    src: "/images/carousel-5.jpg",
+    src: "/images/placeholder.png",
     title: "Logistics & Transport",
     titleDari: "لوژستیک و ترانسپورت",
     location: "Nationwide",

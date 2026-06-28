@@ -113,7 +113,7 @@ export default function AboutStory() {
             <div className="relative">
               {/* Main Image */}
               <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
-                <div className="absolute inset-0 bg-[url('/images/about-story.jpg')] bg-cover bg-center img-zoom" />
+                <div className="absolute inset-0 bg-[url('/images/placeholder.png')] bg-cover bg-center img-zoom" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/60 via-transparent to-transparent" />
               </div>
 
