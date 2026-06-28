@@ -1,0 +1,156 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useI18n } from "@/components/useI18nStore";
+
+const carouselImages = [
+  {
+    src: "/images/carousel-1.jpg",
+    title: "Kabul-Kandahar Highway",
+    titleDari: "اساس سرک کابل-کندهار",
+    location: "Kandahar Province",
+  },
+  {
+    src: "/images/carousel-2.jpg",
+    title: "Badakhshan Mining Operations",
+    titleDari: "عملیات استخراج بدخشان",
+    location: "Badakhshan Province",
+  },
+  {
+    src: "/images/carousel-3.jpg",
+    title: "Solar Power Installation",
+    titleDari: "نصب برق خورشیدی",
+    location: "Nangarhar Province",
+  },
+  {
+    src: "/images/carousel-4.jpg",
+    title: "Construction Excellence",
+    titleDari: "excellence ساختمان",
+    location: "Kabul Province",
+  },
+  {
+    src: "/images/carousel-5.jpg",
+    title: "Logistics & Transport",
+    titleDari: "لوژستیک و ترانسپورت",
+    location: "Nationwide",
+  },
+];
+
+export default function ImageCarousel() {
+  const { lang } = useI18n();
+  const [current, setCurrent] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  const next = useCallback(() => {
+    setCurrent((prev) => (prev + 1) % carouselImages.length);
+  }, []);
+
+  const prev = useCallback(() => {
+    setCurrent((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
+  }, []);
+
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const timer = setInterval(next, 5000);
+    return () => clearInterval(timer);
+  }, [isAutoPlaying, next]);
+
+  return (
+    <section className="about-section py-24 bg-[#0A1628]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="gold-line" />
+            <span className="text-[#C9A227] text-sm font-semibold tracking-wider uppercase">
+              {lang === "en" ? "Our Work" : lang === "dari" ? "کارهای ما" : "زموږ کارونه"}
+            </span>
+            <div className="gold-line" />
+          </div>
+          <h2 className="about-section-title font-bold text-white">
+            {lang === "en" ? (
+              <>
+                Projects That <span className="text-gold-gradient">Define Us</span>
+              </>
+            ) : lang === "dari" ? (
+              <>
+                پروژه‌هایی که <span className="text-gold-gradient">ما را تعریف می‌کنند</span>
+              </>
+            ) : (
+              <>
+                پروژې چې <span className="text-gold-gradient">موږ تعریفوي</span>
+              </>
+            )}
+          </h2>
+        </div>
+
+        {/* Carousel */}
+        <div 
+          className="relative rounded-2xl overflow-hidden aspect-[21/9] lg:aspect-[21/8] group"
+          onMouseEnter={() => setIsAutoPlaying(false)}
+          onMouseLeave={() => setIsAutoPlaying(true)}
+        >
+          {/* Slides */}
+          {carouselImages.map((img, idx) => (
+            <div
+              key={idx}
+              className={`absolute inset-0 transition-all duration-1000 ease-out ${
+                idx === current ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+              }`}
+            >
+              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${img.src})` }} />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628] via-[#0A1628]/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0A1628]/60 to-transparent" />
+            </div>
+          ))}
+
+          {/* Content Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-12">
+            <div className="max-w-2xl">
+              <p className="text-[#C9A227] text-sm font-medium mb-2 tracking-wider uppercase">
+                {carouselImages[current].location}
+              </p>
+              <h3 className="text-2xl lg:text-4xl font-bold text-white mb-2">
+                {lang === "en" ? carouselImages[current].title : carouselImages[current].titleDari}
+              </h3>
+            </div>
+          </div>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={prev}
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#0A1628]/60 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[#C9A227] hover:border-[#C9A227] hover:text-[#0A1628] transition-all duration-300 opacity-0 group-hover:opacity-100"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#0A1628]/60 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[#C9A227] hover:border-[#C9A227] hover:text-[#0A1628] transition-all duration-300 opacity-0 group-hover:opacity-100"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Dots */}
+          <div className="absolute bottom-8 right-8 lg:right-12 flex items-center gap-2">
+            {carouselImages.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrent(idx)}
+                className={`carousel-dot ${idx === current ? "active" : ""}`}
+              />
+            ))}
+          </div>
+
+          {/* Progress Bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/5">
+            <div
+              className="h-full bg-[#C9A227] transition-all duration-500 ease-out"
+              style={{ width: `${((current + 1) / carouselImages.length) * 100}%` }}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
