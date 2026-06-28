@@ -1,15 +1,31 @@
-import Image from "next/image";
+import "./sections/about.css";
+import HeroBanner from "./sections/HeroBanner";
+import AboutStory from "./sections/AboutStory";
+import ImageCarousel from "./sections/ImageCarousel";
+import MissionSection from "./sections/MissionSection";
+import VisionSection from "./sections/VisionSection";
+import CoreValues from "./sections/CoreValues";
+import LeadershipTeam from "./sections/LeadershipTeam";
+import Timeline from "./sections/Timeline";
+import StatsShowcase from "./sections/StatsShowcase";
 
-export default function About() {
+export const metadata = {
+  title: "About Us | Hafez Group of Companies",
+  description: "Discover Hafez Group of Companies — Afghanistan's leading conglomerate since 2001. Construction, mining, logistics & financial services across 38+ provinces.",
+};
+
+export default function AboutPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <div>
-            <p>
-                this is about page
-            </p>
-        </div>
-      </main>
+    <div className="about-page">
+      <HeroBanner />
+      <AboutStory />
+      <StatsShowcase />
+      <ImageCarousel />
+      <MissionSection />
+      <VisionSection />
+      <CoreValues />
+      <Timeline />
+      <LeadershipTeam />
     </div>
   );
 }
