@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Linkedin, Mail, Quote } from "lucide-react";
+// import { LinkedinIcon, Mail, Quote } from "lucide-react";
+import {  Mail, Quote } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
-import ScrollReveal from "@/app/components/ScrollReveal";
+import ScrollReveal from "@/app/about/components/ScrollReveal";
 
 const leaders = [
   {
@@ -14,7 +15,7 @@ const leaders = [
     image: "/images/about/leader-1.jpg",
     quoteEn: "Building Afghanistan is not just our business — it is our duty and our honor.",
     quoteDari: "ساختن افغانستان فقط تجارت ما نیست — این وظیفه و افتخار ماست.",
-    linkedin: "#",
+    // linkedin: "#",
     email: "chairman@hgc.af",
   },
   {
@@ -109,7 +110,7 @@ export default function LeadershipTeam() {
                       </p>
                       <div className="flex items-center gap-3">
                         <a href={leader.linkedin} className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-white/40 hover:bg-[#C9A227]/10 hover:text-[#C9A227] transition-all">
-                          <Linkedin className="w-4 h-4" />
+                          {/* <LinkedinIcon className="w-4 h-4" /> */}
                         </a>
                         <a href={`mailto:${leader.email}`} className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-white/40 hover:bg-[#C9A227]/10 hover:text-[#C9A227] transition-all">
                           <Mail className="w-4 h-4" />
