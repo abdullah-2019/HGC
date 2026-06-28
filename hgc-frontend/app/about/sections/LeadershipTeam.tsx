@@ -5,7 +5,7 @@ import { useState } from "react";
 // import { LinkedinIcon, Mail, Quote } from "lucide-react";
 import {  Mail, Quote } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
-import ScrollReveal from "@/app/about/components/ScrollReveal";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const leaders = [
   {
