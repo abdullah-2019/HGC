@@ -52,3 +52,13 @@ app/
 │       ├── ProjectMilestones.tsx
 │       └── RelatedProjects.tsx
 ```
+
+### Media
+```text
+app/[lang]/media/
+├── page.tsx
+├── MediaHero.tsx
+├── VideoGallery.tsx
+├── PhotoGallery.tsx
+└── PressKit.tsx
+```
