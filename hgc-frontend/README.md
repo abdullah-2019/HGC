@@ -1,6 +1,7 @@
 ## Project Structure
 
 ### About Page
+```text
 app/
 ├── about/
 │   ├── page.tsx
@@ -18,9 +19,10 @@ app/
 │   └── AnimatedCounter.tsx
 └── styles/
     └── about.css
-
+```
 
 ### Projects Page:
+```text
 app/
 ├── projects/
 │   ├── page.tsx
@@ -33,8 +35,10 @@ app/
 │   └── ScrollReveal.tsx
 └── hooks/
     └── useCountUp.ts
+```
 
 ### Project Details: 
+```text
 app/
 ├── projects/
 │   ├── [slug]/
@@ -47,3 +51,4 @@ app/
 │       ├── ProjectGallery.tsx
 │       ├── ProjectMilestones.tsx
 │       └── RelatedProjects.tsx
+```

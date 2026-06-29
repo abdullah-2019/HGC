@@ -1,0 +1,107 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { ArrowLeft, MapPin, Calendar, CheckCircle2, Clock } from "lucide-react";
+import Link from "next/link";
+import { useI18n } from "@/components/useI18nStore";
+
+interface ProjectHeroProps {
+  project: any;
+}
+
+export default function ProjectHero({ project }: ProjectHeroProps) {
+  const { lang } = useI18n();
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const parallaxOffset = scrollY * 0.3;
+
+  const statusConfig = {
+    completed: { bg: "bg-green-500/15", text: "text-green-400", border: "border-green-500/20", icon: CheckCircle2 },
+    ongoing: { bg: "bg-amber-500/15", text: "text-amber-400", border: "border-amber-500/20", icon: Clock },
+    planned: { bg: "bg-blue-500/15", text: "text-blue-400", border: "border-blue-500/20", icon: Clock },
+  };
+
+  const status = statusConfig[project.status as keyof typeof statusConfig];
+  const StatusIcon = status.icon;
+
+  return (
+    <section className="relative w-full overflow-hidden" style={{ height: "75vh", minHeight: 500, maxHeight: 900 }}>
+      {/* Parallax Background */}
+      <div className="absolute inset-0 w-full h-[120%]" style={{ transform: `translateY(${parallaxOffset}px)` }}>
+        <Image
+          src={project.heroImage}
+          alt={lang === "en" ? project.nameEn : project.nameDari}
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+      </div>
+
+      {/* Overlays */}
+      <div className="absolute inset-0 bg-[#0A1628]/60" />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,22,40,0.3) 0%, rgba(10,22,40,0.85) 70%, #0A1628 100%)" }} />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col justify-end h-full pb-16 lg:pb-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto w-full">
+          {/* Back link */}
+          <Link href="/projects" className="inline-flex items-center gap-2 text-white/50 hover:text-[#C9A227] transition-colors mb-8 text-sm">
+            <ArrowLeft className="w-4 h-4" />
+            {lang === "en" ? "Back to Projects" : lang === "dari" ? "بازگشت به پروژه‌ها" : "بیرته پروژو ته"}
+          </Link>
+
+          {/* Status badge */}
+          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${status.bg} ${status.text} border ${status.border} mb-6`}>
+            <StatusIcon className="w-4 h-4" />
+            <span className="text-sm font-medium">
+              {project.status === "completed" 
+                ? (lang === "en" ? "Completed" : lang === "dari" ? "تکمیل شده" : "بشپړه شوې")
+                : project.status === "ongoing"
+                  ? (lang === "en" ? "In Progress" : lang === "dari" ? "در حال اجرا" : "جریان لري")
+                  : (lang === "en" ? "Planned" : lang === "dari" ? "برنامه‌ریزی شده" : "پلان شوی")}
+            </span>
+            {project.completionDate && (
+              <span className="text-white/40 text-xs ml-1">
+                • {project.completionDate}
+              </span>
+            )}
+          </div>
+
+          {/* Title */}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 leading-tight max-w-4xl">
+            {lang === "en" ? project.nameEn : project.nameDari}
+          </h1>
+
+          {/* Tagline */}
+          <p className="text-xl text-[#C9A227] mb-8 max-w-2xl">
+            {lang === "en" ? project.taglineEn : project.taglineDari}
+          </p>
+
+          {/* Meta row */}
+          <div className="flex flex-wrap items-center gap-6 text-white/50 text-sm">
+            <span className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-[#C9A227]" />
+              {lang === "en" ? project.location : project.locationDari}
+            </span>
+            <span className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#C9A227]" />
+              {lang === "en" ? project.duration : project.durationDari}
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: project.companyColor }} />
+              {lang === "en" ? project.contractor : project.contractorDari}
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
