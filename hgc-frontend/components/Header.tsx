@@ -35,6 +35,7 @@ const navPaths = [
   { href: "/about", key: "nav.about" },
   { href: "/projects", key: "nav.projects" },
   { href: "/media", key: "nav.media" },
+  { href: "/products", key: "nav.products" },
   { href: "/contact", key: "nav.contact" },
 ];
 

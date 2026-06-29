@@ -9,7 +9,7 @@ export const translations = {
       news: "News",
       contact: "Contact",
       companies: "Companies",
-      careers: "Careers",
+      products: "Products",       
     },
     footer: {
       brandTitle: "HAFEZ GROUP",
@@ -83,8 +83,8 @@ export const translations = {
       projects: "پروژه ها",
       news: "اخبار",
       contact: "تماس",
-      companies: "شرکت ها",
-      careers: "کاریابی",
+      companies: "شرکت ها",  
+
     },
     footer: {
       brandTitle: "گروپ کمپنی های حافظ",
@@ -159,7 +159,7 @@ export const translations = {
       news: "خبرونه",
       contact: "اړیکه",
       companies: "شرکتونه",
-      careers: "دندې",
+      products: "محصولات",          
     },
     footer: {
       brandTitle: "د حافظ شرکتونو ګروپ",
