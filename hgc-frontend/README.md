@@ -18,7 +18,8 @@ app/
 │   └── AnimatedCounter.tsx
 └── styles/
     └── about.css
----------------------------------------------------------------------
+
+
 ### Projects Page:
 app/
 ├── projects/
@@ -32,3 +33,17 @@ app/
 │   └── ScrollReveal.tsx
 └── hooks/
     └── useCountUp.ts
+
+### Project Details: 
+app/
+├── projects/
+│   ├── [slug]/
+│   │   ├── page.tsx                  # Server Component (metadata)
+│   │   └── ProjectDetailClient.tsx   # Client Component
+│   └── sections/
+│       ├── ProjectHero.tsx
+│       ├── ProjectOverview.tsx
+│       ├── ProjectSpecs.tsx
+│       ├── ProjectGallery.tsx
+│       ├── ProjectMilestones.tsx
+│       └── RelatedProjects.tsx
