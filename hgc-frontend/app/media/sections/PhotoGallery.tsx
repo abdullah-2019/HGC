@@ -270,10 +270,11 @@ export default function PhotoGallery() {
               <button
                 key={cat.key}
                 onClick={() => setActiveCategory(cat.key)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-300 ${activeCategory === cat.key
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                  activeCategory === cat.key
                     ? "bg-[#C9A227] text-[#0A1628]"
                     : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5"
-                  }`}
+                }`}
               >
                 {cat.label}
               </button>
@@ -299,19 +300,21 @@ export default function PhotoGallery() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4, delay: idx * 0.03 }}
-                className={`group relative overflow-hidden rounded-2xl cursor-pointer break-inside-avoid ${layout === "grid" ? "aspect-[4/3]" : ""
-                  }`}
+                className={`group relative overflow-hidden rounded-2xl cursor-pointer break-inside-avoid ${
+                  layout === "grid" ? "aspect-[4/3]" : ""
+                }`}
                 onClick={() => openLightbox(photo, idx)}
               >
                 <div
-                  className={`bg-cover bg-center transition-transform duration-700 group-hover:scale-110 ${layout === "masonry"
+                  className={`bg-cover bg-center transition-transform duration-700 group-hover:scale-110 ${
+                    layout === "masonry"
                       ? photo.aspect === "portrait"
                         ? "h-[420px]"
                         : photo.aspect === "square"
-                          ? "h-[300px]"
-                          : "h-[280px]"
+                        ? "h-[300px]"
+                        : "h-[280px]"
                       : "h-full"
-                    }`}
+                  }`}
                   style={{ backgroundImage: `url(${photo.src})` }}
                 />
                 <div className="absolute inset-0 bg-[#0A1628]/0 group-hover:bg-[#0A1628]/50 transition-colors duration-500" />
@@ -443,8 +446,9 @@ export default function PhotoGallery() {
                   <button
                     key={p.id}
                     onClick={() => { setSelectedPhoto(p); setSelectedIndex(i); }}
-                    className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${i === selectedIndex ? "border-[#C9A227] opacity-100" : "border-transparent opacity-40 hover:opacity-70"
-                      }`}
+                    className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
+                      i === selectedIndex ? "border-[#C9A227] opacity-100" : "border-transparent opacity-40 hover:opacity-70"
+                    }`}
                   >
                     <div
                       className="w-full h-full bg-cover bg-center"
