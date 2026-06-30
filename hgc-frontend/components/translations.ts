@@ -6,10 +6,10 @@ export const translations = {
       home: "Home",
       about: "About",
       projects: "Projects",
-      news: "News",
+      media: "Media",
+      products: "Products",
       contact: "Contact",
       companies: "Companies",
-      careers: "Careers",
     },
     footer: {
       brandTitle: "HAFEZ GROUP",
@@ -81,10 +81,10 @@ export const translations = {
       home: "صفحه اصلی",
       about: "درباره ما",
       projects: "پروژه ها",
-      news: "اخبار",
+      media: "رسانه",
+      products: "محصولات",
       contact: "تماس",
       companies: "شرکت ها",
-      careers: "کاریابی",
     },
     footer: {
       brandTitle: "گروپ کمپنی های حافظ",
@@ -149,6 +149,13 @@ export const translations = {
       provincesCovered: "ولایت تحت پوشش",
       companiesInGroup: "شرکت در گروپ",
     },
+    products: {
+      hero: {
+        title: "محصولات ما",
+        description:
+          "ما طیف گسترده ای از محصولات با کیفیت بالا را ارائه می دهیم که نیازهای مختلف مشتریان ما را برآورده می کند.",
+      }
+    }
   },
 
   pashto: {
@@ -156,10 +163,10 @@ export const translations = {
       home: "اصلي پاڼه",
       about: "زموږ په اړه",
       projects: "پروژې",
-      news: "خبرونه",
+      media: "رسنۍ",
+      products: "محصولات",
       contact: "اړیکه",
       companies: "شرکتونه",
-      careers: "دندې",
     },
     footer: {
       brandTitle: "د حافظ شرکتونو ګروپ",
