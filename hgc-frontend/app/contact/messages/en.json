@@ -1,0 +1,28 @@
+{
+  "contact": {
+    "meta_title": "Contact Us - Hafez Group of Companies",
+    "meta_description": "Get in touch with Hafez Group of Companies. Visit our offices in Kabul, Dubai, and Karachi.",
+    "hero_title": "Contact Us",
+    "hero_subtitle": "We're here to assist you. Reach out with any questions or inquiries.",
+    "get_in_touch": "Get in Touch",
+    "email_address": "Email Address",
+    "call_us": "Call Us",
+    "kabul_office": "Kabul Office",
+    "dubai_office": "Dubai Office",
+    "karachi_office": "Karachi Office",
+    "send_message": "Send Message",
+    "form_name": "Full Name",
+    "form_email": "Email Address",
+    "form_phone": "Phone Number",
+    "form_subject": "Subject",
+    "form_message": "Your Message",
+    "form_submit": "Send Message",
+    "form_success": "Thank you! Your message has been sent successfully.",
+    "form_error": "Something went wrong. Please try again.",
+    "find_us": "Find Us On The Map",
+    "office_hours": "Office Hours",
+    "mon_fri": "Saturday - Thursday",
+    "time": "8:00 AM - 5:00 PM",
+    "follow_us": "Follow Us"
+  }
+}
