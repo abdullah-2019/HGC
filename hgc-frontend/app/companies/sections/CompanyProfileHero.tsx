@@ -16,7 +16,7 @@ export default function CompanyProfileHero() {
     >
       <div className="absolute inset-0">
         <Image
-          src="/images/company-profile-hero.jpg"
+          src="/images/placeholder.png"
           alt="HGC Company Profile"
           fill
           className="object-cover"
