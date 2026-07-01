@@ -10,42 +10,34 @@ use Illuminate\Http\Request;
 class CompanyController extends Controller
 {
     /**
+     * List all active companies (for the grid section)
      * GET /api/companies
-     * List all active companies (for grid/list view)
      */
     public function index(Request $request): JsonResponse
     {
-        $lang = $request->header('Accept-Language', 'en');
-        $lang = in_array($lang, ['en', 'dari', 'pashto']) ? $lang : 'en';
+        $lang = $request->get('lang', 'en');
 
         $companies = Company::active()
             ->ordered()
             ->select([
-                'id', 'slug', 'accent_color', 'icon_name', 'logo_path',
+                'id', 'slug', 'accent_color', 'icon_name',
                 'name_en', 'name_dari', 'name_pashto',
-                'short_name_en', 'short_name_dari', 'short_name_pashto',
                 'description_en', 'description_dari', 'description_pashto',
-                'sector_en', 'sector_dari', 'sector_pashto',
-                'founded_year', 'employee_count',
+                'short_name_en', 'short_name_dari', 'short_name_pashto',
+                'logo_url', 'hero_image_path',
             ])
             ->get()
             ->map(function ($company) use ($lang) {
                 return [
                     'id' => $company->id,
                     'slug' => $company->slug,
-                    'name' => $company->getNameAttribute($lang),
-                    'short_name' => match($lang) {
-                        'dari' => $company->short_name_dari ?? $company->short_name_en,
-                        'pashto' => $company->short_name_pashto ?? $company->short_name_en,
-                        default => $company->short_name_en,
-                    },
-                    'description' => $company->getDescriptionAttribute($lang),
-                    'sector' => $company->getSectorAttribute($lang),
+                    'name' => $company->getLocalizedName($lang),
+                    'short_name' => $company->getLocalizedShortName($lang),
+                    'description' => $company->getLocalizedDescription($lang),
                     'accent_color' => $company->accent_color,
                     'icon_name' => $company->icon_name,
-                    'logo_path' => $company->logo_path,
-                    'founded_year' => $company->founded_year,
-                    'employee_count' => $company->employee_count,
+                    'logo_url' => $company->logo_url,
+                    'hero_image_url' => $company->hero_image_url,
                 ];
             });
 
@@ -56,57 +48,12 @@ class CompanyController extends Controller
     }
 
     /**
-     * GET /api/companies/featured
-     * List featured companies only
-     */
-    public function featured(Request $request): JsonResponse
-    {
-        $lang = $request->header('Accept-Language', 'en');
-        $lang = in_array($lang, ['en', 'dari', 'pashto']) ? $lang : 'en';
-
-        $companies = Company::active()
-            ->featured()
-            ->ordered()
-            ->select([
-                'id', 'slug', 'accent_color', 'icon_name', 'logo_path',
-                'name_en', 'name_dari', 'name_pashto',
-                'short_name_en', 'short_name_dari', 'short_name_pashto',
-                'description_en', 'description_dari', 'description_pashto',
-                'sector_en', 'sector_dari', 'sector_pashto',
-            ])
-            ->get()
-            ->map(function ($company) use ($lang) {
-                return [
-                    'id' => $company->id,
-                    'slug' => $company->slug,
-                    'name' => $company->getNameAttribute($lang),
-                    'short_name' => match($lang) {
-                        'dari' => $company->short_name_dari ?? $company->short_name_en,
-                        'pashto' => $company->short_name_pashto ?? $company->short_name_en,
-                        default => $company->short_name_en,
-                    },
-                    'description' => $company->getDescriptionAttribute($lang),
-                    'sector' => $company->getSectorAttribute($lang),
-                    'accent_color' => $company->accent_color,
-                    'icon_name' => $company->icon_name,
-                    'logo_path' => $company->logo_path,
-                ];
-            });
-
-        return response()->json([
-            'success' => true,
-            'data' => $companies,
-        ]);
-    }
-
-    /**
+     * Get single company by slug (for detail page)
      * GET /api/companies/{slug}
-     * Get single company detail (for company profile page)
      */
     public function show(Request $request, string $slug): JsonResponse
     {
-        $lang = $request->header('Accept-Language', 'en');
-        $lang = in_array($lang, ['en', 'dari', 'pashto']) ? $lang : 'en';
+        $lang = $request->get('lang', 'en');
 
         $company = Company::active()
             ->where('slug', $slug)
@@ -121,41 +68,154 @@ class CompanyController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'id' => $company->id,
-                'slug' => $company->slug,
-                'name' => $company->getNameAttribute($lang),
-                'short_name' => match($lang) {
-                    'dari' => $company->short_name_dari ?? $company->short_name_en,
-                    'pashto' => $company->short_name_pashto ?? $company->short_name_en,
-                    default => $company->short_name_en,
-                },
-                'description' => $company->getDescriptionAttribute($lang),
-                'sector' => $company->getSectorAttribute($lang),
-                'about' => $company->getAboutAttribute($lang),
-                'mission' => $company->getMissionAttribute($lang),
-                'vision' => $company->getVisionAttribute($lang),
-                'accent_color' => $company->accent_color,
-                'icon_name' => $company->icon_name,
-                'logo_path' => $company->logo_path,
-                'hero_image_path' => $company->hero_image_path,
+            'data' => $this->formatCompanyDetail($company, $lang),
+        ]);
+    }
+
+    /**
+     * Get featured companies
+     * GET /api/companies/featured
+     */
+    public function featured(Request $request): JsonResponse
+    {
+        $lang = $request->get('lang', 'en');
+
+        $companies = Company::active()
+            ->featured()
+            ->ordered()
+            ->select([
+                'id', 'slug', 'accent_color', 'icon_name',
+                'name_en', 'name_dari', 'name_pashto',
+                'description_en', 'description_dari', 'description_pashto',
+                'tagline_en', 'tagline_dari', 'tagline_pashto',
+                'logo_url', 'hero_image_path',
+            ])
+            ->get()
+            ->map(function ($company) use ($lang) {
+                return [
+                    'id' => $company->id,
+                    'slug' => $company->slug,
+                    'name' => $company->getLocalizedName($lang),
+                    'tagline' => $company->getLocalizedTagline($lang),
+                    'description' => $company->getLocalizedDescription($lang),
+                    'accent_color' => $company->accent_color,
+                    'icon_name' => $company->icon_name,
+                    'logo_url' => $company->logo_url,
+                    'hero_image_url' => $company->hero_image_url,
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => $companies,
+        ]);
+    }
+
+    /**
+     * Get company profile page data (full detail)
+     * GET /api/companies/{slug}/profile
+     */
+    public function profile(Request $request, string $slug): JsonResponse
+    {
+        $lang = $request->get('lang', 'en');
+
+        $company = Company::active()
+            ->where('slug', $slug)
+            ->first();
+
+        if (!$company) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Company not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $this->formatCompanyProfile($company, $lang),
+        ]);
+    }
+
+    /**
+     * Format company for detail view
+     */
+    private function formatCompanyDetail(Company $company, string $lang): array
+    {
+        return [
+            'id' => $company->id,
+            'slug' => $company->slug,
+            'name' => $company->getLocalizedName($lang),
+            'short_name' => $company->getLocalizedShortName($lang),
+            'description' => $company->getLocalizedDescription($lang),
+            'sector' => $company->getLocalizedSector($lang),
+            'accent_color' => $company->accent_color,
+            'secondary_color' => $company->secondary_color,
+            'icon_name' => $company->icon_name,
+            'logo_url' => $company->logo_url,
+            'hero_image_url' => $company->hero_image_url,
+            'email' => $company->email,
+            'phone' => $company->phone,
+            'address' => $company->getLocalizedAddress($lang),
+            'website' => $company->website ?? $company->website_url,
+            'social' => [
+                'facebook' => $company->facebook_url,
+                'linkedin' => $company->linkedin_url,
+                'twitter' => $company->twitter_url,
+                'instagram' => $company->instagram_url,
+            ],
+            'meta' => [
+                'title' => $company->getLocalizedMetaTitle($lang),
+                'description' => $company->getLocalizedMetaDescription($lang),
+            ],
+        ];
+    }
+
+    /**
+     * Format company for full profile view
+     */
+    private function formatCompanyProfile(Company $company, string $lang): array
+    {
+        return [
+            'id' => $company->id,
+            'slug' => $company->slug,
+            'name' => $company->getLocalizedName($lang),
+            'short_name' => $company->getLocalizedShortName($lang),
+            'tagline' => $company->getLocalizedTagline($lang),
+            'description' => $company->getLocalizedDescription($lang),
+            'sector' => $company->getLocalizedSector($lang),
+            'about' => $company->getLocalizedAbout($lang),
+            'mission' => $company->getLocalizedMission($lang),
+            'vision' => $company->getLocalizedVision($lang),
+            'accent_color' => $company->accent_color,
+            'secondary_color' => $company->secondary_color,
+            'icon_name' => $company->icon_name,
+            'logo_url' => $company->logo_url,
+            'hero_image_url' => $company->hero_image_url,
+            'contact' => [
                 'email' => $company->email,
                 'phone' => $company->phone,
-                'website' => $company->website,
-                'address' => $company->getAddressAttribute($lang),
+                'address' => $company->getLocalizedAddress($lang),
                 'latitude' => $company->latitude,
                 'longitude' => $company->longitude,
-                'facebook_url' => $company->facebook_url,
-                'linkedin_url' => $company->linkedin_url,
-                'twitter_url' => $company->twitter_url,
-                'instagram_url' => $company->instagram_url,
+            ],
+            'web' => [
+                'website' => $company->website ?? $company->website_url,
+                'facebook' => $company->facebook_url,
+                'linkedin' => $company->linkedin_url,
+                'twitter' => $company->twitter_url,
+                'instagram' => $company->instagram_url,
+            ],
+            'details' => [
+                'established_year' => $company->established_year,
                 'founded_year' => $company->founded_year,
                 'registration_number' => $company->registration_number,
                 'tax_id' => $company->tax_id,
                 'employee_count' => $company->employee_count,
-                'meta_title' => $company->getMetaTitleAttribute($lang),
-                'meta_description' => $company->getMetaDescriptionAttribute($lang),
             ],
-        ]);
+            'seo' => [
+                'title' => $company->getLocalizedMetaTitle($lang),
+                'description' => $company->getLocalizedMetaDescription($lang),
+            ],
+        ];
     }
 }

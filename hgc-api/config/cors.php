@@ -3,7 +3,10 @@
 return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['*'], // In production, set to your Next.js domain
+    'allowed_origins' => [
+        'http://localhost:3000',    // Next.js dev
+        'https://yourdomain.com',   // Production
+    ],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],

@@ -1,23 +1,68 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Building2, Mountain, HardHat, Store, Landmark, Truck, ArrowRight } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
 
-const companies = [
-  { slug: "hcrc", accent: "#B22222", icon: Building2 },
-  { slug: "albahrain", accent: "#1A237E", icon: Mountain },
-  { slug: "zainnoorain", accent: "#F57C00", icon: HardHat },
-  { slug: "almadinah", accent: "#2E7D32", icon: Store },
-  { slug: "haramain", accent: "#FFD700", icon: Landmark },
-  { slug: "alkoozi", accent: "#00838F", icon: Truck },
-];
+// Icon mapping for dynamic rendering
+const iconMap: Record<string, React.ElementType> = {
+  Building2,
+  Mountain,
+  HardHat,
+  Store,
+  Landmark,
+  Truck,
+};
+
+interface Company {
+  id: number;
+  slug: string;
+  name: string;
+  short_name: string;
+  description: string;
+  accent_color: string;
+  icon_name: string;
+  logo_url: string | null;
+  hero_image_url: string | null;
+}
 
 export default function CompaniesSection() {
   const { lang } = useI18n();
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
   const [hoveredCompany, setHoveredCompany] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/companies?lang=${lang}`
+        );
+        const json = await res.json();
+        if (json.success) {
+          setCompanies(json.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch companies:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanies();
+  }, [lang]);
+
+  if (loading) {
+    return (
+      <section className="py-24 bg-[#0A1628]">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <div className="animate-pulse text-white/50">Loading companies...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-24 bg-[#0A1628] relative overflow-hidden">
@@ -53,7 +98,7 @@ export default function CompaniesSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {companies.map((company) => {
-            const Icon = company.icon;
+            const Icon = iconMap[company.icon_name] || Building2;
             const isHovered = hoveredCompany === company.slug;
             return (
               <Link
@@ -66,7 +111,7 @@ export default function CompaniesSection() {
                 <div
                   className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl transition-all duration-500"
                   style={{
-                    backgroundColor: isHovered ? company.accent : "transparent",
+                    backgroundColor: isHovered ? company.accent_color : "transparent",
                     opacity: isHovered ? 1 : 0,
                   }}
                 />
@@ -74,17 +119,19 @@ export default function CompaniesSection() {
                   <div
                     className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500"
                     style={{
-                      backgroundColor: isHovered ? `${company.accent}25` : `${company.accent}10`,
+                      backgroundColor: isHovered 
+                        ? `${company.accent_color}25` 
+                        : `${company.accent_color}10`,
                     }}
                   >
-                    <Icon className="w-7 h-7 transition-colors duration-300" style={{ color: company.accent }} />
+                    <Icon className="w-7 h-7 transition-colors duration-300" style={{ color: company.accent_color }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-bold text-lg mb-1 group-hover:text-[#C9A227] transition-colors">
-                      {t(lang, `companies.${company.slug}.name`)}
+                      {company.name}
                     </h3>
                     <p className="text-white/40 text-sm mb-3">
-                      {t(lang, `companies.${company.slug}.desc`)}
+                      {company.description}
                     </p>
                     <span className="inline-flex items-center gap-1 text-sm text-[#C9A227]/70 group-hover:text-[#C9A227] transition-colors">
                       {t(lang, "common.visit")}
