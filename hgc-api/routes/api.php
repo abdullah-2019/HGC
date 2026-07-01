@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\SectorController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -22,4 +23,10 @@ Route::prefix('companies')->group(function () {
 
     // GET /api/companies/{slug}/profile — Full company profile
     Route::get('/{slug}/profile', [CompanyController::class, 'profile']);
+});
+
+// Sector routes
+Route::prefix('sectors')->group(function () {
+    Route::get('/', [SectorController::class, 'index']);
+    Route::get('/{slug}', [SectorController::class, 'show']);
 });

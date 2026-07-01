@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sectors', function (Blueprint $table) {
+       Schema::create('sectors', function (Blueprint $table) {
             $table->id();
             $table->string('slug', 50)->unique();
             $table->string('name_en', 50);
@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('name_pashto', 50)->nullable();
             $table->string('icon_name', 50)->nullable();
             $table->text('description_en')->nullable();
+            $table->text('description_dari')->nullable();
+            $table->text('description_pashto')->nullable();
             $table->integer('projects_count')->default(0);
             $table->string('image_url', 255)->nullable();
             $table->boolean('is_active')->default(true);
