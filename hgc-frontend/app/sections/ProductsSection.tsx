@@ -1,86 +1,114 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Package, CheckCircle2, ArrowRight, Pickaxe, Wrench, Road, Sun, Hammer, Container } from "lucide-react";
+import {
+  Package,
+  CheckCircle2,
+  ArrowRight,
+  Pickaxe,
+  Wrench,
+  Road,
+  Sun,
+  Hammer,
+  Container,
+  Loader2,
+} from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 
-const featuredProducts = [
-  {
-    id: 1,
-    name: "Crushed Stone Aggregate",
-    nameDari: "سنگدانه خرد شده",
-    namePashto: "مات شوي ډبرې",
-    category: "Mining",
-    categoryDari: "استخراج معادن",
-    icon: Pickaxe,
-    description: "High-quality crushed stone for construction and road building, sourced from our own quarries.",
-    descriptionDari: "سنگ خرد شده با کیفیت بالا برای ساخت و ساز و ساخت سرک، از معادن خود ما.",
-    specs: ["Various sizes: 0-5mm, 5-10mm, 10-20mm", "High compressive strength", "Available in bulk quantities"],
-  },
-  {
-    id: 2,
-    name: "Ready-Mix Concrete",
-    nameDari: "بتن آماده",
-    namePashto: "چمتو شوی کنکریټ",
-    category: "Construction",
-    categoryDari: "ساختمان",
-    icon: Wrench,
-    description: "Premium ready-mix concrete delivered to your site with consistent quality and timely supply.",
-    descriptionDari: "بتن آماده با کیفیت بالا به سایت شما تحویل داده می شود با کیفیت ثابت و تدارک به موقع.",
-    specs: ["Grade M15 to M50", "On-site pumping available", "24/7 batching plant operation"],
-  },
-  {
-    id: 3,
-    name: "Bitumen & Asphalt",
-    nameDari: "قیر و آسفالت",
-    namePashto: "بیټومین او اسفالټ",
-    category: "Roads",
-    categoryDari: "سرک",
-    icon: Road,
-    description: "Industrial-grade bitumen and asphalt products for highway and road surfacing projects.",
-    descriptionDari: "محصولات قیر و آسفالت درجه صنعتی برای پروژه های سطح سرک و بزرگراه.",
-    specs: ["Penetration grades: 60/70, 80/100", "Cutback and emulsion types", "Bulk and drum packaging"],
-  },
-  {
-    id: 4,
-    name: "Solar Power Systems",
-    nameDari: "سیستم های برق خورشیدی",
-    namePashto: "د سولري برق سیسټمونه",
-    category: "Energy",
-    categoryDari: "انرژی",
-    icon: Sun,
-    description: "Complete solar power solutions from 5kW to 500kW for residential, commercial, and industrial use.",
-    descriptionDari: "راه حل های کامل برق خورشیدی از ۵ کیلووات تا ۵۰۰ کیلووات برای استفاده مسکونی، تجاری و صنعتی.",
-    specs: ["Tier-1 solar panels", "MPPT charge controllers", "Lithium battery storage"],
-  },
-  {
-    id: 5,
-    name: "Construction Equipment Rental",
-    nameDari: "اجاره تجهیزات ساختمانی",
-    namePashto: "د جوړونې تجهیزات کرایه",
-    category: "Equipment",
-    categoryDari: "تجهیزات",
-    icon: Hammer,
-    description: "Modern construction machinery and equipment rental with trained operators and maintenance support.",
-    descriptionDari: "اجاره ماشین آلات و تجهیزات ساختمانی مدرن با اپراتورهای آموزش دیده و پشتیبانی نگهداری.",
-    specs: ["Excavators, bulldozers, cranes", "Dump trucks and loaders", "Concrete mixers and pumps"],
-  },
-  {
-    id: 6,
-    name: "Logistics & Freight Services",
-    nameDari: "خدمات لوژستیک و باربری",
-    namePashto: "لوجستیکي او بار وړلو خدمات",
-    category: "Logistics",
-    categoryDari: "لوژستیک",
-    icon: Container,
-    description: "End-to-end logistics solutions including warehousing, transportation, and customs clearance across Afghanistan.",
-    descriptionDari: "راه حل های لوژستیک end-to-end شامل انبارداری، حمل و نقل و ترخیص گمرکی در سراسر افغانستان.",
-    specs: ["Nationwide fleet network", "Cold chain logistics", "Real-time tracking"],
-  },
-];
+const iconMap: Record<string, React.ElementType> = {
+  Pickaxe,
+  Wrench,
+  Road,
+  Sun,
+  Hammer,
+  Container,
+};
+
+interface Product {
+  id: number;
+  slug: string;
+  name: string;
+  tagline: string | null;
+  description: string | null;
+  category: {
+    slug: string;
+    name: string;
+    icon_name: string;
+  } | null;
+  company: {
+    slug: string;
+    name: string;
+    accent_color: string;
+  } | null;
+  origin: string | null;
+  grade: string | null;
+  specifications: Array<{ label: string; value: string }> | null;
+  price_range: string | null;
+  currency: string;
+  unit: string | null;
+  availability_label: string;
+  hero_image_url: string | null;
+  thumbnail_url: string | null;
+  is_featured: boolean;
+}
 
 export default function ProductsSection() {
   const { lang } = useI18n();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/products/featured?lang=${lang}`;
+        console.log("Fetching products from:", apiUrl); // DEBUG
+        
+        const res = await fetch(apiUrl, {
+          headers: { Accept: "application/json" },
+        });
+
+        console.log("Response status:", res.status); // DEBUG
+
+        if (!res.ok) {
+          const text = await res.text();
+          console.error("Error response:", text.substring(0, 200)); // DEBUG
+          throw new Error(`HTTP ${res.status}: ${text.substring(0, 100)}`);
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (!contentType?.includes("application/json")) {
+          const text = await res.text();
+          throw new Error(`Expected JSON, got: ${text.substring(0, 100)}`);
+        }
+
+        const json = await res.json();
+        console.log("API response:", json); // DEBUG
+
+        if (json.success) {
+          setProducts(json.data);
+        } else {
+          console.error("API returned success=false:", json.message);
+        }
+      } catch (err) {
+        console.error("Products fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [lang]);
+
+  if (loading) {
+    return (
+      <section className="py-24 bg-[#0A1628] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-10 h-10 text-[#C9A227] animate-spin" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-24 bg-[#0A1628] relative overflow-hidden">
@@ -90,7 +118,11 @@ export default function ProductsSection() {
           <div>
             <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-sm font-medium mb-4">
               <Package className="w-4 h-4 inline mr-2" />
-              {lang === "en" ? "Products & Services" : lang === "dari" ? "محصولات و خدمات" : "محصولات او خدمات"}
+              {lang === "en"
+                ? "Products & Services"
+                : lang === "dari"
+                ? "محصولات و خدمات"
+                : "محصولات او خدمات"}
             </span>
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
               {lang === "en" ? (
@@ -111,58 +143,131 @@ export default function ProductsSection() {
               {lang === "en"
                 ? "High-quality construction materials, energy solutions, and logistics services from our own production facilities."
                 : lang === "dari"
-                  ? "مواد ساختمانی با کیفیت بالا، راه حل های انرژی و خدمات لوژستیک از تاسیسات تولیدی خود ما."
-                  : "د لوړ کیفیت جوړونې مواد، د انرژي حلونه، او د لوجستیکي خدماتو زموږ د خپلو تولیدي تاسیساتو څخه."}
+                ? "مواد ساختمانی با کیفیت بالا، راه حل های انرژی و خدمات لوژستیک از تاسیسات تولیدی خود ما."
+                : "د لوړ کیفیت جوړونې مواد، د انرژي حلونه، او د لوجستیکي خدماتو زموږ د خپلو تولیدي تاسیساتو څخه."}
             </p>
           </div>
           <Link
             href="/products"
             className="mt-4 lg:mt-0 inline-flex items-center gap-2 text-[#C9A227] font-semibold hover:gap-3 transition-all"
           >
-            {lang === "en" ? "View All Products" : lang === "dari" ? "مشاهده همه محصولات" : "ټول محصولات وګورئ"}
+            {lang === "en"
+              ? "View All Products"
+              : lang === "dari"
+              ? "مشاهده همه محصولات"
+              : "ټول محصولات وګورئ"}
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredProducts.map((product) => {
-            const Icon = product.icon;
-            return (
-              <div
-                key={product.id}
-                className="group relative bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden hover:border-[#C9A227]/20 transition-all duration-500"
-              >
-                <div className="aspect-[16/10] relative overflow-hidden bg-[#0A1628]">
-                  <div className="absolute inset-0 bg-[#C9A227]/5 flex items-center justify-center">
-                    <Icon className="w-16 h-16 text-[#C9A227]/20" />
+        {products.length === 0 ? (
+          <div className="text-center text-white/40 py-12">
+            {lang === "en"
+              ? "No products found."
+              : lang === "dari"
+              ? "هیچ محصولی یافت نشد."
+              : "هیڅ محصول ونه موندل شو."}
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((product) => {
+              const CategoryIcon = product.category?.icon_name
+                ? iconMap[product.category.icon_name] || Package
+                : Package;
+              const accentColor = product.company?.accent_color || "#C9A227";
+
+              return (
+                <Link
+                  key={product.slug}
+                  href={`/products/${product.slug}`}
+                  className="group relative bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden hover:border-[#C9A227]/20 transition-all duration-500"
+                >
+                  <div className="aspect-[16/10] relative overflow-hidden bg-[#0A1628]">
+                    <div
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{ backgroundColor: `${accentColor}08` }}
+                    >
+                      <CategoryIcon
+                        className="w-16 h-16"
+                        style={{ color: `${accentColor}25` }}
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors" />
+                    <div className="absolute top-4 left-4">
+                      <span
+                        className="px-3 py-1 rounded-full text-xs font-medium border"
+                        style={{
+                          backgroundColor: `${accentColor}15`,
+                          color: accentColor,
+                          borderColor: `${accentColor}30`,
+                        }}
+                      >
+                        {product.category?.name || ""}
+                      </span>
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <span className="px-3 py-1 rounded-full bg-[#0A1628]/80 text-white/60 text-xs font-medium border border-white/10">
+                        {product.availability_label}
+                      </span>
+                    </div>
                   </div>
-                  <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors" />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full bg-[#0A1628]/80 text-[#C9A227] text-xs font-medium border border-[#C9A227]/20">
-                      {lang === "en" ? product.category : product.categoryDari}
-                    </span>
+                  <div className="p-6">
+                    <h3 className="text-white font-bold text-xl mb-2 group-hover:text-[#C9A227] transition-colors">
+                      {product.name}
+                    </h3>
+                    {product.tagline && (
+                      <p
+                        className="text-sm mb-3"
+                        style={{ color: `${accentColor}aa` }}
+                      >
+                        {product.tagline}
+                      </p>
+                    )}
+                    <p className="text-white/50 text-sm leading-relaxed mb-4 line-clamp-2">
+                      {product.description || ""}
+                    </p>
+
+                    {product.specifications && product.specifications.length > 0 && (
+                      <ul className="space-y-2">
+                        {product.specifications.slice(0, 3).map((spec, i) => (
+                          <li
+                            key={i}
+                            className="flex items-center gap-2 text-white/40 text-xs"
+                          >
+                            <CheckCircle2
+                              className="w-3.5 h-3.5 shrink-0"
+                              style={{ color: `${accentColor}80` }}
+                            />
+                            <span className="truncate">
+                              <span className="text-white/60">{spec.label}:</span>{" "}
+                              {spec.value}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {product.price_range && (
+                      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span className="text-white/40 text-xs">
+                          {lang === "en"
+                            ? "Price Range"
+                            : lang === "dari"
+                            ? "محدوده قیمت"
+                            : "د قیمت حد"}
+                        </span>
+                        <span className="text-[#C9A227] font-bold text-sm">
+                          {product.price_range} {product.currency}
+                          {product.unit ? ` / ${product.unit}` : ""}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-white font-bold text-xl mb-2 group-hover:text-[#C9A227] transition-colors">
-                    {lang === "en" ? product.name : lang === "dari" ? product.nameDari : product.namePashto}
-                  </h3>
-                  <p className="text-white/50 text-sm leading-relaxed mb-4">
-                    {lang === "en" ? product.description : product.descriptionDari}
-                  </p>
-                  <ul className="space-y-2">
-                    {product.specs.map((spec, i) => (
-                      <li key={i} className="flex items-center gap-2 text-white/40 text-xs">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#C9A227]/60" />
-                        {spec}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
