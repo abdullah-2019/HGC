@@ -1,17 +1,167 @@
 <?php
-
+        
 namespace Database\Seeders;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+        
+use App\Models\Company;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CompanySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        //
+        $companies = [
+            [
+                'slug' => 'hcrc',
+                'name_en' => 'Hafez Construction & Reconstruction Company',
+                'name_dari' => 'شرکت ساختمانی و بازسازی حافظ',
+                'name_pashto' => 'حافظ د جوړونې او بیا رغونې شرکت',
+                'short_name_en' => 'HCRC',
+                'short_name_dari' => 'اچ سی آر سی',
+                'short_name_pashto' => 'اچ سی آر سی',
+                'accent_color' => '#B22222',
+                'secondary_color' => '#8B0000',
+                'icon_name' => 'Building2',
+                'description_en' => 'Leading construction and reconstruction services across Afghanistan with over two decades of excellence in infrastructure development.',
+                'description_dari' => 'ارائه دهنده خدمات برتر ساختمانی و بازسازی در سراسر افغانستان با بیش از دو دهه تجربه در توسعه زیرساخت‌ها.',
+                'description_pashto' => 'په افغانستان کې د جوړونې او بیا رغونې مخکښ خدمات د بنسټیزو جوړښتونو پراختیا کې د دوو لسیزو زیاتې ښېګڼې سره.',
+                'sector_en' => 'Construction & Infrastructure',
+                'sector_dari' => 'ساختمان و زیرساخت',
+                'sector_pashto' => 'جوړونه او بنسټیز جوړښت',
+                'email' => 'info@hcrc.af',
+                'phone' => '+93 700 123 456',
+                'address_en' => 'Kabul, Afghanistan',
+                'is_active' => true,
+                'sort_order' => 1,
+                'display_order' => 1,
+            ],
+            [
+                'slug' => 'albahrain',
+                'name_en' => 'Al Bahrain Mining Company',
+                'name_dari' => 'شرکت معدنی البحرین',
+                'name_pashto' => 'د البحرین کان کیندنې شرکت',
+                'short_name_en' => 'Al Bahrain',
+                'short_name_dari' => 'البحرین',
+                'short_name_pashto' => 'البحرین',
+                'accent_color' => '#1A237E',
+                'secondary_color' => '#0D47A1',
+                'icon_name' => 'Mountain',
+                'description_en' => 'Responsible mineral extraction and mining operations contributing to Afghanistan\'s natural resource development.',
+                'description_dari' => 'استخراج مسئولانه مواد معدنی و عملیات معدنکاری که به توسعه منابع طبیعی افغانستان کمک می‌کند.',
+                'description_pashto' => 'د افغانستان د طبیعي زیرمو د پراختیا لپاره د مسؤلانه معدني استخراج او کان کیندنې عملیات.',
+                'sector_en' => 'Mining & Natural Resources',
+                'sector_dari' => 'معدن و منابع طبیعی',
+                'sector_pashto' => 'کان کیندنه او طبیعي زیرمې',
+                'email' => 'info@albahrain.af',
+                'phone' => '+93 700 234 567',
+                'address_en' => 'Kabul, Afghanistan',
+                'is_active' => true,
+                'sort_order' => 2,
+                'display_order' => 2,
+            ],
+            [
+                'slug' => 'zainnoorain',
+                'name_en' => 'Zain Noorain General Trading & Contracting',
+                'name_dari' => 'زین نورین تجارت و تدارکات عمومی',
+                'name_pashto' => 'زین نورین عمومي سوداګري او قراردادونه',
+                'short_name_en' => 'Zain Noorain',
+                'short_name_dari' => 'زین نورین',
+                'short_name_pashto' => 'زین نورین',
+                'accent_color' => '#F57C00',
+                'secondary_color' => '#E65100',
+                'icon_name' => 'HardHat',
+                'description_en' => 'Comprehensive trading and contracting solutions delivering quality materials and services for construction projects nationwide.',
+                'description_dari' => 'راه حل‌های جامع تجارت و تدارکات که مواد و خدمات با کیفیت را برای پروژه‌های ساختمانی در سراسر کشور ارائه می‌دهد.',
+                'description_pashto' => 'د سوداګرۍ او قراردادونو بشپړ حلونه چې د کیفیت موادو او خدماتو د ټول هیواد د جوړونې پروژو لپاره وړاندې کوي.',
+                'sector_en' => 'Trading & Contracting',
+                'sector_dari' => 'تجارت و تدارکات',
+                'sector_pashto' => 'سوداګري او قراردادونه',
+                'email' => 'info@zainnoorain.af',
+                'phone' => '+93 700 345 678',
+                'address_en' => 'Kabul, Afghanistan',
+                'is_active' => true,
+                'sort_order' => 3,
+                'display_order' => 3,
+            ],
+            [
+                'slug' => 'almadinah',
+                'name_en' => 'Al Madinah Supermarket',
+                'name_dari' => 'سوپرمارکت المدینه',
+                'name_pashto' => 'د المدینه سوپرمارکيټ',
+                'short_name_en' => 'Al Madinah',
+                'short_name_dari' => 'المدینه',
+                'short_name_pashto' => 'المدینه',
+                'accent_color' => '#2E7D32',
+                'secondary_color' => '#1B5E20',
+                'icon_name' => 'Store',
+                'description_en' => 'A modern retail destination offering quality products and exceptional shopping experience to communities across Afghanistan.',
+                'description_dari' => 'یک مقصد خرید مدرن که محصولات با کیفیت و تجربه خرید استثنایی را به جوامع در سراسر افغانستان ارائه می‌دهد.',
+                'description_pashto' => 'یو عصري پلورنځی چې د کیفیت محصولاتو او استثنائي پیرود تجربه په افغانستان کې ټولنو ته وړاندې کوي.',
+                'sector_en' => 'Retail & Supermarkets',
+                'sector_dari' => 'خرده‌فروشی و سوپرمارکت',
+                'sector_pashto' => 'پلورنځي او سوپرمارکيټونه',
+                'email' => 'info@almadinah.af',
+                'phone' => '+93 700 456 789',
+                'address_en' => 'Kabul, Afghanistan',
+                'is_active' => true,
+                'sort_order' => 4,
+                'display_order' => 4,
+            ],
+            [
+                'slug' => 'haramain',
+                'name_en' => 'Haramain Group',
+                'name_dari' => 'گروپ حرامین',
+                'name_pashto' => 'د حرامین ګروپ',
+                'short_name_en' => 'Haramain',
+                'short_name_dari' => 'حرامین',
+                'short_name_pashto' => 'حرامین',
+                'accent_color' => '#FFD700',
+                'secondary_color' => '#F9A825',
+                'icon_name' => 'Landmark',
+                'description_en' => 'A diversified conglomerate driving innovation and growth across multiple sectors in the Afghan economy.',
+                'description_dari' => 'یک ابرشرکت متنوع که نوآوری و رشد را در بخش‌های مختلف اقتصاد افغانستان هدایت می‌کند.',
+                'description_pashto' => 'یو متنوع شرکت چې د افغانستان اقتصاد په بیلابیلو برخو کې نوښت او وده رهبري کوي.',
+                'sector_en' => 'Diversified Holdings',
+                'sector_dari' => 'سرمایه‌گذاری متنوع',
+                'sector_pashto' => 'متنوع پانګونه',
+                'email' => 'info@haramain.af',
+                'phone' => '+93 700 567 890',
+                'address_en' => 'Kabul, Afghanistan',
+                'is_active' => true,
+                'sort_order' => 5,
+                'display_order' => 5,
+            ],
+            [
+                'slug' => 'alkoozi',
+                'name_en' => 'Al Koozi Logistics & Transport',
+                'name_dari' => 'الکوزی لجستیک و ترانسپورت',
+                'name_pashto' => 'الکوزی لجستیک او ترانسپورت',
+                'short_name_en' => 'Al Koozi',
+                'short_name_dari' => 'الکوزی',
+                'short_name_pashto' => 'الکوزی',
+                'accent_color' => '#00838F',
+                'secondary_color' => '#006064',
+                'icon_name' => 'Truck',
+                'description_en' => 'Reliable logistics and transportation services connecting businesses and communities throughout Afghanistan.',
+                'description_dari' => 'خدمات قابل اعتماد لجستیک و ترانسپورت که مشاغل و جوامع را در سراسر افغانستان به هم متصل می‌کند.',
+                'description_pashto' => 'د باوري لجستیک او ترانسپورت خدمات چې د افغانستان په اوږدو کې سوداګرۍ او ټولنې سره نښلوي.',
+                'sector_en' => 'Logistics & Transportation',
+                'sector_dari' => 'لجستیک و ترانسپورت',
+                'sector_pashto' => 'لجستیک او ترانسپورت',
+                'email' => 'info@alkoozi.af',
+                'phone' => '+93 700 678 901',
+                'address_en' => 'Kabul, Afghanistan',
+                'is_active' => true,
+                'sort_order' => 6,
+                'display_order' => 6,
+            ],
+        ];
+
+        foreach ($companies as $company) {
+            Company::updateOrCreate(
+                ['slug' => $company['slug']],
+                $company
+            );
+        }
     }
 }

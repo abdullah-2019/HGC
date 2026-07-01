@@ -17,18 +17,32 @@ import {
   Phone,
   Mail,
   ArrowRight,
+  Loader2,
 } from "lucide-react";
 import { useI18n } from "./useI18nStore";
 import { t, type Lang } from "./translations";
 
-const companySlugs = [
-  { slug: "hcrc", accent: "#B22222", icon: Building2 },
-  { slug: "albahrain", accent: "#1A237E", icon: Mountain },
-  { slug: "zain-noorain", accent: "#F57C00", icon: HardHat },
-  { slug: "almadinah", accent: "#2E7D32", icon: Store },
-  { slug: "haramain", accent: "#FFD700", icon: Landmark },
-  { slug: "alkoozi", accent: "#00838F", icon: Truck },
-];
+// Icon mapping for dynamic rendering from API
+const iconMap: Record<string, React.ElementType> = {
+  Building2,
+  Mountain,
+  HardHat,
+  Store,
+  Landmark,
+  Truck,
+};
+
+interface Company {
+  id: number;
+  slug: string;
+  name: string;
+  short_name: string;
+  description: string;
+  accent_color: string;
+  icon_name: string;
+  logo_url: string | null;
+  hero_image_url: string | null;
+}
 
 const navPaths = [
   { href: "/", key: "nav.home" },
@@ -51,7 +65,44 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [companiesOpen, setCompaniesOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loadingCompanies, setLoadingCompanies] = useState(true);
   const pathname = usePathname();
+
+  // Fetch companies from API
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/companies?lang=${lang}`;
+        const res = await fetch(apiUrl, {
+          headers: { Accept: "application/json" },
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (!contentType?.includes("application/json")) {
+          const text = await res.text();
+          throw new Error(`Expected JSON, got: ${text.substring(0, 100)}`);
+        }
+
+        const json = await res.json();
+        if (json.success) {
+          setCompanies(json.data);
+        }
+      } catch (err) {
+        console.error("Header: Failed to fetch companies:", err);
+        // Fallback: empty array, component still renders
+        setCompanies([]);
+      } finally {
+        setLoadingCompanies(false);
+      }
+    };
+
+    fetchCompanies();
+  }, [lang]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -69,16 +120,18 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled
           ? "bg-[#0A1628]/95 backdrop-blur-xl shadow-2xl shadow-black/20 border-b border-white/5"
           : "bg-transparent"
-        }`}
+      }`}
       dir={dir}
     >
       {/* Scroll-aware Top Bar */}
       <div
-        className={`overflow-hidden transition-all duration-500 ${isScrolled ? "max-h-10 opacity-100" : "max-h-0 opacity-0"
-          }`}
+        className={`overflow-hidden transition-all duration-500 ${
+          isScrolled ? "max-h-10 opacity-100" : "max-h-0 opacity-0"
+        }`}
       >
         <div className="bg-[#C9A227]/10 border-b border-[#C9A227]/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between text-xs">
@@ -127,15 +180,17 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${isActive(link.href)
+                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${
+                  isActive(link.href)
                     ? "text-[#C9A227]"
                     : "text-white/70 hover:text-white"
-                  }`}
+                }`}
               >
                 {t(lang, link.key)}
                 <span
-                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-[#C9A227] transition-all duration-300 rounded-full ${isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
-                    }`}
+                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-[#C9A227] transition-all duration-300 rounded-full ${
+                    isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
+                  }`}
                 />
               </Link>
             ))}
@@ -147,62 +202,81 @@ export default function Header() {
               onMouseLeave={() => setCompaniesOpen(false)}
             >
               <button
-                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${pathname.startsWith("/companies")
+                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
+                  pathname.startsWith("/companies")
                     ? "text-[#C9A227]"
                     : "text-white/70 hover:text-white"
-                  }`}
+                }`}
               >
                 {t(lang, "nav.companies")}
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-300 ${companiesOpen ? "rotate-180" : ""
-                    }`}
+                  className={`w-4 h-4 transition-transform duration-300 ${
+                    companiesOpen ? "rotate-180" : ""
+                  }`}
                 />
               </button>
 
               <div
-                className={`absolute top-full ${dir === "rtl" ? "right-0" : "left-0"
-                  } pt-2 transition-all duration-300 ${companiesOpen
+                className={`absolute top-full ${
+                  dir === "rtl" ? "right-0" : "left-0"
+                } pt-2 transition-all duration-300 ${
+                  companiesOpen
                     ? "opacity-100 translate-y-0 pointer-events-auto"
                     : "opacity-0 -translate-y-2 pointer-events-none"
-                  }`}
+                }`}
               >
                 <div className="bg-[#0A1628]/98 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 p-3 w-[420px]">
-                  <div className="grid gap-1">
-                    {companySlugs.map((company) => {
-                      const Icon = company.icon;
-                      const companyName = t(lang, `companies.${company.slug.replace("-", "")}.name`);
-                      const companyDesc = t(lang, `companies.${company.slug.replace("-", "")}.desc`);
-                      return (
-                        <Link
-                          key={company.slug}
-                          href={`/companies/${company.slug}`}
-                          className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 group/item"
-                        >
-                          <div
-                            className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 group-hover/item:scale-110"
-                            style={{ backgroundColor: `${company.accent}15` }}
+                  {loadingCompanies ? (
+                    <div className="flex items-center justify-center py-8">
+                      <Loader2 className="w-5 h-5 text-[#C9A227] animate-spin" />
+                    </div>
+                  ) : companies.length === 0 ? (
+                    <div className="py-6 text-center text-white/40 text-sm">
+                      {lang === "en"
+                        ? "No companies found."
+                        : lang === "dari"
+                        ? "هیچ شرکتی یافت نشد."
+                        : "هیڅ شرکت ونه موندل شو."}
+                    </div>
+                  ) : (
+                    <div className="grid gap-1">
+                      {companies.map((company) => {
+                        const Icon = iconMap[company.icon_name] || Building2;
+                        return (
+                          <Link
+                            key={company.slug}
+                            href={`/companies/${company.slug}`}
+                            className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 group/item"
                           >
-                            <Icon
-                              className="w-5 h-5"
-                              style={{ color: company.accent }}
-                            />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-white text-sm font-medium truncate group-hover/item:text-[#C9A227] transition-colors">
-                              {companyName}
-                            </p>
-                            <p className="text-white/40 text-xs">
-                              {companyDesc}
-                            </p>
-                          </div>
-                          <ArrowRight
-                            className={`w-4 h-4 transition-all duration-200 text-white/20 group-hover/item:text-[#C9A227] ${dir === "rtl" ? "rotate-180" : ""
+                            <div
+                              className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 group-hover/item:scale-110"
+                              style={{
+                                backgroundColor: `${company.accent_color}15`,
+                              }}
+                            >
+                              <Icon
+                                className="w-5 h-5"
+                                style={{ color: company.accent_color }}
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white text-sm font-medium truncate group-hover/item:text-[#C9A227] transition-colors">
+                                {company.name}
+                              </p>
+                              <p className="text-white/40 text-xs line-clamp-1">
+                                {company.description}
+                              </p>
+                            </div>
+                            <ArrowRight
+                              className={`w-4 h-4 transition-all duration-200 text-white/20 group-hover/item:text-[#C9A227] ${
+                                dir === "rtl" ? "rotate-180" : ""
                               }`}
-                          />
-                        </Link>
-                      );
-                    })}
-                  </div>
+                            />
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -210,7 +284,7 @@ export default function Header() {
 
           {/* Right Side: Language + Mobile */}
           <div className="flex items-center gap-3">
-            {/* Language Dropdown - Fixed-width wrapper keeps button and dropdown identical */}
+            {/* Language Dropdown */}
             <div className="relative w-32">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
@@ -223,8 +297,9 @@ export default function Header() {
                   </span>
                 </div>
                 <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform shrink-0 ${langMenuOpen ? "rotate-180" : ""
-                    }`}
+                  className={`w-3 h-3 text-white/50 transition-transform shrink-0 ${
+                    langMenuOpen ? "rotate-180" : ""
+                  }`}
                 />
               </button>
 
@@ -234,7 +309,6 @@ export default function Header() {
                     className="fixed inset-0 z-10"
                     onClick={() => setLangMenuOpen(false)}
                   />
-                  {/* Matches button width perfectly using w-full and right-0 / left-0 constraints */}
                   <div className="absolute top-full mt-2 left-0 right-0 z-20 bg-[#0A1628]/98 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl p-1.5 w-full">
                     <div className="flex flex-col gap-0.5">
                       {languages.map((l) => (
@@ -244,12 +318,12 @@ export default function Header() {
                             setLang(l.code);
                             setLangMenuOpen(false);
                           }}
-                          /* Safely alignments localized typography scripts */
                           dir={l.code === "en" ? "ltr" : "rtl"}
-                          className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${lang === l.code
+                          className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
+                            lang === l.code
                               ? "bg-[#C9A227]/15 text-[#C9A227] font-semibold"
                               : "text-white/70 hover:bg-white/5 hover:text-white"
-                            }`}
+                          }`}
                         >
                           <span className="w-full text-start">{l.label}</span>
                         </button>
@@ -272,26 +346,27 @@ export default function Header() {
               )}
             </button>
           </div>
-
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden fixed inset-0 top-20 bg-[#0A1628]/98 backdrop-blur-2xl transition-all duration-500 ${mobileOpen
+        className={`lg:hidden fixed inset-0 top-20 bg-[#0A1628]/98 backdrop-blur-2xl transition-all duration-500 ${
+          mobileOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
-          }`}
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 py-6 space-y-2 overflow-y-auto h-full pb-24">
           {navPaths.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${isActive(link.href)
+              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${
+                isActive(link.href)
                   ? "bg-[#C9A227]/10 text-[#C9A227] border border-[#C9A227]/20"
                   : "text-white/70 hover:text-white hover:bg-white/5"
-                }`}
+              }`}
             >
               {t(lang, link.key)}
             </Link>
@@ -301,31 +376,39 @@ export default function Header() {
             <p className="px-4 text-xs uppercase tracking-wider text-[#C9A227]/60 mb-3">
               {t(lang, "footer.ourCompanies")}
             </p>
-            <div className="space-y-1">
-              {companySlugs.map((company) => {
-                const Icon = company.icon;
-                return (
-                  <Link
-                    key={company.slug}
-                    href={`/companies/${company.slug}`}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-colors"
-                  >
-                    <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center"
-                      style={{ backgroundColor: `${company.accent}15` }}
+            {loadingCompanies ? (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="w-5 h-5 text-[#C9A227] animate-spin" />
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {companies.map((company) => {
+                  const Icon = iconMap[company.icon_name] || Building2;
+                  return (
+                    <Link
+                      key={company.slug}
+                      href={`/companies/${company.slug}`}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-colors"
                     >
-                      <Icon
-                        className="w-4 h-4"
-                        style={{ color: company.accent }}
-                      />
-                    </div>
-                    <span className="text-white/80 text-sm">
-                      {t(lang, `companies.${company.slug.replace("-", "")}.name`)}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
+                      <div
+                        className="w-9 h-9 rounded-lg flex items-center justify-center"
+                        style={{
+                          backgroundColor: `${company.accent_color}15`,
+                        }}
+                      >
+                        <Icon
+                          className="w-4 h-4"
+                          style={{ color: company.accent_color }}
+                        />
+                      </div>
+                      <span className="text-white/80 text-sm">
+                        {company.name}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>

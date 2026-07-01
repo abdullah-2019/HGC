@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Building2,
@@ -16,20 +16,33 @@ import {
   MessageCircle,
   ArrowUpRight,
   ChevronRight,
-  Share2,
   Users,
+  Loader2,
 } from "lucide-react";
 import { useI18n } from "./useI18nStore";
 import { t } from "./translations";
 
-const companySlugs = [
-  { slug: "hcrc", accent: "#B22222", icon: Building2 },
-  { slug: "albahrain", accent: "#1A237E", icon: Mountain },
-  { slug: "zain-noorain", accent: "#F57C00", icon: HardHat },
-  { slug: "almadinah", accent: "#2E7D32", icon: Store },
-  { slug: "haramain", accent: "#FFD700", icon: Landmark },
-  { slug: "alkoozi", accent: "#00838F", icon: Truck },
-];
+// Icon mapping for dynamic rendering from API
+const iconMap: Record<string, React.ElementType> = {
+  Building2,
+  Mountain,
+  HardHat,
+  Store,
+  Landmark,
+  Truck,
+};
+
+interface Company {
+  id: number;
+  slug: string;
+  name: string;
+  short_name: string;
+  description: string;
+  accent_color: string;
+  icon_name: string;
+  logo_url: string | null;
+  hero_image_url: string | null;
+}
 
 const quickLinks = [
   { href: "/about", key: "nav.about" },
@@ -42,6 +55,42 @@ const quickLinks = [
 export default function Footer() {
   const { lang, dir } = useI18n();
   const [hoveredCompany, setHoveredCompany] = useState<string | null>(null);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loadingCompanies, setLoadingCompanies] = useState(true);
+
+  // Fetch companies from API
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/companies?lang=${lang}`;
+        const res = await fetch(apiUrl, {
+          headers: { Accept: "application/json" },
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (!contentType?.includes("application/json")) {
+          const text = await res.text();
+          throw new Error(`Expected JSON, got: ${text.substring(0, 100)}`);
+        }
+
+        const json = await res.json();
+        if (json.success) {
+          setCompanies(json.data);
+        }
+      } catch (err) {
+        console.error("Footer: Failed to fetch companies:", err);
+        setCompanies([]);
+      } finally {
+        setLoadingCompanies(false);
+      }
+    };
+
+    fetchCompanies();
+  }, [lang]);
 
   return (
     <footer className="relative bg-[#0A1628] overflow-hidden" dir={dir}>
@@ -124,55 +173,68 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Companies */}
+          {/* Column 3: Companies (from API) */}
           <div className="lg:col-span-3">
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
               {t(lang, "footer.ourCompanies")}
             </h3>
-            <ul className="space-y-2">
-              {companySlugs.map((company) => {
-                const Icon = company.icon;
-                const isHovered = hoveredCompany === company.slug;
-                const companyName = t(lang, `companies.${company.slug.replace("-", "")}.name`);
-                return (
-                  <li
-                    key={company.slug}
-                    onMouseEnter={() => setHoveredCompany(company.slug)}
-                    onMouseLeave={() => setHoveredCompany(null)}
-                  >
-                    <Link
-                      href={`/companies/${company.slug}`}
-                      className="group flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-white/5 transition-all duration-200"
+            {loadingCompanies ? (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="w-5 h-5 text-[#C9A227] animate-spin" />
+              </div>
+            ) : companies.length === 0 ? (
+              <p className="text-white/40 text-sm">
+                {lang === "en"
+                  ? "No companies found."
+                  : lang === "dari"
+                  ? "هیچ شرکتی یافت نشد."
+                  : "هیڅ شرکت ونه موندل شو."}
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {companies.map((company) => {
+                  const Icon = iconMap[company.icon_name] || Building2;
+                  const isHovered = hoveredCompany === company.slug;
+                  return (
+                    <li
+                      key={company.slug}
+                      onMouseEnter={() => setHoveredCompany(company.slug)}
+                      onMouseLeave={() => setHoveredCompany(null)}
                     >
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300"
-                        style={{
-                          backgroundColor: isHovered
-                            ? `${company.accent}25`
-                            : `${company.accent}10`,
-                        }}
+                      <Link
+                        href={`/companies/${company.slug}`}
+                        className="group flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-white/5 transition-all duration-200"
                       >
-                        <Icon
-                          className="w-4 h-4 transition-colors duration-200"
-                          style={{ color: company.accent }}
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300"
+                          style={{
+                            backgroundColor: isHovered
+                              ? `${company.accent_color}25`
+                              : `${company.accent_color}10`,
+                          }}
+                        >
+                          <Icon
+                            className="w-4 h-4 transition-colors duration-200"
+                            style={{ color: company.accent_color }}
+                          />
+                        </div>
+                        <span className="text-white/60 group-hover:text-white text-sm transition-colors flex-1">
+                          {company.name}
+                        </span>
+                        <ArrowUpRight
+                          className={`w-3.5 h-3.5 transition-all duration-200 ${
+                            isHovered
+                              ? "text-[#C9A227] opacity-100"
+                              : "text-white/20 opacity-0"
+                          }`}
                         />
-                      </div>
-                      <span className="text-white/60 group-hover:text-white text-sm transition-colors flex-1">
-                        {companyName}
-                      </span>
-                      <ArrowUpRight
-                        className={`w-3.5 h-3.5 transition-all duration-200 ${
-                          isHovered
-                            ? "text-[#C9A227] opacity-100"
-                            : "text-white/20 opacity-0"
-                        }`}
-                      />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
 
           {/* Column 4: Contact */}
