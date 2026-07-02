@@ -7,7 +7,6 @@ import ImageCarousel from "./sections/ImageCarousel";
 import MissionSection from "./sections/MissionSection";
 import VisionSection from "./sections/VisionSection";
 import CoreValues from "./sections/CoreValues";
-import LeadershipTeam from "./sections/LeadershipTeam";
 import Timeline from "./sections/Timeline";
 import StatsShowcase from "./sections/StatsShowcase";
 
@@ -22,7 +21,6 @@ export default function AboutPageClient() {
       <VisionSection />
       <CoreValues />
       <Timeline />
-      <LeadershipTeam />
     </div>
   );
 }

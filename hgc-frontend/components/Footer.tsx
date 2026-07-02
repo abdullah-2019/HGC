@@ -47,8 +47,8 @@ interface Company {
 const quickLinks = [
   { href: "/about", key: "nav.about" },
   { href: "/projects", key: "nav.projects" },
-  { href: "/news", key: "nav.news" },
-  { href: "/careers", key: "nav.careers" },
+  { href: "/media", key: "nav.media" },
+  { href: "/products", key: "nav.products" },
   { href: "/contact", key: "nav.contact" },
 ];
 
