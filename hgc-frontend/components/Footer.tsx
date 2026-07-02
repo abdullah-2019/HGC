@@ -282,7 +282,7 @@ export default function Footer() {
                       href="tel:+93703420311"
                       className="text-white/40 text-xs hover:text-[#C9A227] transition-colors block"
                     >
-                      +93 (0) 703 420 311
+                      +93 (0) 703 420 311xxx
                     </a>
                   </div>
                 </div>
