@@ -160,11 +160,10 @@ export default function Footer() {
                     className="group flex items-center gap-2 text-white/50 hover:text-[#C9A227] transition-colors duration-200 text-sm"
                   >
                     <ChevronRight
-                      className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${
-                        dir === "rtl"
+                      className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${dir === "rtl"
                           ? "-mr-5 group-hover:mr-0 group-hover:opacity-100 rotate-180"
                           : "-ml-5 group-hover:ml-0 group-hover:opacity-100"
-                      }`}
+                        }`}
                     />
                     {t(lang, link.key)}
                   </Link>
@@ -188,8 +187,8 @@ export default function Footer() {
                 {lang === "en"
                   ? "No companies found."
                   : lang === "dari"
-                  ? "هیچ شرکتی یافت نشد."
-                  : "هیڅ شرکت ونه موندل شو."}
+                    ? "هیچ شرکتی یافت نشد."
+                    : "هیڅ شرکت ونه موندل شو."}
               </p>
             ) : (
               <ul className="space-y-2">
@@ -223,11 +222,10 @@ export default function Footer() {
                           {company.name}
                         </span>
                         <ArrowUpRight
-                          className={`w-3.5 h-3.5 transition-all duration-200 ${
-                            isHovered
+                          className={`w-3.5 h-3.5 transition-all duration-200 ${isHovered
                               ? "text-[#C9A227] opacity-100"
                               : "text-white/20 opacity-0"
-                          }`}
+                            }`}
                         />
                       </Link>
                     </li>
