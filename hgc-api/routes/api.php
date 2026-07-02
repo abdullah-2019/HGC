@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\StatController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -55,3 +56,7 @@ Route::get('/companies', [CompanyController::class, 'index']);
 Route::get('/companies/featured', [CompanyController::class, 'featured']);
 Route::get('/companies/{slug}', [CompanyController::class, 'show']);
 Route::get('/companies/{slug}/profile', [CompanyController::class, 'profile']);
+
+// Stats
+Route::get('/stats', [StatController::class, 'index']);
+Route::get('/companies/{slug}/stats', [StatController::class, 'byCompany']);
