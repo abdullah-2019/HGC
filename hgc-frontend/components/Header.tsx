@@ -120,18 +120,16 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
           ? "bg-[#0A1628]/95 backdrop-blur-xl shadow-2xl shadow-black/20 border-b border-white/5"
           : "bg-transparent"
-      }`}
+        }`}
       dir={dir}
     >
       {/* Scroll-aware Top Bar */}
       <div
-        className={`overflow-hidden transition-all duration-500 ${
-          isScrolled ? "max-h-10 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`overflow-hidden transition-all duration-500 ${isScrolled ? "max-h-10 opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="bg-[#C9A227]/10 border-b border-[#C9A227]/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between text-xs">
@@ -180,17 +178,15 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${
-                  isActive(link.href)
+                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${isActive(link.href)
                     ? "text-[#C9A227]"
                     : "text-white/70 hover:text-white"
-                }`}
+                  }`}
               >
                 {t(lang, link.key)}
                 <span
-                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-[#C9A227] transition-all duration-300 rounded-full ${
-                    isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
-                  }`}
+                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-[#C9A227] transition-all duration-300 rounded-full ${isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
+                    }`}
                 />
               </Link>
             ))}
@@ -202,28 +198,24 @@ export default function Header() {
               onMouseLeave={() => setCompaniesOpen(false)}
             >
               <button
-                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
-                  pathname.startsWith("/companies")
+                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${pathname.startsWith("/companies")
                     ? "text-[#C9A227]"
                     : "text-white/70 hover:text-white"
-                }`}
+                  }`}
               >
                 {t(lang, "nav.companies")}
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-300 ${
-                    companiesOpen ? "rotate-180" : ""
-                  }`}
+                  className={`w-4 h-4 transition-transform duration-300 ${companiesOpen ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
               <div
-                className={`absolute top-full ${
-                  dir === "rtl" ? "right-0" : "left-0"
-                } pt-2 transition-all duration-300 ${
-                  companiesOpen
+                className={`absolute top-full ${dir === "rtl" ? "right-0" : "left-0"
+                  } pt-2 transition-all duration-300 ${companiesOpen
                     ? "opacity-100 translate-y-0 pointer-events-auto"
                     : "opacity-0 -translate-y-2 pointer-events-none"
-                }`}
+                  }`}
               >
                 <div className="bg-[#0A1628]/98 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 p-3 w-[420px]">
                   {loadingCompanies ? (
@@ -235,8 +227,8 @@ export default function Header() {
                       {lang === "en"
                         ? "No companies found."
                         : lang === "dari"
-                        ? "هیچ شرکتی یافت نشد."
-                        : "هیڅ شرکت ونه موندل شو."}
+                          ? "هیچ شرکتی یافت نشد."
+                          : "هیڅ شرکت ونه موندل شو."}
                     </div>
                   ) : (
                     <div className="grid gap-1">
@@ -268,9 +260,8 @@ export default function Header() {
                               </p>
                             </div>
                             <ArrowRight
-                              className={`w-4 h-4 transition-all duration-200 text-white/20 group-hover/item:text-[#C9A227] ${
-                                dir === "rtl" ? "rotate-180" : ""
-                              }`}
+                              className={`w-4 h-4 transition-all duration-200 text-white/20 group-hover/item:text-[#C9A227] ${dir === "rtl" ? "rotate-180" : ""
+                                }`}
                             />
                           </Link>
                         );
@@ -297,9 +288,8 @@ export default function Header() {
                   </span>
                 </div>
                 <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform shrink-0 ${
-                    langMenuOpen ? "rotate-180" : ""
-                  }`}
+                  className={`w-3 h-3 text-white/50 transition-transform shrink-0 ${langMenuOpen ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
@@ -319,11 +309,10 @@ export default function Header() {
                             setLangMenuOpen(false);
                           }}
                           dir={l.code === "en" ? "ltr" : "rtl"}
-                          className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                            lang === l.code
+                          className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${lang === l.code
                               ? "bg-[#C9A227]/15 text-[#C9A227] font-semibold"
                               : "text-white/70 hover:bg-white/5 hover:text-white"
-                          }`}
+                            }`}
                         >
                           <span className="w-full text-start">{l.label}</span>
                         </button>
@@ -351,22 +340,20 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden fixed inset-0 top-20 bg-[#0A1628]/98 backdrop-blur-2xl transition-all duration-500 ${
-          mobileOpen
+        className={`lg:hidden fixed inset-0 top-20 bg-[#0A1628]/98 backdrop-blur-2xl transition-all duration-500 ${mobileOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 py-6 space-y-2 overflow-y-auto h-full pb-24">
           {navPaths.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${
-                isActive(link.href)
+              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${isActive(link.href)
                   ? "bg-[#C9A227]/10 text-[#C9A227] border border-[#C9A227]/20"
                   : "text-white/70 hover:text-white hover:bg-white/5"
-              }`}
+                }`}
             >
               {t(lang, link.key)}
             </Link>
