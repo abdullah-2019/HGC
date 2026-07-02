@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\StatController;
+use App\Http\Controllers\Api\ProjectController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
