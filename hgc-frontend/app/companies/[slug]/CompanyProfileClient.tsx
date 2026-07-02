@@ -15,7 +15,6 @@ import CompanyMissionVision from "./sections/CompanyMissionVision";
 import CompanyStats from "./sections/CompanyStats";
 import CompanyValues from "./sections/CompanyValues";
 import CompanyHistory from "./sections/CompanyHistory";
-import CompanyLeadership from "./sections/CompanyLeadership";
 import CompanyAwards from "./sections/CompanyAwards";
 
 import { iconMap } from "@/components/company/iconMap";
@@ -174,7 +173,6 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
       <CompanyStats company={company} />
       <CompanyValues company={company} />
       <CompanyHistory company={company} />
-      <CompanyLeadership company={company} />
       <CompanyAwards company={company} />
     </div>
   );
