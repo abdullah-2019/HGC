@@ -77,10 +77,6 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
               {company.tagline}
             </p>
           ) : null}
-
-          <p className="mx-auto max-w-3xl text-lg text-white/70 md:text-xl leading-relaxed">
-            {company.description}
-          </p>
         </motion.div>
 
         <motion.div
