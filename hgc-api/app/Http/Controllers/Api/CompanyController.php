@@ -203,7 +203,6 @@ class CompanyController extends Controller
             'vision_dari' => $company->vision_dari,
             'vision_pashto' => $company->vision_pashto,
             
-            // FIX: Make sure values uses the right column names
             'value' => $getLocalized($company->value_en, $company->value_dari, $company->value_pashto),
             'value_en' => $company->value_en,
             'value_dari' => $company->value_dari,
@@ -234,6 +233,8 @@ class CompanyController extends Controller
                 'registration_number' => $company->registration_number,
                 'tax_id' => $company->tax_id,
                 'employee_count' => $company->employee_count,
+                'project_count' => $company->project_count ?? 0,        // ← Fixed
+                'province_count' => $company->province_count ?? 0,       // ← Fixed
             ],
             'seo' => [
                 'title' => $company->meta_title_en,

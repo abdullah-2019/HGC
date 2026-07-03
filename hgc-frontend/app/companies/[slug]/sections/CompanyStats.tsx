@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { useI18n } from "@/components/useI18nStore";
-import { Building2, HardHat, Truck, Landmark, Mountain, Store, Users, Calendar } from "lucide-react";
+import { HardHat, Mountain, Users, Calendar } from "lucide-react";
 
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -44,6 +44,8 @@ interface CompanyStatsProps {
       founded_year: number | null;
       employee_count: number | null;
       registration_number: string | null;
+      project_count: number | null;
+      province_count: number | null;
     };
   };
 }
@@ -54,20 +56,14 @@ export default function CompanyStats({ company }: CompanyStatsProps) {
 
   const stats = [
     {
-      icon: Building2,
-      value: 1,
-      suffix: "",
-      label: lang === "en" ? "Company" : lang === "dari" ? "شرکت" : "شرکت",
-    },
-    {
       icon: HardHat,
-      value: 50,
+      value: company.details.project_count || 50,
       suffix: "+",
       label: lang === "en" ? "Projects" : lang === "dari" ? "پروژه‌ها" : "پروژې",
     },
     {
       icon: Mountain,
-      value: 34,
+      value: company.details.province_count || 34,
       suffix: "",
       label: lang === "en" ? "Provinces" : lang === "dari" ? "ولایت‌ها" : "ولایتونه",
     },
@@ -76,12 +72,6 @@ export default function CompanyStats({ company }: CompanyStatsProps) {
       value: company.details.employee_count || 100,
       suffix: "+",
       label: lang === "en" ? "Employees" : lang === "dari" ? "کارمند" : "کارکوونکي",
-    },
-    {
-      icon: Truck,
-      value: 20,
-      suffix: "+",
-      label: lang === "en" ? "Vehicles" : lang === "dari" ? "وسایط" : "موټرونه",
     },
     {
       icon: Calendar,
@@ -102,7 +92,7 @@ export default function CompanyStats({ company }: CompanyStatsProps) {
             hidden: { opacity: 0 },
             visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
           }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6"
         >
           {stats.map((stat) => (
             <motion.div

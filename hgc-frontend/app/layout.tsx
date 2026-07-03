@@ -26,9 +26,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
       <body
-        className={`${inter.variable} ${vazirmatn.variable} bg-[#0A1628] min-h-screen font-sans antialiased`}
+        className={`${inter.variable} ${vazirmatn.variable} bg-[#0A1628] min-h-screen font-sans antialiased overflow-x-hidden`}
       >
         <Header />
         <main className="pt-20 lg:pt-24">{children}</main>

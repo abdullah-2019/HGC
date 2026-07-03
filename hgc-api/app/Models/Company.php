@@ -21,6 +21,7 @@ class Company extends Model
         'mission_en', 'mission_dari', 'mission_pashto',
         'vision_en', 'vision_dari', 'vision_pashto',
         'value_en', 'value_dari', 'value_pashto',
+        'project_count', 'province_count',
         'email', 'phone',
         'address', 'address_en', 'address_dari', 'address_pashto',
         'latitude', 'longitude',
@@ -220,9 +221,9 @@ class Company extends Model
     public function getLocalizedValues(string $lang): ?string
     {
         return match($lang) {
-            'dari' => $this->values_dari,
-            'pashto' => $this->values_pashto,
-            default => $this->values_en ?? $this->values,
+            'dari' => $this->value_dari,
+            'pashto' => $this->value_pashto,
+            default => $this->value_en ?? $this->value,
         };
     }
 }

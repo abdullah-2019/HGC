@@ -68,11 +68,14 @@ interface CompanyProfile {
     registration_number: string | null;
     tax_id: string | null;
     employee_count: number | null;
+    project_count: number | null;
+    province_count: number | null;
   };
   seo: {
     title: string | null;
     description: string | null;
   };
+
 }
 
 // ... rest of the component stays the same
@@ -166,7 +169,7 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
       <CompanyMissionVision company={company} />
       <CompanyStats company={company} />
       <CompanyValues company={company} />
-      <CompanyHistory company={company} />
+      {/* <CompanyHistory company={company} /> */}
       <CompanyAwards company={company} />
     </div>
   );
