@@ -115,11 +115,12 @@ class CompanyController extends Controller
      * Get company profile page data (full detail)
      * GET /api/companies/{slug}/profile
      */
-    public function profile(Request $request, string $slug): JsonResponse
+     public function profile(Request $request, string $slug): JsonResponse
     {
         $lang = $request->get('lang', 'en');
 
         $company = Company::active()
+            ->with('values')  // ← Eager load values relationship
             ->where('slug', $slug)
             ->first();
 
@@ -203,6 +204,7 @@ class CompanyController extends Controller
             'vision_dari' => $company->vision_dari,
             'vision_pashto' => $company->vision_pashto,
             
+            // Single value field (legacy - keep for backward compatibility)
             'value' => $getLocalized($company->value_en, $company->value_dari, $company->value_pashto),
             'value_en' => $company->value_en,
             'value_dari' => $company->value_dari,
@@ -213,6 +215,7 @@ class CompanyController extends Controller
             'icon_name' => $company->icon_name,
             'logo_url' => $company->logo_url,
             'hero_image_url' => $company->hero_image_url,
+            
             'contact' => [
                 'email' => $company->email,
                 'phone' => $company->phone,
@@ -233,13 +236,30 @@ class CompanyController extends Controller
                 'registration_number' => $company->registration_number,
                 'tax_id' => $company->tax_id,
                 'employee_count' => $company->employee_count,
-                'project_count' => $company->project_count ?? 0,        // ← Fixed
-                'province_count' => $company->province_count ?? 0,       // ← Fixed
+                'project_count' => $company->project_count ?? 0,
+                'province_count' => $company->province_count ?? 0,
             ],
             'seo' => [
                 'title' => $company->meta_title_en,
                 'description' => $company->meta_description_en,
             ],
+            
+            // ← CORRECT: values as nested array
+            'values' => $company->values->map(function ($value) use ($lang) {
+                return [
+                    'icon_name' => $value->icon_name,
+                    'title' => $value->getLocalizedTitle($lang),
+                    'title_en' => $value->title_en,
+                    'title_dari' => $value->title_dari,
+                    'title_pashto' => $value->title_pashto,
+                    'description' => $value->getLocalizedDescription($lang),
+                    'description_en' => $value->description_en,
+                    'description_dari' => $value->description_dari,
+                    'description_pashto' => $value->description_pashto,
+                    'sort_order' => $value->sort_order,
+                ];
+            })->toArray(),
         ];
     }
+
 }

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Company extends Model
 {
@@ -218,12 +220,16 @@ class Company extends Model
         return $this->hero_image_path ? asset('storage/' . $this->hero_image_path) : null;
     }
 
-    public function getLocalizedValues(string $lang): ?string
+    public function getLocalizedValue(string $lang): ?string
     {
         return match($lang) {
             'dari' => $this->value_dari,
             'pashto' => $this->value_pashto,
             default => $this->value_en ?? $this->value,
         };
+    }
+    public function values(): HasMany
+    {
+        return $this->hasMany(CompanyValues::class)->orderBy('sort_order');
     }
 }

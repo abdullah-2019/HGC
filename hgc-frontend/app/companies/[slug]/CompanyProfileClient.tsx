@@ -20,19 +20,20 @@ import CompanyAwards from "./sections/CompanyAwards";
 
 import { iconMap } from "@/components/company/iconMap";
 
+
 interface CompanyProfile {
   id: number;
   slug: string;
   name: string;
-  name_dari: string;        // ← ADD
-  name_pashto: string;      // ← ADD
+  name_dari: string;        
+  name_pashto: string;      
   short_name: string;
   tagline: string | null;
   description: string;
   sector: string | null;
   about: string | null;
-  about_dari: string | null;   // ← ADD
-  about_pashto: string | null; // ← ADD
+  about_dari: string | null;   
+  about_pashto: string | null; 
   mission: string | null;
   mission_dari: string | null;
   mission_pashto: string | null;
@@ -76,6 +77,18 @@ interface CompanyProfile {
     description: string | null;
   };
 
+  values: {
+    icon_name: string;
+    title: string;
+    title_en: string;
+    title_dari: string | null;
+    title_pashto: string | null;
+    description: string;
+    description_en: string;
+    description_dari: string | null;
+    description_pashto: string | null;
+    sort_order: number;
+  }[];
 }
 
 // ... rest of the component stays the same

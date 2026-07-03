@@ -1,4 +1,5 @@
 // components/company/iconMap.ts
+import { Shield, Handshake, Lightbulb, Heart, Scale, Leaf } from "lucide-react";
 import {
   Building2,
   Mountain,
@@ -15,4 +16,13 @@ export const iconMap: Record<string, React.ElementType> = {
   Store,
   Landmark,
   Truck,
+};
+
+export const valueIconMap: Record<string, React.ComponentType<{ size?: number; style?: React.CSSProperties }>> = {
+  Shield,
+  Handshake,
+  Lightbulb,
+  Heart,
+  Scale,
+  Leaf,
 };
