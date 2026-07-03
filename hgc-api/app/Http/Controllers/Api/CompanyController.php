@@ -120,7 +120,7 @@ class CompanyController extends Controller
         $lang = $request->get('lang', 'en');
 
         $company = Company::active()
-            ->with('values')  // ← Eager load values relationship
+            ->with('values', 'awards')  // ← Eager load values and awards relationships
             ->where('slug', $slug)
             ->first();
 
@@ -259,6 +259,29 @@ class CompanyController extends Controller
                     'sort_order' => $value->sort_order,
                 ];
             })->toArray(),
+
+            'awards' => $company->awards->map(function ($award) use ($lang) {
+                return [
+                    'id' => $award->id,
+                    'icon_name' => $award->icon_name,
+                    'year' => $award->award_year,
+                    'title' => $award->getLocalizedTitle($lang),
+                    'title_en' => $award->title_en,
+                    'title_dari' => $award->title_dari,
+                    'title_pashto' => $award->title_pashto,
+                    'description' => $award->getLocalizedDescription($lang),
+                    'description_en' => $award->description_en,
+                    'description_dari' => $award->description_dari,
+                    'description_pashto' => $award->description_pashto,
+                    'organization' => $award->getLocalizedOrganization($lang),
+                    'organization_en' => $award->organization_en,
+                    'organization_dari' => $award->organization_dari,
+                    'organization_pashto' => $award->organization_pashto,
+                    'image_url' => $award->image_url ? asset('storage/' . $award->image_url) : null,
+                    'sort_order' => $award->sort_order,
+                ];
+            })->toArray(),
+
         ];
     }
 

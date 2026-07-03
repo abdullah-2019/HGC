@@ -1,8 +1,55 @@
+// components/company/CompanyAwards.tsx
 "use client";
 
 import { motion } from "framer-motion";
 import { useI18n } from "@/components/useI18nStore";
-import { Award, Trophy, Star, Medal } from "lucide-react";
+import {
+  Award,
+  Trophy,
+  Star,
+  Medal,
+  Gem,
+  Mountain,
+  Handshake,
+  Store,
+  Landmark,
+  Truck,
+  type LucideIcon,
+} from "lucide-react";
+
+// Map icon names to Lucide components
+const iconMap: Record<string, LucideIcon> = {
+  Trophy,
+  Star,
+  Medal,
+  Award,
+  Gem,
+  Mountain,
+  Handshake,
+  Store,
+  Landmark,
+  Truck,
+};
+
+interface AwardItem {
+  id: number;
+  icon_name: string | null;
+  year: number | null;
+  title: string;
+  title_en: string | null;
+  title_dari: string | null;
+  title_pashto: string | null;
+  description: string | null;
+  description_en: string | null;
+  description_dari: string | null;
+  description_pashto: string | null;
+  organization: string | null;
+  organization_en: string | null;
+  organization_dari: string | null;
+  organization_pashto: string | null;
+  image_url: string | null;
+  sort_order: number;
+}
 
 interface CompanyAwardsProps {
   company: {
@@ -12,77 +59,39 @@ interface CompanyAwardsProps {
       established_year: number | null;
     };
   };
+  awards: AwardItem[] | null | undefined;
 }
 
-export default function CompanyAwards({ company }: CompanyAwardsProps) {
+export default function CompanyAwards({ company, awards }: CompanyAwardsProps) {
   const { lang, dir } = useI18n();
-  const establishedYear = company.details.established_year || 2001;
-  const currentYear = new Date().getFullYear();
 
-  // Generate awards based on company history
-  const awardIcons = [Trophy, Star, Medal, Award, Trophy, Star];
-  const awards = [
-    {
-      year: currentYear.toString(),
-      title:
-        lang === "en"
-          ? "Excellence in Service"
-          : lang === "dari"
-          ? "برتری در خدمات"
-          : "د خدماتو کې بریا",
-      org: company.name,
-    },
-    {
-      year: (currentYear - 1).toString(),
-      title:
-        lang === "en"
-          ? "Best Employer Award"
-          : lang === "dari"
-          ? "جایزه بهترین کارفرما"
-          : "د غوره کارګمارونکي جایزه",
-      org: "Afghan Chamber of Commerce",
-    },
-    {
-      year: (currentYear - 2).toString(),
-      title:
-        lang === "en"
-          ? "Innovation Award"
-          : lang === "dari"
-          ? "جایزه نوآوری"
-          : "د نوښت جایزه",
-      org: company.name,
-    },
-    {
-      year: (currentYear - 3).toString(),
-      title:
-        lang === "en"
-          ? "Quality Leadership"
-          : lang === "dari"
-          ? "رهبری کیفیت"
-          : "د کیفیت مشري",
-      org: "National Business Council",
-    },
-    {
-      year: (currentYear - 4).toString(),
-      title:
-        lang === "en"
-          ? "Community Impact"
-          : lang === "dari"
-          ? "تأثیر اجتماعی"
-          : "د ټولنې اغیز",
-      org: company.name,
-    },
-    {
-      year: (currentYear - 5).toString(),
-      title:
-        lang === "en"
-          ? "Sustainable Business"
-          : lang === "dari"
-          ? "کسب‌وکار پایدار"
-          : "دوامداره سوداګري",
-      org: "Green Afghanistan Initiative",
-    },
-  ];
+  // 🛡️ HIDE ENTIRE SECTION if no awards data
+  if (!awards || awards.length === 0) {
+    return null;
+  }
+
+  // Helper to get localized content with fallback
+  const getLocalized = (
+    localized: string | null,
+    en: string | null,
+    dari: string | null,
+    pashto: string | null
+  ): string | null => {
+    if (lang === "dari" && dari) return dari;
+    if (lang === "pashto" && pashto) return pashto;
+    return localized ?? en ?? null;
+  };
+
+  // Section title translations
+  const sectionTitle =
+    lang === "en"
+      ? "Awards & Achievements"
+      : lang === "dari"
+      ? "جوایز و دستاوردها"
+      : "جایزې او لاسته راوړنې";
+
+  const sectionBadge =
+    lang === "en" ? "Recognition" : lang === "dari" ? "تقدیر" : "ستاینه";
 
   return (
     <section className="py-20" dir={dir}>
@@ -102,23 +111,45 @@ export default function CompanyAwards({ company }: CompanyAwardsProps) {
             }}
           >
             <Award size={18} />
-            {lang === "en" ? "Recognition" : lang === "dari" ? "تقدیر" : "ستاینه"}
+            {sectionBadge}
           </div>
           <h2 className="text-3xl font-bold text-white md:text-4xl">
-            {lang === "en"
-              ? "Awards & Achievements"
-              : lang === "dari"
-              ? "جوایز و دستاوردها"
-              : "جایزې او لاسته راوړنې"}
+            {sectionTitle}
           </h2>
         </motion.div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {awards.map((award, index) => {
-            const AwardIcon = awardIcons[index % awardIcons.length];
+            // Resolve icon dynamically
+            const AwardIcon =
+              (award.icon_name && iconMap[award.icon_name]) || Award;
+
+            // Get localized values with proper fallbacks
+            const title = getLocalized(
+              award.title,
+              award.title_en,
+              award.title_dari,
+              award.title_pashto
+            );
+            const description = getLocalized(
+              award.description,
+              award.description_en,
+              award.description_dari,
+              award.description_pashto
+            );
+            const organization = getLocalized(
+              award.organization,
+              award.organization_en,
+              award.organization_dari,
+              award.organization_pashto
+            );
+
+            // Skip rendering if no title (minimum required field)
+            if (!title) return null;
+
             return (
               <motion.div
-                key={award.title}
+                key={award.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -129,20 +160,41 @@ export default function CompanyAwards({ company }: CompanyAwardsProps) {
                   className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
                   style={{ backgroundColor: `${company.accent_color}15` }}
                 >
-                  <AwardIcon size={28} style={{ color: company.accent_color }} />
+                  <AwardIcon
+                    size={28}
+                    style={{ color: company.accent_color }}
+                  />
                 </div>
-                <div>
-                  <span
-                    className="inline-block mb-1 rounded px-2 py-0.5 text-xs font-bold"
-                    style={{
-                      backgroundColor: `${company.accent_color}15`,
-                      color: company.accent_color,
-                    }}
-                  >
-                    {award.year}
-                  </span>
-                  <h3 className="mb-1 text-base font-bold text-white">{award.title}</h3>
-                  <p className="text-sm text-white/50">{award.org}</p>
+                <div className="min-w-0 flex-1">
+                  {/* Year badge */}
+                  {award.year && (
+                    <span
+                      className="inline-block mb-1 rounded px-2 py-0.5 text-xs font-bold"
+                      style={{
+                        backgroundColor: `${company.accent_color}15`,
+                        color: company.accent_color,
+                      }}
+                    >
+                      {award.year}
+                    </span>
+                  )}
+
+                  {/* Title - always shown */}
+                  <h3 className="mb-1 text-base font-bold text-white">
+                    {title}
+                  </h3>
+
+                  {/* Description - hidden if null */}
+                  {description && (
+                    <p className="mb-1 text-sm text-white/70 line-clamp-2">
+                      {description}
+                    </p>
+                  )}
+
+                  {/* Organization - hidden if null */}
+                  {organization && (
+                    <p className="text-sm text-white/50">{organization}</p>
+                  )}
                 </div>
               </motion.div>
             );

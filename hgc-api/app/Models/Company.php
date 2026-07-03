@@ -228,8 +228,17 @@ class Company extends Model
             default => $this->value_en ?? $this->value,
         };
     }
+
+    // Relationship between Company and CompanyValues
     public function values(): HasMany
     {
         return $this->hasMany(CompanyValues::class)->orderBy('sort_order');
     }
+
+    // Relationship between Company and CompanyAwards
+    public function awards(): HasMany
+    {
+        return $this->hasMany(CompanyAwards::class)->ordered();
+    }
+
 }

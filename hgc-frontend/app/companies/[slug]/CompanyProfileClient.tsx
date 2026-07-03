@@ -25,15 +25,15 @@ interface CompanyProfile {
   id: number;
   slug: string;
   name: string;
-  name_dari: string;        
-  name_pashto: string;      
+  name_dari: string;
+  name_pashto: string;
   short_name: string;
   tagline: string | null;
   description: string;
   sector: string | null;
   about: string | null;
-  about_dari: string | null;   
-  about_pashto: string | null; 
+  about_dari: string | null;
+  about_pashto: string | null;
   mission: string | null;
   mission_dari: string | null;
   mission_pashto: string | null;
@@ -89,6 +89,27 @@ interface CompanyProfile {
     description_pashto: string | null;
     sort_order: number;
   }[];
+
+  awards: {
+    id: number;
+    icon_name: string | null;
+    year: number | null;
+    title: string;
+    title_en: string | null;
+    title_dari: string | null;
+    title_pashto: string | null;
+    description: string | null;
+    description_en: string | null;
+    description_dari: string | null;
+    description_pashto: string | null;
+    organization: string | null;
+    organization_en: string | null;
+    organization_dari: string | null;
+    organization_pashto: string | null;
+    image_url: string | null;
+    sort_order: number;
+  }[] | null;
+
 }
 
 // ... rest of the component stays the same
@@ -183,7 +204,7 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
       <CompanyStats company={company} />
       <CompanyValues company={company} />
       {/* <CompanyHistory company={company} /> */}
-      <CompanyAwards company={company} />
+      <CompanyAwards company={company} awards={company.awards} />
     </div>
   );
 }
