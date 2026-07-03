@@ -7,6 +7,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
+import { t } from "@/components/translations";
 import Link from "next/link";
 
 import CompanyProfileHero from "./sections/CompanyProfileHero";
@@ -23,13 +24,25 @@ interface CompanyProfile {
   id: number;
   slug: string;
   name: string;
+  name_dari: string;        // ← ADD
+  name_pashto: string;      // ← ADD
   short_name: string;
   tagline: string | null;
   description: string;
   sector: string | null;
   about: string | null;
+  about_dari: string | null;   // ← ADD
+  about_pashto: string | null; // ← ADD
   mission: string | null;
+  mission_dari: string | null;
+  mission_pashto: string | null;
   vision: string | null;
+  vision_dari: string | null;
+  vision_pashto: string | null;
+  value: string | null;
+  value_en: string | null;
+  value_dari: string | null;
+  value_pashto: string | null;
   accent_color: string;
   secondary_color: string | null;
   icon_name: string;
@@ -62,6 +75,7 @@ interface CompanyProfile {
   };
 }
 
+// ... rest of the component stays the same
 export default function CompanyProfileClient({ slug }: { slug: string }) {
   const { lang, dir } = useI18n();
   const [company, setCompany] = useState<CompanyProfile | null>(null);
@@ -82,13 +96,7 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
 
         if (!res.ok) {
           if (res.status === 404) {
-            throw new Error(
-              lang === "en"
-                ? "Company not found"
-                : lang === "dari"
-                ? "شرکت یافت نشد"
-                : "شرکت ونه موندل شو"
-            );
+            throw new Error(t(lang, "error.companyNotFound"));
           }
           throw new Error(`HTTP ${res.status}`);
         }
@@ -101,7 +109,7 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
 
         const json = await res.json();
         if (!json.success) {
-          throw new Error(json.message || "Failed to load company");
+          throw new Error(json.message || t(lang, "error.loadFailed"));
         }
 
         setCompany(json.data);
@@ -121,13 +129,7 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
       <div className="min-h-screen bg-[#0A1628] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-10 h-10 text-[#C9A227] animate-spin mx-auto mb-4" />
-          <p className="text-white/50 text-sm">
-            {lang === "en"
-              ? "Loading company profile..."
-              : lang === "dari"
-              ? "در حال بارگذاری پروفایل شرکت..."
-              : "د شرکت پروفایل بارول کیږي..."}
-          </p>
+          <p className="text-white/50 text-sm">{t(lang, "companies.loading.profile")}</p>
         </div>
       </div>
     );
@@ -142,11 +144,7 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
             <Icon className="w-8 h-8 text-red-400" />
           </div>
           <h2 className="text-white text-xl font-bold mb-2">
-            {lang === "en"
-              ? "Company Not Found"
-              : lang === "dari"
-              ? "شرکت یافت نشد"
-              : "شرکت ونه موندل شو"}
+            {t(lang, "error.companyNotFound")}
           </h2>
           <p className="text-white/40 text-sm mb-6">{error}</p>
           <Link
@@ -154,11 +152,7 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#C9A227]/10 border border-[#C9A227]/20 text-[#C9A227] hover:bg-[#C9A227]/20 transition-all text-sm font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
-            {lang === "en"
-              ? "Back to Home"
-              : lang === "dari"
-              ? "بازگشت به صفحه اصلی"
-              : "بیرته کور ته"}
+            {t(lang, "nav.home")}
           </Link>
         </div>
       </div>

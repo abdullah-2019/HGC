@@ -171,21 +171,44 @@ class CompanyController extends Controller
     }
 
     /**
-     * Format company for full profile view
+     * Format company for profile view
      */
     private function formatCompanyProfile(Company $company, string $lang): array
     {
+        $getLocalized = function(?string $en, ?string $dari, ?string $pashto) use ($lang): ?string {
+            if ($lang === 'dari' && $dari) return $dari;
+            if ($lang === 'pashto' && $pashto) return $pashto;
+            return $en;
+        };
+
         return [
             'id' => $company->id,
             'slug' => $company->slug,
-            'name' => $company->getLocalizedName($lang),
-            'short_name' => $company->getLocalizedShortName($lang),
-            'tagline' => $company->getLocalizedTagline($lang),
-            'description' => $company->getLocalizedDescription($lang),
-            'sector' => $company->getLocalizedSector($lang),
-            'about' => $company->getLocalizedAbout($lang),
-            'mission' => $company->getLocalizedMission($lang),
-            'vision' => $company->getLocalizedVision($lang),
+            'name' => $getLocalized($company->name_en, $company->name_dari, $company->name_pashto),
+            'name_dari' => $company->name_dari,
+            'name_pashto' => $company->name_pashto,
+            'short_name' => $getLocalized($company->short_name_en, $company->short_name_dari, $company->short_name_pashto),
+            'tagline' => $getLocalized($company->tagline_en, $company->tagline_dari, $company->tagline_pashto),
+            'description' => $getLocalized($company->description_en, $company->description_dari, $company->description_pashto),
+            'sector' => $getLocalized($company->sector_en, $company->sector_dari, $company->sector_pashto),
+            'about' => $getLocalized($company->about_en, $company->about_dari, $company->about_pashto),
+            'about_dari' => $company->about_dari,
+            'about_pashto' => $company->about_pashto,
+            'mission' => $getLocalized($company->mission_en, $company->mission_dari, $company->mission_pashto),
+            'mission_en' => $company->mission_en,
+            'mission_dari' => $company->mission_dari,
+            'mission_pashto' => $company->mission_pashto,
+            'vision' => $getLocalized($company->vision_en, $company->vision_dari, $company->vision_pashto),
+            'vision_en' => $company->vision_en,
+            'vision_dari' => $company->vision_dari,
+            'vision_pashto' => $company->vision_pashto,
+            
+            // FIX: Make sure values uses the right column names
+            'value' => $getLocalized($company->value_en, $company->value_dari, $company->value_pashto),
+            'value_en' => $company->value_en,
+            'value_dari' => $company->value_dari,
+            'value_pashto' => $company->value_pashto,
+            
             'accent_color' => $company->accent_color,
             'secondary_color' => $company->secondary_color,
             'icon_name' => $company->icon_name,
@@ -194,12 +217,12 @@ class CompanyController extends Controller
             'contact' => [
                 'email' => $company->email,
                 'phone' => $company->phone,
-                'address' => $company->getLocalizedAddress($lang),
+                'address' => $company->address,
                 'latitude' => $company->latitude,
                 'longitude' => $company->longitude,
             ],
             'web' => [
-                'website' => $company->website ?? $company->website_url,
+                'website' => $company->website,
                 'facebook' => $company->facebook_url,
                 'linkedin' => $company->linkedin_url,
                 'twitter' => $company->twitter_url,
@@ -213,8 +236,8 @@ class CompanyController extends Controller
                 'employee_count' => $company->employee_count,
             ],
             'seo' => [
-                'title' => $company->getLocalizedMetaTitle($lang),
-                'description' => $company->getLocalizedMetaDescription($lang),
+                'title' => $company->meta_title_en,
+                'description' => $company->meta_description_en,
             ],
         ];
     }

@@ -20,6 +20,7 @@ class Company extends Model
         'about_en', 'about_dari', 'about_pashto',
         'mission_en', 'mission_dari', 'mission_pashto',
         'vision_en', 'vision_dari', 'vision_pashto',
+        'value_en', 'value_dari', 'value_pashto',
         'email', 'phone',
         'address', 'address_en', 'address_dari', 'address_pashto',
         'latitude', 'longitude',
@@ -214,5 +215,14 @@ class Company extends Model
     public function getHeroImageUrlAttribute(): ?string
     {
         return $this->hero_image_path ? asset('storage/' . $this->hero_image_path) : null;
+    }
+
+    public function getLocalizedValues(string $lang): ?string
+    {
+        return match($lang) {
+            'dari' => $this->values_dari,
+            'pashto' => $this->values_pashto,
+            default => $this->values_en ?? $this->values,
+        };
     }
 }
