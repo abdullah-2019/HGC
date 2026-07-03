@@ -7,7 +7,11 @@ import { Target, Globe, Users, Award, Calendar } from "lucide-react";
 interface CompanyAboutProps {
   company: {
     name: string;
+    name_dari: string;
+    name_pashto: string;
     about: string | null;
+    about_dari: string | null;
+    about_pashto: string | null;
     accent_color: string;
     icon_name: string;
     logo_url: string | null;
@@ -15,7 +19,6 @@ interface CompanyAboutProps {
     details: {
       established_year: number | null;
       founded_year: number | null;
-      employee_count: number | null;
     };
   };
 }
@@ -28,15 +31,30 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
 
   const highlights = [
     { icon: Calendar, labelKey: "profile.about_founded", value: establishedYear?.toString() || "—" },
-    { icon: Globe, labelKey: "profile.about_countries", value: "3+" },
-    { icon: Users, labelKey: "profile.about_employees", value: company.details.employee_count ? `${company.details.employee_count}+` : "500+" },
     { icon: Award, labelKey: "profile.about_experience", value: yearsOfExperience ? `${yearsOfExperience}+` : "25+" },
   ];
+
+  // Get the about text based on language
+  const getAboutText = () => {
+    if (lang === "dari" && company.about_dari) return company.about_dari;
+    if (lang === "pashto" && company.about_pashto) return company.about_pashto;
+    return company.about;
+  };
+
+  const aboutText = getAboutText();
+
+  // Fallback text when about is empty
+  const fallbackText = {
+    en: "With a commitment to quality and innovation, we continue to expand our services and impact across multiple sectors.",
+    dari: "با تعهد به کیفیت و نوآوری، ما به توسعه خدمات و تأثیر خود در بخش‌های مختلف ادامه می‌دهیم.",
+    pashto: "د کیفیت او نوښت سره د تعهد سره، موږ خپل خدمات او اغیز په بیلابیلو برخو کې پراخوو.",
+  };
 
   return (
     <section className="py-20" dir={dir}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-16 lg:grid-cols-2 items-center">
+        {/* Changed: items-start instead of items-center */}
+        <div className="grid gap-16 lg:grid-cols-2 items-start">
           {/* Left - Image */}
           <motion.div
             initial={{ opacity: 0, x: dir === "rtl" ? 50 : -50 }}
@@ -72,9 +90,10 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
+            className="flex flex-col" // Added flex flex-col
           >
             <div
-              className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
+              className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium w-fit"
               style={{
                 backgroundColor: `${company.accent_color}15`,
                 color: company.accent_color,
@@ -88,33 +107,24 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
               {lang === "en"
                 ? `About ${company.name}`
                 : lang === "dari"
-                  ? `درباره ${company.name}`
-                  : `په اړه ${company.name}`}
+                  ? `درباره ${company.name_dari || company.name}`
+                  : `په اړه ${company.name_pashto || company.name}`}
             </h2>
 
-            {company.about ? (
+            {/* About text - always render HTML if available, show fallback if empty */}
+            {aboutText ? (
               <div
                 className="mb-8 text-white/60 leading-relaxed prose prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: company.about }}
+                dangerouslySetInnerHTML={{ __html: aboutText }}
               />
             ) : (
-              <>
-                <p className="mb-6 text-white/60 leading-relaxed">
-                  {lang === "en"
-                    ? `${company.name} is a leading company under Hafez Group of Companies, delivering excellence across Afghanistan.`
-                    : lang === "dari"
-                      ? `${company.name} یک شرکت پیشرو تحت گروپ شرکت‌های حافظ است که در سراسر افغانستان برتری را ارائه می‌دهد.`
-                      : `${company.name} د حافظ د شرکتونو ګروپ لاندې یو مخکښ شرکت دی چې په افغانستان کې د بریا خدمات وړاندې کوي.`}
-                </p>
-                <p className="mb-8 text-white/60 leading-relaxed">
-                  {lang === "en"
-                    ? "With a commitment to quality and innovation, we continue to expand our services and impact across multiple sectors."
-                    : lang === "dari"
-                      ? "با تعهد به کیفیت و نوآوری، ما به توسعه خدمات و تأثیر خود در بخش‌های مختلف ادامه می‌دهیم."
-                      : "د کیفیت او نوښت سره د تعهد سره، موږ خپل خدمات او اغیز په بیلابیلو برخو کې پراخوو."}
-                </p>
-              </>
+              <p className="mb-8 text-white/60 leading-relaxed">
+                {fallbackText[lang as keyof typeof fallbackText] || fallbackText.en}
+              </p>
             )}
+
+            {/* Spacer to push highlights to bottom when text is short */}
+            <div className="flex-1" />
 
             <div className="grid grid-cols-2 gap-4">
               {highlights.map((item) => (
@@ -128,26 +138,16 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
                     {lang === "en"
                       ? item.labelKey === "profile.about_founded"
                         ? "Founded"
-                        : item.labelKey === "profile.about_countries"
-                          ? "Countries"
-                          : item.labelKey === "profile.about_employees"
-                            ? "Employees"
-                            : "Years Exp."
+                        : item.labelKey === "profile.about_employees"
+                          ? "Employees"
+                          : "Years Exp."
                       : lang === "dari"
                         ? item.labelKey === "profile.about_founded"
                           ? "تأسیس"
-                          : item.labelKey === "profile.about_countries"
-                            ? "کشورها"
-                            : item.labelKey === "profile.about_employees"
-                              ? "کارمندان"
-                              : "سال تجربه"
+                          : "سال تجربه"
                         : item.labelKey === "profile.about_founded"
                           ? "تأسیس"
-                          : item.labelKey === "profile.about_countries"
-                            ? "هیوادونه"
-                            : item.labelKey === "profile.about_employees"
-                              ? "کارکوونکي"
-                              : "د تجربې کالونه"}
+                          : "د تجربې کالونه"}
                   </p>
                 </div>
               ))}
