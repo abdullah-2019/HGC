@@ -55,24 +55,29 @@ export default function ContactMap() {
               }`}
             >
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#C9A227]/15 text-[#C9A227]">
-                  <MapPin size={24} />
-                </div>
-                <div>
-                  <h4 className="text-lg font-bold text-white">
-                    {t(lang, "contact.kabul_office")}
-                  </h4>
-                  <p className="mt-1 text-sm text-white/60">
-                    Share-Now, Old Taimani, Street No 3, Kabul, Afghanistan
-                  </p>
-                  <a
-                    href="tel:+93711111694"
-                    className="mt-2 inline-block text-sm font-medium text-[#C9A227] hover:text-[#D4AF37]"
-                  >
-                    +93 (0) 711 111 694
-                  </a>
-                </div>
-              </div>
+  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#C9A227]/15 text-[#C9A227]">
+    {/* Slightly reduced icon container and size for visual balance */}
+    <MapPin size={18} />
+  </div>
+  <div>
+    {/* Changed text-lg to text-base (or use text-sm if you want it even smaller) */}
+    <h4 className="text-base font-bold text-white">
+      {t(lang, "contact.kabul_office")}
+    </h4>
+    {/* Changed text-sm to text-xs */}
+    <p className="mt-1 text-xs text-white/60">
+      Share-Now, Old Taimani, Street No 3, Kabul, Afghanistan
+    </p>
+    {/* Changed text-sm to text-xs */}
+    <a
+      href="tel:+93711111694"
+      className="mt-1.5 inline-block text-xs font-medium text-[#C9A227] hover:text-[#D4AF37]"
+    >
+      +93 (0) 711 111 694
+    </a>
+  </div>
+</div>
+
             </div>
           </div>
         </motion.div>
