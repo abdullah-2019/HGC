@@ -13,7 +13,7 @@ export default function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background layers */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[url('/images/hero-construction.jpg')] bg-cover bg-center" />
+        <div className="absolute inset-0 bg-[url('/images/hero-construction.webp')] bg-cover bg-center" />
         <div className="absolute inset-0 bg-[#0A1628]/85" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#0A1628_70%)]" />
       </div>

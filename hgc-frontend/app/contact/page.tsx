@@ -1,7 +1,6 @@
 import ContactHero from "./sections/ContactHero";
-import ContactInfo from "./sections/ContactInfo";
-import ContactForm from "./sections/ContactForm";
 import ContactMap from "./sections/ContactMap";
+import ContactSection from "./sections/ContactSection";
 
 export const metadata = {
   title: "Contact Us - Hafez Group of Companies",
@@ -12,8 +11,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white">
       <ContactHero />
-      <ContactInfo />
-      <ContactForm />
+      <ContactSection />
       <ContactMap />
     </main>
   );

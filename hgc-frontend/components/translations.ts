@@ -78,29 +78,39 @@ export const translations = {
       provincesCovered: "Provinces Covered",
       companiesInGroup: "Companies in Group",
     },
+    products: {
+      hero: {
+        title: "Our Products",
+        description:
+          "We offer a wide range of high-quality products that meet the diverse needs of our customers.",
+      }
+    },
     contact: {
       hero_title: "Contact Us",
       hero_subtitle: "We're here to assist you. Reach out with any questions or inquiries.",
       get_in_touch: "Get in Touch",
-      email_address: "Email Address",
-      call_us: "Call Us",
+      headquarters: "Headquarters",
       kabul_office: "Kabul Office",
       dubai_office: "Dubai Office",
       karachi_office: "Karachi Office",
-      send_message: "Send Message",
+      send_message: "Send a Message",
       form_name: "Full Name",
       form_email: "Email Address",
-      form_phone: "Phone Number",
+      form_phone: "Phone Number (optional)",
       form_subject: "Subject",
       form_message: "Your Message",
       form_submit: "Send Message",
-      form_success: "Thank you! Your message has been sent successfully.",
+      form_sending: "Sending...",
+      form_success: "Thank you! Your message has been sent successfully. We will get back to you soon.",
       form_error: "Something went wrong. Please try again.",
       find_us: "Find Us On The Map",
       office_hours: "Office Hours",
       mon_fri: "Saturday - Thursday",
       time: "8:00 AM - 5:00 PM",
       follow_us: "Follow Us",
+      email_address: "Email Address",
+      call_us: "Call Us",
+      company_description: "Hafez Group of Companies operates from its headquarters in Kabul, serving clients and partners across Afghanistan and the region through construction, logistics, mining, financial services, and industrial development projects.",
     },
     profile: {
       hero_badge: "About Us",
@@ -206,7 +216,6 @@ export const translations = {
     error: {
       companyNotFound: "Company not found"
     }
-
   },
 
   dari: {
@@ -297,25 +306,28 @@ export const translations = {
       hero_title: "تماس با ما",
       hero_subtitle: "ما در اینجا هستیم تا به شما کمک کنیم. برای هر سوال یا استعلام با ما تماس بگیرید.",
       get_in_touch: "با ما در تماس باشید",
-      email_address: "آدرس ایمیل",
-      call_us: "با ما تماس بگیرید",
+      headquarters: "دفتر مرکزی",
       kabul_office: "دفتر کابل",
       dubai_office: "دفتر دبی",
       karachi_office: "دفتر کراچی",
       send_message: "ارسال پیام",
       form_name: "نام کامل",
       form_email: "آدرس ایمیل",
-      form_phone: "شماره تماس",
+      form_phone: "شماره تماس (اختیاری)",
       form_subject: "موضوع",
       form_message: "پیام شما",
       form_submit: "ارسال پیام",
-      form_success: "متشکرم! پیام شما با موفقیت ارسال شد.",
+      form_sending: "در حال ارسال...",
+      form_success: "متشکریم! پیام شما با موفقیت ارسال شد. به زودی با شما تماس خواهیم گرفت.",
       form_error: "مشکلی پیش آمد. لطفاً دوباره تلاش کنید.",
       find_us: "ما را در نقشه پیدا کنید",
       office_hours: "ساعت کاری",
       mon_fri: "شنبه - پنجشنبه",
       time: "۸:۰۰ صبح - ۵:۰۰ بعد از ظهر",
       follow_us: "ما را دنبال کنید",
+      email_address: "آدرس ایمیل",
+      call_us: "با ما تماس بگیرید",
+      company_description: "گروه شرکت‌های حافظ از دفتر مرکزی خود در کابل فعالیت می‌کند و از طریق پروژه‌های ساخت و ساز، لجستیک، معادن، خدمات مالی و توسعه صنعتی به مشتریان و شرکای خود در سراسر افغانستان و منطقه خدمات ارائه می‌دهد.",
     },
     profile: {
       hero_badge: "درباره ما",
@@ -420,8 +432,7 @@ export const translations = {
     },
     error: {
       companyNotFound: "شرکت یافت نشد"
-    },
-
+    }
   },
 
   pashto: {
@@ -501,29 +512,39 @@ export const translations = {
       provincesCovered: "پوښل شوي ولایتونه",
       companiesInGroup: "شرکتونه په ګروپ کې",
     },
+    products: {
+      hero: {
+        title: "زموږ محصولات",
+        description:
+          "موږ د لوړ کیفیت محصولاتو پراخه لړۍ وړاندې کوو چې زموږ د پیرودونکو مختلفو اړتیاوې پوره کوي.",
+      }
+    },
     contact: {
       hero_title: "موږ سره اړیکه ونیسئ",
       hero_subtitle: "موږ دلته ستاسو د مرستې لپاره یو. د هرې پوښتنې یا استعلام لپاره موږ سره اړیکه ونیسئ.",
       get_in_touch: "موږ سره اړیکه ونیسئ",
-      email_address: "بریښنالیک پته",
-      call_us: "زموږ سره اړیکه ونیسئ",
+      headquarters: "مرکزي دفتر",
       kabul_office: "د کابل دفتر",
       dubai_office: "د دبۍ دفتر",
       karachi_office: "د کراچۍ دفتر",
       send_message: "پیغام ولېږئ",
       form_name: "بشپړ نوم",
       form_email: "بریښنالیک پته",
-      form_phone: "د اړیکې شمېره",
+      form_phone: "د اړیکې شمېره (اختياري)",
       form_subject: "موضوع",
       form_message: "ستاسو پیغام",
       form_submit: "پیغام ولېږئ",
-      form_success: "مننه! ستاسو پیغام په بریالیتوب سره ولېږل شو.",
+      form_sending: "د لیږلو په حال کې...",
+      form_success: "مننه! ستاسو پیغام په بریالیتوب سره ولېږل شو. موږ به ژر ستاسو سره اړیکه ونیسو.",
       form_error: "ستونزه رامنځته شوه. مهرباني وکړئ بیا هڅه وکړئ.",
       find_us: "موږ په نقشه کې پیدا کړئ",
       office_hours: "د دفتر ساعتونه",
       mon_fri: "شنبه - پنجشنبه",
       time: "۸:۰۰ سهار - ۵:۰۰ ماښام",
       follow_us: "موږ تعقیب کړئ",
+      email_address: "د بریښنالیک پته",
+      call_us: "زموږ سره اړیکه ونیسئ",
+      company_description: "د حافظ شرکتونو ګروپ خپل فعالیتونه د کابل په مرکزي دفتر کې ترسره کوي، او د جوړونې، لوجستیک، کانونو، مالي خدماتو او صنعتي پراختیا پروژو له لارې د افغانستان او سیمې په کچه خپلو پیرودونکو او شریکانو ته خدمات وړاندې کوي.",
     },
     profile: {
       hero_badge: "زموږ په اړه",
@@ -534,6 +555,7 @@ export const translations = {
       about_title: "د حافظ شرکتونو ګروپ",
       about_desc1: "د حافظ شرکتونو ګروپ (HGC) د افغانستان کې یو مخکښ او متنوع ګروپ دی چې په ۲۰۰۱ کال کې تاسیس شو. د دوو لسیزو څخه زیاتې تجربې سره، موږ له یوې واحدې جوړونې شرکت څخه یوې څو برخیزې شرکت ته وده کړې چې په جوړولو، د کانونو استخراج، لوجستیک، سوداګرۍ او مالي خدماتو کې فعالیت کوي.",
       about_desc2: "زموږ د تعالی، صداقت او نوښت ته ژمنډلې موږ د دولتي پروژو، نړیوالو سازمانونو او خصوصي پیرودونکو لپاره د باور وړ شریکانو په توګه وګرځول.",
+
       about_founded: "تاسیس",
       about_countries: "هیوادونه",
       about_employees: "کارکوونکي",
@@ -630,7 +652,6 @@ export const translations = {
       companyNotFound: "شرکت ونه موندل شو"
     }
   },
-
 } as const;
 
 export function t(lang: Lang, path: string): string {
