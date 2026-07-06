@@ -89,23 +89,23 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
   // Social links (same for all languages)
   const socialLinks = contactInfo
     ? ([
-        { key: "facebook" as const, icon: FaFacebookF, label: "Facebook" },
-        { key: "instagram" as const, icon: FaInstagram, label: "Instagram" },
-        { key: "telegram" as const, icon: FaTelegramPlane, label: "Telegram" },
-        { key: "x" as const, icon: FaGlobe, label: "X" },
-        { key: "linkedin" as const, icon: FaGlobe, label: "LinkedIn" },
-        { key: "youtube" as const, icon: FaGlobe, label: "YouTube" },
-        { key: "whatsapp" as const, icon: FaGlobe, label: "WhatsApp" },
-      ] as const)
-        .filter((item) => {
-          const url = contactInfo[item.key];
-          return typeof url === "string" && url.length > 0;
-        })
-        .map((item) => ({
-          icon: item.icon,
-          label: item.label,
-          href: contactInfo[item.key] as string,
-        }))
+      { key: "facebook" as const, icon: FaFacebookF, label: "Facebook" },
+      { key: "instagram" as const, icon: FaInstagram, label: "Instagram" },
+      { key: "telegram" as const, icon: FaTelegramPlane, label: "Telegram" },
+      { key: "x" as const, icon: FaGlobe, label: "X" },
+      { key: "linkedin" as const, icon: FaGlobe, label: "LinkedIn" },
+      { key: "youtube" as const, icon: FaGlobe, label: "YouTube" },
+      { key: "whatsapp" as const, icon: FaGlobe, label: "WhatsApp" },
+    ] as const)
+      .filter((item) => {
+        const url = contactInfo[item.key];
+        return typeof url === "string" && url.length > 0;
+      })
+      .map((item) => ({
+        icon: item.icon,
+        label: item.label,
+        href: contactInfo[item.key] as string,
+      }))
     : [];
 
   const containerVariants = {
@@ -126,38 +126,38 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
     <main className="min-h-screen bg-[#0A1628]">
       {/* ========== HERO ========== */}
       {/* ========== HERO ========== */}
-<section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
-  <div className="absolute inset-0">
-    <Image
-      src="/images/contact.webp"
-      alt="HGC Contact"
-      fill
-      className="object-cover"
-      priority
-    />
-    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
-  </div>
-  <div className="relative z-10 flex h-full items-center justify-center px-4">
-    <div className="text-center">
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl"
-      >
-        {t(lang, "contact.hero_title")}
-      </motion.h1>
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="mx-auto max-w-2xl text-lg text-white/90 md:text-xl"
-      >
-        {t(lang, "contact.hero_subtitle")}
-      </motion.p>
-    </div>
-  </div>
-</section>
+      <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/contact.webp"
+            alt="HGC Contact"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+        </div>
+        <div className="relative z-10 flex h-full items-center justify-center px-4">
+          <div className="text-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl"
+            >
+              {t(lang, "contact.hero_title")}
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mx-auto max-w-2xl text-lg text-white/90 md:text-xl"
+            >
+              {t(lang, "contact.hero_subtitle")}
+            </motion.p>
+          </div>
+        </div>
+      </section>
 
       {/* ========== FORM + INFO ========== */}
       <section className="relative overflow-hidden bg-[#0A1628] py-24" dir={dir}>
@@ -196,9 +196,8 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div className="relative">
                       <User
-                        className={`absolute top-1/2 -translate-y-1/2 text-white/40 ${
-                          dir === "rtl" ? "right-4" : "left-4"
-                        }`}
+                        className={`absolute top-1/2 -translate-y-1/2 text-white/40 ${dir === "rtl" ? "right-4" : "left-4"
+                          }`}
                         size={20}
                       />
                       <input
@@ -207,17 +206,15 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder={t(lang, "contact.form_name")}
-                        className={`${inputClasses} ${
-                          dir === "rtl" ? "pr-12" : "pl-12"
-                        }`}
+                        className={`${inputClasses} ${dir === "rtl" ? "pr-12" : "pl-12"
+                          }`}
                         required
                       />
                     </div>
                     <div className="relative">
                       <Mail
-                        className={`absolute top-1/2 -translate-y-1/2 text-white/40 ${
-                          dir === "rtl" ? "right-4" : "left-4"
-                        }`}
+                        className={`absolute top-1/2 -translate-y-1/2 text-white/40 ${dir === "rtl" ? "right-4" : "left-4"
+                          }`}
                         size={20}
                       />
                       <input
@@ -226,39 +223,35 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
                         value={formData.email}
                         onChange={handleChange}
                         placeholder={t(lang, "contact.form_email")}
-                        className={`${inputClasses} ${
-                          dir === "rtl" ? "pr-12" : "pl-12"
-                        }`}
+                        className={`${inputClasses} ${dir === "rtl" ? "pr-12" : "pl-12"
+                          }`}
                         required
                       />
                     </div>
                   </div>
 
-                 <div className="relative">
-  <Phone
-    className={`absolute top-1/2 -translate-y-1/2 text-white/40 ${
-      dir === "rtl" ? "right-4" : "left-4"
-    }`}
-    size={20}
-  />
-  <input
-    type="tel"
-    name="phone"
-    value={formData.phone}
-    onChange={handleChange}
-    placeholder={t(lang, "contact.form_phone")}
-    dir="ltr"  // Phone numbers always LTR
-    className={`${inputClasses} ${
-      dir === "rtl" ? "pr-12 text-right" : "pl-12 text-left"
-    }`}
-  />
-</div>
+                  <div className="relative">
+                    <Phone
+                      className={`absolute top-1/2 -translate-y-1/2 text-white/40 ${dir === "rtl" ? "right-4" : "left-4"
+                        }`}
+                      size={20}
+                    />
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder={t(lang, "contact.form_phone")}
+                      dir="ltr"  // Phone numbers always LTR
+                      className={`${inputClasses} ${dir === "rtl" ? "pr-12 text-right" : "pl-12 text-left"
+                        }`}
+                    />
+                  </div>
 
                   <div className="relative">
                     <MessageSquare
-                      className={`absolute top-4 text-white/40 ${
-                        dir === "rtl" ? "right-4" : "left-4"
-                      }`}
+                      className={`absolute top-4 text-white/40 ${dir === "rtl" ? "right-4" : "left-4"
+                        }`}
                       size={20}
                     />
                     <textarea
@@ -267,9 +260,8 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
                       onChange={handleChange}
                       placeholder={t(lang, "contact.form_message")}
                       rows={5}
-                      className={`${inputClasses} resize-none ${
-                        dir === "rtl" ? "pr-12" : "pl-12"
-                      }`}
+                      className={`${inputClasses} resize-none ${dir === "rtl" ? "pr-12" : "pl-12"
+                        }`}
                       required
                     />
                   </div>
@@ -479,9 +471,8 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
               />
 
               <div
-                className={`absolute bottom-6 max-w-sm rounded-xl bg-[#0A1628]/95 border border-white/10 p-6 shadow-2xl backdrop-blur-sm ${
-                  dir === "rtl" ? "right-6" : "left-6"
-                }`}
+                className={`absolute bottom-6 max-w-sm rounded-xl bg-[#0A1628]/95 border border-white/10 p-6 shadow-2xl backdrop-blur-sm ${dir === "rtl" ? "right-6" : "left-6"
+                  }`}
               >
                 <div className="flex items-start gap-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#C9A227]/15 text-[#C9A227]">
