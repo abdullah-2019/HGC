@@ -24,11 +24,17 @@ export default function ProductsHero() {
   const { lang, dir } = useI18n();
   const [currentBg, setCurrentBg] = useState(0);
 
-  const backgrounds = [
-    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80",
-    "https://images.unsplash.com/photo-1560251180-1a0b9a9a9a9a?w=1920&q=80",
-    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1920&q=80",
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const backgroundPaths = [
+    "/storage/uploads/hero-products.webp",
+    "/storage/uploads/companies/albahrain/hero.webp",
+    "/storage/uploads/companies/alkoozi/hero.webp"
   ];
+
+  // Create absolute URLs
+  const backgrounds = backgroundPaths.map(path => `${BASE_URL}${path}`);
+
 
   // Use seeded random for consistent SSR/client hydration
   const particles = useMemo(() => {

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Package, Truck, Globe, Award, Users, Factory } from "lucide-react";
+import { Package, Truck, Globe, Users, Factory } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -15,7 +15,6 @@ export default function ProductStats() {
     { icon: Factory, value: "5", label: t(lang, "products.stats.categories") },
     { icon: Truck, value: "34", label: t(lang, "products.stats.provinces") },
     { icon: Globe, value: "12", label: t(lang, "products.stats.countries") },
-    { icon: Award, value: "ISO", label: t(lang, "products.stats.certified") },
     { icon: Users, value: "500+", label: t(lang, "products.stats.clients") },
   ];
 
@@ -23,7 +22,7 @@ export default function ProductStats() {
     <section className="relative py-16 border-y border-white/5 bg-[#0A1628]/80">
       <div className="absolute inset-0 bg-[#C9A227]/[0.02]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-8">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
             return (
