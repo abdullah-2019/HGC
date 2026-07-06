@@ -8,6 +8,10 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\StatController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ContactInfoController;
+use App\Http\Controllers\Api\ContactSubmissionController;
+
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -61,3 +65,19 @@ Route::get('/companies/{slug}/profile', [CompanyController::class, 'profile']);
 // Stats
 Route::get('/stats', [StatController::class, 'index']);
 Route::get('/companies/{slug}/stats', [StatController::class, 'byCompany']);
+
+// Public contact info and submission routes
+Route::get('/contact-info', [ContactInfoController::class, 'index']);
+Route::post('/contact-submissions', [ContactSubmissionController::class, 'store']);
+
+// Admin routes (protected)
+Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
+    Route::get('/contact-info', [ContactInfoController::class, 'show']);
+    Route::post('/contact-info', [ContactInfoController::class, 'storeOrUpdate']);
+    
+    Route::get('/contact-submissions', [ContactSubmissionController::class, 'index']);
+    Route::get('/contact-submissions/stats', [ContactSubmissionController::class, 'stats']);
+    Route::get('/contact-submissions/{id}', [ContactSubmissionController::class, 'show']);
+    Route::put('/contact-submissions/{id}', [ContactSubmissionController::class, 'update']);
+    Route::delete('/contact-submissions/{id}', [ContactSubmissionController::class, 'destroy']);
+});
