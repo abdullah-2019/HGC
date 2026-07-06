@@ -75,4 +75,5 @@ class Category extends Model
     {
         return $value ? asset('storage/' . $value) : null;
     }
+
 }
