@@ -7,26 +7,23 @@ import {
   ArrowRight,
   Check,
   Loader2,
-  Pickaxe,
-  Gem,
-  Fuel,
-  HardHat,
   Boxes,
-  Sun,
+  // Import the dynamic loader
+  type LucideIcon,
 } from "lucide-react";
+import * as Icons from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
 import { getCategories, getProducts, type CategoryItem, type ProductListItem } from "@/lib/api";
 import ScrollReveal from "@/components/ScrollReveal";
 
-const iconMap: Record<string, React.ElementType> = {
-  Pickaxe,
-  Gem,
-  Fuel,
-  HardHat,
-  Boxes,
-  Sun,
-};
+// Dynamic icon resolver — no hardcoded names needed
+function getIcon(iconName: string | null | undefined): LucideIcon {
+  if (!iconName) return Boxes;
+  // lucide-react exports all icons as named exports
+  const Icon = (Icons as Record<string, LucideIcon>)[iconName];
+  return Icon || Boxes;
+}
 
 interface CategoryWithProducts extends CategoryItem {
   products: ProductListItem[];
@@ -80,7 +77,7 @@ export default function ProductCategories() {
   if (categories.length === 0) return null;
 
   const activeCat = categories[activeCategory];
-  const CatIcon = iconMap[activeCat?.icon_name] || Boxes;
+  const CatIcon = getIcon(activeCat?.icon_name);
 
   return (
     <section id="categories" className="py-24 relative" dir={dir}>
@@ -102,7 +99,7 @@ export default function ProductCategories() {
         <ScrollReveal delay={0.1}>
           <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-12 scrollbar-hide">
             {categories.map((cat, idx) => {
-              const Icon = iconMap[cat.icon_name] || Boxes;
+              const Icon = getIcon(cat.icon_name);
               const isActive = idx === activeCategory;
               return (
                 <button
@@ -125,7 +122,7 @@ export default function ProductCategories() {
                   }
                 >
                   <Icon className="w-4 h-4" />
-                  {cat.name}
+                  <span>{cat.name}</span>
                 </button>
               );
             })}
