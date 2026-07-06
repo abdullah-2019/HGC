@@ -4,10 +4,7 @@ import React from "react";
 import ProductsHero from "./sections/ProductsHero";
 import ProductStats from "./sections/ProductStats";
 import ProductCategories from "./sections/ProductCategories";
-import ProductQuality from "./sections/ProductQuality";
-import ProductContact from "./sections/ProductContact";
 import { useI18n } from "@/components/useI18nStore";
-
 export default function ProductsPage() {
   const { dir } = useI18n();
 
@@ -22,11 +19,6 @@ export default function ProductsPage() {
       {/* Product Categories */}
       <ProductCategories />
 
-      {/* Quality Standards */}
-      <ProductQuality />
-
-      {/* Contact / Inquiry */}
-      <ProductContact />
     </div>
   );
 }
