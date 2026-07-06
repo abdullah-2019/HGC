@@ -33,11 +33,6 @@ class Product extends Model
         'sort_order' => 'integer',
     ];
 
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
@@ -132,5 +127,16 @@ class Product extends Model
         ];
 
         return $labels[$this->availability][$lang] ?? $labels[$this->availability]['en'];
+    }
+
+    // used in product page.
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeInStock($query)
+    {
+        return $query->where('availability', 'in_stock');
     }
 }

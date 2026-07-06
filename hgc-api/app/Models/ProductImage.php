@@ -39,4 +39,5 @@ class ProductImage extends Model
             default => $this->caption_en,
         };
     }
+
 }

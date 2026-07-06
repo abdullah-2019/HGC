@@ -101,7 +101,7 @@ export const translations = {
         sectionDesc: "From minerals and metals to construction materials and industrial chemicals, we supply quality products across Afghanistan.",
         viewDetails: "View Details",
         viewAll: "View All",
-      },
+        noProducts: "No products available in this category yet.",},
       quality: {
         sectionSubtitle: "Our Standards",
         sectionTitle: "Quality Assurance",
@@ -124,7 +124,23 @@ export const translations = {
         phoneLabel: "Phone",
         hoursLabel: "Working Hours",
       },
-    },
+      
+    
+      featured: {
+        subtitle: "Featured",
+        title: "Our Featured Products",
+      },
+      viewDetails: "View Details",
+      detail: {
+        backToProducts: "Back to Products",
+        notFound: "Product not found",
+        error: "Failed to load product",
+        origin: "Origin",
+        specifications: "Specifications",
+        applications: "Applications",
+        packaging: "Packaging Options",
+        requestQuote: "Request a Quote",
+      },},
     media: {
       hero: {
         badgeFeatured: "Featured",
@@ -371,7 +387,7 @@ export const translations = {
         sectionDesc: "از مواد معدنی و فلزات گرفته تا مصالح ساختمانی و مواد شیمیایی صنعتی، ما محصولات با کیفیت را در سراسر افغانستان تأمین می کنیم.",
         viewDetails: "مشاهده جزئیات",
         viewAll: "مشاهده همه",
-      },
+        noProducts: "هنوز محصولی در این دسته‌بندی موجود نیست.",},
       quality: {
         sectionSubtitle: "استانداردهای ما",
         sectionTitle: "تضمین کیفیت",
@@ -394,7 +410,22 @@ export const translations = {
         phoneLabel: "تلفن",
         hoursLabel: "ساعت کاری",
       },
-    },
+    
+      featured: {
+        subtitle: "ویژه",
+        title: "محصولات ویژه ما",
+      },
+      viewDetails: "مشاهده جزئیات",
+      detail: {
+        backToProducts: "بازگشت به محصولات",
+        notFound: "محصول یافت نشد",
+        error: "بارگذاری محصول ناموفق بود",
+        origin: "منشأ",
+        specifications: "مشخصات فنی",
+        applications: "کاربردها",
+        packaging: "گزینه‌های بسته‌بندی",
+        requestQuote: "درخواست قیمت",
+      },},
     media: {
       hero: {
         badgeFeatured: "ویژه",
@@ -641,7 +672,7 @@ export const translations = {
         sectionDesc: "له کانونو او فلزاتو څخه تر جوړونې موادو او صنعتي کیمیاوي موادو پورې، موږ په افغانستان کې کیفیت لرونکي محصولات وړاندې کوو.",
         viewDetails: "جزئیات وګورئ",
         viewAll: "ټول وګورئ",
-      },
+        noProducts: "په دې کټګورۍ کې تر اوسه هیڅ محصول شتون نلري.",},
       quality: {
         sectionSubtitle: "زموږ معیارونه",
         sectionTitle: "د کیفیت تضمین",
@@ -664,7 +695,22 @@ export const translations = {
         phoneLabel: "تلیفون",
         hoursLabel: "د دفتر ساعتونه",
       },
-    },
+    
+      featured: {
+        subtitle: "ځانګړي",
+        title: "زموږ ځانګړي محصولات",
+      },
+      viewDetails: "جزئیات وګورئ",
+      detail: {
+        backToProducts: "بیرته محصولاتو ته",
+        notFound: "محصول ونه موندل شو",
+        error: "د محصول پورته کول ناکام شول",
+        origin: "اصالت",
+        specifications: "تخنیکي مشخصات",
+        applications: "کارونې",
+        packaging: "د بسته‌بندۍ اختیارونه",
+        requestQuote: "د قیمت غوښتنه",
+      },},
     media: {
       hero: {
         badgeFeatured: "ویژه",

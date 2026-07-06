@@ -2,19 +2,11 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ArrowRight, Boxes, Gem, Fuel, HardHat, Factory } from "lucide-react";
+import { ChevronDown, ArrowRight, Factory, Loader2 } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
+import { getCategories, type CategoryItem } from "@/lib/api";
 
-const categoryIcons = [
-  { icon: Factory, label: "Minerals & Metals" },
-  { icon: Gem, label: "Stones & Gemstones" },
-  { icon: Fuel, label: "Refinery Products" },
-  { icon: HardHat, label: "Construction Materials" },
-  { icon: Boxes, label: "Industrial Chemicals" },
-];
-
-// Seeded pseudo-random generator for consistent SSR/client values
 function seededRandom(seed: number) {
   const x = Math.sin(seed * 9999) * 10000;
   return x - Math.floor(x);
@@ -23,20 +15,17 @@ function seededRandom(seed: number) {
 export default function ProductsHero() {
   const { lang, dir } = useI18n();
   const [currentBg, setCurrentBg] = useState(0);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-  const backgroundPaths = [
-    "/storage/uploads/hero-products.webp",
-    "/storage/uploads/companies/albahrain/hero.webp",
-    "/storage/uploads/companies/alkoozi/hero.webp"
+  const backgrounds = [
+    `${API_URL}/storage/uploads/hero-products.webp`,
+    `${API_URL}/storage/uploads/companies/albahrain/hero.webp`,
+    `${API_URL}/storage/uploads/companies/alkoozi/hero.webp`,
   ];
 
-  // Create absolute URLs
-  const backgrounds = backgroundPaths.map(path => `${BASE_URL}${path}`);
-
-
-  // Use seeded random for consistent SSR/client hydration
   const particles = useMemo(() => {
     return Array.from({ length: 12 }, (_, i) => ({
       id: i,
@@ -48,6 +37,14 @@ export default function ProductsHero() {
   }, []);
 
   useEffect(() => {
+    getCategories(lang, "product")
+      .then((res) => {
+        if (res.success) setCategories(res.data);
+      })
+      .finally(() => setLoading(false));
+  }, [lang]);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setCurrentBg((prev) => (prev + 1) % backgrounds.length);
     }, 6000);
@@ -56,7 +53,6 @@ export default function ProductsHero() {
 
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden" dir={dir}>
-      {/* Animated Background */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentBg}
@@ -75,7 +71,6 @@ export default function ProductsHero() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Gold particles — seeded for consistent SSR/client */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {particles.map((p) => (
           <motion.div
@@ -125,7 +120,6 @@ export default function ProductsHero() {
             </div>
           </motion.div>
 
-          {/* Category Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -135,26 +129,26 @@ export default function ProductsHero() {
             <p className="text-white/30 text-sm uppercase tracking-wider mb-4">
               {t(lang, "products.hero.categoriesLabel")}
             </p>
-            <div className="flex flex-wrap gap-3">
-              {categoryIcons.map((cat, idx) => {
-                const Icon = cat.icon;
-                return (
+            {loading ? (
+              <Loader2 className="w-5 h-5 text-[#C9A227] animate-spin" />
+            ) : (
+              <div className="flex flex-wrap gap-3">
+                {categories.map((cat) => (
                   <a
-                    key={idx}
-                    href={`#category-${idx}`}
+                    key={cat.id}
+                    href={`#category-${cat.slug}`}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-[#C9A227] hover:border-[#C9A227]/30 hover:bg-[#C9A227]/5 transition-all duration-300 text-sm"
                   >
-                    <Icon className="w-4 h-4" />
-                    {cat.label}
+                    {cat.icon_name}
+                    {cat.name}
                   </a>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            )}
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}

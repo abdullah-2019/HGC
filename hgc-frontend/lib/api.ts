@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 interface FetchOptions extends RequestInit {
   lang?: string;
@@ -80,13 +80,102 @@ export interface APIResponse<T> {
 }
 
 export function getCompanies(lang: string = "en"): Promise<APIResponse<CompanyListItem[]>> {
-  return fetchAPI("/companies", { lang });
+  return fetchAPI("/api/companies", { lang });
 }
 
 export function getFeaturedCompanies(lang: string = "en"): Promise<APIResponse<CompanyListItem[]>> {
-  return fetchAPI("/companies/featured", { lang });
+  return fetchAPI("/api/companies/featured", { lang });
 }
 
 export function getCompanyBySlug(slug: string, lang: string = "en"): Promise<APIResponse<CompanyDetail>> {
-  return fetchAPI(`/companies/${slug}`, { lang });
+  return fetchAPI(`/api/companies/${slug}`, { lang });
+}
+
+// ─── Products API ───
+
+export interface ProductImage {
+  id: number;
+  url: string;
+  caption: string | null;
+  is_primary: boolean;
+}
+
+export interface CategoryItem {
+  id: number;
+  slug: string;
+  name: string;
+  description: string | null;
+  icon_name: string;
+  image_url: string | null;
+}
+
+export interface CompanyItem {
+  id: number;
+  slug: string;
+  name: string;
+  accent_color: string | null;
+}
+
+export interface ProductListItem {
+  id: number;
+  slug: string;
+  name: string;
+  tagline: string | null;
+  description: string | null;
+  category: CategoryItem | null;
+  company: CompanyItem | null;
+  origin: string | null;
+  grade: string | null;
+  purity: string | null;
+  specifications: Array<{ label: string; value: string }> | null;
+  price_range: string | null;
+  currency: string;
+  unit: string | null;
+  availability: "in_stock" | "limited" | "pre_order" | "out_of_stock";
+  availability_label: string;
+  hero_image_url: string | null;
+  thumbnail_url: string | null;
+  primary_image: ProductImage | null;
+  is_featured: boolean;
+}
+
+export interface ProductDetail extends ProductListItem {
+  overview: string | null;
+  applications: string[] | null;
+  packaging: string[] | null;
+  delivery_info: string | null;
+  images: ProductImage[];
+  meta: {
+    title: string | null;
+    description: string | null;
+  } | null;
+}
+
+export function getProducts(lang: string = "en", params?: { category?: string; featured?: boolean }): Promise<APIResponse<ProductListItem[]>> {
+  const query = new URLSearchParams();
+  if (params?.category) query.append("category", params.category);
+  if (params?.featured) query.append("featured", "1");
+  const qs = query.toString();
+  return fetchAPI(`/api/products${qs ? `?${qs}` : ""}`, { lang });
+}
+
+export function getFeaturedProducts(lang: string = "en"): Promise<APIResponse<ProductListItem[]>> {
+  return fetchAPI("/api/products/featured", { lang });
+}
+
+export function getProductBySlug(slug: string, lang: string = "en"): Promise<APIResponse<ProductDetail>> {
+  return fetchAPI(`/api/products/${slug}`, { lang });
+}
+
+// ─── Categories API ───
+
+export function getCategories(lang: string = "en", type?: string): Promise<APIResponse<CategoryItem[]>> {
+  const query = new URLSearchParams();
+  if (type) query.append("type", type);
+  const qs = query.toString();
+  return fetchAPI(`/api/categories${qs ? `?${qs}` : ""}`, { lang });
+}
+
+export function getCategoryBySlug(slug: string, lang: string = "en"): Promise<APIResponse<CategoryItem>> {
+  return fetchAPI(`/api/categories/${slug}`, { lang });
 }

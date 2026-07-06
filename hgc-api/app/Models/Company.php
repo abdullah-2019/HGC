@@ -241,4 +241,10 @@ class Company extends Model
         return $this->hasMany(CompanyAwards::class)->ordered();
     }
 
+     // === Relationships ===
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
 }
