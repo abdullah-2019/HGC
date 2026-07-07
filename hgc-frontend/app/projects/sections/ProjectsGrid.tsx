@@ -3,9 +3,11 @@
 import { useI18n } from "@/components/useI18nStore";
 import ScrollReveal from "@/components/ScrollReveal";
 import ProjectCard from "./ProjectCard";
+import { Project, CompanyFilterItem } from "../types";
 
+// ProjectsGrid.tsx — update the interface
 interface ProjectsGridProps {
-  projects: any[];
+  projects: Project[];  // or keep as any[] if you don't want to import
   loading: boolean;
   error: string | null;
 }

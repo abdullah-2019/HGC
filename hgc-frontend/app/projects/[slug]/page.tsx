@@ -2,17 +2,19 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectDetailClient from "./ProjectDetailClient";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+// Your .env has: NEXT_PUBLIC_API_URL=http://localhost:8000
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api`;
 
 async function getProject(slug: string) {
   try {
     const res = await fetch(`${API_BASE}/projects/${slug}`, {
-      next: { revalidate: 60 }, // ISR: revalidate every 60 seconds
+      next: { revalidate: 60 },
     });
     if (!res.ok) return null;
     const json = await res.json();
     return json.success ? json.data : null;
-  } catch {
+  } catch (err) {
+    console.error("Failed to fetch project:", err);
     return null;
   }
 }
