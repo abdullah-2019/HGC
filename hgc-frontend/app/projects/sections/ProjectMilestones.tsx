@@ -11,7 +11,9 @@ interface ProjectMilestonesProps {
 export default function ProjectMilestones({ project }: ProjectMilestonesProps) {
   const { lang } = useI18n();
 
-  if (!project.milestones) return null;
+  const milestones = project.milestones || [];
+
+  if (milestones.length === 0) return null;
 
   return (
     <section className="relative py-20 lg:py-28 bg-[#0A1628] border-y border-white/5">
@@ -29,9 +31,9 @@ export default function ProjectMilestones({ project }: ProjectMilestonesProps) {
           {/* Vertical line */}
           <div className="absolute left-6 lg:left-1/2 lg:-translate-x-px top-0 bottom-0 w-[2px] bg-white/5" />
 
-          {project.milestones.map((milestone: any, idx: number) => {
+          {milestones.map((milestone: any, idx: number) => {
             const isLeft = idx % 2 === 0;
-            const isCompleted = project.status === "completed" || idx < project.milestones.length - 1;
+            const isCompleted = project.status === "completed" || idx < milestones.length - 1;
 
             return (
               <ScrollReveal key={idx} delay={idx * 0.1} direction={isLeft ? "left" : "right"}>
@@ -39,7 +41,7 @@ export default function ProjectMilestones({ project }: ProjectMilestonesProps) {
                   {/* Content */}
                   <div className={`flex-1 ml-16 lg:ml-0 ${isLeft ? "lg:pr-16 lg:text-right" : "lg:pl-16"}`}>
                     <span className="text-[#C9A227] text-sm font-medium mb-1 block">
-                      {new Date(milestone.date).toLocaleDateString(lang === "en" ? "en-US" : "fa-AF", { year: "numeric", month: "long", day: "numeric" })}
+                      {milestone.date ? new Date(milestone.date).toLocaleDateString(lang === "en" ? "en-US" : "fa-AF", { year: "numeric", month: "long", day: "numeric" }) : ''}
                     </span>
                     <h3 className="text-lg font-bold text-white mb-2">
                       {lang === "en" ? milestone.titleEn : milestone.titleDari}

@@ -2,353 +2,42 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectDetailClient from "./ProjectDetailClient";
 
-const projectsData: Record<string, any> = {
-  "kabul-kandahar-highway": {
-    slug: "kabul-kandahar-highway",
-    nameEn: "Kabul-Kandahar Highway Rehabilitation",
-    nameDari: "ترمیم اساس سرک کابل - کندهار",
-    taglineEn: "National Highway Infrastructure Renewal",
-    taglineDari: "تجدید زیرساخت بزرگراه ملی",
-    heroImage: "/images/projects/highway-kabul-kandahar.jpg",
-    overviewEn: "The Kabul-Kandahar Highway is one of Afghanistan's most critical transportation arteries...",
-    overviewDari: "اساس سرک کابل - کندهار یکی از حیاتی‌ترین شریان‌های حمل و نقل افغانستان است...",
-    location: "Kandahar Province, Afghanistan",
-    locationDari: "ولایت کندهار، افغانستان",
-    client: "Ministry of Public Works",
-    clientDari: "وزارت فواید عامه",
-    contractor: "Hafez Construction & Road Company (HCRC)",
-    contractorDari: "شرکت ساختمانی و سرک حافظ (HCRC)",
-    duration: "March 2023 - November 2025",
-    durationDari: "مارچ ۲۰۲۳ - نوامبر ۲۰۲۵",
-    status: "completed",
-    completionDate: "October 2025",
-    category: "Roads & Highways",
-    categoryDari: "سرک‌ها و بزرگراه‌ها",
-    companyColor: "#B22222",
-    companySlug: "hcrc",
-    gallery: [
-      { src: "http://localhost:8000/storage/uploads/hero-construction.webp", captionEn: "Before rehabilitation", captionDari: "قبل از ترمیم" },
-      { src: "http://localhost:8000/storage/uploads/hero-construction.webp", captionEn: "Asphalt paving operation", captionDari: "عملیات آسفالت" },
-      { src: "http://localhost:8000/storage/uploads/hero-construction.webp", captionEn: "Bridge repair", captionDari: "ترمیم پل" },
-      { src: "http://localhost:8000/storage/uploads/hero-construction.webp", captionEn: "Completed section", captionDari: "بخش تکمیل شده" },
-      { src: "http://localhost:8000/storage/uploads/hero-construction.webp", captionEn: "Final inspection", captionDari: "بازرسی نهایی" },
-    ],
-    milestones: [
-      { date: "2023-03-15", titleEn: "Project Kickoff", titleDari: "آغاز پروژه", descEn: "Site mobilization", descDari: "بسیج سایت" },
-      { date: "2023-07-22", titleEn: "Phase 1 Complete", titleDari: "فاز ۱ تکمیل شد", descEn: "15km prepared", descDari: "۱۵ کیلومتر آماده شد" },
-      { date: "2024-02-10", titleEn: "Asphalt Paving Begins", titleDari: "آسفالت شروع شد", descEn: "Full-scale paving", descDari: "آسفالت در مقیاس کامل" },
-      { date: "2024-09-05", titleEn: "Bridge Repairs Done", titleDari: "ترمیم پل‌ها", descEn: "8 bridges completed", descDari: "۸ پل تکمیل شد" },
-      { date: "2025-10-18", titleEn: "Final Handover", titleDari: "تحویل نهایی", descEn: "Completed early", descDari: "زودتر از موعد" },
-    ],
-  },
-  
-  "badakhshan-police-hq": {
-    slug: "badakhshan-police-hq",
-    nameEn: "Badakhshan Police HQ & Hospital",
-    nameDari: "قومندانی امنیه و شفاخانه پولیس بدخشان",
-    taglineEn: "Modern Security Infrastructure for National Safety",
-    taglineDari: "زیرساخت امنیتی مدرن برای امنیت ملی",
-    heroImage: "/images/projects/badakhshan-police-hq.jpg",
-    overviewEn: "Construction of a state-of-the-art police headquarters and 20-bed hospital facility in Badakhshan province. The complex includes administrative offices, training facilities, detention centers, and a fully-equipped medical wing serving both personnel and civilians.",
-    overviewDari: "ساختمان قومندانی امنیه پیشرفته و شفاخانه ۲۰ تختخوابه در ولایت بدخشان. این مجموعه شامل دفاتر اداری، تاسیسات آموزشی، بازداشتگاه‌ها و بخش پزشکی مجهز برای خدمت به کارمندان و غیرنظامیان است.",
-    location: "Faizabad, Badakhshan Province",
-    locationDari: "فیض‌آباد، ولایت بدخشان",
-    client: "Ministry of Interior",
-    clientDari: "وزارت داخله",
-    contractor: "Hafez Construction & Road Company (HCRC)",
-    contractorDari: "شرکت ساختمانی و سرک حافظ (HCRC)",
-    duration: "January 2023 - December 2023",
-    durationDari: "جنوری ۲۰۲۳ - دسمبر ۲۰۲۳",
-    status: "completed",
-    completionDate: "December 2023",
-    category: "Government Buildings",
-    categoryDari: "ساختمان‌های دولتی",
-    companyColor: "#B22222",
-    companySlug: "hcrc",
-    gallery: [
-      { src: "/images/projects/police-1.jpg", captionEn: "Foundation work", captionDari: "کار بنیاد" },
-      { src: "/images/projects/police-2.jpg", captionEn: "Structural framework", captionDari: "چارچوب سازه‌ای" },
-      { src: "/images/projects/police-3.jpg", captionEn: "Hospital wing interior", captionDari: "داخل بخش شفاخانه" },
-      { src: "/images/projects/police-4.jpg", captionEn: "Training facility", captionDari: "تاسیسات آموزشی" },
-    ],
-    milestones: [
-      { date: "2023-01-10", titleEn: "Ground Breaking", titleDari: "آغاز کار", descEn: "Site preparation began", descDari: "آماده‌سازی سایت آغاز شد" },
-      { date: "2023-04-15", titleEn: "Foundation Complete", titleDari: "بنیاد تکمیل شد", descEn: "RCC foundation poured", descDari: "بنیاد RCC ریخته شد" },
-      { date: "2023-08-20", titleEn: "Structure Topped", titleDari: "سازه تکمیل شد", descEn: "All floors completed", descDari: "تمام طبقات تکمیل شد" },
-      { date: "2023-11-30", titleEn: "Handover", titleDari: "تحویل", descEn: "Project delivered", descDari: "پروژه تحویل داده شد" },
-    ],
-  },
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
-  "nangarhar-solar-150kw": {
-    slug: "nangarhar-solar-150kw",
-    nameEn: "Nangarhar 150kW Solar Power System",
-    nameDari: "سیستم برق سولری ۱۵۰ کیلوواتی ننگرهار",
-    taglineEn: "Sustainable Energy for Customs Operations",
-    taglineDari: "انرژی پایدار برای عملیات گمرک",
-    heroImage: "/images/projects/nangarhar-solar.jpg",
-    overviewEn: "Installation of a 150kW DC solar power system at Nangarhar Customs Department. The system includes Tier-1 monocrystalline panels, MPPT charge controllers, and lithium battery storage, providing 24/7 reliable power for customs operations and reducing diesel generator dependency by 85%.",
-    overviewDari: "نصب سیستم برق سولری ۱۵۰ کیلوواتی DC در ریاست گمرک ننگرهار. این سیستم شامل پنل‌های تک‌بلوری درجه یک، کنترل‌کننده‌های شارژ MPPT و ذخیره باتری لیتیومی است که برق قابل اعتماد ۲۴/۷ برای عملیات گمرکی فراهم می‌کند و وابستگی به ژنراتور دیزل را ۸۵٪ کاهش می‌دهد.",
-    location: "Jalalabad, Nangarhar Province",
-    locationDari: "جلال‌آباد، ولایت ننگرهار",
-    client: "Ministry of Finance",
-    clientDari: "وزارت مالیه",
-    contractor: "Zain Noorain Construction",
-    contractorDari: "شرکت ساختمانی زین نورین",
-    duration: "June 2023 - March 2024",
-    durationDari: "جون ۲۰۲۳ - مارچ ۲۰۲۴",
-    status: "completed",
-    completionDate: "March 2024",
-    category: "Solar Energy",
-    categoryDari: "انرژی سولری",
-    companyColor: "#F57C00",
-    companySlug: "zainnoorain",
-    gallery: [
-      { src: "/images/projects/solar-1.jpg", captionEn: "Panel installation", captionDari: "نصب پنل" },
-      { src: "/images/projects/solar-2.jpg", captionEn: "Battery bank setup", captionDari: "راه‌اندازی بانک باتری" },
-      { src: "/images/projects/solar-3.jpg", captionEn: "Inverter room", captionDari: "اتاق اینورتر" },
-      { src: "/images/projects/solar-4.jpg", captionEn: "System commissioning", captionDari: "راه‌اندازی سیستم" },
-    ],
-    milestones: [
-      { date: "2023-06-01", titleEn: "Site Survey", titleDari: "بررسی سایت", descEn: "Structural and electrical assessment", descDari: "ارزیابی سازه‌ای و برقی" },
-      { date: "2023-08-15", titleEn: "Delivery Complete", titleDari: "تحویل تکمیل شد", descEn: "All equipment on-site", descDari: "تمام تجهیزات در سایت" },
-      { date: "2023-11-20", titleEn: "Installation Done", titleDari: "نصب انجام شد", descEn: "Panels and inverters mounted", descDari: "پنل‌ها و اینورترها نصب شد" },
-      { date: "2024-03-10", titleEn: "Grid Connected", titleDari: "متصل به شبکه", descEn: "Full operation commenced", descDari: "عملیات کامل آغاز شد" },
-    ],
-  },
+async function getProject(slug: string) {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${slug}`, {
+      next: { revalidate: 60 }, // ISR: revalidate every 60 seconds
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.success ? json.data : null;
+  } catch {
+    return null;
+  }
+}
 
-  // Add remaining 6 projects with similar structure...
-  "kharwar-district-building": {
-    slug: "kharwar-district-building",
-    nameEn: "Kharwar District Administrative Building",
-    nameDari: "ساختمان اداری ولسوالی خروار",
-    taglineEn: "Modern Governance Infrastructure",
-    taglineDari: "زیرساخت حکومتی مدرن",
-    heroImage: "/images/projects/kharwar-building.jpg",
-    overviewEn: "Construction of a modern administrative building for Kharwar district in Logar province. The facility includes conference halls, digital record centers, and public service counters designed to improve local governance efficiency.",
-    overviewDari: "ساختمان اداری مدرن برای ولسوالی خروار در ولایت لوگر. این تاسیسات شامل سالن‌های کنفرانس، مراکز دیجیتال اسناد و پیشخوان‌های خدمات عمومی برای بهبود کارایی حکومتداری محلی است.",
-    location: "Kharwar District, Logar Province",
-    locationDari: "ولسوالی خروار، ولایت لوگر",
-    client: "Ministry of Interior",
-    clientDari: "وزارت داخله",
-    contractor: "Hafez Construction & Road Company (HCRC)",
-    contractorDari: "شرکت ساختمانی و سرک حافظ (HCRC)",
-    duration: "March 2024 - March 2025",
-    durationDari: "مارچ ۲۰۲۴ - مارچ ۲۰۲۵",
-    status: "ongoing",
-    completionDate: "",
-    category: "Government Buildings",
-    categoryDari: "ساختمان‌های دولتی",
-    companyColor: "#B22222",
-    companySlug: "hcrc",
-    gallery: [
-      { src: "/images/projects/kharwar-1.jpg", captionEn: "Site clearing", captionDari: "پاکسازی سایت" },
-      { src: "/images/projects/kharwar-2.jpg", captionEn: "Foundation work", captionDari: "کار بنیاد" },
-      { src: "/images/projects/kharwar-3.jpg", captionEn: "First floor structure", captionDari: "سازه طبقه اول" },
-    ],
-    milestones: [
-      { date: "2024-03-05", titleEn: "Project Start", titleDari: "آغاز پروژه", descEn: "Mobilization began", descDari: "بسیج آغاز شد" },
-      { date: "2024-06-20", titleEn: "Foundation Done", titleDari: "بنیاد تکمیل شد", descEn: "Ground floor slab poured", descDari: "دال طبقه همکف ریخته شد" },
-      { date: "2024-10-15", titleEn: "First Floor Complete", titleDari: "طبقه اول تکمیل شد", descEn: "Structure at 65%", descDari: "سازه در ۶۵٪" },
-    ],
-  },
-
-  "lead-zinc-extraction-badakhshan": {
-    slug: "lead-zinc-extraction-badakhshan",
-    nameEn: "Lead & Zinc Mining Operation",
-    nameDari: "عملیات استخراج سرب و روی",
-    taglineEn: "Sustainable Mineral Resource Development",
-    taglineDari: "توسعه پایدار منابع معدنی",
-    heroImage: "/images/projects/mining-badakhshan.jpg",
-    overviewEn: "Large-scale extraction of sulfide lead and zinc deposits in Badakhshan province. The operation includes open-pit mining, on-site crushing and processing facilities, and export logistics infrastructure connecting to international markets via Hairatan border.",
-    overviewDari: "استخراج در مقیاس بزرگ ذخایر سرب و روی سولفیده در ولایت بدخشان. این عملیات شامل استخراج روباز، تاسیسات خردایش و فرآوری در محل و زیرساخت لوجستیک صادرات از طریق مرز حیرتان است.",
-    location: "Yamgan District, Badakhshan Province",
-    locationDari: "ولسوالی یمگان، ولایت بدخشان",
-    client: "Ministry of Mines and Petroleum",
-    clientDari: "وزارت معادن و پترولیم",
-    contractor: "Al-Bahrain Mining Company",
-    contractorDari: "شرکت استخراج معادن البحرین",
-    duration: "January 2022 - December 2026",
-    durationDari: "جنوری ۲۰۲۲ - دسمبر ۲۰۲۶",
-    status: "ongoing",
-    completionDate: "",
-    category: "Mining",
-    categoryDari: "معادن",
-    companyColor: "#1A237E",
-    companySlug: "albahrain",
-    gallery: [
-      { src: "/images/projects/mining-1.jpg", captionEn: "Open pit excavation", captionDari: "حفره روباز" },
-      { src: "/images/projects/mining-2.jpg", captionEn: "Crushing plant", captionDari: "کارخانه خردایش" },
-      { src: "/images/projects/mining-3.jpg", captionEn: "Ore processing", captionDari: "فرآوری سنگ معدن" },
-      { src: "/images/projects/mining-4.jpg", captionEn: "Loading for export", captionDari: "بارگیری برای صادرات" },
-    ],
-    milestones: [
-      { date: "2022-01-20", titleEn: "Exploration Complete", titleDari: "اکتشاف تکمیل شد", descEn: "Reserve estimation finalized", descDari: "برآورد ذخایر نهایی شد" },
-      { date: "2022-08-10", titleEn: "Mining License", titleDari: "جواز استخراج", descEn: "AISA permit obtained", descDari: "مجوز AISA اخذ شد" },
-      { date: "2023-05-15", titleEn: "Production Start", titleDari: "آغاز تولید", descEn: "First ore extracted", descDari: "اولین سنگ معدن استخراج شد" },
-      { date: "2024-03-01", titleEn: "Export Begins", titleDari: "آغاز صادرات", descEn: "First shipment to China", descDari: "اولین محموله به چین" },
-    ],
-  },
-
-  "kabul-logistics-hub": {
-    slug: "kabul-logistics-hub",
-    nameEn: "Kabul Central Logistics Hub",
-    nameDari: "مرکز لوجستیک کابل",
-    taglineEn: "Nationwide Distribution Network Hub",
-    taglineDari: "مرکز شبکه توزیع سراسری",
-    heroImage: "/images/projects/kabul-logistics.jpg",
-    overviewEn: "Construction of a 50,000 square meter logistics and distribution center in Kabul. The facility features modern warehousing, cold chain storage, container yard, and fleet maintenance facilities serving as the primary hub for Al-Koozi's nationwide operations.",
-    overviewDari: "ساخت مرکز لوجستیک و توزیع ۵۰۰۰۰ متر مربع در کابل. این تاسیسات دارای انبارداری مدرن، ذخیره‌سازی زنجیره سرد، محوطه کانتینر و تاسیسات نگهداری ناوگان است که به عنوان مرکز اصلی عملیات سراسری الکوزی عمل می‌کند.",
-    location: "Bagrami District, Kabul Province",
-    locationDari: "ولسوالی بگرامی، ولایت کابل",
-    client: "Al-Koozi Logistics & Transport",
-    clientDari: "لوجستیک و ترانسپورت الکوزی",
-    contractor: "Al-Koozi Logistics & Transport",
-    contractorDari: "لوجستیک و ترانسپورت الکوزی",
-    duration: "June 2024 - June 2025",
-    durationDari: "جون ۲۰۲۴ - جون ۲۰۲۵",
-    status: "ongoing",
-    completionDate: "",
-    category: "Logistics",
-    categoryDari: "لوژستیک",
-    companyColor: "#00838F",
-    companySlug: "alkoozi",
-    gallery: [
-      { src: "/images/projects/logistics-1.jpg", captionEn: "Site overview", captionDari: "نمای کلی سایت" },
-      { src: "/images/projects/logistics-2.jpg", captionEn: "Warehouse framing", captionDari: "قاب‌بندی انبار" },
-      { src: "/images/projects/logistics-3.jpg", captionEn: "Cold room installation", captionDari: "نصب اتاق سرد" },
-    ],
-    milestones: [
-      { date: "2024-06-01", titleEn: "Ground Breaking", titleDari: "آغاز کار", descEn: "Land preparation started", descDari: "آماده‌سازی زمین آغاز شد" },
-      { date: "2024-09-10", titleEn: "Foundation Complete", titleDari: "بنیاد تکمیل شد", descEn: "Main warehouse slab done", descDari: "دال انبار اصلی انجام شد" },
-      { date: "2024-12-15", titleEn: "Structure Rising", titleDari: "سازه در حال بالا رفتن", descEn: "Steel framework at 30%", descDari: "چارچوب فولادی در ۳۰٪" },
-    ],
-  },
-
-  "herat-solar-microgrid": {
-    slug: "herat-solar-microgrid",
-    nameEn: "Herat Solar Microgrid Project",
-    nameDari: "پروژه میکروگرید سولری هرات",
-    taglineEn: "Community Power for Rural Development",
-    taglineDari: "برق جامعه برای توسعه روستایی",
-    heroImage: "/images/projects/herat-solar.jpg",
-    overviewEn: "500kW community solar microgrid powering 5 villages in Herat province. Features smart metering, battery storage, and distribution network providing reliable electricity to 2,000 households previously without grid access.",
-    overviewDari: "میکروگرید سولری ۵۰۰ کیلوواتی جامعه برای تغذیه ۵ قریه در ولایت هرات. دارای میتر هوشمند، ذخیره باتری و شبکه توزیع است که برق قابل اعتماد به ۲۰۰۰ خانوار بدون دسترسی به شبکه قبلاً فراهم می‌کند.",
-    location: "Kohsan District, Herat Province",
-    locationDari: "ولسوالی کهسان، ولایت هرات",
-    client: "Ministry of Energy and Water",
-    clientDari: "وزارت انرژی و آب",
-    contractor: "Zain Noorain Construction",
-    contractorDari: "شرکت ساختمانی زین نورین",
-    duration: "March 2025 - March 2026",
-    durationDari: "مارچ ۲۰۲۵ - مارچ ۲۰۲۶",
-    status: "planned",
-    completionDate: "",
-    category: "Solar Energy",
-    categoryDari: "انرژی سولری",
-    companyColor: "#F57C00",
-    companySlug: "zainnoorain",
-    gallery: [
-      { src: "http://localhost:8000/storage/uploads/hero-construction.webp", captionEn: "Site location", captionDari: "موقعیت سایت" },
-      { src: "/images/placeholder.webp", captionEn: "Village survey", captionDari: "بررسی قریه" },
-    ],
-    milestones: [
-      { date: "2025-03-01", titleEn: "Project Awarded", titleDari: "پروژه اعطا شد", descEn: "Contract signed", descDari: "قرارداد امضا شد" },
-      { date: "2025-06-01", titleEn: "Mobilization", titleDari: "بسیج", descEn: "Equipment delivery scheduled", descDari: "تحویل تجهیزات برنامه‌ریزی شد" },
-    ],
-  },
-
-  "mazar-sharif-trading-center": {
-    slug: "mazar-sharif-trading-center",
-    nameEn: "Mazar-e-Sharif Trading Center",
-    nameDari: "مرکز تجارت مزار شریف",
-    taglineEn: "Modern Wholesale Marketplace",
-    taglineDari: "بازار عمده فروشی مدرن",
-    heroImage: "/images/projects/mazar-trading.jpg",
-    overviewEn: "Modern wholesale trading center with 200 vendor stalls, cold storage facilities, and digital payment infrastructure. Designed to serve as the primary agricultural and consumer goods marketplace for northern Afghanistan.",
-    overviewDari: "مرکز تجارت عمده فروشی مدرن با ۲۰۰ دکان فروشنده، تاسیسات ذخیره سرد و زیرساخت پرداخت دیجیتال. طراحی شده به عنوان بازار اصلی محصولات کشاورزی و مصرفی برای شمال افغانستان.",
-    location: "Mazar-e-Sharif, Balkh Province",
-    locationDari: "مزار شریف، ولایت بلخ",
-    client: "Al-Madinah General Trading",
-    clientDari: "تجارت عمومی المدینه",
-    contractor: "Al-Madinah General Trading",
-    contractorDari: "تجارت عمومی المدینه",
-    duration: "January 2024 - December 2024",
-    durationDari: "جنوری ۲۰۲۴ - دسمبر ۲۰۲۴",
-    status: "completed",
-    completionDate: "December 2024",
-    category: "Commercial",
-    categoryDari: "تجاری",
-    companyColor: "#2E7D32",
-    companySlug: "almadinah",
-    gallery: [
-      { src: "/images/projects/mazar-1.jpg", captionEn: "Market hall interior", captionDari: "داخل سالن بازار" },
-      { src: "/images/projects/mazar-2.jpg", captionEn: "Cold storage facility", captionDari: "تاسیسات ذخیره سرد" },
-      { src: "/images/projects/mazar-3.jpg", captionEn: "Vendor stalls", captionDari: "دکان‌های فروشنده" },
-      { src: "/images/projects/mazar-4.jpg", captionEn: "Grand opening", captionDari: "افتتاحیه بزرگ" },
-    ],
-    milestones: [
-      { date: "2024-01-15", titleEn: "Construction Start", titleDari: "آغاز ساخت", descEn: "Foundation laid", descDari: "بنیاد گذاشته شد" },
-      { date: "2024-05-20", titleEn: "Structure Complete", titleDari: "سازه تکمیل شد", descEn: "Roof installation done", descDari: "نصب سقف انجام شد" },
-      { date: "2024-09-10", titleEn: "Stalls Ready", titleDari: "دکان‌ها آماده", descEn: "200 units completed", descDari: "۲۰۰ واحد تکمیل شد" },
-      { date: "2024-12-01", titleEn: "Grand Opening", titleDari: "افتتاحیه", descEn: "Market operational", descDari: "بازار فعال شد" },
-    ],
-  },
-
-  "kandahar-crushed-stone": {
-    slug: "kandahar-crushed-stone",
-    nameEn: "Kandahar Crushed Stone Quarry",
-    nameDari: "معدن سنگ خرد شده کندهار",
-    taglineEn: "Aggregate Supply for National Infrastructure",
-    taglineDari: "تدارک سنگدانه برای زیرساخت ملی",
-    heroImage: "/images/projects/kandahar-quarry.jpg",
-    overviewEn: "High-capacity stone crushing plant producing aggregate for national road construction projects. The facility includes primary and secondary crushers, screening plants, and loading equipment capable of producing 1,000 tons per day of various aggregate grades.",
-    overviewDari: "کارخانه سنگ شکنی با ظرفیت بالا تولید کننده سنگدانه برای پروژه های ساخت سرک ملی. این تاسیسات شامل سنگ شکن‌های اولیه و ثانویه، کارخانه‌های غربالگری و تجهیزات بارگیری با ظرفیت تولید ۱۰۰۰ تن در روز از درجات مختلف سنگدانه است.",
-    location: "Daman District, Kandahar Province",
-    locationDari: "ولسوالی دامان، ولایت کندهار",
-    client: "Ministry of Mines and Petroleum",
-    clientDari: "وزارت معادن و پترولیم",
-    contractor: "Al-Bahrain Mining Company",
-    contractorDari: "شرکت استخراج معادن البحرین",
-    duration: "March 2023 - September 2024",
-    durationDari: "مارچ ۲۰۲۳ - سپتمبر ۲۰۲۴",
-    status: "completed",
-    completionDate: "September 2024",
-    category: "Mining",
-    categoryDari: "معادن",
-    companyColor: "#1A237E",
-    companySlug: "albahrain",
-    gallery: [
-      { src: "/images/projects/quarry-1.jpg", captionEn: "Primary crusher", captionDari: "سنگ شکن اولیه" },
-      { src: "/images/projects/quarry-2.jpg", captionEn: "Screening plant", captionDari: "کارخانه غربالگری" },
-      { src: "/images/projects/quarry-3.jpg", captionEn: "Loading operations", captionDari: "عملیات بارگیری" },
-      { src: "/images/projects/quarry-4.jpg", captionEn: "Quality testing", captionDari: "آزمایش کیفیت" },
-    ],
-    milestones: [
-      { date: "2023-03-10", titleEn: "Site Development", titleDari: "توسعه سایت", descEn: "Access road and power connected", descDari: "سرک دسترسی و برق متصل شد" },
-      { date: "2023-07-01", titleEn: "Equipment Install", titleDari: "نصب تجهیزات", descEn: "Crushers and screens mounted", descDari: "سنگ شکن‌ها و صفحات نصب شد" },
-      { date: "2023-11-15", titleEn: "Trial Production", titleDari: "تولید آزمایشی", descEn: "First aggregate produced", descDari: "اولین سنگدانه تولید شد" },
-      { date: "2024-09-01", titleEn: "Full Operation", titleDari: "عملیات کامل", descEn: "1,000 tons/day achieved", descDari: "۱۰۰۰ تن/روز محقق شد" },
-    ],
-  },
-};
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const project = projectsData[slug];
-  if (!project) return { title: "Project Not Found | HGC" };
+  const project = await getProject(slug);
+  
+  if (!project) {
+    return { title: "Project Not Found | HGC" };
+  }
   
   return {
     title: `${project.nameEn} | HGC Projects`,
-    description: project.overviewEn.slice(0, 160),
+    description: project.overviewEn?.slice(0, 160) || "Hafez Group project details",
     openGraph: {
-      images: [{ url: project.heroImage }],
+      images: project.heroImage ? [{ url: project.heroImage }] : [],
     },
   };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = projectsData[slug];
+  const project = await getProject(slug);
+  
   if (!project) notFound();
   
   return <ProjectDetailClient project={project} />;

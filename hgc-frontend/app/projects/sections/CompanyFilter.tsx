@@ -3,30 +3,48 @@
 import { Building2, Mountain, HardHat, Store, Landmark, Truck } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 
+// Icon mapping
+const iconMap: Record<string, React.ElementType> = {
+  Building2,
+  Mountain,
+  HardHat,
+  Store,
+  Landmark,
+  Truck,
+  Pickaxe: Mountain,
+  Wrench: HardHat,
+  Sun: Landmark,
+  Fuel: Truck,
+  Gem: Mountain,
+  default: Building2,
+};
+
 interface CompanyFilterProps {
   activeCompany: string;
   onCompanyChange: (company: string) => void;
+  companies: any[];
 }
 
-const companies = [
-  { id: "all", slug: "all", nameEn: "All Projects", nameDari: "همه پروژه‌ها", icon: Building2, color: "#C9A227" },
-  { id: "hcrc", slug: "hcrc", nameEn: "Hafez Construction", nameDari: "حافظ ساختمان", icon: Building2, color: "#B22222" },
-  { id: "albahrain", slug: "albahrain", nameEn: "Al-Bahrain Mining", nameDari: "البحرین معادن", icon: Mountain, color: "#1A237E" },
-  { id: "zainnoorain", slug: "zainnoorain", nameEn: "Zain Noorain", nameDari: "زین نورین", icon: HardHat, color: "#F57C00" },
-  { id: "almadinah", slug: "almadinah", nameEn: "Al-Madinah Trading", nameDari: "المدینه تجارت", icon: Store, color: "#2E7D32" },
-  { id: "haramain", slug: "haramain", nameEn: "Haramain Financial", nameDari: "حرمین مالی", icon: Landmark, color: "#FFD700" },
-  { id: "alkoozi", slug: "alkoozi", nameEn: "Al-Koozi Logistics", nameDari: "الکوزی لوجستیک", icon: Truck, color: "#00838F" },
-];
-
-export default function CompanyFilter({ activeCompany, onCompanyChange }: CompanyFilterProps) {
+export default function CompanyFilter({ activeCompany, onCompanyChange, companies }: CompanyFilterProps) {
   const { lang } = useI18n();
+
+  // Fallback if API companies not loaded yet
+  const filterCompanies = companies.length > 0 ? companies : [
+    { id: "all", slug: "all", nameEn: "All Projects", nameDari: "همه پروژه‌ها", icon: "Building2", color: "#C9A227" },
+    { id: "hcrc", slug: "hcrc", nameEn: "Hafez Construction", nameDari: "حافظ ساختمان", icon: "Building2", color: "#B22222" },
+    { id: "albahrain", slug: "albahrain", nameEn: "Al-Bahrain Mining", nameDari: "البحرین معادن", icon: "Mountain", color: "#1A237E" },
+    { id: "zainnoorain", slug: "zainnoorain", nameEn: "Zain Noorain", nameDari: "زین نورین", icon: "HardHat", color: "#F57C00" },
+    { id: "almadinah", slug: "almadinah", nameEn: "Al-Madinah Trading", nameDari: "المدینه تجارت", icon: "Store", color: "#2E7D32" },
+    { id: "haramain", slug: "haramain", nameEn: "Haramain Financial", nameDari: "حرمین مالی", icon: "Landmark", color: "#FFD700" },
+    { id: "alkoozi", slug: "alkoozi", nameEn: "Al-Koozi Logistics", nameDari: "الکوزی لوجستیک", icon: "Truck", color: "#00838F" },
+  ];
 
   return (
     <section className="relative py-8 bg-[#0A1628] border-b border-white/5 sticky top-0 z-40 backdrop-blur-xl bg-[#0A1628]/90">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          {companies.map((company) => {
-            const Icon = company.icon;
+          {filterCompanies.map((company) => {
+            const Icon = iconMap[company.icon] || iconMap.default;
             const isActive = activeCompany === company.slug;
             
             return (

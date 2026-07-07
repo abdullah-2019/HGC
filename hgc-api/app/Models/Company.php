@@ -247,4 +247,10 @@ class Company extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'company_id');
+    }
+
+
 }

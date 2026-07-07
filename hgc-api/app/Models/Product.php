@@ -45,12 +45,12 @@ class Product extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     public function images(): HasMany
@@ -138,5 +138,10 @@ class Product extends Model
     public function scopeInStock($query)
     {
         return $query->where('availability', 'in_stock');
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class, 'product_id');
     }
 }

@@ -14,12 +14,14 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
   const { lang } = useI18n();
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  if (!project.gallery || project.gallery.length === 0) return null;
+  const gallery = project.gallery || [];
+
+  if (gallery.length === 0) return null;
 
   const openLightbox = (idx: number) => setLightbox(idx);
   const closeLightbox = () => setLightbox(null);
-  const goNext = () => setLightbox((prev) => (prev !== null ? (prev + 1) % project.gallery.length : null));
-  const goPrev = () => setLightbox((prev) => (prev !== null ? (prev - 1 + project.gallery.length) % project.gallery.length : null));
+  const goNext = () => setLightbox((prev) => (prev !== null ? (prev + 1) % gallery.length : null));
+  const goPrev = () => setLightbox((prev) => (prev !== null ? (prev - 1 + gallery.length) % gallery.length : null));
 
   return (
     <section className="relative py-20 lg:py-28 bg-[#0A1628]">
@@ -36,7 +38,7 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
 
         {/* Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-          {project.gallery.map((img: any, idx: number) => (
+          {gallery.map((img: any, idx: number) => (
             <ScrollReveal key={idx} delay={idx * 0.08}>
               <button
                 onClick={() => openLightbox(idx)}
@@ -81,8 +83,8 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
 
           <div className="relative w-[90vw] h-[80vh] max-w-6xl" onClick={(e) => e.stopPropagation()}>
             <Image
-              src={project.gallery[lightbox].src}
-              alt={lang === "en" ? project.gallery[lightbox].captionEn : project.gallery[lightbox].captionDari}
+              src={gallery[lightbox].src}
+              alt={lang === "en" ? gallery[lightbox].captionEn : gallery[lightbox].captionDari}
               fill
               className="object-contain"
               sizes="90vw"
@@ -90,7 +92,7 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
           </div>
           
           <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm">
-            {lightbox + 1} / {project.gallery.length}
+            {lightbox + 1} / {gallery.length}
           </p>
         </div>
       )}

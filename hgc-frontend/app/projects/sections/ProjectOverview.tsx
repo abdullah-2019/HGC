@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, User, DollarSign, Tag } from "lucide-react";
+import { Building2, User, Tag } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -40,8 +40,6 @@ export default function ProjectOverview({ project }: ProjectOverviewProps) {
                 {lang === "en" ? project.overviewEn : project.overviewDari}
               </p>
             </ScrollReveal>
-
-           
           </div>
 
           {/* Sidebar Details */}
@@ -69,19 +67,6 @@ export default function ProjectOverview({ project }: ProjectOverviewProps) {
                     })}
                   </div>
                 </div>
-
-                {/* CTA Card */}
-                {/* <div className="p-6 rounded-2xl bg-[#C9A227]/5 border border-[#C9A227]/10">
-                  <h4 className="text-[#C9A227] font-bold mb-2">
-                    {lang === "en" ? "Interested in similar projects?" : lang === "dari" ? "به پروژه‌های مشابه علاقه‌مندید؟" : "د ورته پروژو ته لیواله یاست؟"}
-                  </h4>
-                  <p className="text-white/40 text-sm mb-4">
-                    {lang === "en" ? "Contact our team for a consultation." : lang === "dari" ? "برای مشاوره با تیم ما تماس بگیرید." : "د مشورې لپاره زموږ ټیم سره اړیکه ونیسئ."}
-                  </p>
-                  <a href="/contact" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C9A227] text-[#0A1628] font-semibold rounded-lg text-sm hover:bg-[#C9A227]/90 transition-colors">
-                    {lang === "en" ? "Get in Touch" : lang === "dari" ? "تماس بگیرید" : "اړیکه ونیسئ"}
-                  </a>
-                </div> */}
               </div>
             </ScrollReveal>
           </div>

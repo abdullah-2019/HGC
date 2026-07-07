@@ -77,3 +77,11 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
         Route::delete('/{id}', [ContactSubmissionController::class, 'destroy']);
     });
 });
+
+
+// Projects
+Route::get('/projects', [ProjectController::class, 'index']);
+Route::get('/projects/{slug}', [ProjectController::class, 'show']);
+
+// Companies (for filter)
+Route::get('/companies/for-filter', [ProjectController::class, 'companiesForFilter']);

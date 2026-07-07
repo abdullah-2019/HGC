@@ -38,9 +38,8 @@ class CompanyAwards extends Model
 
     public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
-
     public function getLocalizedTitle(string $lang): string
     {
         return match ($lang) {

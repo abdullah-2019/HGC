@@ -28,7 +28,7 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
     planned: { bg: "bg-blue-500/15", text: "text-blue-400", border: "border-blue-500/20", icon: Clock },
   };
 
-  const status = statusConfig[project.status as keyof typeof statusConfig];
+  const status = statusConfig[project.status as keyof typeof statusConfig] || statusConfig.ongoing;
   const StatusIcon = status.icon;
 
   return (
@@ -81,9 +81,11 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
           </h1>
 
           {/* Tagline */}
-          <p className="text-xl text-[#C9A227] mb-8 max-w-2xl">
-            {lang === "en" ? project.taglineEn : project.taglineDari}
-          </p>
+          {project.taglineEn && (
+            <p className="text-xl text-[#C9A227] mb-8 max-w-2xl">
+              {lang === "en" ? project.taglineEn : project.taglineDari}
+            </p>
+          )}
 
           {/* Meta row */}
           <div className="flex flex-wrap items-center gap-6 text-white/50 text-sm">

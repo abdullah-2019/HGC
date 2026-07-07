@@ -48,10 +48,6 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class);
-    }
 
     public function getLocalizedName(string $lang = 'en'): string
     {
@@ -74,6 +70,16 @@ class Category extends Model
     public function getImageUrlAttribute($value): ?string
     {
         return $value ? asset('storage/' . $value) : null;
+    }
+
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'category_id');
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'category_id');
     }
 
 }

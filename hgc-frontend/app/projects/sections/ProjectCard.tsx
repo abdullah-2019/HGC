@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
-import { MapPin, Calendar, DollarSign, ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { MapPin, Calendar, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 
 interface ProjectCardProps {
@@ -154,7 +154,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               <Calendar className="w-3.5 h-3.5" />
               {project.duration}
             </span>
-            
           </div>
 
           {/* Client */}
