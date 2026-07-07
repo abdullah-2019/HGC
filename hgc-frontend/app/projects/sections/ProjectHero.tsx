@@ -62,7 +62,7 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${status.bg} ${status.text} border ${status.border} mb-6`}>
             <StatusIcon className="w-4 h-4" />
             <span className="text-sm font-medium">
-              {project.status === "completed" 
+              {project.status === "completed"
                 ? (lang === "en" ? "Completed" : lang === "dari" ? "تکمیل شده" : "بشپړه شوې")
                 : project.status === "ongoing"
                   ? (lang === "en" ? "In Progress" : lang === "dari" ? "در حال اجرا" : "جریان لري")

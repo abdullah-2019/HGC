@@ -14,7 +14,6 @@ export default function ProjectOverview({ project }: ProjectOverviewProps) {
   const details = [
     { icon: Building2, labelEn: "Client", labelDari: "کارفرما", valueEn: project.client, valueDari: project.clientDari },
     { icon: User, labelEn: "Contractor", labelDari: "پیمانکار", valueEn: project.contractor, valueDari: project.contractorDari },
-    { icon: DollarSign, labelEn: "Budget", labelDari: "بودجه", valueEn: project.budget, valueDari: project.budget },
     { icon: Tag, labelEn: "Category", labelDari: "دسته", valueEn: project.category, valueDari: project.categoryDari },
   ];
 
@@ -42,25 +41,7 @@ export default function ProjectOverview({ project }: ProjectOverviewProps) {
               </p>
             </ScrollReveal>
 
-            {/* Applications/Impact */}
-            {project.applications && (
-              <ScrollReveal delay={0.3}>
-                <h3 className="text-xl font-bold text-white mb-6">
-                  {lang === "en" ? "Key Impact Areas" : lang === "dari" ? "حوزه‌های کلیدی تأثیر" : "د اغیزې کلیدي ساحې"}
-                </h3>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {project.applications.map((app: any, idx: number) => (
-                    <div key={idx} className="flex items-start gap-4 p-5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#C9A227]/20 transition-all">
-                      <span className="text-2xl">{app.icon}</span>
-                      <div>
-                        <h4 className="text-white font-semibold mb-1">{lang === "en" ? app.titleEn : app.titleDari}</h4>
-                        <p className="text-white/40 text-sm">{lang === "en" ? app.descEn : app.descDari}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollReveal>
-            )}
+           
           </div>
 
           {/* Sidebar Details */}
@@ -90,7 +71,7 @@ export default function ProjectOverview({ project }: ProjectOverviewProps) {
                 </div>
 
                 {/* CTA Card */}
-                <div className="p-6 rounded-2xl bg-[#C9A227]/5 border border-[#C9A227]/10">
+                {/* <div className="p-6 rounded-2xl bg-[#C9A227]/5 border border-[#C9A227]/10">
                   <h4 className="text-[#C9A227] font-bold mb-2">
                     {lang === "en" ? "Interested in similar projects?" : lang === "dari" ? "به پروژه‌های مشابه علاقه‌مندید؟" : "د ورته پروژو ته لیواله یاست؟"}
                   </h4>
@@ -100,7 +81,7 @@ export default function ProjectOverview({ project }: ProjectOverviewProps) {
                   <a href="/contact" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C9A227] text-[#0A1628] font-semibold rounded-lg text-sm hover:bg-[#C9A227]/90 transition-colors">
                     {lang === "en" ? "Get in Touch" : lang === "dari" ? "تماس بگیرید" : "اړیکه ونیسئ"}
                   </a>
-                </div>
+                </div> */}
               </div>
             </ScrollReveal>
           </div>
