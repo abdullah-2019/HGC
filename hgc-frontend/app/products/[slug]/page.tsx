@@ -173,17 +173,6 @@ export default function ProductDetailPage() {
                             {product.availability_label}
                         </div>
 
-                        {product.price_range && (
-                            <div className="pt-2">
-                                <span className="text-3xl font-bold text-[#C9A227]">
-                                    {product.price_range}
-                                </span>
-                                <span className="text-white/40 ml-2">
-                                    {product.currency} / {product.unit}
-                                </span>
-                            </div>
-                        )}
-
                         {product.overview && (
                             <div
                                 className="text-white/60 leading-relaxed prose prose-invert max-w-none"
@@ -197,72 +186,6 @@ export default function ProductDetailPage() {
                                 <span>{t(lang, "products.detail.origin")}: {product.origin}</span>
                             </div>
                         )}
-
-                        {product.specifications && product.specifications.length > 0 && (
-                            <div className="bg-white/5 rounded-xl p-6 border border-white/5">
-                                <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                                    <Check className="w-5 h-5 text-[#C9A227]" />
-                                    {t(lang, "products.detail.specifications")}
-                                </h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {product.specifications.map((spec, idx) => (
-                                        <div key={idx} className="flex flex-col">
-                                            <span className="text-white/40 text-xs uppercase tracking-wider">{spec.label}</span>
-                                            <span className="text-white font-medium">{spec.value}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {product.applications && product.applications.length > 0 && (
-                            <div>
-                                <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-                                    <Package className="w-5 h-5 text-[#C9A227]" />
-                                    {t(lang, "products.detail.applications")}
-                                </h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {product.applications.map((app, idx) => (
-                                        <span key={idx} className="px-3 py-1.5 rounded-lg bg-white/5 text-white/60 text-sm border border-white/10">
-                                            {app}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {product.packaging && product.packaging.length > 0 && (
-                            <div>
-                                <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-                                    <Package className="w-5 h-5 text-[#C9A227]" />
-                                    {t(lang, "products.detail.packaging")}
-                                </h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {product.packaging.map((pkg, idx) => (
-                                        <span key={idx} className="px-3 py-1.5 rounded-lg bg-white/5 text-white/60 text-sm border border-white/10">
-                                            {pkg}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {product.delivery_info && (
-                            <div className="flex items-start gap-3 text-white/40 text-sm bg-[#C9A227]/5 p-4 rounded-xl border border-[#C9A227]/10">
-                                <Truck className="w-5 h-5 text-[#C9A227] flex-shrink-0 mt-0.5" />
-                                <span>{product.delivery_info}</span>
-                            </div>
-                        )}
-
-                        <div className="pt-4 flex flex-wrap gap-4">
-                            <a
-                                href="#contact"
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-[#C9A227] text-[#0A1628] font-bold rounded-xl hover:bg-[#C9A227]/90 transition-all"
-                            >
-                                {t(lang, "products.detail.requestQuote")}
-                                <ArrowLeft className="w-5 h-5 rotate-180" />
-                            </a>
-                        </div>
                     </motion.div>
                 </div>
             </div>
