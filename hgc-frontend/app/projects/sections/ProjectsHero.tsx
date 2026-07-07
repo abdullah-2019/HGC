@@ -34,7 +34,7 @@ export default function ProjectsHero() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('/images/placeholder.png')`,
+            backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/storage/uploads/project-hero.webp')`
           }}
         />
       </div>

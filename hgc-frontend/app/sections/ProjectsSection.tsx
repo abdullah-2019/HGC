@@ -14,7 +14,6 @@ const featuredProjects = [
     locationDari: "کندهار",
     client: "Ministry of Public Works",
     clientDari: "وزارت فواید عامه",
-    budget: "558,378,156 AFN",
     duration: "2023 - 2025",
     status: "completed",
     category: "roads",
@@ -28,7 +27,6 @@ const featuredProjects = [
     locationDari: "بدخشان",
     client: "Ministry of Interior",
     clientDari: "وزارت داخله",
-    budget: "6,198,630 AFN",
     duration: "2023",
     status: "completed",
     category: "buildings",
@@ -42,7 +40,6 @@ const featuredProjects = [
     locationDari: "ننگرهار",
     client: "Ministry of Finance",
     clientDari: "وزارت مالیه",
-    budget: "5,165,990 AFN",
     duration: "2023 - 2024",
     status: "completed",
     category: "solar",
@@ -56,7 +53,6 @@ const featuredProjects = [
     locationDari: "لوگر",
     client: "Ministry of Interior",
     clientDari: "وزارت داخله",
-    budget: "20,000,000 AFN",
     duration: "2024 - 2025",
     status: "ongoing",
     category: "buildings",
@@ -174,10 +170,6 @@ export default function ProjectsSection() {
                   {lang === "en" ? project.title : project.titleDari}
                 </h3>
                 <div className="flex items-center gap-4 text-xs text-white/40 mb-3">
-                  <span className="flex items-center gap-1">
-                    <DollarSign className="w-3.5 h-3.5" />
-                    {project.budget}
-                  </span>
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5" />
                     {project.duration}

@@ -16,7 +16,6 @@ interface ProjectCardProps {
     locationDari: string;
     clientEn: string;
     clientDari: string;
-    budget: string;
     duration: string;
     status: "completed" | "ongoing" | "planned";
     category: string;
@@ -155,10 +154,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               <Calendar className="w-3.5 h-3.5" />
               {project.duration}
             </span>
-            <span className="flex items-center gap-1.5">
-              <DollarSign className="w-3.5 h-3.5" />
-              {project.budget}
-            </span>
+            
           </div>
 
           {/* Client */}
