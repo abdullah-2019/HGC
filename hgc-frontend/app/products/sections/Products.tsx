@@ -3,12 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ChevronRight,
   ArrowRight,
-  Check,
   Loader2,
   Boxes,
-  // Import the dynamic loader
   type LucideIcon,
 } from "lucide-react";
 import * as Icons from "lucide-react";
@@ -20,8 +17,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 // Dynamic icon resolver — no hardcoded names needed
 function getIcon(iconName: string | null | undefined): LucideIcon {
   if (!iconName) return Boxes;
-  // lucide-react exports all icons as named exports
-  const Icon = (Icons as Record<string, LucideIcon>)[iconName];
+  const Icon = (Icons as unknown as Record<string, LucideIcon>)[iconName];
   return Icon || Boxes;
 }
 
@@ -87,9 +83,6 @@ export default function ProductCategories() {
             <span className="text-[#C9A227] text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">
               {t(lang, "products.categories.sectionSubtitle")}
             </span>
-            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-4">
-              {t(lang, "products.categories.sectionTitle")}
-            </h2>
             <p className="text-white/40 max-w-2xl mx-auto text-lg">
               {t(lang, "products.categories.sectionDesc")}
             </p>
@@ -106,18 +99,17 @@ export default function ProductCategories() {
                   key={cat.id}
                   id={`category-${cat.slug}`}
                   onClick={() => setActiveCategory(idx)}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
-                    isActive
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${isActive
                       ? "text-white shadow-lg"
                       : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5"
-                  }`}
+                    }`}
                   style={
                     isActive
                       ? {
-                          backgroundColor: "#C9A22720",
-                          border: "1px solid #C9A22740",
-                          color: "#C9A227",
-                        }
+                        backgroundColor: "#C9A22720",
+                        border: "1px solid #C9A22740",
+                        color: "#C9A227",
+                      }
                       : {}
                   }
                 >
@@ -199,26 +191,6 @@ export default function ProductCategories() {
                       <p className="text-white/40 text-sm leading-relaxed line-clamp-2">
                         {product.tagline}
                       </p>
-
-                      {product.specifications && product.specifications.length > 0 && (
-                        <div className="space-y-1.5 pt-2">
-                          {product.specifications.slice(0, 2).map((spec, sIdx) => (
-                            <div key={sIdx} className="flex items-center gap-2 text-white/30 text-xs">
-                              <Check className="w-3 h-3 text-[#C9A227]/60 flex-shrink-0" />
-                              <span>{spec.label}: {spec.value}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {product.price_range && (
-                        <div className="pt-2">
-                          <span className="text-[#C9A227] font-bold text-sm">
-                            {product.price_range} {product.currency}
-                          </span>
-                          <span className="text-white/30 text-xs ml-1">/ {product.unit}</span>
-                        </div>
-                      )}
                     </div>
                   </motion.div>
                 ))}
@@ -228,16 +200,6 @@ export default function ProductCategories() {
                 <p className="text-white/40">{t(lang, "products.categories.noProducts")}</p>
               </div>
             )}
-
-            <div className="mt-10 text-center">
-              <a
-                href={`/products?category=${activeCat?.slug}`}
-                className="inline-flex items-center gap-2 text-[#C9A227] font-medium hover:underline transition-all"
-              >
-                {t(lang, "products.categories.viewAll")} {activeCat?.name}
-                <ChevronRight className="w-4 h-4" />
-              </a>
-            </div>
           </motion.div>
         </AnimatePresence>
       </div>

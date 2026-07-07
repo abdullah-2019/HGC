@@ -2,26 +2,32 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ArrowRight, Factory, Loader2 } from "lucide-react";
+import { ChevronDown, ArrowRight, Factory, Loader2, Boxes, type LucideIcon } from "lucide-react";
+import * as Icons from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
-import { getCategories, type CategoryItem } from "@/lib/api";
 
 function seededRandom(seed: number) {
   const x = Math.sin(seed * 9999) * 10000;
   return x - Math.floor(x);
 }
 
+// Dynamic icon resolver
+function getIcon(iconName: string | null | undefined): LucideIcon {
+  if (!iconName) return Boxes;
+  const Icon = (Icons as unknown as Record<string, LucideIcon>)[iconName];
+  return Icon || Boxes;
+}
+
 export default function ProductsHero() {
   const { lang, dir } = useI18n();
   const [currentBg, setCurrentBg] = useState(0);
-  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   const backgrounds = [
-    `${API_URL}/storage/uploads/hero-products.webp`,
+    `${API_URL}/storage/uploads/hero-construction.webp`,
     `${API_URL}/storage/uploads/companies/albahrain/hero.webp`,
     `${API_URL}/storage/uploads/companies/alkoozi/hero.webp`,
   ];
@@ -35,14 +41,6 @@ export default function ProductsHero() {
       delay: seededRandom(i + 300) * 3,
     }));
   }, []);
-
-  useEffect(() => {
-    getCategories(lang, "product")
-      .then((res) => {
-        if (res.success) setCategories(res.data);
-      })
-      .finally(() => setLoading(false));
-  }, [lang]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -118,33 +116,6 @@ export default function ProductsHero() {
                 {t(lang, "products.hero.contactBtn")}
               </a>
             </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-16 pt-8 border-t border-white/10"
-          >
-            <p className="text-white/30 text-sm uppercase tracking-wider mb-4">
-              {t(lang, "products.hero.categoriesLabel")}
-            </p>
-            {loading ? (
-              <Loader2 className="w-5 h-5 text-[#C9A227] animate-spin" />
-            ) : (
-              <div className="flex flex-wrap gap-3">
-                {categories.map((cat) => (
-                  <a
-                    key={cat.id}
-                    href={`#category-${cat.slug}`}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-[#C9A227] hover:border-[#C9A227]/30 hover:bg-[#C9A227]/5 transition-all duration-300 text-sm"
-                  >
-                    {cat.icon_name}
-                    {cat.name}
-                  </a>
-                ))}
-              </div>
-            )}
           </motion.div>
         </div>
       </div>
