@@ -86,7 +86,7 @@ export default function ImageCarousel() {
         </div>
 
         {/* Carousel */}
-        <div 
+        <div
           className="relative rounded-2xl overflow-hidden aspect-[21/9] lg:aspect-[21/8] group"
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
@@ -95,9 +95,8 @@ export default function ImageCarousel() {
           {carouselImages.map((img, idx) => (
             <div
               key={idx}
-              className={`absolute inset-0 transition-all duration-1000 ease-out ${
-                idx === current ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-              }`}
+              className={`absolute inset-0 transition-all duration-1000 ease-out ${idx === current ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                }`}
             >
               <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${img.src})` }} />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628] via-[#0A1628]/30 to-transparent" />
