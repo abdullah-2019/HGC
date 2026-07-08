@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Award, Building2, Globe, TrendingUp } from "lucide-react";
+import { Building2, Globe, TrendingUp } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 
 export default function AboutStory() {
@@ -24,7 +24,6 @@ export default function AboutStory() {
   }, []);
 
   const highlights = [
-    { icon: Award, label: "ISO Certified", labelDari: "گواهی ISO" },
     { icon: Building2, label: "6 Companies", labelDari: "۶ شرکت" },
     { icon: Globe, label: "38+ Provinces", labelDari: "۳۸+ ولایت" },
     { icon: TrendingUp, label: "200+ Projects", labelDari: "۲۰۰+ پروژه" },

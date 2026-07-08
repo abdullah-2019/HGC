@@ -7,20 +7,18 @@ import ImageCarousel from "./sections/ImageCarousel";
 import MissionSection from "./sections/MissionSection";
 import VisionSection from "./sections/VisionSection";
 import CoreValues from "./sections/CoreValues";
-import Timeline from "./sections/Timeline";
 import StatsShowcase from "./sections/StatsShowcase";
 
 export default function AboutPageClient() {
   return (
     <div className="about-page">
       <HeroBanner />
-       <AboutStory />
+      <AboutStory />
       <StatsShowcase />
       <ImageCarousel />
       <MissionSection />
       <VisionSection />
       <CoreValues />
-      <Timeline />
     </div>
   );
 }

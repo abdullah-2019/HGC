@@ -1,24 +1,30 @@
 "use client";
 
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 
 export default function HeroBanner() {
-  const { lang, dir } = useI18n();
+  const { lang } = useI18n();
 
   return (
     <section className="about-section relative w-full h-[70vh] min-h-[500px] max-h-[800px] overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - Using Next.js Image */}
       <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 bg-[url('/images/about-hero.jpg')] bg-cover bg-center parallax-bg"
+        <Image
+          src="http://localhost:8000/storage/uploads/hero-construction.webp"
+          alt="Hero background"
+          fill
+          className="object-cover"
           style={{ transform: "scale(1.1)" }}
+          priority
+          unoptimized
         />
-        {/* Dark Overlay with gradient */}
+        {/* Dark Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0A1628]/60 via-[#0A1628]/50 to-[#0A1628]" />
-        {/* Gold tint overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(201,162,39,0.08)_0%,_transparent_70%)]" />
       </div>
+
 
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 grid-pattern opacity-50" />
