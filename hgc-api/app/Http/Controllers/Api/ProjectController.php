@@ -232,6 +232,7 @@ class ProjectController extends Controller
         if (str_starts_with($path, 'http')) {
             return $path;
         }
-        return rtrim(env('APP_URL', 'http://localhost:8000'), '/') . '/storage/' . ltrim($path, '/');
+        // Force the correct URL with port 8000
+        return 'http://localhost:8000/storage/' . ltrim($path, '/');
     }
 }

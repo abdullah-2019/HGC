@@ -22,7 +22,7 @@ const nextConfig = {
       },
     ],
     // Also allow unoptimized images as fallback
-    unoptimized: false,
+    unoptimized: true,
   },
 };
 
