@@ -75,10 +75,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-
+          
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors duration-500" />
-
+          
           {/* Company color accent bar */}
           <div
             className="absolute top-0 left-0 right-0 h-1 transition-all duration-500"
