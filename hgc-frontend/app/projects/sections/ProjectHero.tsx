@@ -52,12 +52,6 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
       {/* Content */}
       <div className="relative z-10 flex flex-col justify-end h-full pb-16 lg:pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto w-full">
-          {/* Back link */}
-          <Link href="/projects" className="inline-flex items-center gap-2 text-white/50 hover:text-[#C9A227] transition-colors mb-8 text-sm">
-            <ArrowLeft className="w-4 h-4" />
-            {lang === "en" ? "Back to Projects" : lang === "dari" ? "بازگشت به پروژه‌ها" : "بیرته پروژو ته"}
-          </Link>
-
           {/* Status badge */}
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${status.bg} ${status.text} border ${status.border} mb-6`}>
             <StatusIcon className="w-4 h-4" />

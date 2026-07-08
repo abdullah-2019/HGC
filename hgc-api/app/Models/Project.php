@@ -54,6 +54,7 @@ class Project extends Model
         'gallery_images' => 'json',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
+        'gallery_images' => 'array',
     ];
 
     public function category(): BelongsTo

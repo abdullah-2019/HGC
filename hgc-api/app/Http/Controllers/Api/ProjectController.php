@@ -18,7 +18,7 @@ class ProjectController extends Controller
     {
         $companySlug = $request->query('company');
 
-        $query = Project::with(['company:id,slug,name_en,name_dari,accent_color,icon_name'])
+        $query = Project::with(['company:id,slug,name_en,name_dari,accent_color,icon_name', 'category:id,name_en,name_dari'])
             ->where('is_active', true)
             ->orderBy('sort_order', 'asc')
             ->orderBy('created_at', 'desc');
@@ -44,6 +44,7 @@ class ProjectController extends Controller
             'description_dari',
             'cover_image_url',
             'completion_percent',
+            'category_id',
             'company_id',
         ]);
 
