@@ -1,38 +1,135 @@
-/* ═══════════════════════════════════════════════════════
-   HGC ABOUT PAGE — GLOBAL STYLES
-   ═══════════════════════════════════════════════════════ */
+/* ============================================
+   About Page Styles — Hafez Group of Companies
+   ============================================ */
 
-/* ── Section Base ── */
+/* ─── Gold Gradient Text ─────────────────── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #C9A227 0%, #E8D179 50%, #C9A227 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Gold Line Divider ──────────────────── */
+.gold-line {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #C9A227, #E8D179, #C9A227);
+  border-radius: 2px;
+}
+
+/* ─── Section Base ───────────────────────── */
 .about-section {
+  position: relative;
+}
+
+/* ─── Section Titles ─────────────────────── */
+.about-section-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.about-hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+/* ─── Body Text ──────────────────────────── */
+.about-body-text {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ─── Glass Card ─────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(201, 162, 39, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ─── Value Ring (animated border) ──────── */
+.value-ring {
   position: relative;
   overflow: hidden;
 }
 
-/* ── Gold Accent Line ── */
-.gold-line {
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #C9A227, #E8D5A3, #C9A227);
-  background-size: 200% 100%;
-  animation: shimmer-line 3s ease-in-out infinite;
+.value-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1.5px;
+  background: conic-gradient(from 0deg, transparent, #C9A227, transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-@keyframes shimmer-line {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+.group:hover .value-ring::before {
+  opacity: 1;
+  animation: rotate-ring 3s linear infinite;
 }
 
-/* ── Text Reveal Animation ── */
+@keyframes rotate-ring {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Grid Pattern Background ──────────── */
+.grid-pattern {
+  background-image: 
+    linear-gradient(rgba(201, 162, 39, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 162, 39, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ─── Image Zoom Effect ────────────────── */
+.img-zoom {
+  transition: transform 0.7s ease;
+}
+
+.group:hover .img-zoom {
+  transform: scale(1.05);
+}
+
+/* ─── Gold Glow ────────────────────────── */
+.glow-gold {
+  box-shadow: 0 0 40px rgba(201, 162, 39, 0.1);
+}
+
+/* ─── Scroll Indicator ─────────────────── */
+.scroll-indicator {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* ─── Reveal Animations ────────────────── */
 .reveal-text {
   opacity: 0;
-  transform: translateY(30px);
-  animation: reveal-up 0.8s ease-out forwards;
+  transform: translateY(20px);
+  animation: reveal-up 0.8s ease forwards;
 }
 
-.reveal-text-delay-1 { animation-delay: 0.15s; }
-.reveal-text-delay-2 { animation-delay: 0.3s; }
-.reveal-text-delay-3 { animation-delay: 0.45s; }
-.reveal-text-delay-4 { animation-delay: 0.6s; }
+.reveal-text-delay-1 { animation-delay: 0.2s; }
+.reveal-text-delay-2 { animation-delay: 0.4s; }
+.reveal-text-delay-3 { animation-delay: 0.6s; }
+.reveal-text-delay-4 { animation-delay: 0.8s; }
 
 @keyframes reveal-up {
   to {
@@ -41,185 +138,54 @@
   }
 }
 
-/* ── Image Hover Zoom ── */
-.img-zoom {
-  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.img-zoom:hover {
-  transform: scale(1.05);
-}
-
-/* ── Card Glass Effect ── */
-.glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(201, 162, 39, 0.08);
-  transition: all 0.4s ease;
-}
-
-.glass-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(201, 162, 39, 0.2);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(201, 162, 39, 0.05);
-}
-
-/* ── Parallax Container ── */
-.parallax-bg {
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-@media (max-width: 768px) {
-  .parallax-bg {
-    background-attachment: scroll;
-  }
-}
-
-/* ── Gold Gradient Text ── */
-.text-gold-gradient {
-  background: linear-gradient(135deg, #C9A227 0%, #E8D5A3 50%, #C9A227 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ── Section Divider ── */
-.section-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.3), transparent);
-}
-
-/* ── Floating Animation ── */
-.float-gentle {
-  animation: float-gentle 6s ease-in-out infinite;
-}
-
-@keyframes float-gentle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* ── Scroll Indicator ── */
-.scroll-indicator {
-  animation: bounce-gentle 2s ease-in-out infinite;
-}
-
-@keyframes bounce-gentle {
-  0%, 100% { transform: translateY(0); opacity: 1; }
-  50% { transform: translateY(8px); opacity: 0.5; }
-}
-
-/* ── Counter Number ── */
+/* ─── Counter Number ───────────────────── */
 .counter-number {
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  font-feature-settings: "tnum";
 }
 
-/* ── Timeline Connector ── */
-.timeline-connector {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(180deg, transparent, #C9A227, #C9A227, transparent);
-  transform: translateX(-50%);
-}
-
-@media (max-width: 768px) {
-  .timeline-connector {
-    left: 20px;
-  }
-}
-
-/* ── Team Card Overlay ── */
-.team-overlay {
-  background: linear-gradient(180deg, transparent 0%, rgba(10, 22, 40, 0.9) 100%);
-}
-
-/* ── Carousel Dots ── */
+/* ─── Carousel Dot ─────────────────────── */
 .carousel-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
+  border: none;
+  padding: 0;
 }
 
 .carousel-dot.active {
-  width: 32px;
+  width: 24px;
   border-radius: 4px;
   background: #C9A227;
 }
 
-/* ── Value Icon Ring ── */
-.value-ring {
-  position: relative;
+.carousel-dot:hover {
+  background: rgba(201, 162, 39, 0.5);
 }
 
-.value-ring::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: #C9A227;
-  border-right-color: #C9A227;
-  animation: spin-slow 8s linear infinite;
+/* ─── Responsive Adjustments ───────────── */
+@media (max-width: 768px) {
+  .about-section-title {
+    font-size: 1.5rem;
+  }
+
+  .about-hero-title {
+    font-size: 2rem;
+  }
+
+  .glass-card {
+    padding: 1.5rem;
+  }
 }
 
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
+/* ─── RTL Support (Dari/Pashto) ────────── */
+[dir="rtl"] .about-section .flex {
+  flex-direction: row-reverse;
 }
 
-/* ── Responsive Typography ── */
-.about-hero-title {
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-}
-
-.about-section-title {
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-
-.about-body-text {
-  font-size: clamp(1rem, 1.2vw, 1.125rem);
-  line-height: 1.8;
-}
-
-/* ── Decorative Grid Pattern ── */
-.grid-pattern {
-  background-image: 
-    linear-gradient(rgba(201, 162, 39, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201, 162, 39, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-/* ── Glow Effect ── */
-.glow-gold {
-  box-shadow: 0 0 40px rgba(201, 162, 39, 0.15);
-}
-
-/* ── Smooth Section Transitions ── */
-.about-page > section {
-  position: relative;
-}
-
-.about-page > section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.1), transparent);
-  opacity: 0.5;
+[dir="rtl"] .gold-line {
+  background: linear-gradient(90deg, #C9A227, #E8D179, #C9A227);
 }

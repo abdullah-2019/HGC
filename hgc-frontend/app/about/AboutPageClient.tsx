@@ -8,17 +8,22 @@ import MissionSection from "./sections/MissionSection";
 import VisionSection from "./sections/VisionSection";
 import CoreValues from "./sections/CoreValues";
 import StatsShowcase from "./sections/StatsShowcase";
+import { AboutPageData } from "./page";
 
-export default function AboutPageClient() {
+interface AboutPageClientProps {
+  data: AboutPageData;
+}
+
+export default function AboutPageClient({ data }: AboutPageClientProps) {
   return (
     <div className="about-page">
-      <HeroBanner />
-      <AboutStory />
-      <StatsShowcase />
-      <ImageCarousel />
-      <MissionSection />
-      <VisionSection />
-      <CoreValues />
+      <HeroBanner settings={data.settings} />
+      <AboutStory story={data.story} />
+      <StatsShowcase stats={data.stats} />
+      <ImageCarousel slides={data.carousel} />
+      <MissionSection mission={data.mission} />
+      <VisionSection vision={data.vision} />
+      <CoreValues coreValues={data.coreValues} />
     </div>
   );
 }
