@@ -94,7 +94,7 @@ export default function MissionSection({ mission }: MissionSectionProps) {
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,_rgba(201,162,39,0.06)_0%,_transparent_60%)]" />
       <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#C9A227]/5 rounded-full blur-3xl" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-top">
           <div className={`relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden aspect-square">
