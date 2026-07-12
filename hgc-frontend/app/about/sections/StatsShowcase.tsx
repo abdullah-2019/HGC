@@ -62,7 +62,7 @@ const fallbackStats: AboutStat[] = [
   { key: "years_experience", value: 24, suffix: "+", label: { en: "Years Experience", dari: "سال تجربه", pashto: "د تجربې کالونه" }, icon: "Clock" },
   { key: "projects_completed", value: 200, suffix: "+", label: { en: "Projects Completed", dari: "پروژه تکمیل شده", pashto: "بشپړ شوي پروژې" }, icon: "Briefcase" },
   { key: "provinces_covered", value: 38, suffix: "+", label: { en: "Provinces Covered", dari: "ولایت تحت پوشش", pashto: "پوښل شوي ولایتونه" }, icon: "MapPin" },
-  { key: "companies_in_group", value: 6, suffix: "", label: { en: "Companies", dari: "شرکت", pashto: "شرکتونه" }, icon: "Building2" },
+  { key: "companies_in_group", value: 60, suffix: "", label: { en: "Companies", dari: "شرکت", pashto: "شرکتونه" }, icon: "Building2" },
 ];
 
 export default function StatsShowcase({ stats }: StatsShowcaseProps) {
@@ -72,17 +72,42 @@ export default function StatsShowcase({ stats }: StatsShowcaseProps) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); } },
+      ([entry]) => { 
+        if (entry.isIntersecting) { 
+          setIsVisible(true); 
+          observer.disconnect(); 
+        } 
+      },
       { threshold: 0.3 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
+  // Debug: Log whenever stats prop changes
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[StatsShowcase] Received stats:", stats);
+      console.log("[StatsShowcase] Is array?", Array.isArray(stats));
+      console.log("[StatsShowcase] Length:", stats?.length);
+    }
+  }, [stats]);
+
   const displayStats = safeArray(stats, fallbackStats);
 
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[StatsShowcase] displayStats length:", displayStats.length);
+      console.log("[StatsShowcase] First stat key:", displayStats[0]?.key);
+      console.log("[StatsShowcase] Using fallback?", displayStats === fallbackStats);
+    }
+  }, [displayStats]);
+
   return (
-    <section ref={sectionRef} className="about-section py-16 bg-[#080F1A] relative overflow-hidden">
+    <section 
+      ref={sectionRef} 
+      className="about-section py-16 bg-[#080F1A] relative overflow-hidden"
+    >
       <div className="absolute inset-0 grid-pattern opacity-30" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(201,162,39,0.05)_0%,_transparent_70%)]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

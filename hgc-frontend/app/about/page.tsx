@@ -125,14 +125,22 @@ async function fetchAboutPageData(): Promise<AboutPageData> {
   const API_BASE = `${baseUrl}/api`;
   const isDev = process.env.NODE_ENV === "development";
 
+  // Cache-busting query param to bypass both Laravel & Next.js cache in dev
+  const cacheBuster = isDev ? `?_t=${Date.now()}` : "";
+
   const fetchOptions: RequestInit = {
-    ...(isDev ? { cache: "no-store" as const } : { next: { revalidate: 3600, tags: ["about-page"] } }),
-    headers: { Accept: "application/json" },
+    ...(isDev 
+      ? { cache: "no-store" as const } 
+      : { next: { revalidate: 60, tags: ["about-page"] } }
+    ),
+    headers: { 
+      Accept: "application/json",
+      ...(isDev ? { "X-Skip-Cache": "true" } : {}),
+    },
   };
 
   try {
-    // Try the main endpoint first
-    const res = await fetch(`${API_BASE}/about`, fetchOptions);
+    const res = await fetch(`${API_BASE}/about${cacheBuster}`, fetchOptions);
 
     if (!res.ok) {
       const errorBody = await res.text();
@@ -142,12 +150,21 @@ async function fetchAboutPageData(): Promise<AboutPageData> {
 
     const json = (await res.json()) as ApiResponse<AboutPageData>;
 
-    // DEBUG: Log what the API returned
-    if (isDev) {
-      console.log("[AboutPage] API Response keys:", Object.keys(json.data || {}));
+    // Handle both wrapped {success, data} and unwrapped responses
+    const responseData = json.data ?? (json as unknown as AboutPageData);
+
+    // Ensure stats is always an array
+    if (responseData.stats && !Array.isArray(responseData.stats)) {
+      console.warn("[AboutPage] stats is not an array, converting:", responseData.stats);
+      responseData.stats = [];
     }
 
-    return json.data || json as unknown as AboutPageData;
+    if (isDev) {
+      console.log("[AboutPage] API Response keys:", Object.keys(responseData || {}));
+      console.log("[AboutPage] stats count:", responseData.stats?.length);
+    }
+
+    return responseData;
   } catch (error) {
     console.error("Error fetching about page data:", error);
     return {
@@ -186,7 +203,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const data = await fetchAboutPageData();
 
-  // DEBUG: Log data structure in dev
   if (process.env.NODE_ENV === "development") {
     console.log("[AboutPage] data.settings:", data.settings ? "present" : "null");
     console.log("[AboutPage] data.story:", data.story ? "present" : "null");

@@ -26,8 +26,10 @@ class AboutPageController extends Controller
      */
     public function index(): JsonResponse
     {
-        // Clear cache in development to see changes immediately
-        if (app()->environment('local')) {
+        // 🔧 FIX: Check both environment AND request header for cache skip
+        $skipCache = app()->environment('local') || request()->header('X-Skip-Cache') === 'true';
+        
+        if ($skipCache) {
             Cache::forget(self::CACHE_KEY);
         }
 
