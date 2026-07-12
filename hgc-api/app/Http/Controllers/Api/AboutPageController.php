@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/Api/AboutPageController.php
 
 namespace App\Http\Controllers\Api;
 
@@ -13,20 +12,25 @@ use App\Models\AboutVision;
 use App\Models\Stat;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class AboutPageController extends Controller
 {
     use ApiResponseTrait;
 
     private const CACHE_KEY = 'about_page_data';
-    private const CACHE_TTL = 3600; // 1 hour
+    private const CACHE_TTL = 3600;
 
     /**
      * GET /api/about
-     * Returns complete About page data in a single request
      */
     public function index(): JsonResponse
     {
+        // Clear cache in development to see changes immediately
+        if (app()->environment('local')) {
+            Cache::forget(self::CACHE_KEY);
+        }
+
         $data = Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
             return [
                 'settings' => $this->getSettings(),
@@ -44,7 +48,6 @@ class AboutPageController extends Controller
 
     /**
      * GET /api/about/settings
-     * Hero banner + SEO metadata
      */
     public function settings(): JsonResponse
     {
@@ -56,7 +59,7 @@ class AboutPageController extends Controller
 
         return $this->successResponse([
             'hero' => [
-                'backgroundImage' => $settings->hero_background_image,
+                'backgroundImage' => $this->resolveImageUrl($settings->hero_background_image),
                 'label' => [
                     'en' => $settings->hero_label_en,
                     'dari' => $settings->hero_label_dari,
@@ -133,7 +136,7 @@ class AboutPageController extends Controller
                     'pashto' => $story->paragraph_3_pashto,
                 ],
             ],
-            'mainImage' => $story->main_image,
+            'mainImage' => $this->resolveImageUrl($story->main_image),
             'floatingCard' => [
                 'value' => $story->floating_card_value,
                 'label' => [
@@ -152,13 +155,12 @@ class AboutPageController extends Controller
                     ],
                     'value' => $highlight->value_text,
                 ];
-            }),
+            })->values()->all(), // <-- FIX: convert Collection to array
         ]);
     }
 
     /**
      * GET /api/about/stats
-     * Reuses existing stats table
      */
     public function stats(): JsonResponse
     {
@@ -179,7 +181,7 @@ class AboutPageController extends Controller
                     ],
                     'icon' => $stat->icon_name,
                 ];
-            })
+            })->values()->all() // <-- FIX
         );
     }
 
@@ -195,7 +197,7 @@ class AboutPageController extends Controller
         return $this->successResponse(
             $slides->map(function ($slide) {
                 return [
-                    'image' => $slide->image_url,
+                    'image' => $this->resolveImageUrl($slide->image_url),
                     'title' => [
                         'en' => $slide->title_en,
                         'dari' => $slide->title_dari,
@@ -207,7 +209,7 @@ class AboutPageController extends Controller
                         'pashto' => $slide->location_pashto,
                     ],
                 ];
-            })
+            })->values()->all() // <-- FIX
         );
     }
 
@@ -243,7 +245,7 @@ class AboutPageController extends Controller
                 'dari' => $mission->description_dari,
                 'pashto' => $mission->description_pashto,
             ],
-            'image' => $mission->image_url,
+            'image' => $this->resolveImageUrl($mission->image_url),
             'quote' => [
                 'en' => $mission->quote_text_en,
                 'dari' => $mission->quote_text_dari,
@@ -257,7 +259,7 @@ class AboutPageController extends Controller
                         'pashto' => $point->text_pashto,
                     ],
                 ];
-            }),
+            })->values()->all(), // <-- FIX
         ]);
     }
 
@@ -293,7 +295,7 @@ class AboutPageController extends Controller
                 'dari' => $vision->description_dari,
                 'pashto' => $vision->description_pashto,
             ],
-            'image' => $vision->image_url,
+            'image' => $this->resolveImageUrl($vision->image_url),
             'badge' => [
                 'value' => $vision->badge_value,
                 'label' => [
@@ -316,7 +318,7 @@ class AboutPageController extends Controller
                         'pashto' => $pillar->description_pashto,
                     ],
                 ];
-            }),
+            })->values()->all(), // <-- FIX
         ]);
     }
 
@@ -329,7 +331,6 @@ class AboutPageController extends Controller
             ->ordered()
             ->get();
 
-        // Get the first row for section header (all rows share same header)
         $header = $values->first();
 
         return $this->successResponse([
@@ -362,11 +363,11 @@ class AboutPageController extends Controller
                         'pashto' => $value->description_pashto,
                     ],
                 ];
-            }),
+            })->values()->all(), // <-- FIX
         ]);
     }
 
-    // ─── Private helpers for full page response ───
+    // ─── Private helpers ───
 
     private function getSettings(): ?array
     {
@@ -375,7 +376,7 @@ class AboutPageController extends Controller
 
         return [
             'hero' => [
-                'backgroundImage' => $settings->hero_background_image,
+                'backgroundImage' => $this->resolveImageUrl($settings->hero_background_image),
                 'label' => [
                     'en' => $settings->hero_label_en,
                     'dari' => $settings->hero_label_dari,
@@ -433,7 +434,7 @@ class AboutPageController extends Controller
                 ['en' => $story->paragraph_2_en, 'dari' => $story->paragraph_2_dari, 'pashto' => $story->paragraph_2_pashto],
                 ['en' => $story->paragraph_3_en, 'dari' => $story->paragraph_3_dari, 'pashto' => $story->paragraph_3_pashto],
             ],
-            'mainImage' => $story->main_image,
+            'mainImage' => $this->resolveImageUrl($story->main_image),
             'floatingCard' => [
                 'value' => $story->floating_card_value,
                 'label' => [
@@ -442,11 +443,12 @@ class AboutPageController extends Controller
                     'pashto' => $story->floating_card_label_pashto,
                 ],
             ],
+            // FIX: Added ->values()->all() to convert Collection to array
             'highlights' => $story->highlights->map(fn($h) => [
                 'icon' => $h->icon_name,
                 'label' => ['en' => $h->label_en, 'dari' => $h->label_dari, 'pashto' => $h->label_pashto],
                 'value' => $h->value_text,
-            ]),
+            ])->values()->all(),
         ];
     }
 
@@ -462,7 +464,7 @@ class AboutPageController extends Controller
                 'label' => ['en' => $s->label_en, 'dari' => $s->label_dari, 'pashto' => $s->label_pashto],
                 'icon' => $s->icon_name,
             ])
-            ->toArray();
+            ->values()->all(); // Already had ->toArray() in original, but ->values()->all() is safer
     }
 
     private function getCarousel(): array
@@ -471,11 +473,11 @@ class AboutPageController extends Controller
             ->ordered()
             ->get()
             ->map(fn($s) => [
-                'image' => $s->image_url,
+                'image' => $this->resolveImageUrl($s->image_url),
                 'title' => ['en' => $s->title_en, 'dari' => $s->title_dari, 'pashto' => $s->title_pashto],
                 'location' => ['en' => $s->location_en, 'dari' => $s->location_dari, 'pashto' => $s->location_pashto],
             ])
-            ->toArray();
+            ->values()->all();
     }
 
     private function getMission(): ?array
@@ -503,15 +505,16 @@ class AboutPageController extends Controller
                 'dari' => $mission->description_dari,
                 'pashto' => $mission->description_pashto,
             ],
-            'image' => $mission->image_url,
+            'image' => $this->resolveImageUrl($mission->image_url),
             'quote' => [
                 'en' => $mission->quote_text_en,
                 'dari' => $mission->quote_text_dari,
                 'pashto' => $mission->quote_text_pashto,
             ],
+            // FIX: Added ->values()->all()
             'points' => $mission->points->map(fn($p) => [
                 'text' => ['en' => $p->text_en, 'dari' => $p->text_dari, 'pashto' => $p->text_pashto],
-            ]),
+            ])->values()->all(),
         ];
     }
 
@@ -540,7 +543,7 @@ class AboutPageController extends Controller
                 'dari' => $vision->description_dari,
                 'pashto' => $vision->description_pashto,
             ],
-            'image' => $vision->image_url,
+            'image' => $this->resolveImageUrl($vision->image_url),
             'badge' => [
                 'value' => $vision->badge_value,
                 'label' => [
@@ -549,11 +552,12 @@ class AboutPageController extends Controller
                     'pashto' => $vision->badge_label_pashto,
                 ],
             ],
+            // FIX: Added ->values()->all()
             'pillars' => $vision->pillars->map(fn($p) => [
                 'icon' => $p->icon_name,
                 'title' => ['en' => $p->title_en, 'dari' => $p->title_dari, 'pashto' => $p->title_pashto],
                 'description' => ['en' => $p->description_en, 'dari' => $p->description_dari, 'pashto' => $p->description_pashto],
-            ]),
+            ])->values()->all(),
         ];
     }
 
@@ -580,11 +584,42 @@ class AboutPageController extends Controller
                 'dari' => $header->section_description_dari,
                 'pashto' => $header->section_description_pashto,
             ],
+            // FIX: Added ->values()->all()
             'values' => $values->map(fn($v) => [
                 'icon' => $v->icon_name,
                 'title' => ['en' => $v->title_en, 'dari' => $v->title_dari, 'pashto' => $v->title_pashto],
                 'description' => ['en' => $v->description_en, 'dari' => $v->description_dari, 'pashto' => $v->description_pashto],
-            ]),
+            ])->values()->all(),
         ];
     }
+
+    /**
+     * Resolves image paths to full URLs.
+     * Handles: full URLs, /absolute/paths, uploads/relative/paths, and nulls.
+     */
+    // In your AboutPageController, add this private method:
+    private function resolveImageUrl(?string $path): string
+    {
+        if (empty($path)) {
+            return asset('images/placeholder.png');
+        }
+
+        // Already a full URL
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        // Already starts with /
+        if (str_starts_with($path, '/')) {
+            return asset(ltrim($path, '/'));
+        }
+
+        // Relative path like "uploads/hero-construction.webp"
+        if (Storage::disk('public')->exists($path)) {
+            return Storage::disk('public')->url($path);
+        }
+
+        return asset('storage/' . $path);
+    }
+    
 }

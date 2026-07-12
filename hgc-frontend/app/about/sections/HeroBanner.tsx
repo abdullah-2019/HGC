@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { getText, safeString } from "./about-utils";
+import { resolveImageUrl } from "./image-utils";
 
 interface LocalizedText {
   en: string | null;
@@ -51,6 +52,7 @@ export default function HeroBanner({ settings }: HeroBannerProps) {
   const label = getText(hero.label, lang);
   const title = getText(hero.title, lang);
   const subtitle = getText(hero.subtitle, lang);
+  const bgImage = resolveImageUrl(hero.backgroundImage);
 
   const renderTitle = () => {
     if (lang === "en") {
@@ -71,7 +73,7 @@ export default function HeroBanner({ settings }: HeroBannerProps) {
   return (
     <section className="about-section relative w-full h-[70vh] min-h-[500px] max-h-[800px] overflow-hidden">
       <div className="absolute inset-0">
-        <Image src={hero.backgroundImage} alt="Hero background" fill className="object-cover" style={{ transform: "scale(1.1)" }} priority unoptimized />
+        <Image src={bgImage} alt="Hero background" fill className="object-cover" style={{ transform: "scale(1.1)" }} priority unoptimized />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0A1628]/60 via-[#0A1628]/50 to-[#0A1628]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(201,162,39,0.08)_0%,_transparent_70%)]" />
       </div>

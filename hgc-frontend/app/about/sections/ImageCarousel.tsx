@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { getText, safeArray, safeString } from "./about-utils";
+import { resolveImageUrl } from "./image-utils";
 
 interface LocalizedText {
   en: string | null;
@@ -75,7 +76,7 @@ export default function ImageCarousel({ slides }: ImageCarouselProps) {
           onMouseLeave={() => setIsAutoPlaying(true)}>
           {displaySlides.map((slide, idx) => (
             <div key={idx} className={`absolute inset-0 transition-all duration-1000 ease-out ${idx === current ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}>
-              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${safeString(slide.image, "/images/placeholder.png")})` }} />
+              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${resolveImageUrl(slide.image)})` }} />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628] via-[#0A1628]/30 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-r from-[#0A1628]/60 to-transparent" />
             </div>
