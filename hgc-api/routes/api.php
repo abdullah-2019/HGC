@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\ContactInfoController;
 use App\Http\Controllers\Api\ContactSubmissionController;
 use App\Http\Controllers\Api\AboutPageController;
 use App\Http\Controllers\Api\Admin\AboutPageAdminController;
+use App\Http\Controllers\Api\AboutController;
 
 // ─── Auth ───
 Route::get('/user', function (Request $request) {
@@ -108,3 +109,5 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
         Route::delete('/core-values/{id}', [AboutPageAdminController::class, 'destroyCoreValue']);
     });
 });
+
+Route::get('/about', [AboutController::class, 'index']);

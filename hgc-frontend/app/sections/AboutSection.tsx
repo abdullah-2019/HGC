@@ -1,26 +1,57 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Award, ArrowRight, MapPin, Calendar, Users } from "lucide-react";
+import {
+  Award,
+  ArrowRight,
+  Loader2,
+  Building2,
+  Globe,
+  TrendingUp,
+} from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { motion, Variants } from "framer-motion";
 
-const images = {
-  construction: "https://kimi-web-img.moonshot.cn/img/as1.ftcdn.net/ec2b40ca19e5b77d845ebae48716daf3bdde10f8.jpg",
-  mining: "https://kimi-web-img.moonshot.cn/img/www.afghanistan-analysts.org/a96dcbba325966c1459577e281dfdb1ec1fd50e7.jpg",
-  road: "https://kimi-web-img.moonshot.cn/img/www.globaltimes.cn/39bf503c47a5d1ec465af024244ec218da04564c.jpeg",
-  logistics: "https://kimi-web-img.moonshot.cn/img/images.csmonitor.com/c675c718135a22cf4ead7cb3c7a52983dea8b729.jpg",
+// ─── Types ─────────────────────────────────────────────────────────
+interface AboutStory {
+  sectionLabel: string;
+  title: string;
+  foundedYear: number;
+  paragraphs: string[];
+  mainImage: string;
+  highlights: {
+    icon: string;
+    label: string;
+    value: string;
+  }[];
+}
+
+interface AboutCarouselSlide {
+  image: string;
+  title: string;
+  location: string;
+}
+
+interface AboutData {
+  story: AboutStory | null;
+  carousel: AboutCarouselSlide[];
+}
+
+// ─── Icon Map ──────────────────────────────────────────────────────
+const iconMap: Record<string, React.ElementType> = {
+  Building2,
+  Globe,
+  TrendingUp,
 };
 
+// ─── Framer Motion Variants ────────────────────────────────────────
 const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
   },
 };
 
@@ -37,10 +68,7 @@ const imageStagger: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.3,
-    },
+    transition: { staggerChildren: 0.1, delayChildren: 0.3 },
   },
 };
 
@@ -53,28 +81,150 @@ const imageScale: Variants = {
   },
 };
 
+// ─── Component ─────────────────────────────────────────────────────
 export default function AboutSection() {
   const { lang } = useI18n();
+  const [data, setData] = useState<AboutData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAbout = async () => {
+      try {
+        setError(null);
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/about?lang=${lang}`;
+
+        const res = await fetch(apiUrl, {
+          headers: { Accept: "application/json" },
+          cache: "no-store",
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          console.error("About API error response:", text.substring(0, 500));
+          throw new Error(`HTTP ${res.status}: ${text.substring(0, 100)}`);
+        }
+
+        const json = await res.json();
+
+        if (!json.success) {
+          throw new Error(json.message || "API returned success: false");
+        }
+
+        const payload = json.data || {};
+
+        const normalizedData: AboutData = {
+          story: payload.story || null,
+          carousel: Array.isArray(payload.carousel) ? payload.carousel : [],
+        };
+
+        setData(normalizedData);
+      } catch (err) {
+        console.error("About fetch error:", err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+        setData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAbout();
+  }, [lang]);
+
+  // ─── Loading State ───────────────────────────────────────────────
+  if (loading) {
+    return (
+      <section className="py-28 bg-[#0A1628] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 text-[#C9A227] animate-spin" />
+        </div>
+      </section>
+    );
+  }
+
+  // ─── Error / No Data State ───────────────────────────────────────
+  if (error || !data?.story) {
+    return (
+      <section className="py-28 bg-[#0A1628] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center min-h-[400px] gap-4">
+          <p className="text-white/40 text-sm">
+            {error ? `Error: ${error}` : "No about data available"}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 rounded-lg bg-[#C9A227]/10 text-[#C9A227] text-sm hover:bg-[#C9A227]/20 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  const { story, carousel } = data;
+
+  // ─── Build Image Mosaic ──────────────────────────────────────────
+  // Deduplicate images: use unique images only
+  const seenImages = new Set<string>();
+  const uniqueSlides: AboutCarouselSlide[] = [];
+
+  for (const slide of carousel) {
+    if (slide.image && !seenImages.has(slide.image)) {
+      seenImages.add(slide.image);
+      uniqueSlides.push(slide);
+    }
+  }
+
+  // If we don't have enough unique slides, add story main image as fallback
+  if (uniqueSlides.length === 0 && story.mainImage) {
+    uniqueSlides.push({
+      image: story.mainImage,
+      title: story.title,
+      location: "",
+    });
+  }
+
+  const mainImage = uniqueSlides[0]?.image || story.mainImage || "/images/placeholder.png";
+  
+  // Use let so we can push fallback items
+  let secondaryImages: AboutCarouselSlide[] = uniqueSlides.slice(1, 4);
+
+  // Fill remaining slots with labeled fallbacks
+  const fallbackImages = [
+    { image: story.mainImage, title: "Construction", location: "Afghanistan" },
+    { image: story.mainImage, title: "Mining", location: "Badakhshan" },
+    { image: story.mainImage, title: "Logistics", location: "Nationwide" },
+  ];
+
+  let fallbackIdx = 0;
+  while (secondaryImages.length < 3 && fallbackIdx < fallbackImages.length) {
+    secondaryImages.push({
+      image: fallbackImages[fallbackIdx].image || "/images/placeholder.png",
+      title: fallbackImages[fallbackIdx].title,
+      location: fallbackImages[fallbackIdx].location,
+    });
+    fallbackIdx++;
+  }
 
   return (
     <section className="py-28 bg-[#0A1628] relative overflow-hidden">
       {/* Animated background blobs */}
       <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-[#C9A227]/[0.03] rounded-full blur-[100px] animate-pulse" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#1A237E]/[0.05] rounded-full blur-[100px]" />
-      
+
       {/* Subtle grid pattern */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.02]"
-        style={{ 
-          backgroundImage: 'linear-gradient(rgba(201,162,39,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.3) 1px, transparent 1px)',
-          backgroundSize: '60px 60px'
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(201,162,39,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.3) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
         }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
-          {/* Text Content - Left Side */}
+          {/* ─── Text Content - Left Side ──────────────────────────── */}
           <div className="lg:col-span-5 order-2 lg:order-1">
             <motion.div
               initial="hidden"
@@ -84,100 +234,84 @@ export default function AboutSection() {
               className="space-y-6"
             >
               {/* Badge */}
-              <motion.div 
+              <motion.div
                 variants={staggerItem}
                 className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 text-[#C9A227] text-sm font-semibold backdrop-blur-sm"
               >
                 <Award className="w-4 h-4" />
-                {lang === "en" ? "About HGC" : lang === "dari" ? "درباره گروپ حافظ" : "د حافظ ګروپ په اړه"}
+                {story.sectionLabel}
               </motion.div>
 
               {/* Heading */}
-              <motion.h2 
+              <motion.h2
                 variants={staggerItem}
                 className="text-4xl lg:text-[3.25rem] font-bold text-white leading-[1.15] tracking-tight"
               >
-                {lang === "en" ? (
-                  <>
-                    Leading Afghan Conglomerate Since <span className="text-[#C9A227] relative inline-block">
-                      2001
-                      <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 100 12" fill="none">
-                        <path d="M2 8C20 2 50 2 98 8" stroke="#C9A227" strokeWidth="3" strokeLinecap="round" opacity="0.4"/>
-                      </svg>
-                    </span>
-                  </>
-                ) : lang === "dari" ? (
-                  <>
-                    گروپ پیشرو افغان از سال <span className="text-[#C9A227] relative inline-block">
-                      ۲۰۰۱
-                      <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 100 12" fill="none">
-                        <path d="M2 8C20 2 50 2 98 8" stroke="#C9A227" strokeWidth="3" strokeLinecap="round" opacity="0.4"/>
-                      </svg>
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    مخکښ افغان ګروپ له <span className="text-[#C9A227] relative inline-block">
-                      ۲۰۰۱
-                      <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 100 12" fill="none">
-                        <path d="M2 8C20 2 50 2 98 8" stroke="#C9A227" strokeWidth="3" strokeLinecap="round" opacity="0.4"/>
-                      </svg>
-                    </span> کال راهیسې
-                  </>
-                )}
+                {story.title}
               </motion.h2>
 
-              {/* Description */}
+              {/* Description Paragraphs */}
               <motion.div variants={staggerItem} className="space-y-4">
-                <p className="text-white/50 text-lg leading-relaxed">
-                  {lang === "en"
-                    ? "Hafez Group of Companies is a leading Afghan conglomerate operating in construction, mining, logistics, and financial services. With over 200 completed projects across 38+ provinces, we are transforming Afghanistan's infrastructure landscape."
-                    : lang === "dari"
-                      ? "گروپ کمپنی های حافظ یک گروپ پیشرو افغان است که در ساختمان، استخراج معادن، لوژستیک و خدمات مالی فعالیت می کند. با بیش از ۲۰۰ پروژه تکمیل شده در ۳۸+ ولایت، ما چشم انداز زیرساخت های افغانستان را تغییر می دهیم."
-                      : "د حافظ شرکتونو ګروپ یو مخکښ افغان ګروپ دی چې په جوړولو، د کانونو استخراج، لوجستیک او مالي خدماتو کې فعالیت کوي. په ۳۸+ ولایتونو کې د ۲۰۰+ بشپړو شویو پروژو سره، موږ د افغانستان د زیربنا منظره بدلوو."}
-                </p>
-                <p className="text-white/40 leading-relaxed">
-                  {lang === "en"
-                    ? "Our group comprises six specialized companies, each bringing unique expertise to deliver comprehensive solutions for government agencies, international organizations, and private sector clients."
-                    : lang === "dari"
-                      ? "گروپ ما شامل شش شرکت تخصصی است که هر کدام تخصص منحصر به فردی را برای ارائه راه حل های جامع به سازمان های دولتی، سازمان های بین المللی و مشتریان بخش خصوصی به ارمغان می آورند."
-                      : "زموږ ګروپ شپږ تخصصي شرکتونه لري، هر یو یې د دولتي ادارو، نړیوالو سازمانونو او خصوصي سکتور پیرودونکو ته جامع حلونه وړاندې کولو لپاره ځانګړې مهارت راوړي."}
-                </p>
-              </motion.div>
-
-              {/* Mini Stats Row */}
-              <motion.div 
-                variants={staggerItem}
-                className="flex flex-wrap gap-6 pt-2"
-              >
-                {[
-                  { icon: MapPin, label: lang === "en" ? "38+ Provinces" : lang === "dari" ? "۳۸+ ولایت" : "۳۸+ ولایت", color: "text-emerald-400" },
-                  { icon: Calendar, label: lang === "en" ? "Since 2001" : lang === "dari" ? "از ۲۰۰۱" : "له ۲۰۰۱", color: "text-blue-400" },
-                  { icon: Users, label: lang === "en" ? "6 Companies" : lang === "dari" ? "۶ شرکت" : "۶ شرکتونه", color: "text-amber-400" },
-                ].map((stat, idx) => (
-                  <div key={idx} className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
-                      <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                    </div>
-                    <span className="text-white/70 text-sm font-medium">{stat.label}</span>
-                  </div>
+                {story.paragraphs?.filter(Boolean).map((paragraph, idx) => (
+                  <p
+                    key={idx}
+                    className={
+                      idx === 0
+                        ? "text-white/50 text-lg leading-relaxed"
+                        : "text-white/40 leading-relaxed"
+                    }
+                  >
+                    {paragraph}
+                  </p>
                 ))}
               </motion.div>
 
+              {/* ═══ HIGHLIGHTS / STATS ROW — NOW SHOWS VALUE + LABEL ═══ */}
+              {story.highlights && story.highlights.length > 0 && (
+                <motion.div
+                  variants={staggerItem}
+                  className="grid grid-cols-3 gap-4 pt-4"
+                >
+                  {story.highlights.map((highlight, idx) => {
+                    const Icon = iconMap[highlight.icon] || Building2;
+                    return (
+                      <div
+                        key={idx}
+                        className="relative rounded-xl bg-white/[0.03] border border-white/10 p-4 text-center group hover:bg-white/[0.06] hover:border-[#C9A227]/30 transition-all duration-300"
+                      >
+                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[#C9A227]/10 mb-2 group-hover:bg-[#C9A227]/20 transition-colors">
+                          <Icon className="w-5 h-5 text-[#C9A227]" />
+                        </div>
+                        <div className="text-2xl font-bold text-white mb-0.5">
+                          {highlight.value}
+                        </div>
+                        <div className="text-white/40 text-xs font-medium leading-tight">
+                          {highlight.label}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </motion.div>
+              )}
+
               {/* CTA */}
-              <motion.div variants={staggerItem} className="pt-4">
+              <motion.div variants={staggerItem} className="pt-2">
                 <Link
                   href="/about"
                   className="group inline-flex items-center gap-3 bg-[#C9A227] text-[#0A1628] px-7 py-3.5 rounded-xl font-bold text-sm hover:bg-[#D4AF37] transition-all duration-300 shadow-lg shadow-[#C9A227]/20 hover:shadow-[#C9A227]/30 hover:-translate-y-0.5"
                 >
-                  {lang === "en" ? "Explore Our Story" : lang === "dari" ? "داستان ما را کشف کنید" : "زموږ کیسه وګورئ"}
+                  {lang === "en"
+                    ? "Explore Our Story"
+                    : lang === "dari"
+                    ? "داستان ما را کشف کنید"
+                    : "زموږ کیسه وګورئ"}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </motion.div>
             </motion.div>
           </div>
 
-          {/* Image Mosaic - Right Side */}
+          {/* ─── Image Mosaic - Right Side ─────────────────────────── */}
           <div className="lg:col-span-7 order-1 lg:order-2 relative">
             <motion.div
               initial="hidden"
@@ -187,13 +321,13 @@ export default function AboutSection() {
               className="relative"
             >
               {/* Main large image */}
-              <motion.div 
+              <motion.div
                 variants={imageScale}
                 className="relative aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl shadow-black/50 group"
               >
                 <Image
-                  src={images.construction}
-                  alt="Construction"
+                  src={mainImage}
+                  alt={story.title}
                   fill
                   className="object-cover transition-transform duration-1000 group-hover:scale-105"
                   sizes="(max-width: 1024px) 100vw, 60vw"
@@ -202,51 +336,57 @@ export default function AboutSection() {
                 {/* Cinematic overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628] via-[#0A1628]/20 to-transparent opacity-60" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0A1628]/40 to-transparent" />
-                
+
                 {/* Floating label */}
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <span className="inline-block px-3 py-1 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/30 text-[#C9A227] text-xs font-bold uppercase tracking-widest mb-2 backdrop-blur-md">
-                        Construction
-                      </span>
-                      <h3 className="text-white text-xl font-bold">
-                        {lang === "en" ? "Building the Future" : lang === "dari" ? "ساختن آینده" : "راتلونکی جوړول"}
-                      </h3>
+                {uniqueSlides[0] && (
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <span className="inline-block px-3 py-1 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/30 text-[#C9A227] text-xs font-bold uppercase tracking-widest mb-2 backdrop-blur-md">
+                          {uniqueSlides[0].title || "HGC"}
+                        </span>
+                        {uniqueSlides[0].location && (
+                          <h3 className="text-white text-xl font-bold">
+                            {uniqueSlides[0].location}
+                          </h3>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </motion.div>
 
               {/* Secondary images grid */}
-              <div className="grid grid-cols-3 gap-3 mt-3">
-                {[
-                  { src: images.mining, label: "Mining", sublabel: lang === "en" ? "Extracting Value" : lang === "dari" ? "استخراج ارزش" : "ارزښت استخراج" },
-                  { src: images.road, label: "Infrastructure", sublabel: lang === "en" ? "Connecting Nations" : lang === "dari" ? "اتصال ملت ها" : "ملتونه سره نښلوي" },
-                  { src: images.logistics, label: "Logistics", sublabel: lang === "en" ? "Moving Forward" : lang === "dari" ? "حرکت به جلو" : "مخته حرکت" },
-                ].map((img, i) => (
-                  <motion.div
-                    key={i}
-                    variants={imageScale}
-                    className="relative aspect-[4/3] rounded-2xl overflow-hidden group cursor-pointer"
-                  >
-                    <Image
-                      src={img.src}
-                      alt={img.label}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 1024px) 33vw, 20vw"
-                    />
-                    <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/90 via-transparent to-transparent" />
-                    
-                    <div className="absolute bottom-3 left-3 right-3 translate-y-2 opacity-80 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                      <span className="text-[#C9A227] text-[10px] font-bold uppercase tracking-wider">{img.label}</span>
-                      <p className="text-white text-xs font-medium mt-0.5 leading-tight">{img.sublabel}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+              {secondaryImages.length > 0 && (
+                <div className="grid grid-cols-3 gap-3 mt-3">
+                  {secondaryImages.map((slide, i) => (
+                    <motion.div
+                      key={i}
+                      variants={imageScale}
+                      className="relative aspect-[4/3] rounded-2xl overflow-hidden group cursor-pointer"
+                    >
+                      <Image
+                        src={slide.image || "/images/placeholder.png"}
+                        alt={slide.title || "Project"}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        sizes="(max-width: 1024px) 33vw, 20vw"
+                      />
+                      <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/90 via-transparent to-transparent" />
+
+                      <div className="absolute bottom-3 left-3 right-3 translate-y-2 opacity-80 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                        <span className="text-[#C9A227] text-[10px] font-bold uppercase tracking-wider line-clamp-1">
+                          {slide.title || "Project"}
+                        </span>
+                        <p className="text-white text-xs font-medium mt-0.5 leading-tight line-clamp-1">
+                          {slide.location || ""}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
 
               {/* Decorative elements */}
               <div className="absolute -top-6 -right-6 w-32 h-32 border border-[#C9A227]/10 rounded-full" />
