@@ -87,8 +87,8 @@ export default function SectorsSection() {
             {lang === "en"
               ? "Business Verticals"
               : lang === "dari"
-              ? "حوزه های کاری"
-              : "د سوداګرۍ عمودي"}
+                ? "حوزه های کاری"
+                : "د سوداګرۍ عمودي"}
           </span>
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
             {lang === "en" ? (
@@ -109,8 +109,8 @@ export default function SectorsSection() {
             {lang === "en"
               ? "Mining, Construction, Energy, and General Trading solutions driving sustainable growth across Afghanistan."
               : lang === "dari"
-              ? "راه حل های استخراج معادن، ساخت و ساز، انرژی و تجارت عمومی که رشد پایدار را در سراسر افغانستان هدایت می کنند."
-              : "د کانونو استخراج، جوړونه، انرژي، او عمومي سوداګرۍ حلونه چې په افغانستان کې د پایدار ودې هدایت کوي."}
+                ? "راه حل های استخراج معادن، ساخت و ساز، انرژی و تجارت عمومی که رشد پایدار را در سراسر افغانستان هدایت می کنند."
+                : "د کانونو استخراج، جوړونه، انرژي، او عمومي سوداګرۍ حلونه چې په افغانستان کې د پایدار ودې هدایت کوي."}
           </p>
         </div>
 
@@ -119,8 +119,8 @@ export default function SectorsSection() {
             {lang === "en"
               ? "No sectors found."
               : lang === "dari"
-              ? "هیچ حوزه کاری یافت نشد."
-              : "هیڅ سکتور ونه موندل شو."}
+                ? "هیچ حوزه کاری یافت نشد."
+                : "هیڅ سکتور ونه موندل شو."}
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -146,21 +146,6 @@ export default function SectorsSection() {
             })}
           </div>
         )}
-
-        {/* Optional: View All Link */}
-        <div className="text-center mt-10">
-          <Link
-            href="/sectors"
-            className="inline-flex items-center gap-2 text-[#C9A227]/70 hover:text-[#C9A227] text-sm font-medium transition-colors group"
-          >
-            {lang === "en"
-              ? "View All Sectors"
-              : lang === "dari"
-              ? "مشاهده همه حوزه‌ها"
-              : "ټول سکتورونه وګورئ"}
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
       </div>
     </section>
   );
