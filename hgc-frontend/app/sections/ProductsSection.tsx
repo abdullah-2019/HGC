@@ -2,28 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Package,
   CheckCircle2,
   ArrowRight,
-  Pickaxe,
-  Wrench,
-  Road,
-  Sun,
-  Hammer,
-  Container,
   Loader2,
+  ExternalLink,
 } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
-
-const iconMap: Record<string, React.ElementType> = {
-  Pickaxe,
-  Wrench,
-  Road,
-  Sun,
-  Hammer,
-  Container,
-};
 
 interface Product {
   id: number;
@@ -35,6 +22,7 @@ interface Product {
     slug: string;
     name: string;
     icon_name: string;
+    image_url: string | null;
   } | null;
   company: {
     slug: string;
@@ -44,13 +32,18 @@ interface Product {
   origin: string | null;
   grade: string | null;
   specifications: Array<{ label: string; value: string }> | null;
-  price_range: string | null;
   currency: string;
   unit: string | null;
   availability_label: string;
   hero_image_url: string | null;
   thumbnail_url: string | null;
   is_featured: boolean;
+}
+
+// Strip HTML tags for plain text preview
+function stripHtml(html: string | null): string {
+  if (!html) return "";
+  return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
 export default function ProductsSection() {
@@ -62,33 +55,22 @@ export default function ProductsSection() {
     const fetchProducts = async () => {
       try {
         const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/products/featured?lang=${lang}`;
-        console.log("Fetching products from:", apiUrl); // DEBUG
-        
+
         const res = await fetch(apiUrl, {
           headers: { Accept: "application/json" },
+          cache: "no-store",
         });
-
-        console.log("Response status:", res.status); // DEBUG
 
         if (!res.ok) {
           const text = await res.text();
-          console.error("Error response:", text.substring(0, 200)); // DEBUG
-          throw new Error(`HTTP ${res.status}: ${text.substring(0, 100)}`);
-        }
-
-        const contentType = res.headers.get("content-type");
-        if (!contentType?.includes("application/json")) {
-          const text = await res.text();
-          throw new Error(`Expected JSON, got: ${text.substring(0, 100)}`);
+          console.error("Products API error:", text.substring(0, 200));
+          throw new Error(`HTTP ${res.status}`);
         }
 
         const json = await res.json();
-        console.log("API response:", json); // DEBUG
 
         if (json.success) {
           setProducts(json.data);
-        } else {
-          console.error("API returned success=false:", json.message);
         }
       } catch (err) {
         console.error("Products fetch error:", err);
@@ -112,34 +94,40 @@ export default function ProductsSection() {
 
   return (
     <section className="py-24 bg-[#0A1628] relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_#C9A227/5_0%,_transparent_50%)]" />
+      {/* Subtle background glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#C9A227]/[0.02] rounded-full blur-[120px]" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
-          <div>
-            <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-sm font-medium mb-4">
-              <Package className="w-4 h-4 inline mr-2" />
+        {/* Section Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-14">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 text-[#C9A227] text-sm font-medium mb-5">
+              <Package className="w-4 h-4" />
               {lang === "en"
                 ? "Products & Services"
                 : lang === "dari"
                 ? "محصولات و خدمات"
                 : "محصولات او خدمات"}
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
               {lang === "en" ? (
                 <>
-                  Featured <span className="text-[#C9A227]">Products</span>
+                  Featured{" "}
+                  <span className="text-[#C9A227]">Products</span>
                 </>
               ) : lang === "dari" ? (
                 <>
-                  محصولات <span className="text-[#C9A227]">برجسته</span>
+                  محصولات{" "}
+                  <span className="text-[#C9A227]">برجسته</span>
                 </>
               ) : (
                 <>
-                  ټاکل شوي <span className="text-[#C9A227]">محصولات</span>
+                  ټاکل شوي{" "}
+                  <span className="text-[#C9A227]">محصولات</span>
                 </>
               )}
             </h2>
-            <p className="text-white/50 max-w-xl">
+            <p className="text-white/40 text-lg leading-relaxed">
               {lang === "en"
                 ? "High-quality construction materials, energy solutions, and logistics services from our own production facilities."
                 : lang === "dari"
@@ -149,19 +137,20 @@ export default function ProductsSection() {
           </div>
           <Link
             href="/products"
-            className="mt-4 lg:mt-0 inline-flex items-center gap-2 text-[#C9A227] font-semibold hover:gap-3 transition-all"
+            className="group mt-6 lg:mt-0 inline-flex items-center gap-2 text-[#C9A227] font-semibold hover:gap-3 transition-all"
           >
             {lang === "en"
               ? "View All Products"
               : lang === "dari"
               ? "مشاهده همه محصولات"
               : "ټول محصولات وګورئ"}
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
+        {/* Products Grid */}
         {products.length === 0 ? (
-          <div className="text-center text-white/40 py-12">
+          <div className="text-center text-white/30 py-16">
             {lang === "en"
               ? "No products found."
               : lang === "dari"
@@ -171,97 +160,111 @@ export default function ProductsSection() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => {
-              const CategoryIcon = product.category?.icon_name
-                ? iconMap[product.category.icon_name] || Package
-                : Package;
               const accentColor = product.company?.accent_color || "#C9A227";
+
+              const imageUrl =
+                product.hero_image_url ||
+                product.thumbnail_url ||
+                product.category?.image_url ||
+                "/images/placeholder.png";
+
+              const plainDescription = stripHtml(product.description);
+              const plainTagline = stripHtml(product.tagline);
 
               return (
                 <Link
                   key={product.slug}
                   href={`/products/${product.slug}`}
-                  className="group relative bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden hover:border-[#C9A227]/20 transition-all duration-500"
+                  className="group relative bg-[#0F1D32] border border-white/[0.06] rounded-2xl overflow-hidden hover:border-[#C9A227]/25 hover:bg-[#0F1D32]/80 transition-all duration-500"
                 >
-                  <div className="aspect-[16/10] relative overflow-hidden bg-[#0A1628]">
-                    <div
-                      className="absolute inset-0 flex items-center justify-center"
-                      style={{ backgroundColor: `${accentColor}08` }}
-                    >
-                      <CategoryIcon
-                        className="w-16 h-16"
-                        style={{ color: `${accentColor}25` }}
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors" />
-                    <div className="absolute top-4 left-4">
+                  {/* Image Area */}
+                  <div className="aspect-[16/10] relative overflow-hidden">
+                    <Image
+                      src={imageUrl}
+                      alt={product.name}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                    {/* Soft gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F1D32] via-[#0F1D32]/20 to-transparent" />
+
+                    {/* Top badges */}
+                    <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
+                      <span className="px-3 py-1.5 rounded-lg bg-[#0A1628]/80 backdrop-blur-md text-white/80 text-xs font-medium border border-white/10">
+                        {product.category?.name || "Product"}
+                      </span>
                       <span
-                        className="px-3 py-1 rounded-full text-xs font-medium border"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium backdrop-blur-md"
                         style={{
-                          backgroundColor: `${accentColor}15`,
+                          backgroundColor: `${accentColor}18`,
                           color: accentColor,
-                          borderColor: `${accentColor}30`,
+                          border: `1px solid ${accentColor}30`,
                         }}
                       >
-                        {product.category?.name || ""}
-                      </span>
-                    </div>
-                    <div className="absolute top-4 right-4">
-                      <span className="px-3 py-1 rounded-full bg-[#0A1628]/80 text-white/60 text-xs font-medium border border-white/10">
                         {product.availability_label}
                       </span>
                     </div>
                   </div>
+
+                  {/* Content */}
                   <div className="p-6">
-                    <h3 className="text-white font-bold text-xl mb-2 group-hover:text-[#C9A227] transition-colors">
+                    {/* Product name */}
+                    <h3 className="text-white font-bold text-lg mb-2 group-hover:text-[#C9A227] transition-colors duration-300">
                       {product.name}
                     </h3>
-                    {product.tagline && (
-                      <p
-                        className="text-sm mb-3"
-                        style={{ color: `${accentColor}aa` }}
-                      >
-                        {product.tagline}
+
+                    {/* Tagline */}
+                    {plainTagline && (
+                      <p className="text-[#C9A227]/70 text-sm font-medium mb-3">
+                        {plainTagline}
                       </p>
                     )}
-                    <p className="text-white/50 text-sm leading-relaxed mb-4 line-clamp-2">
-                      {product.description || ""}
-                    </p>
 
-                    {product.specifications && product.specifications.length > 0 && (
-                      <ul className="space-y-2">
-                        {product.specifications.slice(0, 3).map((spec, i) => (
-                          <li
-                            key={i}
-                            className="flex items-center gap-2 text-white/40 text-xs"
-                          >
-                            <CheckCircle2
-                              className="w-3.5 h-3.5 shrink-0"
-                              style={{ color: `${accentColor}80` }}
-                            />
-                            <span className="truncate">
-                              <span className="text-white/60">{spec.label}:</span>{" "}
-                              {spec.value}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
+                    {/* Description */}
+                    {plainDescription && (
+                      <p className="text-white/35 text-sm leading-relaxed mb-5 line-clamp-2">
+                        {plainDescription}
+                      </p>
                     )}
 
-                    {product.price_range && (
-                      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
-                        <span className="text-white/40 text-xs">
-                          {lang === "en"
-                            ? "Price Range"
-                            : lang === "dari"
-                            ? "محدوده قیمت"
-                            : "د قیمت حد"}
-                        </span>
-                        <span className="text-[#C9A227] font-bold text-sm">
-                          {product.price_range} {product.currency}
-                          {product.unit ? ` / ${product.unit}` : ""}
-                        </span>
+                    {/* Specs */}
+                    {product.specifications &&
+                      product.specifications.length > 0 && (
+                        <div className="space-y-2 mb-5">
+                          {product.specifications.slice(0, 3).map((spec, i) => (
+                            <div
+                              key={i}
+                              className="flex items-center gap-2.5 text-sm"
+                            >
+                              <CheckCircle2 className="w-4 h-4 text-[#C9A227]/50 shrink-0" />
+                              <span className="text-white/40 truncate">
+                                <span className="text-white/55">
+                                  {spec.label}:
+                                </span>{" "}
+                                {spec.value}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
+                      <div className="flex items-center gap-3">
+                        {product.origin && (
+                          <span className="text-white/25 text-xs">
+                            {product.origin}
+                          </span>
+                        )}
+                        {product.grade && (
+                          <span className="text-[#C9A227]/60 text-xs font-medium px-2 py-0.5 rounded bg-[#C9A227]/8">
+                            {product.grade}
+                          </span>
+                        )}
                       </div>
-                    )}
+                      <ExternalLink className="w-4 h-4 text-white/20 group-hover:text-[#C9A227]/60 transition-colors" />
+                    </div>
                   </div>
                 </Link>
               );
