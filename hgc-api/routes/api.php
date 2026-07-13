@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\ContactSubmissionController;
 use App\Http\Controllers\Api\AboutPageController;
 use App\Http\Controllers\Api\Admin\AboutPageAdminController;
 use App\Http\Controllers\Api\AboutController;
+use App\Http\Controllers\Api\WhyChooseController;
 
 // ─── Auth ───
 Route::get('/user', function (Request $request) {
@@ -111,3 +112,4 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 });
 
 Route::get('/about', [AboutController::class, 'index']);
+Route::get('/why-choose', [WhyChooseController::class, 'index']);
