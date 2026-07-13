@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\AboutPageController;
 use App\Http\Controllers\Api\Admin\AboutPageAdminController;
 use App\Http\Controllers\Api\AboutController;
 use App\Http\Controllers\Api\WhyChooseController;
+use App\Http\Controllers\Api\SiteSettingController;
 
 // ─── Auth ───
 Route::get('/user', function (Request $request) {
@@ -113,3 +114,4 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 
 Route::get('/about', [AboutController::class, 'index']);
 Route::get('/why-choose', [WhyChooseController::class, 'index']);
+Route::get('/site-settings', [SiteSettingController::class, 'index']);
