@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Award, TrendingUp, ArrowRight, MapPin, Calendar, Users } from "lucide-react";
+import { Award, ArrowRight, MapPin, Calendar, Users } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { motion, Variants } from "framer-motion";
 
@@ -11,24 +11,6 @@ const images = {
   mining: "https://kimi-web-img.moonshot.cn/img/www.afghanistan-analysts.org/a96dcbba325966c1459577e281dfdb1ec1fd50e7.jpg",
   road: "https://kimi-web-img.moonshot.cn/img/www.globaltimes.cn/39bf503c47a5d1ec465af024244ec218da04564c.jpeg",
   logistics: "https://kimi-web-img.moonshot.cn/img/images.csmonitor.com/c675c718135a22cf4ead7cb3c7a52983dea8b729.jpg",
-};
-
-const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
-const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-  },
 };
 
 const staggerContainer: Variants = {
@@ -265,29 +247,6 @@ export default function AboutSection() {
                   </motion.div>
                 ))}
               </div>
-
-              {/* Floating Stats Card */}
-              <motion.div 
-                variants={imageScale}
-                className="absolute -bottom-4 -left-4 lg:-left-12 bg-[#0F1D32]/95 backdrop-blur-xl border border-[#C9A227]/20 rounded-2xl p-5 shadow-2xl shadow-black/40 z-10"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-xl bg-[#C9A227]/10 flex items-center justify-center border border-[#C9A227]/20 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[#C9A227]/5 animate-pulse" />
-                    <TrendingUp className="w-7 h-7 text-[#C9A227] relative z-10" />
-                  </div>
-                  <div>
-                    <p className="text-white font-bold text-2xl tracking-tight">200+</p>
-                    <p className="text-white/40 text-xs font-medium uppercase tracking-wider">
-                      {lang === "en" ? "Projects Completed" : lang === "dari" ? "پروژه تکمیل شده" : "بشپړې شوې پروژې"}
-                    </p>
-                  </div>
-                </div>
-                {/* Mini progress bar */}
-                <div className="mt-3 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full w-[85%] bg-[#C9A227] rounded-full" />
-                </div>
-              </motion.div>
 
               {/* Decorative elements */}
               <div className="absolute -top-6 -right-6 w-32 h-32 border border-[#C9A227]/10 rounded-full" />
