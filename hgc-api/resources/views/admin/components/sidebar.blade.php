@@ -49,51 +49,43 @@
             </li>
 
             <!-- Content Dropdown -->
-            <li x-data="{ open: {{ request()->routeIs('admin.companies.*') || request()->routeIs('admin.products.*') || request()->routeIs('admin.projects.*') || request()->routeIs('admin.categories.*') || request()->routeIs('admin.news.*') ? 'true' : 'false' }} }">
-                <button @click="open = !open" type="button" 
-                        class="flex items-center w-full p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.companies.*') || request()->routeIs('admin.products.*') || request()->routeIs('admin.projects.*') || request()->routeIs('admin.categories.*') || request()->routeIs('admin.news.*') ? 'bg-gray-700' : '' }}">
-                    <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                    </svg>
-                    <span class="flex-1 ms-3 text-left whitespace-nowrap truncate">Content</span>
-                    <svg class="w-3 h-3 transition-transform duration-200 flex-shrink-0" 
-                         :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                    </svg>
-                </button>
-                <ul x-show="open" x-collapse class="py-2 space-y-1">
-                    <li>
-                        <a href="{{ route('admin.companies.index') }}" 
-                           class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.companies.*') ? 'bg-gray-700 text-white' : '' }}">
-                            Companies
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.products.index') }}" 
-                           class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.products.*') ? 'bg-gray-700 text-white' : '' }}">
-                            Products
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.projects.index') }}" 
-                           class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.projects.*') ? 'bg-gray-700 text-white' : '' }}">
-                            Projects
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.categories.index') }}" 
-                           class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.categories.*') ? 'bg-gray-700 text-white' : '' }}">
-                            Categories
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.news.index') }}" 
-                           class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.news.*') ? 'bg-gray-700 text-white' : '' }}">
-                            News
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            <!-- Contacts Dropdown -->
+<li x-data="{ open: {{ request()->routeIs('admin.contacts.*') ? 'true' : 'false' }} }">
+    <button @click="open = !open" type="button" 
+            class="flex items-center w-full p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-gray-700' : '' }}">
+        <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        <span class="flex-1 ms-3 text-left whitespace-nowrap truncate">Contacts</span>
+        @php
+            $unreadCount = \App\Models\ContactSubmission::where('status', 'new')->count();
+        @endphp
+        @if($unreadCount > 0)
+            <span class="inline-flex items-center justify-center px-2 py-0.5 ms-2 text-xs font-medium bg-red-900 text-red-300 rounded-full flex-shrink-0">{{ $unreadCount }}</span>
+        @endif
+        <svg class="w-3 h-3 transition-transform duration-200 flex-shrink-0 ml-2" 
+             :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+        </svg>
+    </button>
+    <ul x-show="open" x-collapse class="py-2 space-y-1">
+        <li>
+            <a href="{{ route('admin.contacts.submissions') }}" 
+               class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.submissions') ? 'bg-gray-700 text-white' : '' }}">
+                Submissions
+                @if($unreadCount > 0)
+                    <span class="ml-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium bg-red-900 text-red-300 rounded-full">{{ $unreadCount }}</span>
+                @endif
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.contacts.info') }}" 
+               class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
+                Contact Info
+            </a>
+        </li>
+    </ul>
+</li>
 
             <!-- Partners -->
             <li>
@@ -146,7 +138,7 @@
                     <li>
                         <a href="{{ route('admin.contacts.inquiries') }}" 
                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.inquiries') ? 'bg-gray-700 text-white' : '' }}">
-                            Inquiries
+                            Info
                         </a>
                     </li>
                 </ul>
