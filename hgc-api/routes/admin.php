@@ -1,0 +1,63 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\NewsArticleController;
+use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\ContactSubmissionController;
+use App\Http\Controllers\Admin\ContactInquiryController;
+use App\Http\Controllers\Admin\SiteSettingController;
+use App\Http\Controllers\Admin\StatController;
+use App\Http\Controllers\Admin\SectorController;
+use App\Http\Controllers\Admin\AboutPageController;
+
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+
+    // Dashboard
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Companies
+    Route::resource('companies', CompanyController::class);
+
+    // Products
+    Route::resource('products', ProductController::class);
+
+    // Projects
+    Route::resource('projects', ProjectController::class);
+
+    // Categories
+    Route::resource('categories', CategoryController::class);
+
+    // News
+    Route::resource('news', NewsArticleController::class)->parameters(['news' => 'newsArticle']);
+
+    // Partners
+    Route::resource('partners', PartnerController::class);
+
+    // Testimonials
+    Route::resource('testimonials', TestimonialController::class);
+
+    // Contacts
+    Route::get('contacts/submissions', [ContactSubmissionController::class, 'index'])->name('contacts.submissions');
+    Route::get('contacts/inquiries', [ContactInquiryController::class, 'index'])->name('contacts.inquiries');
+
+    // Settings
+    Route::get('settings', [SiteSettingController::class, 'index'])->name('settings.index');
+    Route::put('settings', [SiteSettingController::class, 'update'])->name('settings.update');
+
+    // Stats
+    Route::resource('stats', StatController::class)->except(['show']);
+
+    // Sectors
+    Route::resource('sectors', SectorController::class);
+
+    // About Page
+    Route::get('about', [AboutPageController::class, 'edit'])->name('about.edit');
+    Route::put('about', [AboutPageController::class, 'update'])->name('about.update');
+});
