@@ -12,27 +12,27 @@ class Company extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // protected $fillable = [
-    //     'slug', 'name_en', 'name_dari', 'name_pashto',
-    //     'short_name_en', 'short_name_dari', 'short_name_pashto',
-    //     'accent_color', 'secondary_color', 'icon_name', 'logo_url', 'hero_image_path',
-    //     'tagline_en', 'tagline_dari', 'tagline_pashto',
-    //     'description_en', 'description_dari', 'description_pashto',
-    //     'sector_en', 'sector_dari', 'sector_pashto',
-    //     'about_en', 'about_dari', 'about_pashto',
-    //     'mission_en', 'mission_dari', 'mission_pashto',
-    //     'vision_en', 'vision_dari', 'vision_pashto',
-    //     'value_en', 'value_dari', 'value_pashto',
-    //     'project_count', 'province_count',
-    //     'email', 'phone',
-    //     'address', 'address_en', 'address_dari', 'address_pashto',
-    //     'latitude', 'longitude',
-    //     'website_url', 'website', 'facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url',
-    //     'established_year', 'founded_year', 'registration_number', 'tax_id', 'employee_count',
-    //     'is_active', 'sort_order', 'display_order', 'is_featured',
-    //     'meta_title_en', 'meta_title_dari', 'meta_title_pashto',
-    //     'meta_description_en', 'meta_description_dari', 'meta_description_pashto',
-    // ];
+    protected $fillable = [
+        'slug', 'name_en', 'name_dari', 'name_pashto',
+        'short_name_en', 'short_name_dari', 'short_name_pashto',
+        'accent_color', 'secondary_color', 'icon_name', 'logo_url', 'hero_image_path',
+        'tagline_en', 'tagline_dari', 'tagline_pashto',
+        'description_en', 'description_dari', 'description_pashto',
+        'sector_en', 'sector_dari', 'sector_pashto',
+        'about_en', 'about_dari', 'about_pashto',
+        'mission_en', 'mission_dari', 'mission_pashto',
+        'vision_en', 'vision_dari', 'vision_pashto',
+        'value_en', 'value_dari', 'value_pashto',
+        'project_count', 'province_count',
+        'email', 'phone',
+        'address', 'address_en', 'address_dari', 'address_pashto',
+        'latitude', 'longitude',
+        'website_url', 'website', 'facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url',
+        'established_year', 'founded_year', 'registration_number', 'tax_id', 'employee_count',
+        'is_active', 'sort_order', 'display_order', 'is_featured',
+        'meta_title_en', 'meta_title_dari', 'meta_title_pashto',
+        'meta_description_en', 'meta_description_dari', 'meta_description_pashto',
+    ];
 
     protected $casts = [
         'is_active' => 'boolean',
