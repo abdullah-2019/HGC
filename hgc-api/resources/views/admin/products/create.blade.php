@@ -70,7 +70,7 @@
 
                     <!-- Basic Info Tab -->
                     <div x-show="activeTab === 'basic'" x-cloak>
-                        <div class="space-y-6">                       
+                        <div class="space-y-6">
                             <div>
                                 <label for="slug" class="block mb-2 text-sm font-medium text-white">Slug <span
                                         class="text-red-400">*</span></label>
@@ -586,21 +586,20 @@
 
             <!-- Submit Buttons -->
             <div class="flex items-center justify-end gap-3 mt-6">
-    <!-- Cancel Button: Secondary Button Shape -->
-    <a href="{{ route('admin.products.index') }}"
-        style="background-color: #374151 !important; border: 1px solid #4b5563 !important; color: #f3f4f6 !important; min-width: 100px; display: inline-flex;"
-        class="px-5 py-2 text-sm font-medium rounded-lg hover:bg-gray-600 transition-all duration-150 items-center justify-center text-center shadow-sm focus:outline-none">
-        Cancel
-    </a>
-    
-    <!-- Create Product Button: Forced Blue Primary Button Shape -->
-    <!-- FIX: Direct inline fallback styles completely force the layout to show the button shapes -->
-    <button type="submit"
-        style="background-color: #2563eb !important; border: 1px solid #1d4ed8 !important; color: #ffffff !important; min-width: 140px; display: inline-flex;"
-        class="px-5 py-2 text-sm font-medium rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-150 items-center justify-center text-center cursor-pointer shadow-md focus:outline-none">
-        Create Product
-    </button>
-</div>
+                <!-- Cancel Button: Secondary Button Shape -->
+                <a href="{{ route('admin.products.index') }}"
+                    style="background-color: #374151 !important; border: 1px solid #4b5563 !important; color: #f3f4f6 !important; min-width: 100px; display: inline-flex;"
+                    class="px-5 py-2 text-sm font-medium rounded-lg hover:bg-gray-600 transition-all duration-150 items-center justify-center text-center shadow-sm focus:outline-none">
+                    Cancel
+                </a>
+
+                <!-- Create Product Button: Forced Blue Primary Button Shape -->
+                <button type="submit"
+                    style="background-color: #2563eb !important; border: 1px solid #1d4ed8 !important; color: #ffffff !important; min-width: 140px; display: inline-flex;"
+                    class="px-5 py-2 text-sm font-medium rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-150 items-center justify-center text-center cursor-pointer shadow-md focus:outline-none">
+                    Create Product
+                </button>
+            </div>
 
         </form>
     </div>
@@ -610,20 +609,16 @@
             return {
                 activeTab: 'basic',
                 specifications: {!! json_encode(old('specifications', [])) !!}.length > 0 ?
-                    {!! json_encode(old('specifications', [])) !!} :
-                    [{
+                    {!! json_encode(old('specifications', [])) !!} : [{
                         label: '',
                         value: ''
                     }],
                 applications: {!! json_encode(old('applications', [])) !!}.length > 0 ?
-                    {!! json_encode(old('applications', [])) !!} :
-                    [],
+                    {!! json_encode(old('applications', [])) !!} : [],
                 packaging: {!! json_encode(old('packaging', [])) !!}.length > 0 ?
-                    {!! json_encode(old('packaging', [])) !!} :
-                    [],
+                    {!! json_encode(old('packaging', [])) !!} : [],
                 images: {!! json_encode(old('images', [])) !!}.length > 0 ?
-                    {!! json_encode(old('images', [])) !!} :
-                    [],
+                    {!! json_encode(old('images', [])) !!} : [],
 
                 addSpecification() {
                     this.specifications.push({
