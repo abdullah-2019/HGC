@@ -670,7 +670,7 @@
                                 <span class="ms-3 text-sm font-medium text-gray-300">Active</span>
                             </label>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
