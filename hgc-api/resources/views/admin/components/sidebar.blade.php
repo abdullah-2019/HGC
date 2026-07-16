@@ -119,11 +119,6 @@
                 <p class="px-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Management</p>
             </li>
 
-            <!-- Management Section -->
-            <li class="pt-4 pb-2">
-                <p class="px-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Management</p>
-            </li>
-
             <!-- Sectors -->
             <li>
                 <a href="{{ route('admin.sectors.index') }}"
