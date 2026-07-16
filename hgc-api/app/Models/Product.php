@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -33,6 +35,36 @@ class Product extends Model
         'sort_order' => 'integer',
     ];
 
+    // Auto-generate slug from name_en if empty
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function ($product) {
+            if (empty($product->slug)) {
+                $baseSlug = Str::slug($product->name_en);
+                $slug = $baseSlug;
+                $counter = 1;
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . $counter++;
+                }
+                $product->slug = $slug;
+            }
+        });
+
+        static::updating(function ($product) {
+            if ($product->isDirty('name_en') && empty($product->slug)) {
+                $baseSlug = Str::slug($product->name_en);
+                $slug = $baseSlug;
+                $counter = 1;
+                while (static::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+                    $slug = $baseSlug . '-' . $counter++;
+                }
+                $product->slug = $slug;
+            }
+        });
+    }
+
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
@@ -43,9 +75,27 @@ class Product extends Model
         return $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeInStock($query)
+    {
+        return $query->where('availability', 'in_stock');
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    // Additional categories via pivot table (category_products)
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_products')
+            ->withPivot('sort_order')
+            ->withTimestamps();
     }
 
     public function company(): BelongsTo
@@ -62,6 +112,11 @@ class Product extends Model
     {
         return $this->images()->where('is_primary', true)->first()
             ?? $this->images()->first();
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class, 'product_id');
     }
 
     public function getLocalizedName(string $lang = 'en'): string
@@ -127,21 +182,5 @@ class Product extends Model
         ];
 
         return $labels[$this->availability][$lang] ?? $labels[$this->availability]['en'];
-    }
-
-    // used in product page.
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-    public function scopeInStock($query)
-    {
-        return $query->where('availability', 'in_stock');
-    }
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(ProductReview::class, 'product_id');
     }
 }

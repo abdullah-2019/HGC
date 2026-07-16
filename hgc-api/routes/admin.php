@@ -16,7 +16,6 @@ use App\Http\Controllers\Admin\StatController;
 use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\AboutPageController;
 
-
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
     // Dashboard
@@ -60,4 +59,30 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // About Page
     Route::get('about', [AboutPageController::class, 'edit'])->name('about.edit');
     Route::put('about', [AboutPageController::class, 'update'])->name('about.update');
+
+    // Products
+    Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
+    Route::patch('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
+
+    // ─────────────────────────────────────────
+    // PRODUCTS
+    // ─────────────────────────────────────────
+    // Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    // Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
+    // Route::post('products', [ProductController::class, 'store'])->name('products.store');
+    // Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+    // Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    // Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
+    // Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    // Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
+    // Route::patch('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
+    
+    
 });
