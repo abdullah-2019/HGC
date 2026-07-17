@@ -40,11 +40,6 @@
                 </a>
             </li>
 
-            <!-- Content Section -->
-            <li class="pt-4 pb-2">
-                <p class="px-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Content</p>
-            </li>
-
             <!-- Contacts Dropdown -->
             <li x-data="{ open: {{ request()->routeIs('admin.contacts.*') ? 'true' : 'false' }} }">
                 <button @click="open = !open" type="button"
@@ -114,9 +109,54 @@
                 </a>
             </li>
 
-            <!-- Management Section -->
-            <li class="pt-4 pb-2">
-                <p class="px-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Management</p>
+            <!-- About Dropdown -->
+            <li x-data="{ open: {{ request()->routeIs('admin.contacts.*') ? 'true' : 'false' }} }">
+                <button @click="open = !open" type="button"
+                    class="flex items-center w-full p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-gray-700' : '' }}">
+                    <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="flex-1 ms-3 text-left whitespace-nowrap truncate">About</span>
+                    <svg class="w-3 h-3 transition-transform duration-200 flex-shrink-0 ml-2"
+                        :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 4 4 4-4" />
+                    </svg>
+                </button>
+                <ul x-show="open" x-collapse class="py-2 space-y-1">
+                    <li>
+                        <a href="{{ route('admin.contacts.submissions') }}"
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.submissions') ? 'bg-gray-700 text-white' : '' }}">
+                            Carousel
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.contacts.info') }}"
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
+                            Mission
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.contacts.info') }}"
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
+                            Vision
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.contacts.info') }}"
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
+                            Value
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.contacts.info') }}"
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
+                            Story Highlight
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <!-- Sectors -->
