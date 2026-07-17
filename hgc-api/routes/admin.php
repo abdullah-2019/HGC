@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\StatController;
 use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\AboutPageController;
 
+
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
     // Dashboard
@@ -50,9 +51,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // Route::get('settings', [SiteSettingController::class, 'index'])->name('settings.index');
     // Route::put('settings', [SiteSettingController::class, 'update'])->name('settings.update');
 
-    // Stats
-    Route::resource('stats', StatController::class)->except(['show']);
-
     // Sectors
     Route::resource('sectors', SectorController::class);
 
@@ -76,4 +74,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     ->parameters([
         'settings' => 'siteSetting',
     ]);
+
+    // stat
+    Route::resource('stats', StatController::class)
+        ->only([
+            'index',
+            'edit',
+            'update',
+        ]);
+
+
 });
