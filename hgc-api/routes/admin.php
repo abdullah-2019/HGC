@@ -47,8 +47,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('contacts/inquiries', [ContactInquiryController::class, 'index'])->name('contacts.inquiries');
 
     // Settings
-    Route::get('settings', [SiteSettingController::class, 'index'])->name('settings.index');
-    Route::put('settings', [SiteSettingController::class, 'update'])->name('settings.update');
+    // Route::get('settings', [SiteSettingController::class, 'index'])->name('settings.index');
+    // Route::put('settings', [SiteSettingController::class, 'update'])->name('settings.update');
 
     // Stats
     Route::resource('stats', StatController::class)->except(['show']);
@@ -71,18 +71,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
     Route::patch('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
 
-    // ─────────────────────────────────────────
-    // PRODUCTS
-    // ─────────────────────────────────────────
-    // Route::get('products', [ProductController::class, 'index'])->name('products.index');
-    // Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
-    // Route::post('products', [ProductController::class, 'store'])->name('products.store');
-    // Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
-    // Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    // Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
-    // Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-    // Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
-    // Route::patch('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
-    
-    
+    // site setting
+    Route::resource('settings', SiteSettingController::class)
+    ->parameters([
+        'settings' => 'siteSetting',
+    ]);
 });

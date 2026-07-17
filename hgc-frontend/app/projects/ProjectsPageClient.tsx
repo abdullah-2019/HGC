@@ -58,7 +58,7 @@ export default function ProjectsPageClient() {
         }
       })
       .catch((err: Error) => {
-        console.error("Companies API failed:", err.message);
+        // console.error("Companies API failed:", err.message);
         setCompanies([]);
       });
   }, []);
