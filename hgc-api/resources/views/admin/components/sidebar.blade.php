@@ -110,7 +110,7 @@
             </li>
 
             <!-- About Dropdown -->
-            <li x-data="{ open: {{ request()->routeIs('admin.contacts.*') ? 'true' : 'false' }} }">
+            <li x-data="{ open: {{ request()->routeIs('admin.about.*') ? 'true' : 'false' }} }">
                 <button @click="open = !open" type="button"
                     class="flex items-center w-full p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-gray-700' : '' }}">
                     <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
@@ -127,11 +127,19 @@
                 </button>
                 <ul x-show="open" x-collapse class="py-2 space-y-1">
                     <li>
-                        <a href="{{ route('admin.contacts.submissions') }}"
+                        <a href="{{ route('admin.about.carousel.index') }}"
                             class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.submissions') ? 'bg-gray-700 text-white' : '' }}">
                             Carousel
                         </a>
                     </li>
+
+                    {{-- admin.about.carousel.index
+admin.about.carousel.create
+admin.about.carousel.store
+admin.about.carousel.edit
+admin.about.carousel.update
+admin.about.carousel.destroy --}}
+
                     <li>
                         <a href="{{ route('admin.contacts.info') }}"
                             class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">

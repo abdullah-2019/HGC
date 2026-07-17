@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\StatController;
 use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\AboutPageController;
+use App\Http\Controllers\Admin\About\CarouselSlideController;
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
@@ -83,5 +84,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
             'update',
         ]);
 
+    Route::prefix('about')
+        ->name('about.')
+        ->group(function () {
+
+            Route::resource(
+                'carousel',
+                CarouselSlideController::class
+            );
+
+    });
 
 });
