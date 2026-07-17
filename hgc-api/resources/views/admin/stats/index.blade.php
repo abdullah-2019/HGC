@@ -2,6 +2,8 @@
 
 @section('title', 'Statistics')
 
+@section('page-title', 'Statistics')
+
 @section('content')
     <div class="p-4">
 
@@ -58,7 +60,7 @@
 
                                 {{-- Key --}}
                                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $stat->key }}
+                                    {{ Str::headline($stat->key) }}
                                 </td>
 
                                 {{-- Status --}}
