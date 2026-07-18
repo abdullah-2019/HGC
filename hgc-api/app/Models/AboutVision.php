@@ -1,5 +1,4 @@
 <?php
-// app/Models/AboutVision.php
 
 namespace App\Models;
 
@@ -37,7 +36,20 @@ class AboutVision extends Model
         'sort_order' => 'integer',
     ];
 
+    /**
+     * Active pillars ordered — for frontend/public use
+     */
     public function pillars(): HasMany
+    {
+        return $this->hasMany(AboutVisionPillar::class, 'about_vision_id')
+            ->where('is_active', true)
+            ->orderBy('sort_order');
+    }
+
+    /**
+     * All pillars including inactive — for admin use
+     */
+    public function allPillars(): HasMany
     {
         return $this->hasMany(AboutVisionPillar::class, 'about_vision_id')
             ->orderBy('sort_order');

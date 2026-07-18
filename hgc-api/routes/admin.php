@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\AboutPageController;
 use App\Http\Controllers\Admin\About\CarouselSlideController;
 use App\Http\Controllers\Admin\MediaBrowserController;
 use App\Http\Controllers\Admin\About\AboutMissionController;
+use App\Http\Controllers\Admin\About\AboutVisionController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
@@ -99,6 +100,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
                 AboutMissionController::class
             );
 
+            Route::resource(
+                'vision',
+                AboutVisionController::class
+            );
+
     });
 
     // media browser
@@ -108,3 +114,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     )->name('media.browser');
 
 });
+
+
+
+
+ // Vision routes (new)
+    // Route::get('/about/vision', [AboutVisionController::class, 'index'])->name('about.vision.index');
+    // Route::get('/about/vision/create', [AboutVisionController::class, 'create'])->name('about.vision.create');
+    // Route::post('/about/vision', [AboutVisionController::class, 'store'])->name('about.vision.store');
+    // Route::get('/about/vision/{vision}/edit', [AboutVisionController::class, 'edit'])->name('about.vision.edit');
+    // Route::put('/about/vision/{vision}', [AboutVisionController::class, 'update'])->name('about.vision.update');
+    // Route::delete('/about/vision/{vision}', [AboutVisionController::class, 'destroy'])->name('about.vision.destroy');
