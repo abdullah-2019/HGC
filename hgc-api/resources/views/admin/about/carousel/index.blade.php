@@ -12,7 +12,7 @@
                 </h1>
 
                 <p class="mt-1 text-sm text-gray-400">
-                    Manage homepage/about page carousel slides.
+                    Manage about page carousel slides.
                 </p>
             </div>
 
@@ -72,7 +72,7 @@
                                 <td class="px-6 py-4">
 
                                     @if ($slide->image_url)
-                                        <img src="{{ asset($slide->image_url) }}" alt="{{ $slide->title_en }}"
+                                        <img src="{{ asset('storage/' . ltrim($slide->image_url, '/')) }}" alt="{{ $slide->title_en }}"
                                             class="w-32 h-20 object-cover rounded-lg border border-gray-700">
                                     @else
                                         <div
@@ -134,22 +134,39 @@
                                     {{ $slide->sort_order }}
                                 </td>
                                 {{-- Actions --}}
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
+                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                    <div class="flex items-center justify-center gap-2">
+
+                                        <!-- Edit Action (Small Pencil Icon Only) -->
                                         <a href="{{ route('admin.about.carousel.edit', $slide) }}"
-                                            class="font-medium text-blue-400 hover:text-blue-300">
-                                            Edit
+                                            class="text-yellow-400 hover:text-yellow-300 transition-colors duration-150 block"
+                                            title="Edit Slide">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
                                         </a>
+
+                                        <!-- Delete Action (Small Trash Icon Only) -->
                                         <form action="{{ route('admin.about.carousel.destroy', $slide) }}" method="POST"
-                                            onsubmit="return confirm('Are you sure you want to delete this slide?')">
+                                            onsubmit="return confirm('Are you sure you want to delete this slide?')"
+                                            class="inline-flex">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="font-medium text-red-400 hover:text-red-300">
-                                                Delete
+                                            <button type="submit"
+                                                class="text-red-400 hover:text-red-300 transition-colors duration-150 focus:outline-none"
+                                                title="Delete Slide">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
                                             </button>
                                         </form>
+
                                     </div>
                                 </td>
+
                             </tr>
                         @empty
                             <tr class="bg-gray-800">

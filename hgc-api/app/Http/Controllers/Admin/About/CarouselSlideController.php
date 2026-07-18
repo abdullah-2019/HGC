@@ -26,8 +26,12 @@ class CarouselSlideController extends Controller
 
     public function create()
     {
-        return view('admin.about.carousel.create');
+        $lastSortOrder = AboutCarouselSlide::max('sort_order') ?? 0;
+        $lastSortOrder++;
+        
+        return view('admin.about.carousel.create', compact('lastSortOrder'));
     }
+
 
 
     public function store(Request $request)
@@ -35,25 +39,25 @@ class CarouselSlideController extends Controller
         $validated = $request->validate([
 
             'image_url' => [
-                'nullable',
+                'required',
                 'string',
                 'max:255'
             ],
 
             'title_en' => [
-                'nullable',
+                'required',
                 'string',
                 'max:200'
             ],
 
             'title_dari' => [
-                'nullable',
+                'required',
                 'string',
                 'max:200'
             ],
 
             'title_pashto' => [
-                'nullable',
+                'required',
                 'string',
                 'max:200'
             ],
@@ -141,18 +145,15 @@ class CarouselSlideController extends Controller
             ->with('success','Slide updated successfully.');
     }
 
-
-
-    public function destroy(
-        AboutCarouselSlide $carousel
-    )
+    public function destroy(AboutCarouselSlide $carousel)
     {
-
+        $deletedOrder = $carousel->sort_order;
         $carousel->delete();
-
-
+        AboutCarouselSlide::where('sort_order', '>', $deletedOrder)
+            ->decrement('sort_order');
         return redirect()
             ->route('admin.about.carousel.index')
-            ->with('success','Slide deleted successfully.');
+            ->with('success', 'Slide deleted and sequences updated successfully.');
     }
+
 }

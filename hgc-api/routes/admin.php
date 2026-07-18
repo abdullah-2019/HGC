@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\StatController;
 use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\AboutPageController;
 use App\Http\Controllers\Admin\About\CarouselSlideController;
-
+use App\Http\Controllers\Admin\MediaBrowserController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
@@ -94,5 +94,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
             );
 
     });
+
+    // media browser
+    Route::get(
+        'media-browser',
+        [MediaBrowserController::class, 'index']
+    )->name('media.browser');
 
 });
