@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\AboutPageController;
 use App\Http\Controllers\Admin\About\CarouselSlideController;
 use App\Http\Controllers\Admin\MediaBrowserController;
+use App\Http\Controllers\Admin\AboutMissionController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
@@ -91,6 +92,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
             Route::resource(
                 'carousel',
                 CarouselSlideController::class
+            );
+
+            Route::resource(
+                'mission',
+                AboutMissionController::class
             );
 
     });

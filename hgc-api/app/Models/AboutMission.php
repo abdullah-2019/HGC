@@ -39,6 +39,7 @@ class AboutMission extends Model
     public function points(): HasMany
     {
         return $this->hasMany(AboutMissionPoint::class, 'about_mission_id')
+            ->where('is_active', true)
             ->orderBy('sort_order');
     }
 
