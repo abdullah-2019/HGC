@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\AboutPageController;
 use App\Http\Controllers\Admin\About\CarouselSlideController;
 use App\Http\Controllers\Admin\MediaBrowserController;
-use App\Http\Controllers\Admin\AboutMissionController;
+use App\Http\Controllers\Admin\About\AboutMissionController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 

@@ -43,6 +43,15 @@ class AboutMission extends Model
             ->orderBy('sort_order');
     }
 
+    /**
+     * All points including inactive — for admin use
+     */
+    public function allPoints(): HasMany
+    {
+        return $this->hasMany(AboutMissionPoint::class, 'about_mission_id')
+            ->orderBy('sort_order');
+    }
+    
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

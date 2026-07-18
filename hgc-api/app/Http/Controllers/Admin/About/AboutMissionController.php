@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\About;
 
 use App\Http\Controllers\Controller;
 use App\Models\AboutMission;
 use App\Models\AboutMissionPoint;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class AboutMissionController extends Controller
@@ -14,7 +13,7 @@ class AboutMissionController extends Controller
 
     public function index()
     {
-        $mission = AboutMission::with('points')->first();
+        $mission = AboutMission::with('allPoints')->first();
 
         return view('admin.about.mission.index', compact('mission'));
     }
@@ -28,17 +27,15 @@ class AboutMissionController extends Controller
     {
         $data = $this->validateMissionData($request);
 
-        // Handle image upload
         if ($request->hasFile('image')) {
             $data['image_url'] = $request->file('image')->store('uploads', 'public');
         }
 
         $mission = AboutMission::create($data);
 
-        // Create mission points
         if ($request->has('points')) {
             foreach ($request->input('points') as $pointData) {
-                $mission->points()->create($pointData);
+                $mission->allPoints()->create($pointData);
             }
         }
 
@@ -49,7 +46,7 @@ class AboutMissionController extends Controller
 
     public function edit(AboutMission $mission)
     {
-        $mission = $mission->load('points');
+        $mission = $mission->load('allPoints');
 
         return view('admin.about.mission.edit', compact('mission'));
     }
@@ -58,9 +55,7 @@ class AboutMissionController extends Controller
     {
         $data = $this->validateMissionData($request);
 
-        // Handle image upload
         if ($request->hasFile('image')) {
-            // Delete old image
             if ($mission->image_url && Storage::disk('public')->exists($mission->image_url)) {
                 Storage::disk('public')->delete($mission->image_url);
             }
@@ -74,7 +69,6 @@ class AboutMissionController extends Controller
 
         $mission->update($data);
 
-        // Sync mission points
         $this->syncPoints($request, $mission);
 
         return redirect()
@@ -84,7 +78,6 @@ class AboutMissionController extends Controller
 
     public function destroy(AboutMission $mission)
     {
-        // Delete image
         if ($mission->image_url && Storage::disk('public')->exists($mission->image_url)) {
             Storage::disk('public')->delete($mission->image_url);
         }
@@ -98,60 +91,60 @@ class AboutMissionController extends Controller
     private function validateMissionData(Request $request)
     {
         return $request->validate([
-            'section_label_en'  => 'nullable|string|max:100',
-            'section_label_dari'  => 'nullable|string|max:100',
-            'section_label_pashto'  => 'nullable|string|max:100',
+            'section_label_en'   => 'nullable|string|max:100',
+            'section_label_dari' => 'nullable|string|max:100',
+            'section_label_pashto' => 'nullable|string|max:100',
 
-            'title_en'  => 'nullable|string|max:200',
-            'title_dari'  => 'nullable|string|max:200',
-            'title_pashto'  => 'nullable|string|max:200',
+            'title_en'   => 'nullable|string|max:200',
+            'title_dari' => 'nullable|string|max:200',
+            'title_pashto' => 'nullable|string|max:200',
 
-            'description_en'  => 'nullable|string',
-            'description_dari'  => 'nullable|string',
-            'description_pashto'  => 'nullable|string',
+            'description_en'   => 'nullable|string',
+            'description_dari' => 'nullable|string',
+            'description_pashto' => 'nullable|string',
 
-            'quote_text_en'  => 'nullable|string|max:300',
-            'quote_text_dari'  => 'nullable|string|max:300',
-            'quote_text_pashto'  => 'nullable|string|max:300',
+            'quote_text_en'   => 'nullable|string|max:300',
+            'quote_text_dari' => 'nullable|string|max:300',
+            'quote_text_pashto' => 'nullable|string|max:300',
 
             'is_active'  => 'boolean',
-            'sort_order'  => 'integer',
+            'sort_order' => 'integer',
         ]);
     }
 
     private function syncPoints(Request $request, AboutMission $mission)
     {
+        // FIX #1: Use allPoints() instead of points() to include inactive points
+        $existingIds = $mission->allPoints()->pluck('id')->toArray();
         $submittedIds = [];
-        $existingIds = $mission->points()->pluck('id')->toArray();
 
         if ($request->has('points')) {
             foreach ($request->input('points') as $index => $pointData) {
                 $pointId = $pointData['id'] ?? null;
 
                 $payload = [
-                    'text_en'    => $pointData['text_en'] ?? null,
-                    'text_dari'  => $pointData['text_dari'] ?? null,
+                    'text_en'     => $pointData['text_en'] ?? null,
+                    'text_dari'   => $pointData['text_dari'] ?? null,
                     'text_pashto' => $pointData['text_pashto'] ?? null,
-                    'is_active'  => isset($pointData['is_active']) ? 1 : 0,
-                    'sort_order' => $index,
+                    'is_active'   => isset($pointData['is_active']) ? 1 : 0,
+                    'sort_order'  => $index,
                 ];
 
                 if ($pointId && in_array((int)$pointId, $existingIds)) {
-                    // Update existing
-                    $mission->points()->where('id', $pointId)->update($payload);
+                    // FIX #2: Use allPoints() for update too
+                    $mission->allPoints()->where('id', $pointId)->update($payload);
                     $submittedIds[] = (int)$pointId;
                 } else {
-                    // Create new
-                    $newPoint = $mission->points()->create($payload);
+                    $newPoint = $mission->allPoints()->create($payload);
                     $submittedIds[] = $newPoint->id;
                 }
             }
         }
 
-        // Delete removed points
+        // FIX #3: Use allPoints() for delete too
         $toDelete = array_diff($existingIds, $submittedIds);
         if (!empty($toDelete)) {
-            $mission->points()->whereIn('id', $toDelete)->delete();
+            $mission->allPoints()->whereIn('id', $toDelete)->delete();
         }
     }
 }

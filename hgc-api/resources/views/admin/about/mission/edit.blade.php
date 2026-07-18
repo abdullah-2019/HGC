@@ -8,16 +8,22 @@
     <div class="min-h-screen bg-gray-950 p-6">
         <div class="max-w-5xl mx-auto">
             {{-- HEADER --}}
-            <a href="{{ route('admin.about.mission.index') }}"
-                class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium transition-colors border border-gray-700 whitespace-nowrap">
-                <svg class="w-4 h-10 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to preview
-            </a>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-white tracking-tight">Edit Mission</h1>
+                    <p class="text-gray-400 mt-2 text-sm">Update mission content across all languages</p>
+                </div>
+                <a href="{{ route('admin.about.mission.index') }}"
+                    class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium transition-colors border border-gray-700 whitespace-nowrap">
+                    {{-- FIX: h-10 -> h-4 --}}
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to preview
+                </a>
+            </div>
 
-            <form action="{{ route('admin.about.mission.update', $mission) }}" method="POST" enctype="multipart/form-data"
-                id="missionForm">
+            <form action="{{ route('admin.about.mission.update', $mission) }}" method="POST" enctype="multipart/form-data" id="missionForm">
                 @csrf
                 @method('PUT')
 
@@ -25,10 +31,8 @@
                 @if ($errors->any())
                     <div class="mb-6 bg-red-900/30 border border-red-800 rounded-xl p-4">
                         <div class="flex items-start gap-3">
-                            <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             <div>
                                 <p class="text-red-300 text-sm font-medium">Please fix the following errors:</p>
@@ -51,15 +55,12 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                         <div>
-                            <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">Section
-                                label (EN)</label>
-                            <input type="text" name="section_label_en"
-                                value="{{ old('section_label_en', $mission->section_label_en) }}"
+                            <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">Section label (EN)</label>
+                            <input type="text" name="section_label_en" value="{{ old('section_label_en', $mission->section_label_en) }}"
                                 class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors placeholder-gray-500">
                         </div>
                         <div>
-                            <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">Sort
-                                order</label>
+                            <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">Sort order</label>
                             <input type="number" name="sort_order" value="{{ old('sort_order', $mission->sort_order) }}"
                                 class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
                         </div>
@@ -82,46 +83,37 @@
                         <h2 class="text-lg font-semibold text-white">Hero image</h2>
                     </div>
 
-                    {{-- Current Image --}}
                     @if ($mission->image_url)
                         <div class="mb-5">
-                            <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">Current
-                                image</label>
+                            <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">Current image</label>
                             <div class="relative rounded-xl overflow-hidden border border-gray-700 max-w-md">
-                                <img src="{{ asset('storage/' . ltrim($mission->image_url, '/')) }}"
-                                    class="w-full h-48 object-cover">
+                                <img src="{{ asset('storage/' . ltrim($mission->image_url, '/')) }}" class="w-full h-48 object-cover">
                                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
                             </div>
                         </div>
                     @endif
 
-                    {{-- Upload --}}
                     <div>
                         <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
                             {{ $mission->image_url ? 'Replace image' : 'Upload image' }}
                         </label>
                         <div class="border-2 border-dashed border-gray-700 hover:border-gray-500 rounded-xl p-8 text-center bg-gray-800/30 transition-colors cursor-pointer"
-                            onclick="document.getElementById('imageInput').click()">
-                            <svg class="w-10 h-10 text-gray-500 mx-auto mb-3" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                             onclick="document.getElementById('imageInput').click()">
+                            <svg class="w-10 h-10 text-gray-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                             </svg>
                             <p class="text-gray-400 text-sm">Click to upload or drag and drop</p>
                             <p class="text-gray-500 text-xs mt-1">WebP, JPG, PNG up to 2MB</p>
                         </div>
-                        <input type="file" name="image" id="imageInput" accept="image/*" class="hidden"
-                            onchange="handleImagePreview(this)">
+                        <input type="file" name="image" id="imageInput" accept="image/*" class="hidden" onchange="handleImagePreview(this)">
                         <div id="imagePreview" class="hidden mt-4"></div>
                     </div>
 
-                    {{-- Remove image checkbox --}}
                     @if ($mission->image_url)
                         <div class="mt-4 flex items-center gap-3">
                             <input type="checkbox" name="remove_image" id="remove_image" value="1"
                                 class="w-4 h-4 rounded border-gray-600 bg-gray-700 text-red-500 focus:ring-red-500 focus:ring-offset-gray-900">
-                            <label for="remove_image" class="text-red-400 text-sm cursor-pointer select-none">Remove current
-                                image</label>
+                            <label for="remove_image" class="text-red-400 text-sm cursor-pointer select-none">Remove current image</label>
                         </div>
                     @endif
                 </div>
@@ -140,16 +132,14 @@
                     </div>
 
                     <div class="mb-5">
-                        <label
-                            class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">Description</label>
+                        <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">Description</label>
                         <textarea name="description_en" rows="4"
                             class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-y placeholder-gray-500">{{ old('description_en', $mission->description_en) }}</textarea>
                     </div>
 
                     <div>
                         <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">Quote</label>
-                        <input type="text" name="quote_text_en"
-                            value="{{ old('quote_text_en', $mission->quote_text_en) }}"
+                        <input type="text" name="quote_text_en" value="{{ old('quote_text_en', $mission->quote_text_en) }}"
                             class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors placeholder-gray-500">
                     </div>
                 </div>
@@ -168,17 +158,14 @@
                     </div>
 
                     <div class="mb-5">
-                        <label
-                            class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">توضیحات</label>
+                        <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">توضیحات</label>
                         <textarea name="description_dari" rows="4"
                             class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors resize-y placeholder-gray-500 text-right">{{ old('description_dari', $mission->description_dari) }}</textarea>
                     </div>
 
                     <div>
-                        <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">نقل
-                            قول</label>
-                        <input type="text" name="quote_text_dari"
-                            value="{{ old('quote_text_dari', $mission->quote_text_dari) }}"
+                        <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">نقل قول</label>
+                        <input type="text" name="quote_text_dari" value="{{ old('quote_text_dari', $mission->quote_text_dari) }}"
                             class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors placeholder-gray-500 text-right">
                     </div>
                 </div>
@@ -192,8 +179,7 @@
 
                     <div class="mb-5">
                         <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">سرلیک</label>
-                        <input type="text" name="title_pashto"
-                            value="{{ old('title_pashto', $mission->title_pashto) }}"
+                        <input type="text" name="title_pashto" value="{{ old('title_pashto', $mission->title_pashto) }}"
                             class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors placeholder-gray-500 text-right">
                     </div>
 
@@ -205,8 +191,7 @@
 
                     <div>
                         <label class="block text-gray-400 text-xs uppercase tracking-wider font-medium mb-2">اقتباس</label>
-                        <input type="text" name="quote_text_pashto"
-                            value="{{ old('quote_text_pashto', $mission->quote_text_pashto) }}"
+                        <input type="text" name="quote_text_pashto" value="{{ old('quote_text_pashto', $mission->quote_text_pashto) }}"
                             class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors placeholder-gray-500 text-right">
                     </div>
                 </div>
@@ -221,8 +206,7 @@
                         <button type="button" onclick="addPoint()"
                             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium transition-colors border border-gray-700">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4v16m8-8H4" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
                             Add point
                         </button>
@@ -230,72 +214,61 @@
 
                     <div id="pointsContainer" class="space-y-4">
                         @php
-                            $points = old('points', $mission->points->toArray());
+                            $points = old('points', $mission->allPoints->toArray());
                             if (empty($points)) {
-                                $points = [
-                                    [
-                                        'id' => '',
-                                        'text_en' => '',
-                                        'text_dari' => '',
-                                        'text_pashto' => '',
-                                        'is_active' => 1,
-                                    ],
-                                ];
+                                $points = [['id' => '', 'text_en' => '', 'text_dari' => '', 'text_pashto' => '', 'is_active' => 1]];
                             }
                         @endphp
 
                         @foreach ($points as $index => $point)
-                            <div class="point-card bg-gray-800/50 border border-gray-700/50 rounded-xl p-5"
-                                data-index="{{ $index }}">
+                            <div class="point-card bg-gray-800/50 border border-gray-700/50 rounded-xl p-5" data-index="{{ $index }}">
                                 <div class="flex items-center justify-between mb-4">
                                     <div class="flex items-center gap-3">
-                                        <span
-                                            class="point-number flex items-center justify-center w-8 h-8 rounded-lg bg-gray-700 text-white text-sm font-semibold">
+                                        <span class="point-number flex items-center justify-center w-8 h-8 rounded-lg bg-gray-700 text-white text-sm font-semibold">
                                             {{ $index + 1 }}
                                         </span>
-                                        <span class="text-gray-400 text-sm font-medium">Point #<span
-                                                class="point-label">{{ $index + 1 }}</span></span>
+                                        <span class="text-gray-400 text-sm font-medium">Point #<span class="point-label">{{ $index + 1 }}</span></span>
                                     </div>
                                     <div class="flex items-center gap-3">
                                         <div class="flex items-center gap-2">
-                                            <input type="checkbox" name="points[{{ $index }}][is_active]"
-                                                id="point_{{ $index }}_active" value="1"
-                                                {{ $point['is_active'] ?? true ? 'checked' : '' }}
+                                            <input type="checkbox"
+                                                name="points[{{ $index }}][is_active]"
+                                                id="point_{{ $index }}_active"
+                                                value="1"
+                                                {{-- FIX: Properly handle old() data where is_active might be string '1', int 1, or missing --}}
+                                                @if (is_array($point) && array_key_exists('is_active', $point))
+                                                    {{ $point['is_active'] ? 'checked' : '' }}
+                                                @else
+                                                    checked
+                                                @endif
                                                 class="w-4 h-4 rounded border-gray-600 bg-gray-700 text-green-500 focus:ring-green-500 focus:ring-offset-gray-900">
-                                            <label for="point_{{ $index }}_active"
-                                                class="text-gray-400 text-xs cursor-pointer select-none">Active</label>
+                                            <label for="point_{{ $index }}_active" class="text-gray-400 text-xs cursor-pointer select-none">Active</label>
                                         </div>
                                         <button type="button" onclick="removePoint(this)"
                                             class="p-2 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-900/20 transition-colors"
                                             title="Remove point">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                             </svg>
                                         </button>
                                     </div>
                                 </div>
 
-                                <input type="hidden" name="points[{{ $index }}][id]"
-                                    value="{{ $point['id'] ?? '' }}">
+                                <input type="hidden" name="points[{{ $index }}][id]" value="{{ $point['id'] ?? '' }}">
 
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                     <div>
-                                        <label
-                                            class="block text-gray-500 text-[10px] uppercase tracking-widest font-semibold mb-1.5">English</label>
+                                        <label class="block text-gray-500 text-[10px] uppercase tracking-widest font-semibold mb-1.5">English</label>
                                         <textarea name="points[{{ $index }}][text_en]" rows="3"
                                             class="w-full px-3 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-y placeholder-gray-600">{{ $point['text_en'] ?? '' }}</textarea>
                                     </div>
                                     <div dir="rtl">
-                                        <label
-                                            class="block text-gray-500 text-[10px] uppercase tracking-widest font-semibold mb-1.5">دری</label>
+                                        <label class="block text-gray-500 text-[10px] uppercase tracking-widest font-semibold mb-1.5">دری</label>
                                         <textarea name="points[{{ $index }}][text_dari]" rows="3"
                                             class="w-full px-3 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors resize-y placeholder-gray-600 text-right">{{ $point['text_dari'] ?? '' }}</textarea>
                                     </div>
                                     <div dir="rtl">
-                                        <label
-                                            class="block text-gray-500 text-[10px] uppercase tracking-widest font-semibold mb-1.5">پښتو</label>
+                                        <label class="block text-gray-500 text-[10px] uppercase tracking-widest font-semibold mb-1.5">پښتو</label>
                                         <textarea name="points[{{ $index }}][text_pashto]" rows="3"
                                             class="w-full px-3 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors resize-y placeholder-gray-600 text-right">{{ $point['text_pashto'] ?? '' }}</textarea>
                                     </div>
@@ -397,12 +370,11 @@
                 card.querySelector('.point-number').textContent = newIndex + 1;
                 card.querySelector('.point-label').textContent = newIndex + 1;
 
-                // Update all input names
                 const inputs = card.querySelectorAll('input, textarea');
                 inputs.forEach(input => {
                     const name = input.getAttribute('name');
                     if (name) {
-                        const newName = name.replace(/points\[\d+\]/, `points[${newIndex}]`);
+                        const newName = name.replace(/points\\[\\d+\\]/, `points[${newIndex}]`);
                         input.setAttribute('name', newName);
                     }
                     const id = input.getAttribute('id');
@@ -411,7 +383,6 @@
                     }
                 });
 
-                // Update label for
                 const label = card.querySelector('label[for^=\"point_\"]');
                 if (label) {
                     label.setAttribute('for', `point_${newIndex}_active`);
