@@ -19,109 +19,54 @@ use App\Http\Controllers\Admin\About\CarouselSlideController;
 use App\Http\Controllers\Admin\MediaBrowserController;
 use App\Http\Controllers\Admin\About\AboutMissionController;
 use App\Http\Controllers\Admin\About\AboutVisionController;
+use App\Http\Controllers\Admin\About\AboutCoreValueController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
-    // Dashboard
+    // Dashboard Portal
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Companies
+    // Companies & Entities
     Route::resource('companies', CompanyController::class);
 
-    // Products
+    // Products (Cleaned Resource Framework with custom Action toggles mapped correctly)
+    Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
+    Route::patch('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
     Route::resource('products', ProductController::class);
 
-    // Projects
+    // Structural Resources
     Route::resource('projects', ProjectController::class);
-
-    // Categories
     Route::resource('categories', CategoryController::class);
-
-    // News
-    Route::resource('news', NewsArticleController::class)->parameters(['news' => 'newsArticle']);
-
-    // Partners
+    Route::resource('sectors', SectorController::class);
     Route::resource('partners', PartnerController::class);
-
-    // Testimonials
     Route::resource('testimonials', TestimonialController::class);
 
-    // Contacts
+    // News Articles (Custom singular parameter mapping preservation)
+    Route::resource('news', NewsArticleController::class)->parameters(['news' => 'newsArticle']);
+
+    // Communications & Inbound Portals
     Route::get('contacts/submissions', [ContactSubmissionController::class, 'index'])->name('contacts.submissions');
     Route::get('contacts/inquiries', [ContactInquiryController::class, 'index'])->name('contacts.inquiries');
 
-    // Settings
-    // Route::get('settings', [SiteSettingController::class, 'index'])->name('settings.index');
-    // Route::put('settings', [SiteSettingController::class, 'update'])->name('settings.update');
+    // Global Key-Value Site Settings
+    Route::resource('settings', SiteSettingController::class)->parameters(['settings' => 'siteSetting']);
 
-    // Sectors
-    Route::resource('sectors', SectorController::class);
+    // Metrics & Statistics
+    Route::resource('stats', StatController::class)->only(['index', 'edit', 'update']);
 
-    // About Page
+    // Media Manager Hub
+    Route::get('media-browser', [MediaBrowserController::class, 'index'])->name('media.browser');
+
+    // About Main Landing Config
     Route::get('about', [AboutPageController::class, 'edit'])->name('about.edit');
     Route::put('about', [AboutPageController::class, 'update'])->name('about.update');
 
-    // Products
-    Route::get('products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::post('products', [ProductController::class, 'store'])->name('products.store');
-    Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
-    Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-    Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
-    Route::patch('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
-
-    // site setting
-    Route::resource('settings', SiteSettingController::class)
-    ->parameters([
-        'settings' => 'siteSetting',
-    ]);
-
-    // stat
-    Route::resource('stats', StatController::class)
-        ->only([
-            'index',
-            'edit',
-            'update',
-        ]);
-
-    Route::prefix('about')
-        ->name('about.')
-        ->group(function () {
-
-            Route::resource(
-                'carousel',
-                CarouselSlideController::class
-            );
-
-            Route::resource(
-                'mission',
-                AboutMissionController::class
-            );
-
-            Route::resource(
-                'vision',
-                AboutVisionController::class
-            );
-
+    // Nested About Layout Entities Block
+    Route::prefix('about')->name('about.')->group(function () {
+        Route::resource('carousel', CarouselSlideController::class);
+        Route::resource('mission', AboutMissionController::class);
+        Route::resource('vision', AboutVisionController::class);
+        Route::resource('values', AboutCoreValueController::class);
     });
 
-    // media browser
-    Route::get(
-        'media-browser',
-        [MediaBrowserController::class, 'index']
-    )->name('media.browser');
-
 });
-
-
-
-
- // Vision routes (new)
-    // Route::get('/about/vision', [AboutVisionController::class, 'index'])->name('about.vision.index');
-    // Route::get('/about/vision/create', [AboutVisionController::class, 'create'])->name('about.vision.create');
-    // Route::post('/about/vision', [AboutVisionController::class, 'store'])->name('about.vision.store');
-    // Route::get('/about/vision/{vision}/edit', [AboutVisionController::class, 'edit'])->name('about.vision.edit');
-    // Route::put('/about/vision/{vision}', [AboutVisionController::class, 'update'])->name('about.vision.update');
-    // Route::delete('/about/vision/{vision}', [AboutVisionController::class, 'destroy'])->name('about.vision.destroy');

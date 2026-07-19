@@ -146,7 +146,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.contacts.info') }}"
+                        <a href="{{ route('admin.about.values.index') }}"
                             class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
                             Value
                         </a>

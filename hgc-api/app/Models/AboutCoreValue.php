@@ -1,5 +1,4 @@
 <?php
-// app/Models/AboutCoreValue.php
 
 namespace App\Models;
 
@@ -38,6 +37,9 @@ class AboutCoreValue extends Model
         'sort_order' => 'integer',
     ];
 
+    /**
+     * Frontend: active values only, ordered
+     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
@@ -48,8 +50,11 @@ class AboutCoreValue extends Model
         return $query->orderBy('sort_order');
     }
 
-    public function scopeSectionHeader($query)
+    /**
+     * Get the first record's section header (shared across all values)
+     */
+    public static function getSectionHeader()
     {
-        return $query->whereNotNull('section_label_en')->first();
+        return static::first(['section_label_en', 'section_label_dari', 'section_label_pashto', 'section_title_en', 'section_title_dari', 'section_title_pashto', 'section_description_en', 'section_description_dari', 'section_description_pashto']);
     }
 }
