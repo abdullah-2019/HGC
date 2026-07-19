@@ -53,7 +53,7 @@ class ProjectController extends Controller
 
         $projects = $query->orderBy('sort_order', 'asc')
                           ->orderBy('created_at', 'desc')
-                          ->paginate(15)
+                          ->paginate(50)
                           ->withQueryString();
 
         $categories = Category::orderBy('name_en')->get();

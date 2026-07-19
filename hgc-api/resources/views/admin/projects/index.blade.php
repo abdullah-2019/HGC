@@ -120,7 +120,6 @@
                         <th scope="col" class="px-4 py-3">Location</th>
                         <th scope="col" class="px-4 py-3">Status</th>
                         <th scope="col" class="px-4 py-3">Progress</th>
-                        <th scope="col" class="px-4 py-3">Budget</th>
                         <th scope="col" class="px-4 py-3 text-center">Featured</th>
                         <th scope="col" class="px-4 py-3 text-center">Active</th>
                         <th scope="col" class="px-4 py-3 text-right">Actions</th>
@@ -132,8 +131,7 @@
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-3">
                                     @if ($project->cover_image_url)
-                                        <img src="{{ asset('storage/uploads/' . $project->cover_image_url) }}"
-                                            alt=""
+                                        <img src="{{ asset('storage/' . $project->cover_image_url) }}" alt=""
                                             class="w-10 h-10 rounded-lg object-cover border border-gray-600">
                                     @else
                                         <div
@@ -148,8 +146,6 @@
                                     @endif
                                     <div class="min-w-0">
                                         <div class="font-medium text-white truncate max-w-[180px]">{{ $project->name_en }}
-                                        </div>
-                                        <div class="text-xs text-gray-500 truncate max-w-[180px]">{{ $project->slug }}
                                         </div>
                                     </div>
                                 </div>
@@ -187,15 +183,6 @@
                                         class="text-xs font-medium text-white">{{ $project->completion_percent }}%</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
-                                @if ($project->budget_amount)
-                                    <div class="text-white font-medium">{{ number_format($project->budget_amount, 0) }}
-                                    </div>
-                                    <div class="text-xs text-gray-500">{{ $project->budget_currency }}</div>
-                                @else
-                                    <span class="text-gray-500">—</span>
-                                @endif
-                            </td>
                             <td class="px-4 py-3 text-center">
                                 <form method="POST" action="{{ route('admin.projects.toggle-featured', $project) }}"
                                     class="inline">
@@ -218,7 +205,7 @@
                                     </button>
                                 </form>
                             </td>
-                            <td class="px-4 py-3 text-center">
+                            {{-- <td class="px-4 py-3 text-center">
                                 <form method="POST" action="{{ route('admin.projects.toggle-active', $project) }}"
                                     class="inline">
                                     @csrf
@@ -241,7 +228,31 @@
                                         @endif
                                     </button>
                                 </form>
-                            </td>
+                            </td> --}}
+
+                            <td class="px-4 py-3 text-center whitespace-nowrap">
+    <!-- Centered form flex block matching your micro-toggle blueprint layout exactly -->
+    <form method="POST" action="{{ route('admin.projects.toggle-active', $project) }}" class="flex items-center justify-center w-full">
+        @csrf
+        @method('PATCH')
+
+        <!-- Micro Toggle Button Interface Track -->
+        <button type="submit"
+            style="background-color: {{ $project->is_active ? '#2563eb' : '#4b5563' }}; width: 1.75rem; height: 1rem; flex-shrink: 0;"
+            class="relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-blue-500/40 cursor-pointer">
+
+            <span class="sr-only">Toggle active status</span>
+
+            <!-- Micro White Slider Dot (Width/Height: 0.7rem with perfectly tight edge offsets) -->
+            <span style="width: 0.7rem; height: 0.7rem; flex-shrink: 0;"
+                class="inline-block transform rounded-full bg-white shadow-sm transition-transform duration-200 ease-in-out {{ $project->is_active ? 'translate-x-[0.9rem]' : 'translate-x-[0.15rem]' }}">
+            </span>
+        </button>
+    </form>
+</td>
+
+
+
                             <td class="px-4 py-3 text-right">
                                 <div class="flex items-center justify-end gap-1">
                                     <a href="{{ route('admin.projects.show', $project) }}"

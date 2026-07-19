@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Edit Project: ' . $project->name_en)
+@section('page-title', 'Edit Project')
 
 @section('content')
     <div class="p-4">
@@ -8,7 +9,7 @@
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-4">
                 @if ($project->cover_image_url)
-                    <img src="{{ asset('storage/uploads/' . $project->cover_image_url) }}" alt=""
+                    <img src="{{ asset('storage/' . $project->cover_image_url) }}" alt=""
                         class="w-16 h-16 rounded-lg object-cover border border-gray-600">
                 @endif
                 <div>
@@ -199,7 +200,7 @@
                         <div class="flex items-center gap-4">
                             @if ($project->client_logo_url)
                                 <div class="w-16 h-16 rounded-lg bg-gray-700 overflow-hidden border border-gray-600">
-                                    <img src="{{ asset('storage/uploads/' . $project->client_logo_url) }}"
+                                    <img src="{{ asset('storage/' . $project->client_logo_url) }}"
                                         alt="Client Logo" class="w-full h-full object-cover">
                                 </div>
                             @endif
@@ -381,7 +382,7 @@
                         <div class="flex items-center gap-4">
                             @if ($project->cover_image_url)
                                 <div class="w-32 h-24 rounded-lg bg-gray-700 overflow-hidden border border-gray-600">
-                                    <img src="{{ asset('storage/uploads/' . $project->cover_image_url) }}" alt="Cover"
+                                    <img src="{{ asset('storage/' . $project->cover_image_url) }}" alt="Cover"
                                         class="w-full h-full object-cover">
                                 </div>
                             @endif
@@ -405,7 +406,7 @@
                             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="existing-gallery">
                                 @foreach ($gallery as $index => $image)
                                     <div class="relative group" data-image-url="{{ $image['image_url'] ?? '' }}">
-                                        <img src="{{ str_starts_with($image['image_url'] ?? '', 'http') ? $image['image_url'] : asset('storage/uploads/' . $image['image_url']) }}"
+                                        <img src="{{ str_starts_with($image['image_url'] ?? '', 'http') ? $image['image_url'] : asset('storage/' . $image['image_url']) }}"
                                             alt="{{ $image['caption_en'] ?? '' }}"
                                             class="w-full h-24 object-cover rounded-lg border border-gray-600">
                                         <div class="mt-1 text-xs text-gray-500 truncate">{{ $image['caption_en'] ?? '' }}
