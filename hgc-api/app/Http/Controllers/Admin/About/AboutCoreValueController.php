@@ -26,6 +26,20 @@ class AboutCoreValueController extends Controller
     {
         $data = $this->validateValueData($request);
 
+        // Copy section header from first existing record
+        $first = AboutCoreValue::first();
+        if ($first) {
+            $data['section_label_en']   = $first->section_label_en;
+            $data['section_label_dari'] = $first->section_label_dari;
+            $data['section_label_pashto'] = $first->section_label_pashto;
+            $data['section_title_en']   = $first->section_title_en;
+            $data['section_title_dari'] = $first->section_title_dari;
+            $data['section_title_pashto'] = $first->section_title_pashto;
+            $data['section_description_en']   = $first->section_description_en;
+            $data['section_description_dari'] = $first->section_description_dari;
+            $data['section_description_pashto'] = $first->section_description_pashto;
+        }
+
         AboutCoreValue::create($data);
 
         return redirect()
@@ -50,7 +64,13 @@ class AboutCoreValueController extends Controller
 
     public function destroy(AboutCoreValue $value)
     {
+        $deletedSortOrder = $value->sort_order;
+
         $value->delete();
+
+        // Shift all values with higher sort_order down by 1
+        AboutCoreValue::where('sort_order', '>', $deletedSortOrder)
+            ->decrement('sort_order');
 
         return back()
             ->with('success', 'Core value deleted successfully');
@@ -70,7 +90,7 @@ class AboutCoreValueController extends Controller
             'description_pashto' => 'nullable|string',
 
             'is_active'  => 'boolean',
-            'sort_order' => 'integer',
+            'sort_order' => 'required|integer|unique:about_core_values,sort_order',
         ]);
     }
 }
