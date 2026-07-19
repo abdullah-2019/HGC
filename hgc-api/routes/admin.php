@@ -69,4 +69,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::resource('values', AboutCoreValueController::class);
     });
 
+
+    // Projects CRUD
+    Route::resource('projects', ProjectController::class);
+
+    // Additional project routes
+    Route::patch('projects/{project}/toggle-featured', [ProjectController::class, 'toggleFeatured'])
+        ->name('projects.toggle-featured');
+
+    Route::patch('projects/{project}/toggle-active', [ProjectController::class, 'toggleActive'])
+        ->name('projects.toggle-active');
+
+    Route::post('projects/{project}/gallery/delete', [ProjectController::class, 'deleteGalleryImage'])
+        ->name('projects.gallery.delete');
+        
 });

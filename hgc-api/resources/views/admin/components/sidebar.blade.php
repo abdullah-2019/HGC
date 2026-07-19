@@ -109,6 +109,19 @@
                 </a>
             </li>
 
+            <!-- ─── PROJETS ─── -->
+            <li>
+                <a href="{{ route('admin.projects.index') }}"
+                    class="flex items-center p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.projects.*') ? 'bg-gray-700' : '' }}">
+                    <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                    <span class="ms-3 truncate">Projects</span>
+                </a>
+            </li>
+
             <!-- About Dropdown -->
             <li x-data="{ open: {{ request()->routeIs('admin.about.*') ? 'true' : 'false' }} }">
                 <button @click="open = !open" type="button"
