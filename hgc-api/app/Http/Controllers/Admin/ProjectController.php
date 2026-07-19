@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ProjectRequest;
 use App\Models\Project;
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\ProjectMilestone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -157,6 +158,9 @@ class ProjectController extends Controller
 
         $project->update($data);
 
+        // Handle milestones
+        $this->processMilestones($request, $project);
+
         return redirect()
             ->route('admin.projects.index')
             ->with('success', 'Project updated successfully.');
@@ -264,17 +268,38 @@ class ProjectController extends Controller
      */
     private function processGalleryImages(Request $request, array $existingGallery = [])
     {
-        $gallery = $existingGallery;
+        $gallery = [];
+
+        // Keep existing images that weren't deleted, with updated captions
+        if ($request->has('gallery_existing_captions_en')) {
+            $existingCaptionsEn = $request->input('gallery_existing_captions_en', []);
+            $existingCaptionsDari = $request->input('gallery_existing_captions_dari', []);
+            $existingCaptionsPashto = $request->input('gallery_existing_captions_pashto', []);
+
+            foreach ($existingCaptionsEn as $index => $captionEn) {
+                if (isset($existingGallery[$index])) {
+                    $gallery[] = [
+                        'image_url' => $existingGallery[$index]['image_url'],
+                        'caption_en' => $captionEn ?? '',
+                        'caption_dari' => $existingCaptionsDari[$index] ?? '',
+                        'caption_pashto' => $existingCaptionsPashto[$index] ?? '',
+                    ];
+                }
+            }
+        }
 
         // Handle new file uploads
         if ($request->hasFile('gallery_files')) {
             foreach ($request->file('gallery_files') as $index => $file) {
-                $imageUrl = $this->uploadImage($file, 'projects/gallery');
-                $gallery[] = [
-                    'image_url' => $imageUrl,
-                    'caption_en' => $request->input("gallery_captions_en.{$index}", ''),
-                    'caption_dari' => $request->input("gallery_captions_dari.{$index}", ''),
-                ];
+                if ($file) {
+                    $imageUrl = $this->uploadImage($file, 'projects/gallery');
+                    $gallery[] = [
+                        'image_url' => $imageUrl,
+                        'caption_en' => $request->input("gallery_captions_en.{$index}", ''),
+                        'caption_dari' => $request->input("gallery_captions_dari.{$index}", ''),
+                        'caption_pashto' => $request->input("gallery_captions_pashto.{$index}", ''),
+                    ];
+                }
             }
         }
 
@@ -286,11 +311,59 @@ class ProjectController extends Controller
                         'image_url' => $url,
                         'caption_en' => $request->input("gallery_url_captions_en.{$index}", ''),
                         'caption_dari' => $request->input("gallery_url_captions_dari.{$index}", ''),
+                        'caption_pashto' => $request->input("gallery_url_captions_pashto.{$index}", ''),
                     ];
                 }
             }
         }
 
         return $gallery;
+    }
+
+    /**
+     * Process milestones (update existing, create new, delete removed)
+     */
+    private function processMilestones(Request $request, Project $project)
+    {
+        // Delete removed milestones
+        if ($request->has('milestones_delete')) {
+            $deleteIds = $request->input('milestones_delete', []);
+            ProjectMilestone::whereIn('id', $deleteIds)->where('project_id', $project->id)->delete();
+        }
+
+        // Update existing milestones
+        if ($request->has('milestones')) {
+            foreach ($request->input('milestones', []) as $milestoneId => $milestoneData) {
+                $milestone = ProjectMilestone::where('id', $milestoneId)
+                    ->where('project_id', $project->id)
+                    ->first();
+
+                if ($milestone) {
+                    $milestone->update([
+                        'title_en' => $milestoneData['title_en'] ?? null,
+                        'title_dari' => $milestoneData['title_dari'] ?? null,
+                        'title_pashto' => $milestoneData['title_pashto'] ?? null,
+                        'description' => $milestoneData['description'] ?? null,
+                        'milestone_date' => $milestoneData['milestone_date'] ?? null,
+                    ]);
+                }
+            }
+        }
+
+        // Create new milestones
+        if ($request->has('milestones_new')) {
+            foreach ($request->input('milestones_new', []) as $milestoneData) {
+                if (!empty($milestoneData['title_en']) || !empty($milestoneData['title_dari']) || !empty($milestoneData['title_pashto'])) {
+                    ProjectMilestone::create([
+                        'project_id' => $project->id,
+                        'title_en' => $milestoneData['title_en'] ?? null,
+                        'title_dari' => $milestoneData['title_dari'] ?? null,
+                        'title_pashto' => $milestoneData['title_pashto'] ?? null,
+                        'description' => $milestoneData['description'] ?? null,
+                        'milestone_date' => $milestoneData['milestone_date'] ?? null,
+                    ]);
+                }
+            }
+        }
     }
 }

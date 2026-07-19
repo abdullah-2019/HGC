@@ -200,8 +200,8 @@
                         <div class="flex items-center gap-4">
                             @if ($project->client_logo_url)
                                 <div class="w-16 h-16 rounded-lg bg-gray-700 overflow-hidden border border-gray-600">
-                                    <img src="{{ asset('storage/' . $project->client_logo_url) }}"
-                                        alt="Client Logo" class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/' . $project->client_logo_url) }}" alt="Client Logo"
+                                        class="w-full h-full object-cover">
                                 </div>
                             @endif
                             <div class="flex-1">
@@ -365,7 +365,7 @@
                 </div>
             </div>
 
-            <!-- ===== SECTION 7: IMAGES ===== -->
+            <!-- ===== SECTION 7: IMAGES & GALLERY (CARD STYLE) ===== -->
             <div class="bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
                 <div class="flex items-center gap-2 px-6 py-4 border-b border-gray-700 bg-gray-700/50 rounded-t-lg">
                     <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -402,18 +402,61 @@
                     @php $gallery = $project->gallery_images ?? []; @endphp
                     @if (count($gallery) > 0)
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-300">Existing Gallery Images</label>
-                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="existing-gallery">
+                            <label class="block mb-3 text-sm font-medium text-gray-300">Existing Gallery Images</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                                id="existing-gallery">
                                 @foreach ($gallery as $index => $image)
-                                    <div class="relative group" data-image-url="{{ $image['image_url'] ?? '' }}">
-                                        <img src="{{ str_starts_with($image['image_url'] ?? '', 'http') ? $image['image_url'] : asset('storage/' . $image['image_url']) }}"
-                                            alt="{{ $image['caption_en'] ?? '' }}"
-                                            class="w-full h-24 object-cover rounded-lg border border-gray-600">
-                                        <div class="mt-1 text-xs text-gray-500 truncate">{{ $image['caption_en'] ?? '' }}
+                                    <div class="gallery-card group bg-gray-700/50 rounded-xl border border-gray-600 overflow-hidden hover:border-gray-500 transition-all"
+                                        data-image-url="{{ $image['image_url'] ?? '' }}">
+                                        <!-- Image -->
+                                        <div class="relative aspect-[4/3] bg-gray-800 overflow-hidden">
+                                            <img src="{{ str_starts_with($image['image_url'] ?? '', 'http') ? $image['image_url'] : asset('storage/' . $image['image_url']) }}"
+                                                alt="{{ $image['caption_en'] ?? '' }}"
+                                                class="w-full h-full object-cover">
+                                            <!-- Remove Button Overlay -->
+                                            <button type="button"
+                                                onclick="deleteGalleryImage(this, '{{ $image['image_url'] ?? '' }}')"
+                                                class="absolute top-2 right-2 bg-red-500/90 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg backdrop-blur-sm">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
                                         </div>
-                                        <button type="button"
-                                            onclick="deleteGalleryImage(this, '{{ $image['image_url'] ?? '' }}')"
-                                            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-xs shadow-md hover:bg-red-600">×</button>
+                                        <!-- Captions -->
+                                        <div class="p-3 space-y-2">
+                                            <div>
+                                                <label
+                                                    class="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Caption
+                                                    (EN)</label>
+                                                <input type="text"
+                                                    name="gallery_existing_captions_en[{{ $index }}]"
+                                                    value="{{ $image['caption_en'] ?? '' }}"
+                                                    class="mt-0.5 block w-full text-xs bg-gray-700 border border-gray-600 rounded-md px-2 py-1 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                                    placeholder="English caption...">
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Caption
+                                                    (Dari)</label>
+                                                <input type="text"
+                                                    name="gallery_existing_captions_dari[{{ $index }}]"
+                                                    value="{{ $image['caption_dari'] ?? '' }}"
+                                                    class="mt-0.5 block w-full text-xs bg-gray-700 border border-gray-600 rounded-md px-2 py-1 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                                    placeholder="شرح دری..." dir="rtl">
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Caption
+                                                    (Pashto)</label>
+                                                <input type="text"
+                                                    name="gallery_existing_captions_pashto[{{ $index }}]"
+                                                    value="{{ $image['caption_pashto'] ?? '' }}"
+                                                    class="mt-0.5 block w-full text-xs bg-gray-700 border border-gray-600 rounded-md px-2 py-1 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                                    placeholder="پښتو شرح..." dir="rtl">
+                                            </div>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
@@ -423,33 +466,117 @@
                     <!-- Add New Gallery Images -->
                     <div>
                         <div class="flex items-center justify-between mb-3">
-                            <label class="block mb-2 text-sm font-medium text-gray-300 mb-0">Add New Gallery Images</label>
-                            <div class="flex gap-2">
-                                <button type="button" onclick="addGalleryRow('file')"
-                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-300 bg-blue-900/50 rounded-lg hover:bg-blue-900 border border-blue-800">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 4v16m8-8H4"></path>
-                                    </svg>
-                                    Upload File
-                                </button>
-                                <button type="button" onclick="addGalleryRow('url')"
-                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-300 bg-purple-900/50 rounded-lg hover:bg-purple-900 border border-purple-800">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
-                                        </path>
-                                    </svg>
-                                    External URL
-                                </button>
-                            </div>
+                            <label class="block text-sm font-medium text-gray-300">Add New Gallery Images</label>
+                            <button type="button" onclick="addGalleryRow()"
+                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-300 bg-blue-900/50 rounded-lg hover:bg-blue-900 border border-blue-800 transition-colors">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                Add Image
+                            </button>
                         </div>
-                        <div id="gallery-container" class="space-y-3"></div>
+                        <div id="gallery-container"
+                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- ===== SECTION 8: SEO ===== -->
+            <!-- ===== SECTION 8: PROJECT MILESTONES ===== -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
+                <div class="flex items-center gap-2 px-6 py-4 border-b border-gray-700 bg-gray-700/50 rounded-t-lg">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
+                        </path>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-white">Project Milestones</h3>
+                </div>
+                <div class="p-6 space-y-4">
+                    <!-- Existing Milestones -->
+                    @php $milestones = $project->milestones ?? collect(); @endphp
+                    @if ($milestones->count() > 0)
+                        <div id="existing-milestones" class="space-y-3">
+                            @foreach ($milestones as $milestone)
+                                <div class="milestone-row p-4 bg-gray-700/50 rounded-lg border border-gray-600"
+                                    data-milestone-id="{{ $milestone->id }}">
+                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                                        <!-- Title EN -->
+                                        <div class="md:col-span-3">
+                                            <label class="block mb-1 text-xs font-medium text-gray-400">Title (EN)</label>
+                                            <input type="text" name="milestones[{{ $milestone->id }}][title_en]"
+                                                value="{{ old('milestones.' . $milestone->id . '.title_en', $milestone->title_en) }}"
+                                                class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="Milestone title...">
+                                        </div>
+                                        <!-- Title Dari -->
+                                        <div class="md:col-span-3">
+                                            <label class="block mb-1 text-xs font-medium text-gray-400">Title
+                                                (Dari)</label>
+                                            <input type="text" name="milestones[{{ $milestone->id }}][title_dari]"
+                                                value="{{ old('milestones.' . $milestone->id . '.title_dari', $milestone->title_dari) }}"
+                                                class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="عنوان دری..." dir="rtl">
+                                        </div>
+                                        <!-- Title Pashto -->
+                                        <div class="md:col-span-3">
+                                            <label class="block mb-1 text-xs font-medium text-gray-400">Title
+                                                (Pashto)</label>
+                                            <input type="text" name="milestones[{{ $milestone->id }}][title_pashto]"
+                                                value="{{ old('milestones.' . $milestone->id . '.title_pashto', $milestone->title_pashto) }}"
+                                                class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="پښتو عنوان..." dir="rtl">
+                                        </div>
+                                        <!-- Date & Actions -->
+                                        <div class="md:col-span-3 flex gap-3 items-end">
+                                            <div class="flex-1">
+                                                <label class="block mb-1 text-xs font-medium text-gray-400">Date</label>
+                                                <input type="date"
+                                                    name="milestones[{{ $milestone->id }}][milestone_date]"
+                                                    value="{{ old('milestones.' . $milestone->id . '.milestone_date', $milestone->milestone_date?->format('Y-m-d')) }}"
+                                                    class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500">
+                                            </div>
+                                            <button type="button" onclick="removeMilestoneRow(this)"
+                                                class="mb-0.5 text-red-400 hover:text-red-300 transition-colors p-2 rounded-lg hover:bg-red-900/30"
+                                                title="Remove milestone">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <!-- Description -->
+                                        <div class="md:col-span-12">
+                                            <label class="block mb-1 text-xs font-medium text-gray-400">Description</label>
+                                            <textarea name="milestones[{{ $milestone->id }}][description]" rows="2"
+                                                class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="Milestone description...">{{ old('milestones.' . $milestone->id . '.description', $milestone->description) }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div id="existing-milestones" class="space-y-3"></div>
+                        <p id="no-milestones-msg" class="text-sm text-gray-500 italic">No milestones yet. Click below to
+                            add one.</p>
+                    @endif
+
+                    <!-- Add New Milestone Button -->
+                    <button type="button" onclick="addMilestoneRow()"
+                        class="w-full py-3 border-2 border-dashed border-gray-600 rounded-lg text-gray-400 hover:text-blue-400 hover:border-blue-500/50 hover:bg-blue-900/20 transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Add New Milestone
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== SECTION 9: SEO ===== -->
             <div class="bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
                 <div class="flex items-center gap-2 px-6 py-4 border-b border-gray-700 bg-gray-700/50 rounded-t-lg">
                     <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -500,97 +627,79 @@
 @section('scripts')
     <script>
         let galleryIndex = 0;
+        let milestoneIndex = 0;
 
-        function addGalleryRow(type = 'file') {
+        // ===== GALLERY FUNCTIONS =====
+        function addGalleryRow() {
             const container = document.getElementById('gallery-container');
             const row = document.createElement('div');
-            row.className = 'gallery-row p-4 bg-gray-700/50 rounded-lg border border-gray-600';
+            row.className =
+                'gallery-card bg-gray-700/50 rounded-xl border border-gray-600 overflow-hidden hover:border-gray-500 transition-all';
             row.dataset.index = galleryIndex;
 
-            if (type === 'file') {
-                row.innerHTML = `
-                <div class="flex items-start gap-4">
-                    <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="md:col-span-1">
-                            <label class="block mb-2 text-xs font-medium text-gray-400">Image File</label>
-                            <input type="file" name="gallery_files[${galleryIndex}]" accept="image/*"
-                                   class="block w-full text-sm text-gray-400 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-600 file:text-white hover:file:bg-gray-500"
-                                   onchange="previewGalleryImage(this, ${galleryIndex})">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-xs font-medium text-gray-400">Caption (EN)</label>
-                            <input type="text" name="gallery_captions_en[${galleryIndex}]"
-                                   class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
-                                   placeholder="English caption...">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-xs font-medium text-gray-400">Caption (Dari)</label>
-                            <input type="text" name="gallery_captions_dari[${galleryIndex}]"
-                                   class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
-                                   placeholder="شرح دری..." dir="rtl">
-                        </div>
+            row.innerHTML = `
+                <!-- Image Preview -->
+                <div class="relative aspect-[4/3] bg-gray-800 overflow-hidden group">
+                    <div id="gallery-preview-${galleryIndex}" class="w-full h-full flex items-center justify-center text-gray-600">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
                     </div>
-                    <div class="flex flex-col gap-2">
-                        <div id="gallery-preview-${galleryIndex}" class="w-20 h-16 rounded-lg bg-gray-600 overflow-hidden hidden">
-                            <img src="" alt="" class="w-full h-full object-cover">
-                        </div>
-                        <button type="button" onclick="removeGalleryRow(this)"
-                                class="text-red-400 hover:text-red-300 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            `;
-            } else {
-                row.innerHTML = `
-                <div class="flex items-start gap-4">
-                    <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="md:col-span-1">
-                            <label class="block mb-2 text-xs font-medium text-gray-400">Image URL</label>
-                            <input type="url" name="gallery_urls[${galleryIndex}]"
-                                   class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
-                                   placeholder="https://example.com/image.jpg">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-xs font-medium text-gray-400">Caption (EN)</label>
-                            <input type="text" name="gallery_url_captions_en[${galleryIndex}]"
-                                   class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
-                                   placeholder="English caption...">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-xs font-medium text-gray-400">Caption (Dari)</label>
-                            <input type="text" name="gallery_url_captions_dari[${galleryIndex}]"
-                                   class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
-                                   placeholder="شرح دری..." dir="rtl">
-                        </div>
-                    </div>
+                    <img id="gallery-preview-img-${galleryIndex}" src="" alt="" class="w-full h-full object-cover hidden">
+                    <!-- Remove Button -->
                     <button type="button" onclick="removeGalleryRow(this)"
-                            class="mt-6 text-red-400 hover:text-red-300 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        class="absolute top-2 right-2 bg-red-500/90 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg backdrop-blur-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
+                <!-- File Input -->
+                <div class="p-3">
+                    <label class="block mb-1.5 text-[10px] font-medium text-gray-500 uppercase tracking-wider">Image File</label>
+                    <input type="file" name="gallery_files[${galleryIndex}]" accept="image/*"
+                        class="block w-full text-xs text-gray-400 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-600 file:text-white hover:file:bg-gray-500"
+                        onchange="previewGalleryImage(this, ${galleryIndex})">
+                </div>
+                <!-- Captions -->
+                <div class="px-3 pb-3 space-y-2">
+                    <div>
+                        <label class="block mb-0.5 text-[10px] font-medium text-gray-500 uppercase tracking-wider">Caption (EN)</label>
+                        <input type="text" name="gallery_captions_en[${galleryIndex}]"
+                            class="block w-full text-xs bg-gray-700 border border-gray-600 rounded-md px-2 py-1 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="English caption...">
+                    </div>
+                    <div>
+                        <label class="block mb-0.5 text-[10px] font-medium text-gray-500 uppercase tracking-wider">Caption (Dari)</label>
+                        <input type="text" name="gallery_captions_dari[${galleryIndex}]"
+                            class="block w-full text-xs bg-gray-700 border border-gray-600 rounded-md px-2 py-1 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="شرح دری..." dir="rtl">
+                    </div>
+                    <div>
+                        <label class="block mb-0.5 text-[10px] font-medium text-gray-500 uppercase tracking-wider">Caption (Pashto)</label>
+                        <input type="text" name="gallery_captions_pashto[${galleryIndex}]"
+                            class="block w-full text-xs bg-gray-700 border border-gray-600 rounded-md px-2 py-1 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="پښتو شرح..." dir="rtl">
+                    </div>
+                </div>
             `;
-            }
 
             container.appendChild(row);
             galleryIndex++;
         }
 
         function previewGalleryImage(input, index) {
-            const preview = document.getElementById(`gallery-preview-${index}`);
-            const img = preview.querySelector('img');
+            const placeholder = document.getElementById(`gallery-preview-${index}`);
+            const img = document.getElementById(`gallery-preview-img-${index}`);
             if (input.files && input.files[0]) {
                 img.src = URL.createObjectURL(input.files[0]);
-                preview.classList.remove('hidden');
+                img.classList.remove('hidden');
+                placeholder.classList.add('hidden');
             }
         }
 
         function removeGalleryRow(btn) {
-            btn.closest('.gallery-row').remove();
+            btn.closest('.gallery-card').remove();
         }
 
         function previewCoverImage(input) {
@@ -611,7 +720,7 @@
         function deleteGalleryImage(btn, imageUrl) {
             if (!confirm('Are you sure you want to delete this gallery image?')) return;
 
-            const item = btn.closest('.relative');
+            const card = btn.closest('.gallery-card');
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             fetch('{{ route('admin.projects.gallery.delete', $project) }}', {
@@ -628,7 +737,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        item.remove();
+                        card.remove();
                         const gallery = document.getElementById('existing-gallery');
                         if (gallery && gallery.children.length === 0) {
                             gallery.innerHTML = '<p class="text-sm text-gray-500 col-span-full">No gallery images</p>';
@@ -639,6 +748,95 @@
                     console.error('Error:', error);
                     alert('Failed to delete image. Please try again.');
                 });
+        }
+
+        // ===== MILESTONE FUNCTIONS =====
+        function addMilestoneRow() {
+            const container = document.getElementById('existing-milestones');
+            const noMsg = document.getElementById('no-milestones-msg');
+            if (noMsg) noMsg.remove();
+
+            const row = document.createElement('div');
+            row.className = 'milestone-row p-4 bg-gray-700/50 rounded-lg border border-gray-600';
+            row.dataset.newIndex = milestoneIndex;
+
+            row.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                    <!-- Title EN -->
+                    <div class="md:col-span-3">
+                        <label class="block mb-1 text-xs font-medium text-gray-400">Title (EN)</label>
+                        <input type="text" name="milestones_new[${milestoneIndex}][title_en]"
+                            class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Milestone title...">
+                    </div>
+                    <!-- Title Dari -->
+                    <div class="md:col-span-3">
+                        <label class="block mb-1 text-xs font-medium text-gray-400">Title (Dari)</label>
+                        <input type="text" name="milestones_new[${milestoneIndex}][title_dari]"
+                            class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="عنوان دری..." dir="rtl">
+                    </div>
+                    <!-- Title Pashto -->
+                    <div class="md:col-span-3">
+                        <label class="block mb-1 text-xs font-medium text-gray-400">Title (Pashto)</label>
+                        <input type="text" name="milestones_new[${milestoneIndex}][title_pashto]"
+                            class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="پښتو عنوان..." dir="rtl">
+                    </div>
+                    <!-- Date & Actions -->
+                    <div class="md:col-span-3 flex gap-3 items-end">
+                        <div class="flex-1">
+                            <label class="block mb-1 text-xs font-medium text-gray-400">Date</label>
+                            <input type="date" name="milestones_new[${milestoneIndex}][milestone_date]"
+                                class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <button type="button" onclick="removeMilestoneRow(this)"
+                            class="mb-0.5 text-red-400 hover:text-red-300 transition-colors p-2 rounded-lg hover:bg-red-900/30"
+                            title="Remove milestone">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Description -->
+                    <div class="md:col-span-12">
+                        <label class="block mb-1 text-xs font-medium text-gray-400">Description</label>
+                        <textarea name="milestones_new[${milestoneIndex}][description]" rows="2"
+                            class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Milestone description..."></textarea>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(row);
+            milestoneIndex++;
+        }
+
+        function removeMilestoneRow(btn) {
+            const row = btn.closest('.milestone-row');
+            const container = document.getElementById('existing-milestones');
+
+            // If it's an existing milestone, mark it for deletion
+            const milestoneId = row.dataset.milestoneId;
+            if (milestoneId) {
+                // Add hidden input to mark for deletion
+                const deleteInput = document.createElement('input');
+                deleteInput.type = 'hidden';
+                deleteInput.name = 'milestones_delete[]';
+                deleteInput.value = milestoneId;
+                document.querySelector('form').appendChild(deleteInput);
+            }
+
+            row.remove();
+
+            // Show "no milestones" message if empty
+            if (container.children.length === 0) {
+                const noMsg = document.createElement('p');
+                noMsg.id = 'no-milestones-msg';
+                noMsg.className = 'text-sm text-gray-500 italic';
+                noMsg.textContent = 'No milestones yet. Click below to add one.';
+                container.parentNode.insertBefore(noMsg, container.nextSibling);
+            }
         }
     </script>
 @endsection
