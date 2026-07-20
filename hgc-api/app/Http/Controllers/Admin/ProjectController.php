@@ -246,8 +246,7 @@ class ProjectController extends Controller
     private function uploadImage($file, $directory)
     {
         $filename = Str::uuid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs("uploads/{$directory}", $filename, 'public');
-        return str_replace('uploads/', '', $path);
+        return $file->storeAs("uploads/{$directory}", $filename, 'public');
     }
 
     /**
@@ -259,7 +258,7 @@ class ProjectController extends Controller
 
         // Only delete local files, not external URLs
         if (!str_starts_with($path, 'http')) {
-            Storage::disk('public')->delete('uploads/' . $path);
+            Storage::disk('public')->delete($path);
         }
     }
 
@@ -270,7 +269,7 @@ class ProjectController extends Controller
     {
         $gallery = [];
 
-        // Keep existing images that weren't deleted, with updated captions
+        // Keep existing images with updated captions
         if ($request->has('gallery_existing_captions_en')) {
             $existingCaptionsEn = $request->input('gallery_existing_captions_en', []);
             $existingCaptionsDari = $request->input('gallery_existing_captions_dari', []);
