@@ -1,4 +1,4 @@
-<!-- Mobile overlay: z-30, behind sidebar -->
+\\\\<!-- Mobile overlay: z-30, behind sidebar -->
 <div class="fixed inset-0 z-30 bg-gray-900/70 backdrop-blur-sm sm:hidden" x-show="sidebarOpen" @click="sidebarOpen = false"
     x-transition:enter="transition-opacity ease-out duration-200" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in duration-150"
@@ -109,14 +109,14 @@
                 </a>
             </li>
 
-            <!-- ─── PROJETS ─── -->
+            <!-- ─── PROJECTS ─── -->
             <li>
                 <a href="{{ route('admin.projects.index') }}"
                     class="flex items-center p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.projects.*') ? 'bg-gray-700' : '' }}">
                     <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                     </svg>
                     <span class="ms-3 truncate">Projects</span>
                 </a>
@@ -125,7 +125,7 @@
             <!-- About Dropdown -->
             <li x-data="{ open: {{ request()->routeIs('admin.about.*') ? 'true' : 'false' }} }">
                 <button @click="open = !open" type="button"
-                    class="flex items-center w-full p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-gray-700' : '' }}">
+                    class="flex items-center w-full p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.about.*') ? 'bg-gray-700' : '' }}">
                     <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -141,33 +141,27 @@
                 <ul x-show="open" x-collapse class="py-2 space-y-1">
                     <li>
                         <a href="{{ route('admin.about.carousel.index') }}"
-                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.submissions') ? 'bg-gray-700 text-white' : '' }}">
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.about.carousel.*') ? 'bg-gray-700 text-white' : '' }}">
                             Carousel
                         </a>
                     </li>
 
                     <li>
                         <a href="{{ route('admin.about.mission.index') }}"
-                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.about.mission.*') ? 'bg-gray-700 text-white' : '' }}">
                             Mission
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.about.vision.index') }}"
-                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.about.vision.*') ? 'bg-gray-700 text-white' : '' }}">
                             Vision
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.about.values.index') }}"
-                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.about.values.*') ? 'bg-gray-700 text-white' : '' }}">
                             Value
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.contacts.info') }}"
-                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.contacts.info') ? 'bg-gray-700 text-white' : '' }}">
-                            Story Highlight
                         </a>
                     </li>
                 </ul>
@@ -211,19 +205,6 @@
                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <span class="ms-3 truncate">Settings</span>
-                </a>
-            </li>
-
-            <!-- About Page -->
-            <li>
-                <a href="{{ route('admin.about.edit') }}"
-                    class="flex items-center p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.about.*') ? 'bg-gray-700' : '' }}">
-                    <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span class="ms-3 truncate">About Page</span>
                 </a>
             </li>
 
