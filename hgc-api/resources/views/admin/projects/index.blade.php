@@ -229,7 +229,7 @@
                             </td>
 
                             <td class="px-4 py-3 text-center whitespace-nowrap">
-                                <p>{{$project->sort_order}}</p>
+                                <p>{{ $project->sort_order }}</p>
                             </td>
 
                             <td class="px-4 py-3 text-right">
@@ -254,60 +254,27 @@
                                             </path>
                                         </svg>
                                     </a>
-                                    <button type="button" data-modal-target="delete-modal-{{ $project->id }}"
-                                        data-modal-toggle="delete-modal-{{ $project->id }}"
-                                        class="inline-flex items-center p-2 text-sm font-medium text-red-400 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 hover:text-red-300 focus:z-10 focus:ring-2 focus:ring-red-500 transition-colors"
-                                        title="Delete">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                            </path>
-                                        </svg>
-                                    </button>
+
+
+                                    <form method="POST" action="{{ route('admin.projects.destroy', $project) }}"
+                                        class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            onclick="return confirm('Are you sure you want to delete &quot;{{ addslashes($project->name_en) }}&quot;? This action cannot be undone.')"
+                                            class="inline-flex items-center p-2 text-sm font-medium text-red-400 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 hover:text-red-300 focus:z-10 focus:ring-2 focus:ring-red-500 transition-colors"
+                                            title="Delete">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
-
-                        <!-- Delete Modal -->
-                        <div id="delete-modal-{{ $project->id }}" tabindex="-1" aria-hidden="true"
-                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                            <div class="relative p-4 w-full max-w-md max-h-full">
-                                <div class="relative bg-gray-800 rounded-lg shadow border border-gray-700">
-                                    <button type="button" data-modal-hide="delete-modal-{{ $project->id }}"
-                                        class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-700 hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
-                                        <svg class="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                        </svg>
-                                    </button>
-                                    <div class="p-4 md:p-5 text-center">
-                                        <svg class="mx-auto mb-4 text-gray-500 w-12 h-12" aria-hidden="true"
-                                            fill="none" viewBox="0 0 20 20">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                        <h3 class="mb-5 text-lg font-normal text-gray-400">
-                                            Are you sure you want to delete <strong
-                                                class="text-white">{{ $project->name_en }}</strong>?
-                                        </h3>
-                                        <form method="POST" action="{{ route('admin.projects.destroy', $project) }}"
-                                            class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                                Yes, delete it
-                                            </button>
-                                        </form>
-                                        <button data-modal-hide="delete-modal-{{ $project->id }}" type="button"
-                                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-300 focus:outline-none bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-700">
-                                            No, cancel
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     @empty
                         <tr>
                             <td colspan="9" class="px-4 py-8 text-center text-gray-500">
@@ -333,4 +300,6 @@
             </div>
         @endif
     </div>
+
+
 @endsection
