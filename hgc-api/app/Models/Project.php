@@ -14,33 +14,59 @@ class Project extends Model
     protected $table = 'projects';
 
     protected $fillable = [
+        // Basic
         'slug',
         'name_en',
         'name_dari',
         'name_pashto',
+
+        // Categorization
+        'category_id',
+        'company_id',
+
+        // Location
         'location_en',
         'location_dari',
         'location_pashto',
-        'province',
+        'province_en',
+        'province_dari',
+        'province_pashto',
+
+        // Client
         'client_name_en',
         'client_name_dari',
+        'client_name_pashto',
         'client_logo_url',
+
+        // Financial & Timeline
         'budget_amount',
         'budget_currency',
         'start_date',
         'end_date',
         'duration_text',
-        'category_id',
-        'company_id',
+
+        // Content
         'description_en',
         'description_dari',
         'description_pashto',
+
+        // Status
         'status',
         'completion_percent',
+
+        // Media
         'cover_image_url',
         'gallery_images',
+
+        // SEO
         'meta_title_en',
         'meta_desc_en',
+        'meta_title_dari',
+        'meta_desc_dari',
+        'meta_title_pashto',
+        'meta_desc_pashto',
+
+        // Settings
         'is_featured',
         'is_active',
         'sort_order',

@@ -5,7 +5,7 @@
         </svg>
         <div>
             <span class="font-bold tracking-wide block mb-1 text-red-400">Please correct the following errors:</span>
-            <ul class="mt-1.5 list-disc list-inside space-y-1 text-xs text-red-400">
+            <ul class="mt-1.5 list-disc list-inside space-y-1 text-xs text-red-500">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach

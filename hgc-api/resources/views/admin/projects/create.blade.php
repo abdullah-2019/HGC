@@ -4,6 +4,8 @@
 @section('page-title', 'Create Project')
 
 @section('content')
+
+    @include('admin.error-alert')
     <div class="p-4">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
