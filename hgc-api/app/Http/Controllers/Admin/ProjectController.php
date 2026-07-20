@@ -102,6 +102,9 @@ class ProjectController extends Controller
 
         $project = Project::create($data);
 
+        // Handle milestones
+        $this->processMilestones($request, $project);
+
         return redirect()
             ->route('admin.projects.index')
             ->with('success', 'Project created successfully.');

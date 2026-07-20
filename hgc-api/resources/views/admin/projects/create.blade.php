@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Create Project')
+@section('page-title', 'Create Project')
 
 @section('content')
     <div class="p-4">
@@ -33,17 +34,6 @@
                     <h3 class="text-lg font-semibold text-white">Basic Information</h3>
                 </div>
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="md:col-span-2">
-                        <label for="slug" class="block mb-2 text-sm font-medium text-gray-300">Slug <span
-                                class="text-gray-500 text-xs">(Auto-generated if empty)</span></label>
-                        <input type="text" id="slug" name="slug" value="{{ old('slug') }}"
-                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400 @error('slug') border-red-500 bg-red-900/20 @enderror"
-                            placeholder="e.g., kabul-kandahar-highway">
-                        @error('slug')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <div>
                         <label for="name_en" class="block mb-2 text-sm font-medium text-gray-300">Project Name (English)
                             <span class="text-red-400">*</span></label>
@@ -51,6 +41,17 @@
                             class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400 @error('name_en') border-red-500 bg-red-900/20 @enderror"
                             placeholder="e.g., Kabul-Kandahar Highway Rehabilitation">
                         @error('name_en')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label for="slug" class="block mb-2 text-sm font-medium text-gray-300">Slug <span
+                                class="text-gray-500 text-xs">(Auto-generated if empty)</span></label>
+                        <input type="text" id="slug" name="slug" value="{{ old('slug') }}"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400 @error('slug') border-red-500 bg-red-900/20 @enderror"
+                            placeholder="e.g., kabul-kandahar-highway">
+                        @error('slug')
                             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
@@ -125,12 +126,6 @@
                             placeholder="e.g., Kabul to Kandahar">
                     </div>
                     <div>
-                        <label for="province" class="block mb-2 text-sm font-medium text-gray-300">Province</label>
-                        <input type="text" id="province" name="province" value="{{ old('province') }}"
-                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
-                            placeholder="e.g., Multi-Province">
-                    </div>
-                    <div>
                         <label for="location_dari" class="block mb-2 text-sm font-medium text-gray-300">Location
                             (Dari)</label>
                         <input type="text" id="location_dari" name="location_dari"
@@ -146,6 +141,29 @@
                             class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
                             placeholder="کابل تر کندهار" dir="rtl">
                     </div>
+                    <div>
+                        <label for="province_en" class="block mb-2 text-sm font-medium text-gray-300">Province
+                            (English)</label>
+                        <input type="text" id="province_en" name="province_en" value="{{ old('province_en') }}"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                            placeholder="e.g., Multi-Province">
+                    </div>
+                    <div>
+                        <label for="province_dari" class="block mb-2 text-sm font-medium text-gray-300">Province
+                            (Dari)</label>
+                        <input type="text" id="province_dari" name="province_dari"
+                            value="{{ old('province_dari') }}"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                            placeholder="ولایت" dir="rtl">
+                    </div>
+                    <div>
+                        <label for="province_pashto" class="block mb-2 text-sm font-medium text-gray-300">Province
+                            (Pashto)</label>
+                        <input type="text" id="province_pashto" name="province_pashto"
+                            value="{{ old('province_pashto') }}"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                            placeholder="ولایت" dir="rtl">
+                    </div>
                 </div>
             </div>
 
@@ -159,7 +177,7 @@
                     </svg>
                     <h3 class="text-lg font-semibold text-white">Client Information</h3>
                 </div>
-                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label for="client_name_en" class="block mb-2 text-sm font-medium text-gray-300">Client Name
                             (English)</label>
@@ -176,7 +194,15 @@
                             class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
                             placeholder="وزارت کارهای عامه" dir="rtl">
                     </div>
-                    <div class="md:col-span-2">
+                    <div>
+                        <label for="client_name_pashto" class="block mb-2 text-sm font-medium text-gray-300">Client Name
+                            (Pashto)</label>
+                        <input type="text" id="client_name_pashto" name="client_name_pashto"
+                            value="{{ old('client_name_pashto') }}"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                            placeholder="د عامه کارونو وزارت" dir="rtl">
+                    </div>
+                    <div class="md:col-span-3">
                         <label for="client_logo" class="block mb-2 text-sm font-medium text-gray-300">Client Logo</label>
                         <input type="file" id="client_logo" name="client_logo" accept="image/*"
                             class="block w-full text-sm text-gray-400 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-600 file:text-white hover:file:bg-gray-500">
@@ -212,10 +238,10 @@
                                 class="text-red-400">*</span></label>
                         <select id="budget_currency" name="budget_currency" required
                             class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option value="USD" class="bg-gray-700"
-                                {{ old('budget_currency', 'USD') == 'USD' ? 'selected' : '' }}>USD</option>
                             <option value="AFN" class="bg-gray-700"
-                                {{ old('budget_currency') == 'AFN' ? 'selected' : '' }}>AFN</option>
+                                {{ old('budget_currency', 'AFN') == 'AFN' ? 'selected' : '' }}>AFN</option>
+                            <option value="USD" class="bg-gray-700"
+                                {{ old('budget_currency') == 'USD' ? 'selected' : '' }}>USD</option>
                             <option value="EUR" class="bg-gray-700"
                                 {{ old('budget_currency') == 'EUR' ? 'selected' : '' }}>EUR</option>
                         </select>
@@ -317,23 +343,33 @@
                             placeholder="0">
                     </div>
                     <div class="flex items-center gap-6 pt-7">
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="is_featured" value="1"
-                                {{ old('is_featured') ? 'checked' : '' }} class="sr-only peer">
-                            <div
-                                class="relative w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
-                            </div>
-                            <span class="ms-3 text-sm font-medium text-gray-300">Featured</span>
-                        </label>
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="is_active" value="1" checked
-                                {{ old('is_active') ? 'checked' : '' }} class="sr-only peer">
-                            <div
-                                class="relative w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
-                            </div>
-                            <span class="ms-3 text-sm font-medium text-gray-300">Active</span>
-                        </label>
+
+                        <!-- 1. FEATURED CHECKBOX -->
+                        <div>
+                            <input type="hidden" name="is_featured" value="0">
+                            <label class="inline-flex items-center cursor-pointer select-none">
+                                <input type="checkbox" name="is_featured" value="1"
+                                    {{ old('is_featured') ? 'checked' : '' }}
+                                    class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2 focus:outline-none cursor-pointer">
+                                <span
+                                    class="ms-2.5 text-sm font-medium text-gray-300 hover:text-white transition-colors">&nbsp;Featured</span>
+                            </label>
+                        </div>
+
+                        <!-- 2. ACTIVE CHECKBOX -->
+                        <div>
+                            <input type="hidden" name="is_active" value="0">
+                            <label class="inline-flex items-center cursor-pointer select-none">
+                                <input type="checkbox" name="is_active" value="1"
+                                    {{ old('is_active', true) ? 'checked' : '' }}
+                                    class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2 focus:outline-none cursor-pointer">
+                                <span
+                                    class="ms-2.5 text-sm font-medium text-gray-300 hover:text-white transition-colors">&nbsp;Active</span>
+                            </label>
+                        </div>
+
                     </div>
+
                 </div>
             </div>
 
@@ -392,7 +428,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div id="gallery-container" class="space-y-3"></div>
+                        <div id="gallery-container" class="space-y-3" style="margin-top: 10px;"></div>
                         <p class="mt-2 text-xs text-gray-500">You can upload files or paste external image URLs</p>
                         @error('gallery_files')
                             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
@@ -404,7 +440,32 @@
                 </div>
             </div>
 
-            <!-- ===== SECTION 8: SEO ===== -->
+            <!-- ===== SECTION 8: PROJECT MILESTONES ===== -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
+                <div class="flex items-center gap-2 px-6 py-4 border-b border-gray-700 bg-gray-700/50 rounded-t-lg">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    <h3 class="text-lg font-semibold text-white">Project Milestones</h3>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div id="milestones-wrapper" class="space-y-3">
+                        <p id="no-milestones-msg" class="text-sm text-gray-500 italic py-2">No milestones yet. Click below
+                            to add one.</p>
+                    </div>
+                    <button type="button" onclick="addMilestone()"
+                        class="w-full py-3 border-2 border-dashed border-gray-600 rounded-lg text-gray-400 hover:text-blue-400 hover:border-blue-500/50 hover:bg-blue-900/20 transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Add New Milestone
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== SECTION 9: SEO ===== -->
             <div class="bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
                 <div class="flex items-center gap-2 px-6 py-4 border-b border-gray-700 bg-gray-700/50 rounded-t-lg">
                     <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -432,6 +493,41 @@
                             placeholder="SEO description...">{{ old('meta_desc_en') }}</textarea>
                         <p class="mt-1 text-xs text-gray-500">Max 300 characters</p>
                     </div>
+                    <div>
+                        <label for="meta_title_dari" class="block mb-2 text-sm font-medium text-gray-300">Meta Title
+                            (Dari)</label>
+                        <input type="text" id="meta_title_dari" name="meta_title_dari"
+                            value="{{ old('meta_title_dari') }}"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                            placeholder="عنوان سئو..." maxlength="150" dir="rtl">
+                        <p class="mt-1 text-xs text-gray-500">Max 150 characters</p>
+                    </div>
+                    <div>
+                        <label for="meta_desc_dari" class="block mb-2 text-sm font-medium text-gray-300">Meta Description
+                            (Dari)</label>
+                        <textarea id="meta_desc_dari" name="meta_desc_dari" rows="3" maxlength="300"
+                            class="block p-2.5 w-full text-sm text-white bg-gray-700 rounded-lg border border-gray-600 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                            placeholder="توضیحات سئو..." dir="rtl">{{ old('meta_desc_dari') }}</textarea>
+                        <p class="mt-1 text-xs text-gray-500">Max 300 characters</p>
+                    </div>
+                    <div>
+                        <label for="meta_title_pashto" class="block mb-2 text-sm font-medium text-gray-300">Meta Title
+                            (Pashto)</label>
+                        <input type="text" id="meta_title_pashto" name="meta_title_pashto"
+                            value="{{ old('meta_title_pashto') }}"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+                            placeholder="د سئو سرلیک..." maxlength="150" dir="rtl">
+                        <p class="mt-1 text-xs text-gray-500">Max 150 characters</p>
+                    </div>
+                    <div>
+                        <label for="meta_desc_pashto" class="block mb-2 text-sm font-medium text-gray-300">Meta
+                            Description
+                            (Pashto)</label>
+                        <textarea id="meta_desc_pashto" name="meta_desc_pashto" rows="3" maxlength="300"
+                            class="block p-2.5 w-full text-sm text-white bg-gray-700 rounded-lg border border-gray-600 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                            placeholder="د سئو تشریح..." dir="rtl">{{ old('meta_desc_pashto') }}</textarea>
+                        <p class="mt-1 text-xs text-gray-500">Max 300 characters</p>
+                    </div>
                 </div>
             </div>
 
@@ -450,45 +546,66 @@
                 </button>
             </div>
         </form>
-    </div>
-@endsection
 
-@section('scripts')
-    <script>
-        // Auto-generate slug from name
-        document.getElementById('name_en').addEventListener('blur', function() {
-            const slugField = document.getElementById('slug');
-            if (!slugField.value) {
-                slugField.value = this.value.toLowerCase()
-                    .replace(/[^\w\s-]/g, '')
-                    .replace(/[\s_]+/g, '-')
-                    .replace(/^-+|-+$/g, '');
+
+        <script>
+            // Real-time slug generation from name_en
+            (function() {
+                const nameInput = document.getElementById('name_en');
+                const slugInput = document.getElementById('slug');
+
+                if (!nameInput || !slugInput) return;
+
+                nameInput.addEventListener('input', function() {
+                    const slug = this.value
+                        .toLowerCase()
+                        .trim()
+                        .replace(/[^\w\s-]/g, '') // remove symbols (keep letters, numbers, spaces, hyphens)
+                        .replace(/[\s_]+/g, '-') // replace spaces/underscores with single hyphen
+                        .replace(/^-+|-+$/g, '') // trim leading/trailing hyphens
+                        .replace(/-+/g, '-'); // collapse multiple hyphens into one
+
+                    slugInput.value = slug;
+                });
+            })();
+        </script>
+
+        <script>
+            // Auto-generate slug from name
+            // document.getElementById('name_en').addEventListener('blur', function() {
+            //     const slugField = document.getElementById('slug');
+            //     if (!slugField.value) {
+            //         slugField.value = this.value.toLowerCase()
+            //             .replace(/[^\w\s-]/g, '')
+            //             .replace(/[\s_]+/g, '-')
+            //             .replace(/^-+|-+$/g, '');
+            //     }
+            // });
+
+            // Cover image preview
+            function previewCover(input) {
+                const preview = document.getElementById('cover-preview');
+                const img = preview.querySelector('img');
+                if (input.files && input.files[0]) {
+                    img.src = URL.createObjectURL(input.files[0]);
+                    preview.classList.remove('hidden');
+                }
             }
-        });
 
-        // Cover image preview
-        function previewCover(input) {
-            const preview = document.getElementById('cover-preview');
-            const img = preview.querySelector('img');
-            if (input.files && input.files[0]) {
-                img.src = URL.createObjectURL(input.files[0]);
-                preview.classList.remove('hidden');
-            }
-        }
+            // Gallery management
+            let galleryIndex = 0;
 
-        // Gallery management
-        let galleryIndex = 0;
+            function addGalleryRow(type = 'file') {
+                const container = document.getElementById('gallery-container');
+                if (!container) return;
+                const row = document.createElement('div');
+                row.className = 'gallery-row p-4 bg-gray-700/50 rounded-lg border border-gray-600';
+                row.dataset.index = galleryIndex;
 
-        function addGalleryRow(type = 'file') {
-            const container = document.getElementById('gallery-container');
-            const row = document.createElement('div');
-            row.className = 'gallery-row p-4 bg-gray-700/50 rounded-lg border border-gray-600';
-            row.dataset.index = galleryIndex;
-
-            if (type === 'file') {
-                row.innerHTML = `
+                if (type === 'file') {
+                    row.innerHTML = `
                 <div class="flex items-start gap-4">
-                    <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="md:col-span-1">
                             <label class="block mb-2 text-xs font-medium text-gray-400">Image File</label>
                             <input type="file" name="gallery_files[${galleryIndex}]" accept="image/*"
@@ -507,6 +624,12 @@
                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
                                    placeholder="شرح دری..." dir="rtl">
                         </div>
+                        <div>
+                            <label class="block mb-2 text-xs font-medium text-gray-400">Caption (Pashto)</label>
+                            <input type="text" name="gallery_captions_pashto[${galleryIndex}]"
+                                   class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
+                                   placeholder="پښتو شرح..." dir="rtl">
+                        </div>
                     </div>
                     <div class="flex flex-col gap-2">
                         <div id="gallery-preview-${galleryIndex}" class="w-20 h-16 rounded-lg bg-gray-600 overflow-hidden hidden">
@@ -521,10 +644,10 @@
                     </div>
                 </div>
             `;
-            } else {
-                row.innerHTML = `
+                } else {
+                    row.innerHTML = `
                 <div class="flex items-start gap-4">
-                    <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="md:col-span-1">
                             <label class="block mb-2 text-xs font-medium text-gray-400">Image URL</label>
                             <input type="url" name="gallery_urls[${galleryIndex}]"
@@ -543,6 +666,12 @@
                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
                                    placeholder="شرح دری..." dir="rtl">
                         </div>
+                        <div>
+                            <label class="block mb-2 text-xs font-medium text-gray-400">Caption (Pashto)</label>
+                            <input type="text" name="gallery_url_captions_pashto[${galleryIndex}]"
+                                   class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400"
+                                   placeholder="پښتو شرح..." dir="rtl">
+                        </div>
                     </div>
                     <button type="button" onclick="removeGalleryRow(this)"
                             class="mt-6 text-red-400 hover:text-red-300 transition-colors">
@@ -552,28 +681,73 @@
                     </button>
                 </div>
             `;
+                }
+
+                container.appendChild(row);
+                galleryIndex++;
             }
 
-            container.appendChild(row);
-            galleryIndex++;
-        }
-
-        function previewGalleryImage(input, index) {
-            const preview = document.getElementById(`gallery-preview-${index}`);
-            const img = preview.querySelector('img');
-            if (input.files && input.files[0]) {
-                img.src = URL.createObjectURL(input.files[0]);
-                preview.classList.remove('hidden');
+            function previewGalleryImage(input, index) {
+                const preview = document.getElementById(`gallery-preview-${index}`);
+                const img = preview.querySelector('img');
+                if (input.files && input.files[0]) {
+                    img.src = URL.createObjectURL(input.files[0]);
+                    preview.classList.remove('hidden');
+                }
             }
-        }
 
-        function removeGalleryRow(btn) {
-            btn.closest('.gallery-row').remove();
-        }
+            function removeGalleryRow(btn) {
+                btn.closest('.gallery-row').remove();
+            }
 
-        // Add initial gallery row
-        document.addEventListener('DOMContentLoaded', function() {
-            addGalleryRow('file');
-        });
-    </script>
+            // Add initial gallery row
+            document.addEventListener('DOMContentLoaded', function() {
+                addGalleryRow('file');
+            });
+
+            // Milestone management
+            let milestoneIndex = 0;
+
+            function addMilestone() {
+                const container = document.getElementById('milestones-wrapper');
+                if (!container) return;
+                const noMsg = document.getElementById('no-milestones-msg');
+                if (noMsg) noMsg.remove();
+                const idx = milestoneIndex++;
+                const row = document.createElement('div');
+                row.className = 'milestone-row relative p-4 bg-gray-700/50 rounded-lg border border-gray-600 mb-2';
+                row.innerHTML =
+                    '<button type="button" onclick="removeMilestone(this)" title="Remove milestone" style="position: absolute; top: 2px; right: 2px; color: red;"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg></button><div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start pr-8"><div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (EN)</label><input type="text" name="milestones_new[' +
+                    idx +
+                    '][title_en]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Milestone title..."></div><div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (Dari)</label><input type="text" name="milestones_new[' +
+                    idx +
+                    '][title_dari]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="عنوان دری..." dir="rtl"></div><div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (Pashto)</label><input type="text" name="milestones_new[' +
+                    idx +
+                    '][title_pashto]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="پښتو عنوان..." dir="rtl"></div><div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Date</label><input type="date" name="milestones_new[' +
+                    idx +
+                    '][milestone_date]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500"></div><div class="md:col-span-12"><label class="block mb-1 text-xs font-medium text-gray-400">Description (EN)</label><textarea name="milestones_new[' +
+                    idx +
+                    '][description_en]" rows="2" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Milestone description..."></textarea></div><div class="md:col-span-6"><label class="block mb-1 text-xs font-medium text-gray-400">Description (Dari)</label><textarea name="milestones_new[' +
+                    idx +
+                    '][description_dari]" rows="2" dir="rtl" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="توضیحات دری..."></textarea></div><div class="md:col-span-6"><label class="block mb-1 text-xs font-medium text-gray-400">Description (Pashto)</label><textarea name="milestones_new[' +
+                    idx +
+                    '][description_pashto]" rows="2" dir="rtl" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="پښتو تشریح..."></textarea></div></div>';
+                container.appendChild(row);
+            }
+
+            function removeMilestone(btn) {
+                const row = btn.closest('.milestone-row');
+                if (!row) return;
+                const container = document.getElementById('milestones-wrapper');
+                row.remove();
+                if (container && container.children.length === 0) {
+                    const msg = document.createElement('p');
+                    msg.id = 'no-milestones-msg';
+                    msg.className = 'text-sm text-gray-500 italic py-2';
+                    msg.textContent = 'No milestones yet. Click below to add one.';
+                    container.appendChild(msg);
+                }
+            }
+        </script>
+    </div>
 @endsection
