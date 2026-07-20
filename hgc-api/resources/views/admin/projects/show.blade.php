@@ -8,12 +8,18 @@
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-4">
                 @if ($project->cover_image_url)
-                    <img src="{{ asset('storage/uploads/' . $project->cover_image_url) }}" alt=""
-                        class="w-16 h-16 rounded-lg object-cover border border-gray-600">
+                    <img src="{{ asset('storage/' . $project->cover_image_url) }}" alt=""
+                        class="w-16 h-20 rounded-lg object-cover border border-gray-600">
                 @endif
                 <div>
-                    <h2 class="text-2xl font-bold text-white">{{ $project->name_en }}</h2>
-                    <p class="text-sm text-gray-400 mt-1">{{ $project->slug }}</p>
+                    <h4 class="font-bold text-white">{{ $project->name_en }}</h4>
+                    @if ($project->name_dari)
+                        <p class="text-sm text-gray-400 mt-0.5" dir="rtl">{{ $project->name_dari }}</p>
+                    @endif
+                    @if ($project->name_pashto)
+                        <p class="text-sm text-gray-400 mt-0.5" dir="rtl">{{ $project->name_pashto }}</p>
+                    @endif
+                    <p class="text-sm text-gray-500 mt-1"><small>{{ $project->slug }}</small></p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -44,7 +50,7 @@
                 @if ($project->cover_image_url)
                     <div class="bg-gray-800 border border-gray-700 rounded-lg shadow-sm p-4">
                         <h3 class="text-lg font-semibold text-white mb-3">Cover Image</h3>
-                        <img src="{{ asset('storage/uploads/' . $project->cover_image_url) }}" alt="Cover"
+                        <img src="{{ asset('storage/' . $project->cover_image_url) }}" alt="Cover"
                             class="w-full h-64 object-cover rounded-lg">
                     </div>
                 @endif
@@ -85,18 +91,40 @@
                 @if (count($gallery) > 0)
                     <div class="bg-gray-800 border border-gray-700 rounded-lg shadow-sm p-6">
                         <h3 class="text-lg font-semibold text-white mb-4">Gallery ({{ count($gallery) }} images)</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                             @foreach ($gallery as $image)
-                                <div class="group relative">
-                                    <img src="{{ str_starts_with($image['image_url'] ?? '', 'http') ? $image['image_url'] : asset('storage/uploads/' . $image['image_url']) }}"
-                                        alt="{{ $image['caption_en'] ?? '' }}"
-                                        class="w-full h-40 object-cover rounded-lg border border-gray-600">
-                                    @if ($image['caption_en'] ?? false)
-                                        <div
-                                            class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-2 rounded-b-lg">
-                                            {{ $image['caption_en'] }}
-                                        </div>
-                                    @endif
+                                <div
+                                    class="group relative bg-gray-700/50 rounded-xl border border-gray-600 overflow-hidden">
+                                    <div class="aspect-[4/3] bg-gray-800 overflow-hidden">
+                                        <img src="{{ str_starts_with($image['image_url'] ?? '', 'http') ? $image['image_url'] : asset('storage/' . $image['image_url']) }}"
+                                            alt="{{ $image['caption_en'] ?? '' }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <!-- Captions -->
+                                    <div class="p-3 space-y-1.5">
+                                        @if ($image['caption_en'] ?? false)
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-medium text-gray-500 uppercase tracking-wider">EN</span>
+                                                <p class="text-xs text-white">{{ $image['caption_en'] }}</p>
+                                            </div>
+                                        @endif
+                                        @if ($image['caption_dari'] ?? false)
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Dari</span>
+                                                <p class="text-xs text-white" dir="rtl">{{ $image['caption_dari'] }}
+                                                </p>
+                                            </div>
+                                        @endif
+                                        @if ($image['caption_pashto'] ?? false)
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Pashto</span>
+                                                <p class="text-xs text-white" dir="rtl">{{ $image['caption_pashto'] }}
+                                                </p>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
@@ -116,18 +144,26 @@
                                         <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
                                     </span>
                                     <div class="flex items-center justify-between mb-1">
-                                        <h4 class="text-sm font-semibold text-white">{{ $milestone->title_en }}</h4>
+                                        <div>
+                                            @if ($milestone->title_en)
+                                                <h4 class="text-sm font-semibold text-white">{{ $milestone->title_en }}
+                                                </h4>
+                                            @endif
+                                            @if ($milestone->title_dari)
+                                                <p class="text-xs text-gray-400 mt-0.5" dir="rtl">
+                                                    {{ $milestone->title_dari }}</p>
+                                            @endif
+                                            @if ($milestone->title_pashto)
+                                                <p class="text-xs text-gray-400 mt-0.5" dir="rtl">
+                                                    {{ $milestone->title_pashto }}</p>
+                                            @endif
+                                        </div>
                                         <time
                                             class="text-xs text-gray-400">{{ $milestone->milestone_date?->format('M d, Y') }}</time>
                                     </div>
-                                    <p class="text-sm text-gray-400 mb-2">{{ $milestone->description_en }}</p>
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-24 bg-gray-700 rounded-full h-1.5">
-                                            <div class="bg-blue-500 h-1.5 rounded-full"
-                                                style="width: {{ $milestone->completion_percent }}%"></div>
-                                        </div>
-                                        <span class="text-xs text-gray-400">{{ $milestone->completion_percent }}%</span>
-                                    </div>
+                                    @if ($milestone->description)
+                                        <p class="text-sm text-gray-400">{{ $milestone->description }}</p>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -161,13 +197,18 @@
                         <div>
                             <span class="text-xs text-gray-400">Completion</span>
                             <div class="flex items-center gap-2 mt-1">
-                                <div class="flex-1 bg-gray-700 rounded-full h-2">
-                                    <div class="bg-blue-500 h-2 rounded-full"
-                                        style="width: {{ $project->completion_percent }}%"></div>
+                                <div class="flex-1 relative h-2 flex items-center bg-transparent rounded-full"
+                                    style="border: 0.5px solid #4b5563 !important;">
+                                    <div class="h-full rounded-full relative flex items-center justify-end"
+                                        style="background-color: #22c55e !important; width: {{ $project->completion_percent }}%;">
+                                        <div class="w-3 h-3 bg-white rounded-full absolute translate-x-1.5 shadow-md z-10"
+                                            style="border: 0.5px solid #22c55e !important;"></div>
+                                    </div>
                                 </div>
                                 <span class="text-sm font-medium text-white">{{ $project->completion_percent }}%</span>
                             </div>
                         </div>
+
                         <div class="flex items-center gap-4 pt-2 border-t border-gray-700">
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-gray-400">Featured:</span>
@@ -209,15 +250,26 @@
                         <div class="border-t border-gray-700 pt-3">
                             <span class="text-xs text-gray-400">Location</span>
                             <p class="text-sm font-medium text-white">{{ $project->location_en ?? 'N/A' }}</p>
+                            @if ($project->location_dari)
+                                <p class="text-xs text-gray-500 mt-0.5" dir="rtl">{{ $project->location_dari }}</p>
+                            @endif
+                            @if ($project->location_pashto)
+                                <p class="text-xs text-gray-500 mt-0.5" dir="rtl">{{ $project->location_pashto }}
+                                </p>
+                            @endif
                             @if ($project->province)
-                                <p class="text-xs text-gray-500">{{ $project->province }}</p>
+                                <p class="text-xs text-gray-500 mt-1">{{ $project->province }}</p>
                             @endif
                         </div>
                         <div class="border-t border-gray-700 pt-3">
                             <span class="text-xs text-gray-400">Client</span>
                             <p class="text-sm font-medium text-white">{{ $project->client_name_en ?? 'N/A' }}</p>
+                            @if ($project->client_name_dari)
+                                <p class="text-xs text-gray-500 mt-0.5" dir="rtl">{{ $project->client_name_dari }}
+                                </p>
+                            @endif
                             @if ($project->client_logo_url)
-                                <img src="{{ asset('storage/uploads/' . $project->client_logo_url) }}" alt="Client Logo"
+                                <img src="{{ asset('storage/' . $project->client_logo_url) }}" alt="Client Logo"
                                     class="w-12 h-12 object-contain mt-2 rounded border border-gray-600">
                             @endif
                         </div>
