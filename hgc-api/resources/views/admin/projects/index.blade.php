@@ -17,8 +17,6 @@
             </a>
         </div>
 
-
-
         <!-- Filters Bar -->
         <div class="mb-6 p-4 bg-gray-800 rounded-lg border border-gray-700">
             <form method="GET" action="{{ route('admin.projects.index') }}" class="flex flex-wrap items-end gap-3 w-full">
@@ -122,6 +120,7 @@
                         <th scope="col" class="px-4 py-3">Progress</th>
                         <th scope="col" class="px-4 py-3 text-center">Featured</th>
                         <th scope="col" class="px-4 py-3 text-center">Active</th>
+                        <th scope="col" class="px-4 py-3 text-center">Sort</th>
                         <th scope="col" class="px-4 py-3 text-right">Actions</th>
                     </tr>
                 </thead>
@@ -145,7 +144,8 @@
                                         </div>
                                     @endif
                                     <div class="min-w-0">
-                                        <div class="font-medium text-white truncate max-w-[180px]">{{ $project->name_en }}
+                                        <div class="font-medium text-white truncate max-w-[180px]">
+                                            {{ Str::limit($project->name_en ?? 'N/A', 50, '...') }}
                                         </div>
                                     </div>
                                 </div>
@@ -205,53 +205,32 @@
                                     </button>
                                 </form>
                             </td>
-                            {{-- <td class="px-4 py-3 text-center">
-                                <form method="POST" action="{{ route('admin.projects.toggle-active', $project) }}"
-                                    class="inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="focus:outline-none">
-                                        @if ($project->is_active)
-                                            <div
-                                                class="flex items-center justify-center w-10 h-6 bg-green-500 rounded-full cursor-pointer">
-                                                <div
-                                                    class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-2">
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div
-                                                class="flex items-center justify-center w-10 h-6 bg-gray-600 rounded-full cursor-pointer">
-                                                <div
-                                                    class="w-4 h-4 bg-white rounded-full shadow-md transform -translate-x-2">
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </button>
-                                </form>
-                            </td> --}}
 
                             <td class="px-4 py-3 text-center whitespace-nowrap">
-    <!-- Centered form flex block matching your micro-toggle blueprint layout exactly -->
-    <form method="POST" action="{{ route('admin.projects.toggle-active', $project) }}" class="flex items-center justify-center w-full">
-        @csrf
-        @method('PATCH')
+                                <!-- Centered form flex block matching your micro-toggle blueprint layout exactly -->
+                                <form method="POST" action="{{ route('admin.projects.toggle-active', $project) }}"
+                                    class="flex items-center justify-center w-full">
+                                    @csrf
+                                    @method('PATCH')
 
-        <!-- Micro Toggle Button Interface Track -->
-        <button type="submit"
-            style="background-color: {{ $project->is_active ? '#2563eb' : '#4b5563' }}; width: 1.75rem; height: 1rem; flex-shrink: 0;"
-            class="relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-blue-500/40 cursor-pointer">
+                                    <!-- Micro Toggle Button Interface Track -->
+                                    <button type="submit"
+                                        style="background-color: {{ $project->is_active ? '#2563eb' : '#4b5563' }}; width: 1.75rem; height: 1rem; flex-shrink: 0;"
+                                        class="relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-blue-500/40 cursor-pointer">
 
-            <span class="sr-only">Toggle active status</span>
+                                        <span class="sr-only">Toggle active status</span>
 
-            <!-- Micro White Slider Dot (Width/Height: 0.7rem with perfectly tight edge offsets) -->
-            <span style="width: 0.7rem; height: 0.7rem; flex-shrink: 0;"
-                class="inline-block transform rounded-full bg-white shadow-sm transition-transform duration-200 ease-in-out {{ $project->is_active ? 'translate-x-[0.9rem]' : 'translate-x-[0.15rem]' }}">
-            </span>
-        </button>
-    </form>
-</td>
+                                        <!-- Micro White Slider Dot (Width/Height: 0.7rem with perfectly tight edge offsets) -->
+                                        <span style="width: 0.7rem; height: 0.7rem; flex-shrink: 0;"
+                                            class="inline-block transform rounded-full bg-white shadow-sm transition-transform duration-200 ease-in-out {{ $project->is_active ? 'translate-x-[0.9rem]' : 'translate-x-[0.15rem]' }}">
+                                        </span>
+                                    </button>
+                                </form>
+                            </td>
 
-
+                            <td class="px-4 py-3 text-center whitespace-nowrap">
+                                <p>{{$project->sort_order}}</p>
+                            </td>
 
                             <td class="px-4 py-3 text-right">
                                 <div class="flex items-center justify-end gap-1">
