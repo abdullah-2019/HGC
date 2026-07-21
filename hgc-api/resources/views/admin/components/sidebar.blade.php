@@ -1,4 +1,4 @@
-\\\\<!-- Mobile overlay: z-30, behind sidebar -->
+<!-- Mobile overlay: z-30, behind sidebar -->
 <div class="fixed inset-0 z-30 bg-gray-900/70 backdrop-blur-sm sm:hidden" x-show="sidebarOpen" @click="sidebarOpen = false"
     x-transition:enter="transition-opacity ease-out duration-200" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in duration-150"
@@ -162,6 +162,12 @@
                         <a href="{{ route('admin.about.values.index') }}"
                             class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.about.values.*') ? 'bg-gray-700 text-white' : '' }}">
                             Value
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.about.story.index') }}"
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.about.story.*') ? 'bg-gray-700 text-white' : '' }}">
+                            Story
                         </a>
                     </li>
                 </ul>

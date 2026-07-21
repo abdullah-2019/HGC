@@ -7,6 +7,7 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './node_modules/flowbite/**/*.js',
     ],
 
     theme: {
@@ -14,8 +15,22 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                hgc: {
+                    blue: '#1e40af',
+                    emerald: '#059669',
+                    amber: '#d97706',
+                    purple: '#7c3aed',
+                }
+            }
         },
     },
 
-    plugins: [forms],
+    plugins: [
+        forms,
+        require('flowbite/plugin'),
+        require('@tailwindcss/typography'), // for prose classes in editor
+    ],
+
+    darkMode: 'class',
 };

@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\MediaBrowserController;
 use App\Http\Controllers\Admin\About\AboutMissionController;
 use App\Http\Controllers\Admin\About\AboutVisionController;
 use App\Http\Controllers\Admin\About\AboutCoreValueController;
+use App\Http\Controllers\Admin\About\AboutStoryController;
+use App\Http\Controllers\Admin\About\AboutStoryHighlightController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
@@ -67,6 +69,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::resource('mission', AboutMissionController::class);
         Route::resource('vision', AboutVisionController::class);
         Route::resource('values', AboutCoreValueController::class);
+        Route::get('story', [AboutStoryController::class, 'index'])->name('story.index');
+        Route::get('story/edit', [AboutStoryController::class, 'edit'])->name('story.edit');
+        Route::put('story', [AboutStoryController::class, 'update'])->name('story.update');
+
+             // Story (single story - no resource route)
+        Route::get('story', [AboutStoryController::class, 'index'])->name('story.index');
+        Route::get('story/edit', [AboutStoryController::class, 'edit'])->name('story.edit');
+        Route::put('story', [AboutStoryController::class, 'update'])->name('story.update');
+        
+        // Story Highlights
+        Route::get('story/highlights', [AboutStoryHighlightController::class, 'index'])->name('story.highlights.index');
+        Route::get('story/highlights/create', [AboutStoryHighlightController::class, 'create'])->name('story.highlights.create');
+        Route::post('story/highlights', [AboutStoryHighlightController::class, 'store'])->name('story.highlights.store');
+        Route::get('story/highlights/{highlight}/edit', [AboutStoryHighlightController::class, 'edit'])->name('story.highlights.edit');
+        Route::put('story/highlights/{highlight}', [AboutStoryHighlightController::class, 'update'])->name('story.highlights.update');
+        Route::delete('story/highlights/{highlight}', [AboutStoryHighlightController::class, 'destroy'])->name('story.highlights.destroy');
+    
     });
 
 
