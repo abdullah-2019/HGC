@@ -102,12 +102,12 @@ export default function AboutStory({ story }: AboutStoryProps) {
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* Text Content */}
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (lang === 'dari' || lang === 'pashto' ? 'translate-x-12' : '-translate-x-12')} ${lang === 'dari' || lang === 'pashto' ? 'lg:order-2 text-right' : 'lg:order-1 text-left'}`}>
-            <div className={`flex items-center gap-3 mb-6 ${lang === 'dari' || lang === 'pashto' ? 'flex-row-reverse' : ''}`}>
+            <div className="flex items-center gap-3 mb-6">
               <div className="gold-line" />
               <span className="text-[#C9A227] text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
             </div>
             <h2 className={`about-section-title font-bold text-white mb-8 ${lang === 'dari' || lang === 'pashto' ? 'text-right' : 'text-left'}`}>{renderTitle()}</h2>
-            <div className="space-y-6 about-body-text text-white/60 [&_p]:mb-4 [&_p]:leading-relaxed [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_li]:mb-1 [&_li]:leading-relaxed">
+            <div className="story-content text-white/60 leading-relaxed space-y-4">
               {paragraphs.map((paragraph, idx) => (
                 <div
                   key={idx}
@@ -115,7 +115,7 @@ export default function AboutStory({ story }: AboutStoryProps) {
                 />
               ))}
             </div>
-            <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10 ${lang === 'dari' || lang === 'pashto' ? 'rtl-grid' : ''}`}>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
               {data.highlights.map((item, idx) => {
                 const Icon = iconMap[item.icon] || Building2;
                 return (
