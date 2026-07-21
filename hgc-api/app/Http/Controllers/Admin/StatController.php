@@ -34,6 +34,9 @@ class StatController extends Controller
 
         $validated['is_active'] = $request->boolean('is_active');
 
+        // Fix: Convert null suffix to empty string
+        $validated['suffix'] = $validated['suffix'] ?? '';
+
         $stat->update($validated);
 
         return redirect()

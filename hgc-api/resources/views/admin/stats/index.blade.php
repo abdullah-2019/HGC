@@ -19,20 +19,6 @@
             </div>
         </div>
 
-        {{-- Success Message --}}
-        @if (session('success'))
-            <div class="p-4 mb-4 text-green-800 border border-green-300 rounded-lg bg-green-50">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        {{-- Error Message --}}
-        @if (session('error'))
-            <div class="p-4 mb-4 text-red-800 border border-red-300 rounded-lg bg-red-50">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
 
             <div class="overflow-x-auto">
@@ -42,6 +28,10 @@
                         <tr>
                             <th scope="col" class="px-6 py-3">
                                 Key
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">
+                                Value
                             </th>
 
                             <th scope="col" class="px-6 py-3">
@@ -61,6 +51,11 @@
                                 {{-- Key --}}
                                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ Str::headline($stat->key) }}
+                                </td>
+
+                                {{-- value --}}
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $stat->value . ' ' . $stat->suffix }}
                                 </td>
 
                                 {{-- Status --}}
