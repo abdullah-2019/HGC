@@ -10,6 +10,10 @@ import {
   Building2,
   Globe,
   TrendingUp,
+  Users,
+  Star,
+  Heart,
+  Zap,
 } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { motion, Variants } from "framer-motion";
@@ -44,6 +48,11 @@ const iconMap: Record<string, React.ElementType> = {
   Building2,
   Globe,
   TrendingUp,
+  Users,
+  Award,
+  Star,
+  Heart,
+  Zap,
 };
 
 // ─── Framer Motion Variants ────────────────────────────────────────
@@ -112,9 +121,34 @@ export default function AboutSection() {
         }
 
         const payload = json.data || {};
+        const storyData = payload.story;
+
+        let paragraphs: string[] = [];
+        if (storyData?.paragraphs && Array.isArray(storyData.paragraphs)) {
+          paragraphs = storyData.paragraphs;
+        } else if (storyData?.paragraph_1) {
+          paragraphs = [storyData.paragraph_1];
+        }
+
+        const normalizedStory: AboutStory | null = storyData
+          ? {
+            sectionLabel: storyData.sectionLabel || storyData.section_label || "",
+            title: storyData.title || "",
+            foundedYear: storyData.foundedYear || storyData.founded_year || 2001,
+            paragraphs: paragraphs,
+            mainImage: storyData.mainImage || storyData.main_image || "",
+            highlights: Array.isArray(storyData.highlights)
+              ? storyData.highlights.map((h: any) => ({
+                icon: h.icon || h.icon_name || "Building2",
+                label: h.label || h.label_en || "",
+                value: h.value || h.value_text || "",
+              }))
+              : [],
+          }
+          : null;
 
         const normalizedData: AboutData = {
-          story: payload.story || null,
+          story: normalizedStory,
           carousel: Array.isArray(payload.carousel) ? payload.carousel : [],
         };
 
@@ -163,48 +197,12 @@ export default function AboutSection() {
 
   const { story, carousel } = data;
 
-  // ─── Build Image Mosaic ──────────────────────────────────────────
-  // Deduplicate images: use unique images only
-  const seenImages = new Set<string>();
-  const uniqueSlides: AboutCarouselSlide[] = [];
+  // ─── Build Images ────────────────────────────────────────────────
+  const mainImage = story.mainImage || "/images/placeholder.png";
 
-  for (const slide of carousel) {
-    if (slide.image && !seenImages.has(slide.image)) {
-      seenImages.add(slide.image);
-      uniqueSlides.push(slide);
-    }
-  }
-
-  // If we don't have enough unique slides, add story main image as fallback
-  if (uniqueSlides.length === 0 && story.mainImage) {
-    uniqueSlides.push({
-      image: story.mainImage,
-      title: story.title,
-      location: "",
-    });
-  }
-
-  const mainImage = uniqueSlides[0]?.image || story.mainImage || "/images/placeholder.png";
-  
-  // Use let so we can push fallback items
-  let secondaryImages: AboutCarouselSlide[] = uniqueSlides.slice(1, 4);
-
-  // Fill remaining slots with labeled fallbacks
-  const fallbackImages = [
-    { image: story.mainImage, title: "Construction", location: "Afghanistan" },
-    { image: story.mainImage, title: "Mining", location: "Badakhshan" },
-    { image: story.mainImage, title: "Logistics", location: "Nationwide" },
-  ];
-
-  let fallbackIdx = 0;
-  while (secondaryImages.length < 3 && fallbackIdx < fallbackImages.length) {
-    secondaryImages.push({
-      image: fallbackImages[fallbackIdx].image || "/images/placeholder.png",
-      title: fallbackImages[fallbackIdx].title,
-      location: fallbackImages[fallbackIdx].location,
-    });
-    fallbackIdx++;
-  }
+  const carouselImages = Array.isArray(carousel)
+    ? carousel.filter((s) => s.image && s.image !== mainImage).slice(0, 3)
+    : [];
 
   return (
     <section className="py-28 bg-[#0A1628] relative overflow-hidden">
@@ -223,7 +221,8 @@ export default function AboutSection() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        {/* CHANGED: items-start instead of items-center to align tops */}
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-start">
           {/* ─── Text Content - Left Side ──────────────────────────── */}
           <div className="lg:col-span-5 order-2 lg:order-1">
             <motion.div
@@ -251,22 +250,28 @@ export default function AboutSection() {
               </motion.h2>
 
               {/* Description Paragraphs */}
-              <motion.div variants={staggerItem} className="space-y-4">
-                {story.paragraphs?.filter(Boolean).map((paragraph, idx) => (
-                  <p
-                    key={idx}
-                    className={
-                      idx === 0
-                        ? "text-white/50 text-lg leading-relaxed"
-                        : "text-white/40 leading-relaxed"
-                    }
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </motion.div>
+              {story.paragraphs && story.paragraphs.length > 0 ? (
+                <motion.div
+                  variants={staggerItem}
+                  className="story-content text-white/60 leading-relaxed space-y-4"
+                >
+                  {story.paragraphs.map((paragraph, idx) => (
+                    <div
+                      key={idx}
+                      dangerouslySetInnerHTML={{ __html: paragraph }}
+                    />
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.p
+                  variants={staggerItem}
+                  className="text-white/30 text-sm italic"
+                >
+                  No content available.
+                </motion.p>
+              )}
 
-              {/* ═══ HIGHLIGHTS / STATS ROW — NOW SHOWS VALUE + LABEL ═══ */}
+              {/* Highlights / Stats Row */}
               {story.highlights && story.highlights.length > 0 && (
                 <motion.div
                   variants={staggerItem}
@@ -303,15 +308,15 @@ export default function AboutSection() {
                   {lang === "en"
                     ? "Explore Our Story"
                     : lang === "dari"
-                    ? "داستان ما را کشف کنید"
-                    : "زموږ کیسه وګورئ"}
+                      ? "داستان ما را کشف کنید"
+                      : "زموږ کیسه وګورئ"}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </motion.div>
             </motion.div>
           </div>
 
-          {/* ─── Image Mosaic - Right Side ─────────────────────────── */}
+          {/* ─── Image Area - Right Side ───────────────────────────── */}
           <div className="lg:col-span-7 order-1 lg:order-2 relative">
             <motion.div
               initial="hidden"
@@ -320,7 +325,7 @@ export default function AboutSection() {
               variants={imageStagger}
               className="relative"
             >
-              {/* Main large image */}
+              {/* Main large image from DB */}
               <motion.div
                 variants={imageScale}
                 className="relative aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl shadow-black/50 group"
@@ -336,63 +341,35 @@ export default function AboutSection() {
                 {/* Cinematic overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628] via-[#0A1628]/20 to-transparent opacity-60" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0A1628]/40 to-transparent" />
-
-                {/* Floating label */}
-                {uniqueSlides[0] && (
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <span className="inline-block px-3 py-1 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/30 text-[#C9A227] text-xs font-bold uppercase tracking-widest mb-2 backdrop-blur-md">
-                          {uniqueSlides[0].title || "HGC"}
-                        </span>
-                        {uniqueSlides[0].location && (
-                          <h3 className="text-white text-xl font-bold">
-                            {uniqueSlides[0].location}
-                          </h3>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
               </motion.div>
 
-              {/* Secondary images grid */}
-              {secondaryImages.length > 0 && (
+              {/* Secondary images from carousel - NO TAGLINES */}
+              {carouselImages.length > 0 && (
                 <div className="grid grid-cols-3 gap-3 mt-3">
-                  {secondaryImages.map((slide, i) => (
+                  {carouselImages.map((slide, i) => (
                     <motion.div
                       key={i}
                       variants={imageScale}
-                      className="relative aspect-[4/3] rounded-2xl overflow-hidden group cursor-pointer"
+                      className="relative aspect-[4/3] rounded-2xl overflow-hidden group"
                     >
                       <Image
-                        src={slide.image || "/images/placeholder.png"}
-                        alt={slide.title || "Project"}
+                        src={slide.image}
+                        alt="Project"
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                         sizes="(max-width: 1024px) 33vw, 20vw"
                       />
-                      <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors duration-500" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/90 via-transparent to-transparent" />
-
-                      <div className="absolute bottom-3 left-3 right-3 translate-y-2 opacity-80 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                        <span className="text-[#C9A227] text-[10px] font-bold uppercase tracking-wider line-clamp-1">
-                          {slide.title || "Project"}
-                        </span>
-                        <p className="text-white text-xs font-medium mt-0.5 leading-tight line-clamp-1">
-                          {slide.location || ""}
-                        </p>
-                      </div>
+                      <div className="absolute inset-0 bg-[#0A1628]/30 group-hover:bg-[#0A1628]/10 transition-colors duration-500" />
                     </motion.div>
                   ))}
                 </div>
               )}
 
-              {/* Decorative elements */}
-              <div className="absolute -top-6 -right-6 w-32 h-32 border border-[#C9A227]/10 rounded-full" />
-              <div className="absolute -top-6 -right-6 w-24 h-24 border border-[#C9A227]/20 rounded-full" />
-              <div className="absolute -bottom-8 right-12 w-2 h-2 bg-[#C9A227] rounded-full animate-ping" />
-              <div className="absolute top-1/2 -right-3 w-1.5 h-16 bg-[#C9A227]/20 rounded-full" />
+              {/* Decorative elements - MOVED to not push image down */}
+              <div className="absolute -top-6 -right-6 w-32 h-32 border border-[#C9A227]/10 rounded-full pointer-events-none" />
+              <div className="absolute -top-6 -right-6 w-24 h-24 border border-[#C9A227]/20 rounded-full pointer-events-none" />
+              <div className="absolute -bottom-8 right-12 w-2 h-2 bg-[#C9A227] rounded-full animate-ping pointer-events-none" />
+              <div className="absolute top-1/2 -right-3 w-1.5 h-16 bg-[#C9A227]/20 rounded-full pointer-events-none" />
             </motion.div>
           </div>
         </div>

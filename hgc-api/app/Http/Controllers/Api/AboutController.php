@@ -46,8 +46,8 @@ class AboutController extends Controller
                     'foundedYear' => (int) $story->founded_year,
                     'paragraphs' => array_values(array_filter([
                         $story->{"paragraph_1_{$lang}"} ?? $story->paragraph_1_en,
-                        $story->{"paragraph_2_{$lang}"} ?? $story->paragraph_2_en,
-                        $story->{"paragraph_3_{$lang}"} ?? $story->paragraph_3_en,
+                       // $story->{"paragraph_2_{$lang}"} ?? $story->paragraph_2_en,
+                        //$story->{"paragraph_3_{$lang}"} ?? $story->paragraph_3_en,
                     ])),
                     'mainImage' => $story->main_image 
                         ? (str_starts_with($story->main_image, 'http') 
