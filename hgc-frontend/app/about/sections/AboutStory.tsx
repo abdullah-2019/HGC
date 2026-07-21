@@ -96,21 +96,26 @@ export default function AboutStory({ story }: AboutStoryProps) {
   };
 
   return (
-    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-[#0A1628]">
+    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-[#0A1628]" dir={lang === 'dari' || lang === 'pashto' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* items-start aligns image top with text top */}
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* Text Content */}
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
-            <div className="flex items-center gap-3 mb-6">
+          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (lang === 'dari' || lang === 'pashto' ? 'translate-x-12' : '-translate-x-12')} ${lang === 'dari' || lang === 'pashto' ? 'lg:order-2 text-right' : 'lg:order-1 text-left'}`}>
+            <div className={`flex items-center gap-3 mb-6 ${lang === 'dari' || lang === 'pashto' ? 'flex-row-reverse' : ''}`}>
               <div className="gold-line" />
               <span className="text-[#C9A227] text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
             </div>
-            <h2 className="about-section-title font-bold text-white mb-8">{renderTitle()}</h2>
-            <div className="space-y-6 about-body-text text-white/60">
-              {paragraphs.map((paragraph, idx) => (<p key={idx}>{paragraph}</p>))}
+            <h2 className={`about-section-title font-bold text-white mb-8 ${lang === 'dari' || lang === 'pashto' ? 'text-right' : 'text-left'}`}>{renderTitle()}</h2>
+            <div className="space-y-6 about-body-text text-white/60 [&_p]:mb-4 [&_p]:leading-relaxed [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_li]:mb-1 [&_li]:leading-relaxed">
+              {paragraphs.map((paragraph, idx) => (
+                <div
+                  key={idx}
+                  dangerouslySetInnerHTML={{ __html: paragraph }}
+                />
+              ))}
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
+            <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10 ${lang === 'dari' || lang === 'pashto' ? 'rtl-grid' : ''}`}>
               {data.highlights.map((item, idx) => {
                 const Icon = iconMap[item.icon] || Building2;
                 return (
@@ -126,7 +131,7 @@ export default function AboutStory({ story }: AboutStoryProps) {
           </div>
 
           {/* Image Side — aligned to top with text */}
-          <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+          <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (lang === 'dari' || lang === 'pashto' ? '-translate-x-12' : 'translate-x-12')} ${lang === 'dari' || lang === 'pashto' ? 'lg:order-1' : 'lg:order-2'}`}>
             <div className="relative">
               {/* Main Image */}
               <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
@@ -135,7 +140,7 @@ export default function AboutStory({ story }: AboutStoryProps) {
               </div>
 
               {/* Floating Card */}
-              <div className="absolute -bottom-6 -left-6 bg-[#0A1628] border border-[#C9A227]/20 rounded-2xl p-5 shadow-2xl glow-gold max-w-[200px]">
+              <div className={`absolute -bottom-6 bg-[#0A1628] border border-[#C9A227]/20 rounded-2xl p-5 shadow-2xl glow-gold max-w-[200px] ${lang === 'dari' || lang === 'pashto' ? '-right-6' : '-left-6'}`}>
                 <p className="text-[#C9A227] text-3xl font-bold mb-1">{data.floatingCard.value}</p>
                 <p className="text-white/60 text-sm">{floatingLabel}</p>
               </div>

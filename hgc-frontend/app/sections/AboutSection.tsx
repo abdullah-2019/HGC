@@ -101,8 +101,7 @@ export default function AboutSection() {
     const fetchAbout = async () => {
       try {
         setError(null);
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/about?lang=${lang}`;
-
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/homepage-about?lang=${lang}`;
         const res = await fetch(apiUrl, {
           headers: { Accept: "application/json" },
           cache: "no-store",

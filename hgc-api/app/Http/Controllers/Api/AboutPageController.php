@@ -433,8 +433,8 @@ class AboutPageController extends Controller
             'foundedYear' => $story->founded_year,
             'paragraphs' => [
                 ['en' => $story->paragraph_1_en, 'dari' => $story->paragraph_1_dari, 'pashto' => $story->paragraph_1_pashto],
-                ['en' => $story->paragraph_2_en, 'dari' => $story->paragraph_2_dari, 'pashto' => $story->paragraph_2_pashto],
-                ['en' => $story->paragraph_3_en, 'dari' => $story->paragraph_3_dari, 'pashto' => $story->paragraph_3_pashto],
+                // ['en' => $story->paragraph_2_en, 'dari' => $story->paragraph_2_dari, 'pashto' => $story->paragraph_2_pashto],
+                // ['en' => $story->paragraph_3_en, 'dari' => $story->paragraph_3_dari, 'pashto' => $story->paragraph_3_pashto],
             ],
             'mainImage' => $this->resolveImageUrl($story->main_image),
             'floatingCard' => [

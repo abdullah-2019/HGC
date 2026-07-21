@@ -95,23 +95,36 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     });
 
     // About Page Admin
+    // Route::prefix('about')->group(function () {
+    //     Route::post('/clear-cache', [AboutPageAdminController::class, 'clearCache']);
+    //     Route::put('/settings', [AboutPageAdminController::class, 'updateSettings']);
+    //     Route::put('/story', [AboutPageAdminController::class, 'updateStory']);
+    //     Route::put('/story/highlights', [AboutPageAdminController::class, 'updateStoryHighlights']);
+    //     Route::post('/carousel', [AboutPageAdminController::class, 'storeCarouselSlide']);
+    //     Route::put('/carousel/{id}', [AboutPageAdminController::class, 'updateCarouselSlide']);
+    //     Route::delete('/carousel/{id}', [AboutPageAdminController::class, 'destroyCarouselSlide']);
+    //     Route::put('/mission', [AboutPageAdminController::class, 'updateMission']);
+    //     Route::put('/mission/points', [AboutPageAdminController::class, 'updateMissionPoints']);
+    //     Route::put('/vision', [AboutPageAdminController::class, 'updateVision']);
+    //     Route::put('/vision/pillars', [AboutPageAdminController::class, 'updateVisionPillars']);
+    //     Route::put('/core-values', [AboutPageAdminController::class, 'updateCoreValues']);
+    //     Route::delete('/core-values/{id}', [AboutPageAdminController::class, 'destroyCoreValue']);
+    // });
+
     Route::prefix('about')->group(function () {
-        Route::post('/clear-cache', [AboutPageAdminController::class, 'clearCache']);
-        Route::put('/settings', [AboutPageAdminController::class, 'updateSettings']);
-        Route::put('/story', [AboutPageAdminController::class, 'updateStory']);
-        Route::put('/story/highlights', [AboutPageAdminController::class, 'updateStoryHighlights']);
-        Route::post('/carousel', [AboutPageAdminController::class, 'storeCarouselSlide']);
-        Route::put('/carousel/{id}', [AboutPageAdminController::class, 'updateCarouselSlide']);
-        Route::delete('/carousel/{id}', [AboutPageAdminController::class, 'destroyCarouselSlide']);
-        Route::put('/mission', [AboutPageAdminController::class, 'updateMission']);
-        Route::put('/mission/points', [AboutPageAdminController::class, 'updateMissionPoints']);
-        Route::put('/vision', [AboutPageAdminController::class, 'updateVision']);
-        Route::put('/vision/pillars', [AboutPageAdminController::class, 'updateVisionPillars']);
-        Route::put('/core-values', [AboutPageAdminController::class, 'updateCoreValues']);
-        Route::delete('/core-values/{id}', [AboutPageAdminController::class, 'destroyCoreValue']);
-    });
+    Route::get('/', [AboutPageController::class, 'index']);
+    Route::get('/settings', [AboutPageController::class, 'settings']);
+    Route::get('/story', [AboutPageController::class, 'story']);
+    Route::get('/stats', [AboutPageController::class, 'stats']);
+    Route::get('/carousel', [AboutPageController::class, 'carousel']);
+    Route::get('/mission', [AboutPageController::class, 'mission']);
+    Route::get('/vision', [AboutPageController::class, 'vision']);
+    Route::get('/core-values', [AboutPageController::class, 'coreValues']);
 });
 
-Route::get('/about', [AboutController::class, 'index']);
+});
+
+// Route::get('/about', [AboutController::class, 'index']);
+Route::get('/homepage-about', [AboutController::class, 'index']);
 Route::get('/why-choose', [WhyChooseController::class, 'index']);
 Route::get('/site-settings', [SiteSettingController::class, 'index']);
