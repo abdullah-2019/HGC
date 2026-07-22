@@ -5,6 +5,7 @@ out/
 build/
 .turbo/
 .env*.local
+.env.production
 
 # === Laravel Templates ===
 /vendor/
