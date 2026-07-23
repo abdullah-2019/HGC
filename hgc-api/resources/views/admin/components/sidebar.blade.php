@@ -39,6 +39,19 @@
                     <span class="ms-3 truncate">Dashboard</span>
                 </a>
             </li>
+            
+            {{-- Companies --}}
+            <li>
+                <a href="{{ route('admin.companies.index') }}"
+                    class="flex items-center p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.companies.*') ? 'bg-gray-700' : '' }}">
+                    <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                    <span class="ms-3 truncate">Companies</span>
+                </a>
+            </li>
 
             <!-- Contacts Dropdown -->
             <li x-data="{ open: {{ request()->routeIs('admin.contacts.*') ? 'true' : 'false' }} }">
@@ -84,7 +97,7 @@
             </li>
 
             <!-- Testimonials -->
-            <li>
+            {{-- <li>
                 <a href="{{ route('admin.testimonials.index') }}"
                     class="flex items-center p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.testimonials.*') ? 'bg-gray-700' : '' }}">
                     <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
@@ -94,7 +107,7 @@
                     </svg>
                     <span class="ms-3 truncate">Testimonials</span>
                 </a>
-            </li>
+            </li> --}}
 
             <!-- ─── PRODUCTS ─── -->
             <li>
@@ -216,7 +229,7 @@
 
             <!-- Icons -->
             <li>
-                <a href="https://lucide.dev/icons/"
+                <a href="https://lucide.dev/icons/" target="_blank"
                     class="flex items-center p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-gray-700' : '' }}">
                     <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white flex-shrink-0"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
