@@ -87,9 +87,15 @@ interface SiteSettings {
 }
 
 // ── Icon Maps ───────────────────────────────────────────────────────
-const companyIconMap: Record<string, React.ElementType> = {
-  Building2, Mountain, HardHat, Store, Landmark, Truck,
-};
+// const companyIconMap: Record<string, React.ElementType> = {
+//   Building2, Mountain, HardHat, Store, Landmark, Truck,
+// };
+function resolveCompanyIcon(iconName: string): LucideIcon {
+  // Normalize: ensure PascalCase
+  const normalized = iconName.charAt(0).toUpperCase() + iconName.slice(1);
+  const Icon = (LucideIcons as Record<string, unknown>)[normalized];
+  return (Icon as LucideIcon) || LucideIcons.Building2;
+}
 
 function resolveIcon(iconName: string): LucideIcon {
   const Icon = (LucideIcons as Record<string, unknown>)[iconName];
@@ -281,11 +287,10 @@ export default function Footer() {
                       className="group flex items-center gap-2 text-white/50 hover:text-[#C9A227] transition-colors duration-200 text-sm"
                     >
                       <ChevronRight
-                        className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${
-                          dir === "rtl"
+                        className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${dir === "rtl"
                             ? "-mr-5 group-hover:mr-0 group-hover:opacity-100 rotate-180"
                             : "-ml-5 group-hover:ml-0 group-hover:opacity-100"
-                        }`}
+                          }`}
                       />
                       {getLocalizedText(lang, link.label_en, link.label_dari, link.label_pashto)}
                     </Link>
@@ -311,7 +316,8 @@ export default function Footer() {
             ) : (
               <ul className="space-y-2">
                 {companies.map((company) => {
-                  const Icon = companyIconMap[company.icon_name] || Building2;
+                  // const Icon = companyIconMap[company.icon_name] || Building2;
+                  const Icon = resolveCompanyIcon(company.icon_name);
                   const isHovered = hoveredCompany === company.slug;
                   return (
                     <li
