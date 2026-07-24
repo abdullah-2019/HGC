@@ -30,6 +30,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     // Companies & Entities
     Route::resource('companies', CompanyController::class);
+    // Company Awards CRUD
+    Route::resource('companies.awards', \App\Http\Controllers\Admin\CompanyAwardController::class)->except(['show']);
+    // Company Values CRUD
+    Route::resource('companies.values', \App\Http\Controllers\Admin\CompanyValueController::class)->except(['show']);
 
     // Products (Cleaned Resource Framework with custom Action toggles mapped correctly)
     Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');

@@ -9,16 +9,11 @@
     <form action="{{ route('admin.companies.update', $company) }}" method="POST" enctype="multipart/form-data">
         @include('admin.companies.form')
     </form>
+    <br>
 
     {{-- Awards Section --}}
-    <div class="mt-8 p-5 bg-gray-800 border border-gray-700 rounded-xl">
-        <h3 class="text-lg font-semibold text-white mb-4">Company Awards</h3>
-        {{-- Awards management will be added here --}}
-    </div>
-
+    @include('admin.companies.awards.index', ['company' => $company])
+    <br>
     {{-- Values Section --}}
-    <div class="mt-8 p-5 bg-gray-800 border border-gray-700 rounded-xl">
-        <h3 class="text-lg font-semibold text-white mb-4">Company Values</h3>
-        {{-- Values management will be added here --}}
-    </div>
+    @include('admin.companies.values.index', ['company' => $company])
 @endsection
