@@ -1,5 +1,6 @@
 "use client";
 
+import CompanyContact from "./sections/CompanyContact";
 import React, { useState, useEffect } from "react";
 import {
   Building2,
@@ -205,6 +206,8 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
       <CompanyValues company={company} />
       {/* <CompanyHistory company={company} /> */}
       <CompanyAwards company={company} awards={company.awards} />
+      <CompanyContact company={company} /> 
+
     </div>
   );
 }

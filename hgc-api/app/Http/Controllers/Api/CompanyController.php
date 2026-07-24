@@ -48,7 +48,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Get single company by slug (for detail page)
+     * Get single company by slug (for detail page / metadata)
      * GET /api/companies/{slug}
      */
     public function show(Request $request, string $slug): JsonResponse
@@ -115,12 +115,19 @@ class CompanyController extends Controller
      * Get company profile page data (full detail)
      * GET /api/companies/{slug}/profile
      */
-     public function profile(Request $request, string $slug): JsonResponse
+    public function profile(Request $request, string $slug): JsonResponse
     {
         $lang = $request->get('lang', 'en');
 
         $company = Company::active()
-            ->with('values', 'awards')  // ← Eager load values and awards relationships
+            ->with([
+                'values' => function ($query) {
+                    $query->orderBy('sort_order');
+                },
+                'awards' => function ($query) {
+                    $query->active()->ordered();
+                },
+            ])
             ->where('slug', $slug)
             ->first();
 
@@ -157,7 +164,7 @@ class CompanyController extends Controller
             'email' => $company->email,
             'phone' => $company->phone,
             'address' => $company->getLocalizedAddress($lang),
-            'website' => $company->website ?? $company->website_url,
+            'website' => $company->website_url ?? $company->website,
             'social' => [
                 'facebook' => $company->facebook_url,
                 'linkedin' => $company->linkedin_url,
@@ -176,7 +183,7 @@ class CompanyController extends Controller
      */
     private function formatCompanyProfile(Company $company, string $lang): array
     {
-        $getLocalized = function(?string $en, ?string $dari, ?string $pashto) use ($lang): ?string {
+        $getLocalized = function (?string $en, ?string $dari, ?string $pashto) use ($lang): ?string {
             if ($lang === 'dari' && $dari) return $dari;
             if ($lang === 'pashto' && $pashto) return $pashto;
             return $en;
@@ -203,33 +210,32 @@ class CompanyController extends Controller
             'vision_en' => $company->vision_en,
             'vision_dari' => $company->vision_dari,
             'vision_pashto' => $company->vision_pashto,
-            
-            // Single value field (legacy - keep for backward compatibility)
             'value' => $getLocalized($company->value_en, $company->value_dari, $company->value_pashto),
             'value_en' => $company->value_en,
             'value_dari' => $company->value_dari,
             'value_pashto' => $company->value_pashto,
-            
             'accent_color' => $company->accent_color,
             'secondary_color' => $company->secondary_color,
             'icon_name' => $company->icon_name,
             'logo_url' => $company->logo_url,
             'hero_image_url' => $company->hero_image_url,
-            
+
             'contact' => [
                 'email' => $company->email,
                 'phone' => $company->phone,
-                'address' => $company->address,
+                'address' => $company->getLocalizedAddress($lang),          // ← FIXED: localized
                 'latitude' => $company->latitude,
                 'longitude' => $company->longitude,
             ],
+
             'web' => [
-                'website' => $company->website,
+                'website' => $company->website_url ?? $company->website,     // ← FIXED: prefer website_url
                 'facebook' => $company->facebook_url,
                 'linkedin' => $company->linkedin_url,
                 'twitter' => $company->twitter_url,
                 'instagram' => $company->instagram_url,
             ],
+
             'details' => [
                 'established_year' => $company->established_year,
                 'founded_year' => $company->founded_year,
@@ -239,12 +245,12 @@ class CompanyController extends Controller
                 'project_count' => $company->project_count ?? 0,
                 'province_count' => $company->province_count ?? 0,
             ],
+
             'seo' => [
-                'title' => $company->meta_title_en,
-                'description' => $company->meta_description_en,
+                'title' => $company->getLocalizedMetaTitle($lang),             // ← FIXED: localized
+                'description' => $company->getLocalizedMetaDescription($lang), // ← FIXED: localized
             ],
-            
-            // ← CORRECT: values as nested array
+
             'values' => $company->values->map(function ($value) use ($lang) {
                 return [
                     'icon_name' => $value->icon_name,
@@ -281,8 +287,6 @@ class CompanyController extends Controller
                     'sort_order' => $award->sort_order,
                 ];
             })->toArray(),
-
         ];
     }
-
 }

@@ -49,18 +49,46 @@ export default function CompanyContact({ company }: CompanyContactProps) {
     const hasContact =
         company.contact.email ||
         company.contact.phone ||
-        company.contact.address ||
-        company.contact.latitude;
+        company.contact.address;
+
+    const hasMap =
+        company.contact.latitude && company.contact.longitude;
 
     const hasSocial = Object.values(company.web).some((v) => v);
 
-    if (!hasContact && !hasSocial) return null;
+    if (!hasContact && !hasMap && !hasSocial) return null;
 
-    const t = {
-        en: { badge: "Get in Touch", title: "Contact Us", addr: "Address", phone: "Phone", email: "Email", follow: "Follow Us", noMap: "Map location not available" },
-        dari: { badge: "در تماس باشید", title: "تماس با ما", addr: "آدرس", phone: "تلفن", email: "ایمیل", follow: "ما را دنبال کنید", noMap: "موقعیت نقشه در دسترس نیست" },
-        pashto: { badge: "اړیکه ونیسئ", title: "زموږ سره اړیکه", addr: "پته", phone: "تلیفون", email: "برېښنالیک", follow: "موږ تعقیب کړئ", noMap: "د نقشې موقعیت شتون نلري" },
-    }[lang as "en" | "dari" | "pashto"] ?? t.en;
+    const translations = {
+        en: {
+            badge: "Get in Touch",
+            title: "Contact Us",
+            addr: "Address",
+            phone: "Phone",
+            email: "Email",
+            follow: "Follow Us",
+            noMap: "Map location not available",
+        },
+        dari: {
+            badge: "در تماس باشید",
+            title: "تماس با ما",
+            addr: "آدرس",
+            phone: "تلفن",
+            email: "ایمیل",
+            follow: "ما را دنبال کنید",
+            noMap: "موقعیت نقشه در دسترس نیست",
+        },
+        pashto: {
+            badge: "اړیکه ونیسئ",
+            title: "زموږ سره اړیکه",
+            addr: "پته",
+            phone: "تلیفون",
+            email: "برېښنالیک",
+            follow: "موږ تعقیب کړئ",
+            noMap: "د نقشې موقعیت شتون نلري",
+        },
+    };
+
+    const t = translations[lang as keyof typeof translations] ?? translations.en;
 
     return (
         <section className="py-20 bg-[#070F1A]" dir={dir}>
@@ -81,19 +109,21 @@ export default function CompanyContact({ company }: CompanyContactProps) {
                     >
                         {t.badge}
                     </div>
-                    <h2 className="text-3xl font-bold text-white md:text-4xl">{t.title}</h2>
+                    <h2 className="text-3xl font-bold text-white md:text-4xl">
+                        {t.title}
+                    </h2>
                 </motion.div>
 
                 <div className="grid gap-8 lg:grid-cols-2">
-                    {/* Contact Cards */}
+                    {/* Left: Contact Cards */}
                     <motion.div
                         initial={{ opacity: 0, x: dir === "rtl" ? 50 : -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="space-y-6"
+                        className="space-y-5"
                     >
                         {company.contact.address && (
-                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6">
+                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6 transition-all hover:bg-white/10">
                                 <div
                                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
                                     style={{ backgroundColor: `${company.accent_color}15` }}
@@ -102,13 +132,15 @@ export default function CompanyContact({ company }: CompanyContactProps) {
                                 </div>
                                 <div>
                                     <h3 className="mb-1 text-lg font-bold text-white">{t.addr}</h3>
-                                    <p className="text-white/60 leading-relaxed">{company.contact.address}</p>
+                                    <p className="text-white/60 leading-relaxed">
+                                        {company.contact.address}
+                                    </p>
                                 </div>
                             </div>
                         )}
 
                         {company.contact.phone && (
-                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6">
+                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6 transition-all hover:bg-white/10">
                                 <div
                                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
                                     style={{ backgroundColor: `${company.accent_color}15` }}
@@ -117,7 +149,10 @@ export default function CompanyContact({ company }: CompanyContactProps) {
                                 </div>
                                 <div>
                                     <h3 className="mb-1 text-lg font-bold text-white">{t.phone}</h3>
-                                    <a href={`tel:${company.contact.phone}`} className="text-white/60 hover:text-white transition-colors">
+                                    <a
+                                        href={`tel:${company.contact.phone}`}
+                                        className="text-white/60 hover:text-white transition-colors"
+                                    >
                                         {company.contact.phone}
                                     </a>
                                 </div>
@@ -125,7 +160,7 @@ export default function CompanyContact({ company }: CompanyContactProps) {
                         )}
 
                         {company.contact.email && (
-                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6">
+                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6 transition-all hover:bg-white/10">
                                 <div
                                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
                                     style={{ backgroundColor: `${company.accent_color}15` }}
@@ -134,7 +169,10 @@ export default function CompanyContact({ company }: CompanyContactProps) {
                                 </div>
                                 <div>
                                     <h3 className="mb-1 text-lg font-bold text-white">{t.email}</h3>
-                                    <a href={`mailto:${company.contact.email}`} className="text-white/60 hover:text-white transition-colors">
+                                    <a
+                                        href={`mailto:${company.contact.email}`}
+                                        className="text-white/60 hover:text-white transition-colors"
+                                    >
                                         {company.contact.email}
                                     </a>
                                 </div>
@@ -142,34 +180,39 @@ export default function CompanyContact({ company }: CompanyContactProps) {
                         )}
                     </motion.div>
 
-                    {/* Map + Social */}
+                    {/* Right: Map + Social */}
                     <motion.div
                         initial={{ opacity: 0, x: dir === "rtl" ? -50 : 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         className="flex flex-col gap-6"
                     >
-                        {company.contact.latitude && company.contact.longitude ? (
-                            <div className="rounded-2xl overflow-hidden border border-white/10 h-[300px]">
+                        {hasMap ? (
+                            <div className="rounded-2xl overflow-hidden border border-white/10 h-[320px]">
                                 <iframe
                                     width="100%"
                                     height="100%"
-                                    style={{ border: 0, filter: "grayscale(100%) invert(92%) contrast(83%)" }}
+                                    style={{
+                                        border: 0,
+                                        filter: "grayscale(100%) invert(92%) contrast(83%)",
+                                    }}
                                     loading="lazy"
                                     allowFullScreen
                                     referrerPolicy="no-referrer-when-downgrade"
-                                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d${company.contact.longitude}!3d${company.contact.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!5e0!3m2!1sen!2s!4v1`}
+                                    src={`https://maps.google.com/maps?q=${company.contact.latitude},${company.contact.longitude}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                                 />
                             </div>
                         ) : (
-                            <div className="flex h-[300px] items-center justify-center rounded-2xl bg-white/5 border border-white/10">
+                            <div className="flex h-[320px] items-center justify-center rounded-2xl bg-white/5 border border-white/10">
                                 <p className="text-white/30 text-sm">{t.noMap}</p>
                             </div>
                         )}
 
                         {hasSocial && (
                             <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                                <h3 className="mb-4 text-lg font-bold text-white">{t.follow}</h3>
+                                <h3 className="mb-4 text-lg font-bold text-white">
+                                    {t.follow}
+                                </h3>
                                 <div className="flex flex-wrap gap-3">
                                     {socialConfig.map((s) => {
                                         const url = company.web[s.key as keyof typeof company.web];

@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ContactInfoController;
 use App\Http\Controllers\Api\ContactSubmissionController;
 use App\Http\Controllers\Api\AboutPageController;
-use App\Http\Controllers\Api\Admin\AboutPageAdminController;
+use App\Http\Controllers\Api\AboutPageAdminController;
 use App\Http\Controllers\Api\AboutController;
 use App\Http\Controllers\Api\WhyChooseController;
 use App\Http\Controllers\Api\SiteSettingController;
