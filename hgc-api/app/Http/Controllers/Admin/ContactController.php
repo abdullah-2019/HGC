@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactInfo;
 use App\Models\ContactSubmission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware(['auth', 'admin']); // or whatever your admin middleware is
+    // }
+
     /**
      * Display contact submissions list.
      */
@@ -45,7 +49,7 @@ class ContactController extends Controller
     }
 
     /**
-     * Get a single submission (JSON).
+     * Get a single submission (JSON — for AJAX).
      */
     public function showSubmission(ContactSubmission $submission)
     {
@@ -53,7 +57,7 @@ class ContactController extends Controller
     }
 
     /**
-     * Update submission status.
+     * Update submission status (JSON — for AJAX).
      */
     public function updateSubmission(Request $request, ContactSubmission $submission)
     {
@@ -62,9 +66,7 @@ class ContactController extends Controller
             'admin_notes' => 'nullable|string',
         ]);
 
-        $update = [
-            'status' => $validated['status'],
-        ];
+        $update = ['status' => $validated['status']];
 
         if ($validated['status'] === 'read' && !$submission->read_at) {
             $update['read_at'] = now();
@@ -80,7 +82,7 @@ class ContactController extends Controller
     }
 
     /**
-     * Mark submission as read.
+     * Mark submission as read (JSON — for AJAX).
      */
     public function markAsRead(ContactSubmission $submission)
     {
@@ -121,6 +123,8 @@ class ContactController extends Controller
                 'youtube' => '',
                 'whatsapp' => '',
                 'map_embed_url' => '',
+                'map_lat' => null,
+                'map_lng' => null,
             ]);
         }
 
@@ -129,6 +133,9 @@ class ContactController extends Controller
 
     /**
      * Update contact info.
+     * 
+     * FIXED: Redirects with flash message for traditional form submissions.
+     * Keeps JSON response for AJAX requests.
      */
     public function updateInfo(Request $request)
     {
@@ -139,11 +146,11 @@ class ContactController extends Controller
             'office_hours' => 'nullable|string',
             'address_dari' => 'nullable|string',
             'phones_dari' => 'nullable|string',
-            'email_dari' => 'nullable|string',
+            'email_dari' => 'nullable|email',
             'office_hours_dari' => 'nullable|string',
             'address_pashto' => 'nullable|string',
             'phones_pashto' => 'nullable|string',
-            'email_pashto' => 'nullable|string',
+            'email_pashto' => 'nullable|email',
             'office_hours_pashto' => 'nullable|string',
             'facebook' => 'nullable|string|url',
             'x' => 'nullable|string|url',
@@ -165,9 +172,16 @@ class ContactController extends Controller
             $contactInfo->update($validated);
         }
 
-        return response()->json([
-            'success' => true,
-            'contactInfo' => $contactInfo->fresh(),
-        ]);
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'contactInfo' => $contactInfo->fresh(),
+            ]);
+        }
+
+        // Otherwise redirect with flash message (traditional form submission)
+        return redirect()
+            ->back()
+            ->with('success', 'Contact information updated successfully.');
     }
 }
