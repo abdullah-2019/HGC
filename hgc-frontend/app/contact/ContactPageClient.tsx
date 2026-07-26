@@ -18,6 +18,7 @@ import {
   User,
   Mail,
   Phone,
+  FileText,
   MessageSquare,
   Clock,
   MapPin,
@@ -276,6 +277,22 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
                       dir="ltr"  // Phone numbers always LTR
                       className={`${inputClasses} ${dir === "rtl" ? "pr-12 text-right" : "pl-12 text-left"
                         }`}
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <FileText
+                      className={`absolute top-1/2 -translate-y-1/2 text-white/40 ${dir === "rtl" ? "right-4" : "left-4"}`}
+                      size={20}
+                    />
+                    <input
+                      type="text"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      placeholder={t(lang, "contact.form_subject")}
+                      className={`${inputClasses} ${dir === "rtl" ? "pr-12" : "pl-12"}`}
+                      required
                     />
                   </div>
 
