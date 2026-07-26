@@ -4,19 +4,29 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import {
+  FaFacebookF,
+  FaInstagram,
+  FaXTwitter,
+  FaLinkedinIn,
+  FaYoutube,
+  FaWhatsapp,
+  FaTelegram,
+  FaGlobe
+} from "react-icons/fa6";
+import {
   Send,
   User,
   Mail,
   Phone,
-  FileText,
   MessageSquare,
   Clock,
   MapPin,
   Building2,
   Loader2,
 } from "lucide-react";
-import { FaFacebookF, FaInstagram, FaGlobe } from "react-icons/fa6";
-import { FaTelegramPlane } from "react-icons/fa";
+
+// import { FaFacebookF, FaInstagram, FaGlobe } from "react-icons/fa6";
+// import { FaTelegramPlane } from "react-icons/fa";
 
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
@@ -87,15 +97,36 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
   const officeHours = getField("office_hours");
 
   // Social links (same for all languages)
+  // const socialLinks = contactInfo
+  //   ? ([
+  //     { key: "facebook" as const, icon: FaFacebookF, label: "Facebook" },
+  //     { key: "instagram" as const, icon: FaInstagram, label: "Instagram" },
+  //     { key: "telegram" as const, icon: FaTelegramPlane, label: "Telegram" },
+  //     { key: "x" as const, icon: FaGlobe, label: "X" },
+  //     { key: "linkedin" as const, icon: FaGlobe, label: "LinkedIn" },
+  //     { key: "youtube" as const, icon: FaGlobe, label: "YouTube" },
+  //     { key: "whatsapp" as const, icon: FaGlobe, label: "WhatsApp" },
+  //   ] as const)
+  //     .filter((item) => {
+  //       const url = contactInfo[item.key];
+  //       return typeof url === "string" && url.length > 0;
+  //     })
+  //     .map((item) => ({
+  //       icon: item.icon,
+  //       label: item.label,
+  //       href: contactInfo[item.key] as string,
+  //     }))
+  //   : [];
+
   const socialLinks = contactInfo
     ? ([
       { key: "facebook" as const, icon: FaFacebookF, label: "Facebook" },
       { key: "instagram" as const, icon: FaInstagram, label: "Instagram" },
-      { key: "telegram" as const, icon: FaTelegramPlane, label: "Telegram" },
-      { key: "x" as const, icon: FaGlobe, label: "X" },
-      { key: "linkedin" as const, icon: FaGlobe, label: "LinkedIn" },
-      { key: "youtube" as const, icon: FaGlobe, label: "YouTube" },
-      { key: "whatsapp" as const, icon: FaGlobe, label: "WhatsApp" },
+      { key: "telegram" as const, icon: FaTelegram, label: "Telegram" },
+      { key: "x" as const, icon: FaXTwitter, label: "X" },
+      { key: "linkedin" as const, icon: FaLinkedinIn, label: "LinkedIn" },
+      { key: "youtube" as const, icon: FaYoutube, label: "YouTube" },
+      { key: "whatsapp" as const, icon: FaWhatsapp, label: "WhatsApp" },
     ] as const)
       .filter((item) => {
         const url = contactInfo[item.key];
