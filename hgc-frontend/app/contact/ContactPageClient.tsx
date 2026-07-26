@@ -26,8 +26,6 @@ import {
   Loader2,
 } from "lucide-react";
 
-// import { FaFacebookF, FaInstagram, FaGlobe } from "react-icons/fa6";
-// import { FaTelegramPlane } from "react-icons/fa";
 
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
@@ -97,28 +95,6 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
   const email = getField("email");
   const officeHours = getField("office_hours");
 
-  // Social links (same for all languages)
-  // const socialLinks = contactInfo
-  //   ? ([
-  //     { key: "facebook" as const, icon: FaFacebookF, label: "Facebook" },
-  //     { key: "instagram" as const, icon: FaInstagram, label: "Instagram" },
-  //     { key: "telegram" as const, icon: FaTelegramPlane, label: "Telegram" },
-  //     { key: "x" as const, icon: FaGlobe, label: "X" },
-  //     { key: "linkedin" as const, icon: FaGlobe, label: "LinkedIn" },
-  //     { key: "youtube" as const, icon: FaGlobe, label: "YouTube" },
-  //     { key: "whatsapp" as const, icon: FaGlobe, label: "WhatsApp" },
-  //   ] as const)
-  //     .filter((item) => {
-  //       const url = contactInfo[item.key];
-  //       return typeof url === "string" && url.length > 0;
-  //     })
-  //     .map((item) => ({
-  //       icon: item.icon,
-  //       label: item.label,
-  //       href: contactInfo[item.key] as string,
-  //     }))
-  //   : [];
-
   const socialLinks = contactInfo
     ? ([
       { key: "facebook" as const, icon: FaFacebookF, label: "Facebook" },
@@ -157,11 +133,10 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
   return (
     <main className="min-h-screen bg-[#0A1628]">
       {/* ========== HERO ========== */}
-      {/* ========== HERO ========== */}
       <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/contact.webp"
+            src="/images/contact-hero.webp"
             alt="HGC Contact"
             fill
             className="object-cover"
@@ -185,7 +160,6 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="mx-auto max-w-2xl text-lg text-white/90 md:text-xl"
             >
-              {t(lang, "contact.hero_subtitle")}
             </motion.p>
           </div>
         </div>
