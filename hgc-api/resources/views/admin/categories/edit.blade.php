@@ -3,7 +3,6 @@
 @section('title', 'Edit Category')
 @section('page-title', 'Edit Category')
 
-
 @section('content')
     <div class="max-w-5xl mx-auto p-6">
         <div class="mb-6">
@@ -138,8 +137,8 @@
 
                         @if ($category->image_url)
                             <div class="mt-3 flex items-center gap-4">
-                                <img src="{{ asset('storage/' . $category->image_url) }}" alt="Current"
-                                    class="w-20 h-20 rounded-lg object-cover border border-gray-700">
+                                <img src="{{ Str::startsWith($category->image_url, 'http') ? $category->image_url : asset('storage/' . $category->image_url) }}"
+                                    alt="Current" class="w-20 h-20 rounded-lg object-cover border border-gray-700">
                                 <span class="text-xs text-gray-500">Current image. Upload new to replace.</span>
                             </div>
                         @endif
