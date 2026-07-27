@@ -21,9 +21,12 @@ class ProductController extends Controller
             ->with(['category', 'company', 'images'])
             ->ordered();
 
-        // Filter by category
+        // Filter by category (checks both main category & pivot table)
         if ($request->has('category')) {
-            $query->whereHas('category', fn($q) => $q->where('slug', $request->category));
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('category', fn($sq) => $sq->where('slug', $request->category));
+                $q->orWhereHas('categories', fn($sq) => $sq->where('slug', $request->category));
+            });
         }
 
         // Filter by company

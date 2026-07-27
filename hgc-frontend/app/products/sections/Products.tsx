@@ -100,8 +100,8 @@ export default function ProductCategories() {
                   id={`category-${cat.slug}`}
                   onClick={() => setActiveCategory(idx)}
                   className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${isActive
-                      ? "text-white shadow-lg"
-                      : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5"
+                    ? "text-white shadow-lg"
+                    : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5"
                     }`}
                   style={
                     isActive
@@ -158,7 +158,7 @@ export default function ProductCategories() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: idx * 0.1 }}
-                    className="group relative bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden hover:border-white/10 transition-all duration-500"
+                    className="group relative bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#C9A227]/30 transition-all duration-500"
                   >
                     <div className="relative h-48 overflow-hidden">
                       <div
@@ -169,7 +169,7 @@ export default function ProductCategories() {
                       />
                       <div className="absolute inset-0 bg-[#0A1628]/30 group-hover:bg-[#0A1628]/10 transition-colors duration-500" />
                       <div
-                        className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} w-9 h-9 rounded-lg flex items-center justify-center backdrop-blur-sm bg-[#C9A227]25`}
+                        className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} w-9 h-9 rounded-lg flex items-center justify-center backdrop-blur-sm bg-[#C9A227]/20`}
                       >
                         <CatIcon className="w-4 h-4 text-[#C9A227]" />
                       </div>
@@ -179,7 +179,7 @@ export default function ProductCategories() {
                           className="px-5 py-2.5 bg-[#C9A227] text-[#0A1628] font-semibold rounded-xl text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 flex items-center gap-2"
                         >
                           {t(lang, "products.categories.viewDetails")}
-                          <ArrowRight className="w-4 h-4" />
+                          <ArrowRight className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`} />
                         </a>
                       </div>
                     </div>
@@ -189,15 +189,26 @@ export default function ProductCategories() {
                         {product.name}
                       </h4>
                       <p className="text-white/40 text-sm leading-relaxed line-clamp-2">
-                        {product.tagline}
+                        {product.tagline || product.description}
                       </p>
+                      {product.availability_label && (
+                        <span className="inline-block text-xs px-2 py-1 rounded-md bg-white/5 text-[#C9A227] border border-[#C9A227]/20">
+                          {product.availability_label}
+                        </span>
+                      )}
                     </div>
                   </motion.div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-white/40">{t(lang, "products.categories.noProducts")}</p>
+              <div className="text-center py-16 bg-white/[0.02] rounded-2xl border border-white/5">
+                <Boxes className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                <p className="text-white/40 text-lg font-medium">
+                  {t(lang, "products.categories.noProducts")}
+                </p>
+                <p className="text-white/20 text-sm mt-1">
+                  {activeCat?.name} — 0 active products found
+                </p>
               </div>
             )}
           </motion.div>

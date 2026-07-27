@@ -82,7 +82,7 @@ export default function ProductsHero() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="max-w-3xl">
+        <div className="max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -97,11 +97,11 @@ export default function ProductsHero() {
               {t(lang, "products.hero.title")}
             </h1>
 
-            <p className="text-white/50 text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl">
+            <p className="text-white/50 text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl mx-auto">
               {t(lang, "products.hero.subtitle")}
             </p>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <a
                 href="#categories"
                 className="group inline-flex items-center gap-2 px-8 py-4 bg-[#C9A227] text-[#0A1628] font-bold rounded-xl hover:bg-[#C9A227]/90 transition-all duration-300"
