@@ -3,7 +3,6 @@
 @section('title', 'Create Category')
 @section('page-title', 'Create Category')
 
-
 @section('content')
     <div class="max-w-5xl mx-auto p-6">
         <div class="mb-6">
@@ -120,6 +119,7 @@
 
                     <div class="flex items-end">
                         <label class="inline-flex items-center gap-3 cursor-pointer select-none">
+                            <input type="hidden" name="is_active" value="0">
                             <div class="relative">
                                 <input type="checkbox" name="is_active" value="1"
                                     {{ old('is_active', true) ? 'checked' : '' }} class="peer sr-only">
