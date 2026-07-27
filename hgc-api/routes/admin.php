@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProjectController;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\NewsArticleController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\TestimonialController;
@@ -15,8 +15,8 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\StatController;
 use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\AboutPageController;
-use App\Http\Controllers\Admin\About\CarouselSlideController;
 use App\Http\Controllers\Admin\MediaBrowserController;
+use App\Http\Controllers\Admin\About\CarouselSlideController;
 use App\Http\Controllers\Admin\About\AboutMissionController;
 use App\Http\Controllers\Admin\About\AboutVisionController;
 use App\Http\Controllers\Admin\About\AboutCoreValueController;
@@ -30,24 +30,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     // Companies & Entities
     Route::resource('companies', CompanyController::class);
-    // Company Awards CRUD
     Route::resource('companies.awards', \App\Http\Controllers\Admin\CompanyAwardController::class)->except(['show']);
-    // Company Values CRUD
     Route::resource('companies.values', \App\Http\Controllers\Admin\CompanyValueController::class)->except(['show']);
 
-    // Products (Cleaned Resource Framework with custom Action toggles mapped correctly)
+    // Products
     Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
     Route::patch('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
     Route::resource('products', ProductController::class);
 
-    // Structural Resources
-    Route::resource('projects', ProjectController::class);
-    Route::resource('categories', CategoryController::class);
+    // Categories, Sectors, Partners, Testimonials
+    Route::resource('categories', AdminCategoryController::class);
     Route::resource('sectors', SectorController::class);
     Route::resource('partners', PartnerController::class);
     Route::resource('testimonials', TestimonialController::class);
 
-    // News Articles (Custom singular parameter mapping preservation)
+    // News Articles
     Route::resource('news', NewsArticleController::class)->parameters(['news' => 'newsArticle']);
 
     // Communications & Inbound Portals
@@ -67,21 +64,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('about', [AboutPageController::class, 'edit'])->name('about.edit');
     Route::put('about', [AboutPageController::class, 'update'])->name('about.update');
 
-    // Nested About Layout Entities Block
+    // Nested About Layout Entities
     Route::prefix('about')->name('about.')->group(function () {
         Route::resource('carousel', CarouselSlideController::class);
         Route::resource('mission', AboutMissionController::class);
         Route::resource('vision', AboutVisionController::class);
         Route::resource('values', AboutCoreValueController::class);
+
+        // Story (single)
         Route::get('story', [AboutStoryController::class, 'index'])->name('story.index');
         Route::get('story/edit', [AboutStoryController::class, 'edit'])->name('story.edit');
         Route::put('story', [AboutStoryController::class, 'update'])->name('story.update');
 
-             // Story (single story - no resource route)
-        Route::get('story', [AboutStoryController::class, 'index'])->name('story.index');
-        Route::get('story/edit', [AboutStoryController::class, 'edit'])->name('story.edit');
-        Route::put('story', [AboutStoryController::class, 'update'])->name('story.update');
-        
         // Story Highlights
         Route::get('story/highlights', [AboutStoryHighlightController::class, 'index'])->name('story.highlights.index');
         Route::get('story/highlights/create', [AboutStoryHighlightController::class, 'create'])->name('story.highlights.create');
@@ -89,21 +83,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('story/highlights/{highlight}/edit', [AboutStoryHighlightController::class, 'edit'])->name('story.highlights.edit');
         Route::put('story/highlights/{highlight}', [AboutStoryHighlightController::class, 'update'])->name('story.highlights.update');
         Route::delete('story/highlights/{highlight}', [AboutStoryHighlightController::class, 'destroy'])->name('story.highlights.destroy');
-    
     });
 
-
-    // Projects CRUD
+    // Projects
     Route::resource('projects', ProjectController::class);
+    Route::patch('projects/{project}/toggle-featured', [ProjectController::class, 'toggleFeatured'])->name('projects.toggle-featured');
+    Route::patch('projects/{project}/toggle-active', [ProjectController::class, 'toggleActive'])->name('projects.toggle-active');
+    Route::post('projects/{project}/gallery/delete', [ProjectController::class, 'deleteGalleryImage'])->name('projects.gallery.delete');
 
-    // Additional project routes
-    Route::patch('projects/{project}/toggle-featured', [ProjectController::class, 'toggleFeatured'])
-        ->name('projects.toggle-featured');
-
-    Route::patch('projects/{project}/toggle-active', [ProjectController::class, 'toggleActive'])
-        ->name('projects.toggle-active');
-
-    Route::post('projects/{project}/gallery/delete', [ProjectController::class, 'deleteGalleryImage'])
-        ->name('projects.gallery.delete');
-        
 });
