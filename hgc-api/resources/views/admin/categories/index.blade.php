@@ -9,7 +9,6 @@
 
 @section('content')
     <div class="p-6">
-        {{-- Header --}}
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-xl font-semibold text-white">Categories</h1>
@@ -24,33 +23,53 @@
             </a>
         </div>
 
-        {{-- Table Card --}}
-        <div class="bg-slate-800/50 border border-slate-100 rounded-xl overflow-hidden">
+        @if (session('success'))
+            <div
+                class="mb-4 flex items-center gap-3 bg-green-500/10 border border-green-500/20 text-green-400 px-4 py-3 rounded-lg text-sm">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div
+                class="mb-4 flex items-center gap-3 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg text-sm">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table id="categoriesTable" class="w-full text-left text-sm">
-                    <thead class="bg-slate-900/80 text-slate-400 uppercase text-xs tracking-wider">
+                    <thead class="bg-gray-950 text-gray-400 uppercase text-xs tracking-wider">
                         <tr>
                             <th class="px-5 py-3.5 font-semibold">ID</th>
                             <th class="px-5 py-3.5 font-semibold">Image</th>
                             <th class="px-5 py-3.5 font-semibold">Name</th>
                             <th class="px-5 py-3.5 font-semibold">Type</th>
+                            <th class="px-5 py-3.5 font-semibold">Parent</th>
                             <th class="px-5 py-3.5 font-semibold">Icon</th>
                             <th class="px-5 py-3.5 font-semibold">Order</th>
                             <th class="px-5 py-3.5 font-semibold">Status</th>
                             <th class="px-5 py-3.5 font-semibold text-center">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-700/50">
+                    <tbody class="divide-y divide-gray-800">
                         @foreach ($categories as $category)
-                            <tr class="hover:bg-slate-700/30 transition-colors">
-                                <td class="px-5 py-4 text-slate-400">{{ $category->id }}</td>
+                            <tr class="hover:bg-gray-800/50 transition-colors">
+                                <td class="px-5 py-4 text-gray-400">{{ $category->id }}</td>
                                 <td class="px-5 py-4">
                                     @if ($category->image_url)
-                                        <img src="{{ asset('storage/' . $category->image_url) }}" alt=""
-                                            class="w-11 h-11 rounded-lg object-cover bg-slate-700">
+                                        <img src="{{ Str::startsWith($category->image_url, 'http') ? $category->image_url : asset('storage/' . $category->image_url) }}"
+                                            alt="" class="w-11 h-11 rounded-lg object-cover bg-gray-800">
                                     @else
-                                        <div class="w-11 h-11 rounded-lg bg-slate-700 flex items-center justify-center">
-                                            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor"
+                                        <div class="w-11 h-11 rounded-lg bg-gray-800 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -60,9 +79,9 @@
                                 </td>
                                 <td class="px-5 py-4">
                                     <div class="font-medium text-white">{{ $category->name_en }}</div>
-                                    <div class="text-xs text-slate-400 mt-0.5" dir="rtl">
+                                    <div class="text-xs text-gray-400 mt-0.5" dir="rtl">
                                         {{ $category->name_dari ?: '-' }}</div>
-                                    <div class="text-xs text-slate-400 mt-0.5" dir="rtl">
+                                    <div class="text-xs text-gray-400 mt-0.5" dir="rtl">
                                         {{ $category->name_pashto ?: '-' }}</div>
                                 </td>
                                 <td class="px-5 py-4">
@@ -71,15 +90,18 @@
                                         {{ ucfirst($category->type) }}
                                     </span>
                                 </td>
+                                <td class="px-5 py-4 text-gray-400">
+                                    {{ $category->parent?->name_en ?? '-' }}
+                                </td>
                                 <td class="px-5 py-4">
                                     @if ($category->icon_name)
                                         <code
-                                            class="text-xs bg-slate-700 text-blue-300 px-2 py-1 rounded">{{ $category->icon_name }}</code>
+                                            class="text-xs bg-gray-800 text-blue-300 px-2 py-1 rounded">{{ $category->icon_name }}</code>
                                     @else
-                                        <span class="text-slate-500">-</span>
+                                        <span class="text-gray-600">-</span>
                                     @endif
                                 </td>
-                                <td class="px-5 py-4 text-slate-400">{{ $category->sort_order }}</td>
+                                <td class="px-5 py-4 text-gray-400">{{ $category->sort_order }}</td>
                                 <td class="px-5 py-4">
                                     @if ($category->is_active)
                                         <span
@@ -96,7 +118,7 @@
                                 <td class="px-5 py-4">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('admin.categories.edit', $category) }}"
-                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-600 text-slate-400 hover:text-blue-400 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all"
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-gray-700 text-gray-400 hover:text-blue-400 hover:border-blue-600 hover:bg-blue-600/10 transition-all"
                                             title="Edit">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -109,7 +131,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-600 text-slate-400 hover:text-red-400 hover:border-red-500/50 hover:bg-red-500/10 transition-all"
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-gray-700 text-gray-400 hover:text-red-400 hover:border-red-600 hover:bg-red-600/10 transition-all"
                                                 title="Delete">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -141,7 +163,7 @@
                 ],
                 columnDefs: [{
                     orderable: false,
-                    targets: [1, 7]
+                    targets: [1, 8]
                 }],
                 language: {
                     search: '',
