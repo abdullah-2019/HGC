@@ -6,7 +6,6 @@ interface FetchOptions extends RequestInit {
 
 async function fetchAPI<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
   const { lang = "en", ...rest } = options;
-
   const url = `${API_BASE_URL}${endpoint}`;
 
   const response = await fetch(url, {
@@ -80,15 +79,15 @@ export interface APIResponse<T> {
 }
 
 export function getCompanies(lang: string = "en"): Promise<APIResponse<CompanyListItem[]>> {
-  return fetchAPI("/api/companies", { lang });
+  return fetchAPI(`/api/companies?lang=${lang}`, { lang });
 }
 
 export function getFeaturedCompanies(lang: string = "en"): Promise<APIResponse<CompanyListItem[]>> {
-  return fetchAPI("/api/companies/featured", { lang });
+  return fetchAPI(`/api/companies/featured?lang=${lang}`, { lang });
 }
 
 export function getCompanyBySlug(slug: string, lang: string = "en"): Promise<APIResponse<CompanyDetail>> {
-  return fetchAPI(`/api/companies/${slug}`, { lang });
+  return fetchAPI(`/api/companies/${slug}?lang=${lang}`, { lang });
 }
 
 // ─── Products API ───
@@ -123,6 +122,7 @@ export interface ProductListItem {
   tagline: string | null;
   description: string | null;
   category: CategoryItem | null;
+  category_slugs?: string[]; // ← ADDED: backend now sends this
   company: CompanyItem | null;
   origin: string | null;
   grade: string | null;
@@ -151,8 +151,12 @@ export interface ProductDetail extends ProductListItem {
   } | null;
 }
 
-export function getProducts(lang: string = "en", params?: { category?: string; featured?: boolean }): Promise<APIResponse<ProductListItem[]>> {
+export function getProducts(
+  lang: string = "en",
+  params?: { category?: string; featured?: boolean }
+): Promise<APIResponse<ProductListItem[]>> {
   const query = new URLSearchParams();
+  query.append("lang", lang);
   if (params?.category) query.append("category", params.category);
   if (params?.featured) query.append("featured", "1");
   const qs = query.toString();
@@ -160,22 +164,23 @@ export function getProducts(lang: string = "en", params?: { category?: string; f
 }
 
 export function getFeaturedProducts(lang: string = "en"): Promise<APIResponse<ProductListItem[]>> {
-  return fetchAPI("/api/products/featured", { lang });
+  return fetchAPI(`/api/products/featured?lang=${lang}`, { lang });
 }
 
 export function getProductBySlug(slug: string, lang: string = "en"): Promise<APIResponse<ProductDetail>> {
-  return fetchAPI(`/api/products/${slug}`, { lang });
+  return fetchAPI(`/api/products/${slug}?lang=${lang}`, { lang });
 }
 
 // ─── Categories API ───
 
 export function getCategories(lang: string = "en", type?: string): Promise<APIResponse<CategoryItem[]>> {
   const query = new URLSearchParams();
+  query.append("lang", lang); // ← ADDED
   if (type) query.append("type", type);
   const qs = query.toString();
   return fetchAPI(`/api/categories${qs ? `?${qs}` : ""}`, { lang });
 }
 
 export function getCategoryBySlug(slug: string, lang: string = "en"): Promise<APIResponse<CategoryItem>> {
-  return fetchAPI(`/api/categories/${slug}`, { lang });
+  return fetchAPI(`/api/categories/${slug}?lang=${lang}`, { lang });
 }

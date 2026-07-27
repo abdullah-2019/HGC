@@ -14,7 +14,6 @@ import { t } from "@/components/translations";
 import { getCategories, getProducts, type CategoryItem, type ProductListItem } from "@/lib/api";
 import ScrollReveal from "@/components/ScrollReveal";
 
-// Dynamic icon resolver — no hardcoded names needed
 function getIcon(iconName: string | null | undefined): LucideIcon {
   if (!iconName) return Boxes;
   const Icon = (Icons as unknown as Record<string, LucideIcon>)[iconName];
@@ -34,30 +33,53 @@ export default function ProductCategories() {
   const isRTL = dir === "rtl";
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchData = async () => {
+      setLoading(true);
       try {
-        const catRes = await getCategories(lang, "product");
-        if (!catRes.success) return;
+        // Fetch categories + ALL active products in parallel
+        const [catRes, prodRes] = await Promise.all([
+          getCategories(lang, "product"),
+          getProducts(lang),
+        ]);
 
-        const catsWithProducts = await Promise.all(
-          catRes.data.map(async (cat) => {
-            const prodRes = await getProducts(lang, { category: cat.slug });
-            return {
-              ...cat,
-              products: prodRes.success ? prodRes.data : [],
-            };
-          })
-        );
+        if (!catRes.success || !prodRes.success) {
+          if (!cancelled) setCategories([]);
+          return;
+        }
 
-        setCategories(catsWithProducts);
+        const allProducts = prodRes.data;
+
+        // Match products to categories (main category + pivot categories)
+        const catsWithProducts = catRes.data
+          .map((cat) => ({
+            ...cat,
+            products: allProducts.filter((p) => {
+              if (p.category?.slug === cat.slug) return true;
+              if (p.category_slugs?.includes(cat.slug)) return true;
+              return false;
+            }),
+          }))
+          // Hide tabs that have zero active products
+          .filter((cat) => cat.products.length > 0);
+
+        if (!cancelled) {
+          setCategories(catsWithProducts);
+          setActiveCategory(0);
+        }
       } catch (error) {
-        console.error("Failed to fetch categories:", error);
+        console.error("Failed to fetch categories/products:", error);
+        if (!cancelled) setCategories([]);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchData();
+    return () => {
+      cancelled = true;
+    };
   }, [lang]);
 
   if (loading) {
@@ -70,7 +92,18 @@ export default function ProductCategories() {
     );
   }
 
-  if (categories.length === 0) return null;
+  if (categories.length === 0) {
+    return (
+      <section id="categories" className="py-24 relative" dir={dir}>
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <Boxes className="w-12 h-12 text-white/20 mx-auto mb-4" />
+          <p className="text-white/40 text-lg font-medium">
+            {t(lang, "products.categories.noProducts")}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   const activeCat = categories[activeCategory];
   const CatIcon = getIcon(activeCat?.icon_name);
@@ -97,24 +130,27 @@ export default function ProductCategories() {
               return (
                 <button
                   key={cat.id}
-                  id={`category-${cat.slug}`}
                   onClick={() => setActiveCategory(idx)}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${isActive
-                    ? "text-white shadow-lg"
-                    : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5"
-                    }`}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                    isActive
+                      ? "shadow-lg"
+                      : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5"
+                  }`}
                   style={
                     isActive
                       ? {
-                        backgroundColor: "#C9A22720",
-                        border: "1px solid #C9A22740",
-                        color: "#C9A227",
-                      }
+                          backgroundColor: "#C9A22720",
+                          border: "1px solid #C9A22740",
+                          color: "#C9A227",
+                        }
                       : {}
                   }
                 >
                   <Icon className="w-4 h-4" />
                   <span>{cat.name}</span>
+                  <span className="text-xs opacity-60 ml-1">
+                    ({cat.products.length})
+                  </span>
                 </button>
               );
             })}
@@ -137,7 +173,7 @@ export default function ProductCategories() {
               <div className="absolute inset-0 bg-[#0A1628]/60" />
               <div className="absolute inset-0 flex items-center">
                 <div className="max-w-3xl px-8 sm:px-12">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-[#C9A227]20">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-[#C9A227]/20">
                     <CatIcon className="w-7 h-7 text-[#C9A227]" />
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
@@ -150,7 +186,7 @@ export default function ProductCategories() {
               </div>
             </div>
 
-            {activeCat?.products && activeCat.products.length > 0 ? (
+            {activeCat.products.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {activeCat.products.map((product, idx) => (
                   <motion.div
@@ -164,12 +200,18 @@ export default function ProductCategories() {
                       <div
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                         style={{
-                          backgroundImage: `url(${product.primary_image?.url || product.thumbnail_url || "/placeholder.jpg"})`,
+                          backgroundImage: `url(${
+                            product.primary_image?.url ||
+                            product.thumbnail_url ||
+                            "/placeholder.jpg"
+                          })`,
                         }}
                       />
                       <div className="absolute inset-0 bg-[#0A1628]/30 group-hover:bg-[#0A1628]/10 transition-colors duration-500" />
                       <div
-                        className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} w-9 h-9 rounded-lg flex items-center justify-center backdrop-blur-sm bg-[#C9A227]/20`}
+                        className={`absolute top-3 ${
+                          isRTL ? "left-3" : "right-3"
+                        } w-9 h-9 rounded-lg flex items-center justify-center backdrop-blur-sm bg-[#C9A227]/20`}
                       >
                         <CatIcon className="w-4 h-4 text-[#C9A227]" />
                       </div>
@@ -179,7 +221,9 @@ export default function ProductCategories() {
                           className="px-5 py-2.5 bg-[#C9A227] text-[#0A1628] font-semibold rounded-xl text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 flex items-center gap-2"
                         >
                           {t(lang, "products.categories.viewDetails")}
-                          <ArrowRight className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`} />
+                          <ArrowRight
+                            className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`}
+                          />
                         </a>
                       </div>
                     </div>
@@ -205,9 +249,6 @@ export default function ProductCategories() {
                 <Boxes className="w-12 h-12 text-white/20 mx-auto mb-4" />
                 <p className="text-white/40 text-lg font-medium">
                   {t(lang, "products.categories.noProducts")}
-                </p>
-                <p className="text-white/20 text-sm mt-1">
-                  {activeCat?.name} — 0 active products found
                 </p>
               </div>
             )}

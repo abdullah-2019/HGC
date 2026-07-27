@@ -9,19 +9,14 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * List products (with optional filters)
-     * GET /api/products
-     */
     public function index(Request $request): JsonResponse
     {
         $lang = $request->get('lang', 'en');
 
         $query = Product::active()
-            ->with(['category', 'company', 'images'])
+            ->with(['category', 'categories', 'company', 'images'])
             ->ordered();
 
-        // Filter by category (checks both main category & pivot table)
         if ($request->has('category')) {
             $query->where(function ($q) use ($request) {
                 $q->whereHas('category', fn($sq) => $sq->where('slug', $request->category));
@@ -29,12 +24,10 @@ class ProductController extends Controller
             });
         }
 
-        // Filter by company
         if ($request->has('company')) {
             $query->whereHas('company', fn($q) => $q->where('slug', $request->company));
         }
 
-        // Featured only
         if ($request->boolean('featured')) {
             $query->featured();
         }
@@ -49,16 +42,12 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Get single product
-     * GET /api/products/{slug}
-     */
     public function show(Request $request, string $slug): JsonResponse
     {
         $lang = $request->get('lang', 'en');
 
         $product = Product::active()
-            ->with(['category', 'company', 'images'])
+            ->with(['category', 'categories', 'company', 'images'])
             ->where('slug', $slug)
             ->first();
 
@@ -75,17 +64,13 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Get featured products (for homepage)
-     * GET /api/products/featured
-     */
     public function featured(Request $request): JsonResponse
     {
         $lang = $request->get('lang', 'en');
 
         $products = Product::active()
             ->featured()
-            ->with(['category', 'company'])
+            ->with(['category', 'categories', 'company'])
             ->ordered()
             ->limit(6)
             ->get()
@@ -99,12 +84,14 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Format product for list/card view
-     */
     private function formatProduct(Product $product, string $lang): array
     {
         $primaryImage = $product->primaryImage();
+
+        $categorySlugs = array_values(array_unique(array_filter(array_merge(
+            [$product->category?->slug],
+            $product->categories->pluck('slug')->toArray()
+        ))));
 
         return [
             'id' => $product->id,
@@ -117,6 +104,7 @@ class ProductController extends Controller
                 'name' => $product->category->getLocalizedName($lang),
                 'icon_name' => $product->category->icon_name,
             ] : null,
+            'category_slugs' => $categorySlugs,
             'company' => $product->company ? [
                 'slug' => $product->company->slug,
                 'name' => $product->company->getLocalizedName($lang),
@@ -141,9 +129,6 @@ class ProductController extends Controller
         ];
     }
 
-    /**
-     * Format product for detail view
-     */
     private function formatProductDetail(Product $product, string $lang): array
     {
         return [
@@ -188,6 +173,3 @@ class ProductController extends Controller
         ];
     }
 }
-
-
-/////////////////
