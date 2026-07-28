@@ -123,14 +123,14 @@ export default function SectorsSection() {
                 : "هیڅ سکتور ونه موندل شو."}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             {sectors.map((sector) => {
               const Icon = iconMap[sector.icon_name] || Road;
               return (
                 <Link
                   key={sector.slug}
                   href={`/sectors/${sector.slug}`}
-                  className="group text-center p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-[#C9A227]/20 transition-all duration-300"
+                  className="group text-center p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-[#C9A227]/20 transition-all duration-300 w-36 sm:w-40 lg:w-44"
                 >
                   <div className="w-12 h-12 mx-auto rounded-xl bg-[#C9A227]/10 flex items-center justify-center mb-3 group-hover:bg-[#C9A227]/20 group-hover:scale-110 transition-all duration-300">
                     <Icon className="w-6 h-6 text-[#C9A227]" />
