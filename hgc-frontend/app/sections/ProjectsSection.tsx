@@ -56,10 +56,11 @@ export default function ProjectsSection() {
 
   // Fetch projects from API
   useEffect(() => {
+
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${API_BASE}/api/projects`, {
+        const res = await fetch(`${API_BASE}/api/projects?featured=1`, {
           headers: { Accept: "application/json" },
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -151,8 +152,8 @@ export default function ProjectsSection() {
     lang === "en"
       ? { pre: "Featured ", highlight: "Projects" }
       : lang === "dari"
-      ? { pre: "پروژه های ", highlight: "برجسته" }
-      : { pre: "ټاکل شوې ", highlight: "پروژې" };
+        ? { pre: "پروژه های ", highlight: "برجسته" }
+        : { pre: "ټاکل شوې ", highlight: "پروژې" };
 
   const portfolioLabel =
     lang === "en" ? "Portfolio" : lang === "dari" ? "نمونه کارها" : "پورټفولیو";
@@ -234,11 +235,10 @@ export default function ProjectsSection() {
           <div className="flex flex-wrap gap-2 mb-10">
             <button
               onClick={() => setActiveCategory("all")}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-                activeCategory === "all"
-                  ? "bg-[#C9A227] text-[#0A1628]"
-                  : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
-              }`}
+              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeCategory === "all"
+                ? "bg-[#C9A227] text-[#0A1628]"
+                : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                }`}
             >
               {allLabel}
             </button>
@@ -246,11 +246,10 @@ export default function ProjectsSection() {
               <button
                 key={filter.key}
                 onClick={() => setActiveCategory(filter.key)}
-                className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activeCategory === filter.key
-                    ? "bg-[#C9A227] text-[#0A1628]"
-                    : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
-                }`}
+                className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeCategory === filter.key
+                  ? "bg-[#C9A227] text-[#0A1628]"
+                  : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                  }`}
               >
                 {getLabel(filter)}
               </button>
@@ -280,11 +279,10 @@ export default function ProjectsSection() {
                 {/* Status Badge */}
                 <div className="absolute top-4 left-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                      project.status === "completed"
-                        ? "bg-green-500/20 text-green-400 border-green-500/20"
-                        : "bg-amber-500/20 text-amber-400 border-amber-500/20"
-                    }`}
+                    className={`px-3 py-1 rounded-full text-xs font-medium border ${project.status === "completed"
+                      ? "bg-green-500/20 text-green-400 border-green-500/20"
+                      : "bg-amber-500/20 text-amber-400 border-amber-500/20"
+                      }`}
                   >
                     {getStatusLabel(project.status)}
                   </span>
@@ -330,8 +328,8 @@ export default function ProjectsSection() {
               {lang === "en"
                 ? "No projects found in this category."
                 : lang === "dari"
-                ? "هیچ پروژه ای در این دسته بندی یافت نشد."
-                : "په دې کټګورۍ کې هیڅ پروژه ونه موندل شوه."}
+                  ? "هیچ پروژه ای در این دسته بندی یافت نشد."
+                  : "په دې کټګورۍ کې هیڅ پروژه ونه موندل شوه."}
             </p>
           </div>
         )}

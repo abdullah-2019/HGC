@@ -23,6 +23,10 @@ class ProjectController extends Controller
             ->orderBy('sort_order', 'asc')
             ->orderBy('created_at', 'desc');
 
+        if ($request->query('featured')) {
+            $query->where('is_featured', true);
+        }
+
         if ($companySlug && $companySlug !== 'all') {
             $query->whereHas('company', function ($q) use ($companySlug) {
                 $q->where('slug', $companySlug);
