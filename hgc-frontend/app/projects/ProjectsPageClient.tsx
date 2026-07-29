@@ -5,7 +5,8 @@ import ProjectsHero from "./sections/ProjectsHero";
 import CompanyFilter from "./sections/CompanyFilter";
 import ProjectsGrid from "./sections/ProjectsGrid";
 
-const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api`;
+// const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api`;
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af"}/api`;
 
 interface Project {
   id: number;

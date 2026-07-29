@@ -20,6 +20,7 @@ export function resolveImageUrl(path: string | null | undefined): string {
 
   // Relative path like "uploads/hero-construction.webp"
   // Prepend the API base URL + /storage/
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:8000";
+  // const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:8000";
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "https://api.hgc.af";
   return `${baseUrl}/storage/${path}`;
 }

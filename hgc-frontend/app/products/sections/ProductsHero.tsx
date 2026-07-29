@@ -24,7 +24,8 @@ export default function ProductsHero() {
   const [currentBg, setCurrentBg] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  // const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
   const backgrounds = [
     `${API_URL}/storage/uploads/hero-construction.webp`,

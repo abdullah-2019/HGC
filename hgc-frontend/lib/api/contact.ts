@@ -1,6 +1,7 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL 
   ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
-  : "http://localhost:8000/api";
+  // : "http://localhost:8000/api";
+  : "https://api.hgc.af/api";
 
 export interface ContactInfo {
   id: number;

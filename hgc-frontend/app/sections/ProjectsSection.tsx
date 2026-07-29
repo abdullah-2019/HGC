@@ -33,7 +33,8 @@ interface CategoryFilter {
   labelPashto: string;
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
 // Pashto translations for common categories (fallback)
 const CATEGORY_TRANSLATIONS: Record<string, { dari: string; pashto: string }> = {

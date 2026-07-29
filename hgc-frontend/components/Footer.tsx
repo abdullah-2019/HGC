@@ -180,7 +180,8 @@ function getSocialIcon(url: string): React.ReactNode {
 
 
 // ── Helpers ───────────────────────────────────────────────────────────
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
 function getLocalizedText(
   lang: string,

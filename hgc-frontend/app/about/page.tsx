@@ -121,7 +121,7 @@ interface ApiResponse<T> {
 // ─── Fetch function ─────────────────────────────────────
 
 async function fetchAboutPageData(): Promise<AboutPageData> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:8000";
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "https://api.hgc.af/";
   const API_BASE = `${baseUrl}/api`;
   const isDev = process.env.NODE_ENV === "development";
 

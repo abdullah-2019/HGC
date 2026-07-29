@@ -18,7 +18,8 @@ interface WhyChooseFeature {
   descPashto: string | null;
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
 // Safe icon resolver — falls back to Award if icon not found
 function resolveIcon(iconName: string): LucideIcon {

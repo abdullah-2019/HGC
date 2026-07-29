@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectDetailClient from "./ProjectDetailClient";
 
-// Your .env has: NEXT_PUBLIC_API_URL=http://localhost:8000
-const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api`;
+// const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api`;
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af"}/api`;
 
 async function getProject(slug: string) {
   try {
