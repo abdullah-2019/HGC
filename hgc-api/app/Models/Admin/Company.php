@@ -43,7 +43,6 @@ class Company extends BaseCompany
 
     /**
      * Get full URL for logo preview.
-     * Returns: http://localhost:8000/storage/uploads/companies/{slug}/logos/logo.jpg
      */
     public function getLogoPreviewUrl(): ?string
     {
@@ -53,7 +52,6 @@ class Company extends BaseCompany
 
     /**
      * Get full URL for hero image preview.
-     * Returns: http://localhost:8000/storage/uploads/companies/{slug}/heroes/hero.webp
      */
     public function getHeroPreviewUrl(): ?string
     {

@@ -238,6 +238,7 @@ class ProjectController extends Controller
             return $path;
         }
         // Force the correct URL with port 8000
-        return 'http://localhost:8000/storage/' . ltrim($path, '/');
+        // return 'http://localhost:8000/storage/' . ltrim($path, '/');
+        return 'https://api.hgc.af/storage/' . ltrim($path, '/');
     }
 }
