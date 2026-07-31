@@ -1,4 +1,4 @@
-@props(['type' => 'info', 'message', 'dismissible' => true])
+@props(['type' => 'info', 'message' => '', 'dismissible' => true, 'autoDismiss' => false])
 
 @php
 $classes = match($type) {
@@ -28,6 +28,7 @@ $iconColors = match($type) {
 
 <div 
     x-data="{ show: true }" 
+    @if($autoDismiss) x-init="setTimeout(() => show = false, 5000)" @endif
     x-show="show" 
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0 translate-x-4"
