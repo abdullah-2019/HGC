@@ -1,40 +1,27 @@
 "use client";
 
-import Link from "next/link";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
-import { t } from "@/components/translations";
 import Particles from "@/app/components/Particles";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
-/* ── Slide Data ── */
+const SLIDE_DURATION = 5000;
+
 const slides = [
   {
     image: "/images/hero-construction.webp",
+    kenBurns: "zoom-in", // or "zoom-out", "pan-left", "pan-right"
     badge: {
       en: "Since 2001 — Building Afghanistan's Future",
       dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
       pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
     },
     title: {
-      en: [
-        { text: "Building ", highlight: false },
-        { text: "Afghanistan's", highlight: true },
-        { text: "\nFuture", highlight: false },
-      ],
-      dari: [
-        { text: "", highlight: false },
-        { text: "آینده", highlight: true },
-        { text: " افغانستان", highlight: false },
-        { text: "\nرا می سازیم", highlight: false },
-      ],
-      pashto: [
-        { text: "د ", highlight: false },
-        { text: "افغانستان", highlight: true },
-        { text: "", highlight: false },
-        { text: "\nراتلونکی جوړوو", highlight: false },
-      ],
+      en: ["Building ", "Afghanistan's", "\nFuture"],
+      dari: ["", "آینده", " افغانستان", "\nرا می سازیم"],
+      pashto: ["د ", "افغانستان", "", "\nراتلونکی جوړوو"],
     },
+    highlights: { en: [1], dari: [1], pashto: [1] },
     subtitle: {
       en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
       dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
@@ -42,29 +29,19 @@ const slides = [
     },
   },
   {
-    image: "/images/hero-mining.webp",
+    image: "/images/contact-hero.webp",
+    kenBurns: "pan-right",
     badge: {
       en: "Responsible Mining Operations",
       dari: "عملیات مسئولانه استخراج معادن",
       pashto: "د مسؤلانه کانونو استخراج عملیات",
     },
     title: {
-      en: [
-        { text: "Extracting ", highlight: false },
-        { text: "Value", highlight: true },
-        { text: "\nFrom the Earth", highlight: false },
-      ],
-      dari: [
-        { text: "استخراج ", highlight: false },
-        { text: "ارزش", highlight: true },
-        { text: "\nاز زمین", highlight: false },
-      ],
-      pashto: [
-        { text: "د ځمکې څخه ", highlight: false },
-        { text: "ارزښت", highlight: true },
-        { text: "\nاستخراج", highlight: false },
-      ],
+      en: ["Extracting ", "Value", "\nFrom the Earth"],
+      dari: ["استخراج ", "ارزش", "\nاز زمین"],
+      pashto: ["د ځمکې څخه ", "ارزښت", "\nاستخراج"],
     },
+    highlights: { en: [1], dari: [1], pashto: [1] },
     subtitle: {
       en: "Sustainable mineral extraction powering Afghanistan's industrial growth and lasting economic impact.",
       dari: "استخراج پایدار مواد معدنی که رشد صنعتی افغانستان را تقویت می‌کند.",
@@ -73,28 +50,18 @@ const slides = [
   },
   {
     image: "/images/hero-logistics.webp",
+    kenBurns: "zoom-out",
     badge: {
       en: "Nationwide Logistics Network",
       dari: "شبکه لوژستیک سراسری",
       pashto: "د ټول هیواد لوجستیک شبکه",
     },
     title: {
-      en: [
-        { text: "Connecting ", highlight: false },
-        { text: "Every", highlight: true },
-        { text: "\nProvince", highlight: false },
-      ],
-      dari: [
-        { text: "اتصال ", highlight: false },
-        { text: "هر", highlight: true },
-        { text: "\nولایت", highlight: false },
-      ],
-      pashto: [
-        { text: "د ", highlight: false },
-        { text: "هر", highlight: true },
-        { text: "\nولایت نښلول", highlight: false },
-      ],
+      en: ["Connecting ", "Every", "\nProvince"],
+      dari: ["اتصال ", "هر", "\nولایت"],
+      pashto: ["د ", "هر", "\nولایت نښلول"],
     },
+    highlights: { en: [1], dari: [1], pashto: [1] },
     subtitle: {
       en: "Reliable transportation and supply chain solutions delivering across all 38+ provinces of Afghanistan.",
       dari: "حمل و نقل و زنجیره تأمین قابل اعتماد در سراسر ۳۸+ ولایت افغانستان.",
@@ -103,43 +70,55 @@ const slides = [
   },
 ];
 
+/* ── Ken Burns keyframe helper (per-slide) ── */
+const getKenBurnsClass = (type: string) => {
+  switch (type) {
+    case "zoom-in":
+      return "animate-[kenBurnsIn_10s_ease-out_forwards]";
+    case "zoom-out":
+      return "animate-[kenBurnsOut_10s_ease-out_forwards]";
+    case "pan-right":
+      return "animate-[kenBurnsRight_10s_ease-out_forwards]";
+    case "pan-left":
+      return "animate-[kenBurnsLeft_10s_ease-out_forwards]";
+    default:
+      return "animate-[kenBurnsIn_10s_ease-out_forwards]";
+  }
+};
+
 export default function HeroSection() {
   const { lang } = useI18n();
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [direction, setDirection] = useState<"next" | "prev">("next");
+  const progressRef = useRef<HTMLDivElement>(null);
 
-  const SLIDE_DURATION = 6000;
+  const goTo = useCallback(
+    (idx: number, dir: "next" | "prev" = "next") => {
+      setDirection(dir);
+      setActive(idx);
+    },
+    []
+  );
 
-  const nextSlide = useCallback(() => {
-    setActiveSlide((prev) => (prev + 1) % slides.length);
-    setProgress(0);
+  const next = useCallback(() => {
+    setDirection("next");
+    setActive((p) => (p + 1) % slides.length);
   }, []);
 
-  const prevSlide = useCallback(() => {
-    setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    setProgress(0);
+  const prev = useCallback(() => {
+    setDirection("prev");
+    setActive((p) => (p - 1 + slides.length) % slides.length);
   }, []);
 
-  /* Auto-play with progress */
+  /* Autoplay */
   useEffect(() => {
     if (isPaused) return;
-    const start = Date.now();
-    const timer = setInterval(() => {
-      const elapsed = Date.now() - start;
-      const pct = Math.min((elapsed / SLIDE_DURATION) * 100, 100);
-      setProgress(pct);
-      if (elapsed >= SLIDE_DURATION) nextSlide();
-    }, 50);
-    return () => clearInterval(timer);
-  }, [isPaused, activeSlide, nextSlide]);
+    const t = setInterval(next, SLIDE_DURATION);
+    return () => clearInterval(t);
+  }, [isPaused, next]);
 
-  const goTo = (idx: number) => {
-    setActiveSlide(idx);
-    setProgress(0);
-  };
-
-  const current = slides[activeSlide];
+  const current = slides[active];
 
   return (
     <section
@@ -147,131 +126,174 @@ export default function HeroSection() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* ── Background Carousel with Ken Burns ── */}
+      {/* ── Background Layers ── */}
       {slides.map((slide, idx) => {
-        const isActive = idx === activeSlide;
+        const isActive = idx === active;
+        const isPrev =
+          idx === (active - 1 + slides.length) % slides.length;
+        const isNext = idx === (active + 1) % slides.length;
+        const isLeaving = isPrev || isNext;
+
+        /* 
+         * EXIT TRANSFORMS:
+         * When navigating NEXT, the previous slide exits left (scale up + pan left).
+         * When navigating PREV, the next slide exits right (scale up + pan right).
+         */
+        const exitTransform =
+          isPrev && direction === "next"
+            ? "scale-[1.12] -translate-x-[8%] opacity-0"
+            : isNext && direction === "prev"
+              ? "scale-[1.12] translate-x-[8%] opacity-0"
+              : "scale-105 opacity-0";
+
         return (
           <div
             key={idx}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] ${isActive ? "opacity-100 z-[1]" : "opacity-0 z-0"
-              }`}
+            className={`absolute inset-0 will-change-transform transition-all duration-[1400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+              isActive
+                ? "opacity-100 z-[1] scale-100 translate-x-0"
+                : isLeaving
+                  ? exitTransform
+                  : "opacity-0 z-0 scale-105"
+            }`}
           >
+            {/* 
+              Image with Ken Burns — ALWAYS animating, not just when active.
+              This ensures the animation state is preserved so when a slide
+              returns it doesn't jump from a reset position.
+            */}
             <div
-              className={`absolute inset-0 bg-cover bg-center transition-transform duration-[8000ms] ease-linear ${isActive ? "scale-110" : "scale-100"
-                }`}
+              className={`absolute inset-[-5%] w-[110%] h-[110%] bg-cover bg-center will-change-transform ${getKenBurnsClass(
+                slide.kenBurns
+              )}`}
               style={{ backgroundImage: `url('${slide.image}')` }}
             />
-            {/* Lighter overlays so images are visible */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0A1628]/40 via-[#0A1628]/30 to-[#0A1628]/70" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0A1628]/50 via-transparent to-[#0A1628]/50" />
           </div>
         );
       })}
 
-      {/* Subtle grid overlay */}
-      <div className="absolute inset-0 opacity-[0.07] pointer-events-none z-[2]">
+      {/* Overlays — lighter so images show through */}
+      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0A1628]/50 via-[#0A1628]/30 to-[#0A1628]/80" />
+      <div className="absolute inset-0 z-[2] bg-gradient-to-r from-[#0A1628]/60 via-transparent to-[#0A1628]/60" />
+
+      {/* Grid + Particles */}
+      <div className="absolute inset-0 z-[3] opacity-[0.06] pointer-events-none">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(201,162,39,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.4) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(201,162,39,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.35) 1px, transparent 1px)`,
             backgroundSize: "80px 80px",
           }}
         />
       </div>
-
-      <div className="absolute inset-0 z-[2] pointer-events-none">
-        <Particles count={25} />
+      <div className="absolute inset-0 z-[3] pointer-events-none">
+        <Particles count={20} />
       </div>
 
-      {/* ── Arrow Navigation ── */}
+      {/* ── Arrows ── */}
       <button
-        onClick={prevSlide}
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 hover:border-[#C9A227]/40 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
-        aria-label="Previous slide"
+        onClick={prev}
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full border border-white/10 bg-white/[0.03] text-white/50 hover:text-white hover:bg-white/10 hover:border-[#C9A227]/30 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
+        aria-label="Previous"
       >
-        <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+        <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
       </button>
       <button
-        onClick={nextSlide}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 hover:border-[#C9A227]/40 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
-        aria-label="Next slide"
+        onClick={next}
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full border border-white/10 bg-white/[0.03] text-white/50 hover:text-white hover:bg-white/10 hover:border-[#C9A227]/30 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
+        aria-label="Next"
       >
-        <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+        <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
       </button>
 
       {/* ── Content ── */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 text-center">
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         {/* Badge */}
         <div
-          key={`badge-${activeSlide}`}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 mb-6 sm:mb-8 animate-[fadeInUp_0.6s_ease-out_both]"
+          key={`b-${active}`}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 mb-6 overflow-hidden"
         >
-          <Star className="w-3.5 h-3.5 text-[#C9A227]" />
-          <span className="text-[#C9A227] text-xs sm:text-sm font-medium tracking-wide uppercase">
-            {current.badge[lang]}
-          </span>
+          <div className="animate-[slideDown_0.5s_ease-out_both] flex items-center gap-2">
+            <Star className="w-3.5 h-3.5 text-[#C9A227]" />
+            <span className="text-[#C9A227] text-xs font-medium tracking-widest uppercase">
+              {current.badge[lang]}
+            </span>
+          </div>
         </div>
 
-        {/* Title — smaller, more refined */}
-        <h1
-          key={`title-${activeSlide}`}
-          className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 sm:mb-6 leading-[1.1] tracking-tight animate-[fadeInUp_0.6s_ease-out_0.1s_both]"
-        >
-          {current.title[lang].map((part, i) =>
-            part.text === "\n" ? (
-              <br key={i} />
-            ) : (
-              <span
-                key={i}
-                className={part.highlight ? "text-[#C9A227]" : ""}
-              >
-                {part.text}
-              </span>
-            )
-          )}
-        </h1>
+        {/* Title — cinematic line reveal */}
+        <div className="overflow-hidden mb-5">
+          <h1
+            key={`t-${active}`}
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight animate-[slideUp_0.7s_ease-out_0.1s_both]"
+          >
+            {current.title[lang].map((part, i) =>
+              part === "\n" ? (
+                <br key={i} />
+              ) : (
+                <span
+                  key={i}
+                  className={
+                    current.highlights[lang].includes(i)
+                      ? "text-[#C9A227]"
+                      : ""
+                  }
+                >
+                  {part}
+                </span>
+              )
+            )}
+          </h1>
+        </div>
 
         {/* Subtitle */}
-        <p
-          key={`subtitle-${activeSlide}`}
-          className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed animate-[fadeInUp_0.6s_ease-out_0.2s_both]"
-        >
-          {current.subtitle[lang]}
-        </p>
+        <div className="overflow-hidden">
+          <p
+            key={`s-${active}`}
+            className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed animate-[slideUp_0.7s_ease-out_0.25s_both]"
+          >
+            {current.subtitle[lang]}
+          </p>
+        </div>
       </div>
 
       {/* ── Bottom Controls ── */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-4">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-5">
         {/* Progress Dots */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           {slides.map((_, idx) => (
             <button
               key={idx}
-              onClick={() => goTo(idx)}
-              className="relative h-1 rounded-full overflow-hidden transition-all duration-300 bg-white/20"
-              style={{ width: idx === activeSlide ? 48 : 8 }}
-              aria-label={`Go to slide ${idx + 1}`}
+              onClick={() => goTo(idx, idx > active ? "next" : "prev")}
+              className="group relative h-[3px] rounded-full overflow-hidden bg-white/15 transition-all duration-500 hover:bg-white/25"
+              style={{ width: idx === active ? 56 : 10 }}
+              aria-label={`Slide ${idx + 1}`}
             >
-              {idx === activeSlide && (
+              {idx === active && (
                 <div
-                  className="absolute inset-y-0 left-0 bg-[#C9A227] rounded-full transition-all duration-100 ease-linear"
-                  style={{ width: `${progress}%` }}
+                  ref={idx === active ? progressRef : null}
+                  className="absolute inset-y-0 left-0 bg-[#C9A227] rounded-full"
+                  style={{
+                    animation: isPaused
+                      ? "none"
+                      : `progress ${SLIDE_DURATION}ms linear forwards`,
+                  }}
                 />
               )}
             </button>
           ))}
         </div>
 
-        {/* Slide counter */}
-        <div className="text-[10px] sm:text-xs font-medium text-white/30 tracking-[0.2em] uppercase">
-          <span className="text-white/60">0{activeSlide + 1}</span>
-          <span className="mx-2">/</span>
-          <span>0{slides.length}</span>
+        {/* Counter */}
+        <div className="flex items-center gap-3 text-[11px] font-medium tracking-[0.25em] text-white/30 uppercase">
+          <span className="text-white/70 tabular-nums">0{active + 1}</span>
+          <span className="w-8 h-px bg-white/20" />
+          <span className="tabular-nums">0{slides.length}</span>
         </div>
       </div>
 
-      {/* Bottom vignette for depth */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0A1628] to-transparent z-[5] pointer-events-none" />
+      {/* Bottom vignette */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0A1628] via-[#0A1628]/50 to-transparent z-[5] pointer-events-none" />
     </section>
   );
 }
