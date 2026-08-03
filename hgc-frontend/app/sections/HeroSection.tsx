@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Phone, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
 import Particles from "@/app/components/Particles";
@@ -36,9 +36,9 @@ const slides = [
       ],
     },
     subtitle: {
-      en: "Construction • Mining • Logistics • Financial Services — A diversified conglomerate driving national development across 38+ provinces.",
-      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — یک گروپ متنوع که توسعه ملی را در بیش از ۳۸ ولایت هدایت می کند.",
-      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — یو متنوع ګروپ چې په ۳۸+ ولایتونو کې ملي پراختیا رهبري کوي.",
+      en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
+      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
+      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — ملي پراختیا په ۳۸+ ولایتونو کې.",
     },
   },
   {
@@ -66,9 +66,9 @@ const slides = [
       ],
     },
     subtitle: {
-      en: "Sustainable mineral extraction and processing that powers Afghanistan's industrial growth and creates lasting economic impact.",
-      dari: "استخراج و فرآوری پایدار مواد معدنی که رشد صنعتی افغانستان را تقویت می کند و تأثیر اقتصادی پایدار ایجاد می کند.",
-      pashto: "د معدني موادو دوامداره استخراج او پروسس چې د افغانستان صنعتي وده ځواکمنوي او دوامداره اقتصادي اغیز رامنځته کوي.",
+      en: "Sustainable mineral extraction powering Afghanistan's industrial growth and lasting economic impact.",
+      dari: "استخراج پایدار مواد معدنی که رشد صنعتی افغانستان را تقویت می‌کند.",
+      pashto: "د معدني موادو دوامداره استخراج چې د افغانستان صنعتي وده ځواکمنوي.",
     },
   },
   {
@@ -96,9 +96,9 @@ const slides = [
       ],
     },
     subtitle: {
-      en: "Reliable transportation and supply chain solutions delivering materials and goods across all 38+ provinces of Afghanistan.",
-      dari: "راه حل‌های قابل اعتماد حمل و نقل و زنجیره تأمین که مواد و کالاها را در سراسر ۳۸+ ولایت افغانستان تحویل می دهد.",
-      pashto: "د باوري لیږد او د عرضې زنځیر حلونه چې مواد او توکي په افغانستان کې په ټولو ۳۸+ ولایتونو کې ورسوي.",
+      en: "Reliable transportation and supply chain solutions delivering across all 38+ provinces of Afghanistan.",
+      dari: "حمل و نقل و زنجیره تأمین قابل اعتماد در سراسر ۳۸+ ولایت افغانستان.",
+      pashto: "د باوري لیږد او عرضې زنځیر حلونه په ټولو ۳۸+ ولایتونو کې.",
     },
   },
 ];
@@ -107,92 +107,115 @@ export default function HeroSection() {
   const { lang } = useI18n();
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const SLIDE_DURATION = 6000;
 
   const nextSlide = useCallback(() => {
     setActiveSlide((prev) => (prev + 1) % slides.length);
+    setProgress(0);
   }, []);
 
   const prevSlide = useCallback(() => {
     setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    setProgress(0);
   }, []);
 
-  /* Auto-play every 6 seconds */
+  /* Auto-play with progress */
   useEffect(() => {
     if (isPaused) return;
-    const timer = setInterval(nextSlide, 6000);
+    const start = Date.now();
+    const timer = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const pct = Math.min((elapsed / SLIDE_DURATION) * 100, 100);
+      setProgress(pct);
+      if (elapsed >= SLIDE_DURATION) nextSlide();
+    }, 50);
     return () => clearInterval(timer);
-  }, [isPaused, nextSlide]);
+  }, [isPaused, activeSlide, nextSlide]);
+
+  const goTo = (idx: number) => {
+    setActiveSlide(idx);
+    setProgress(0);
+  };
 
   const current = slides[activeSlide];
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* ── Background Carousel ── */}
-      {slides.map((slide, idx) => (
-        <div
-          key={idx}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${idx === activeSlide ? "opacity-100" : "opacity-0"
-            }`}
-        >
+      {/* ── Background Carousel with Ken Burns ── */}
+      {slides.map((slide, idx) => {
+        const isActive = idx === activeSlide;
+        return (
           <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${slide.image}')` }}
-          />
-          <div className="absolute inset-0 bg-[#0A1628]/85" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#0A1628_70%)]" />
-        </div>
-      ))}
+            key={idx}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] ${isActive ? "opacity-100 z-[1]" : "opacity-0 z-0"
+              }`}
+          >
+            <div
+              className={`absolute inset-0 bg-cover bg-center transition-transform duration-[8000ms] ease-linear ${isActive ? "scale-110" : "scale-100"
+                }`}
+              style={{ backgroundImage: `url('${slide.image}')` }}
+            />
+            {/* Lighter overlays so images are visible */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0A1628]/40 via-[#0A1628]/30 to-[#0A1628]/70" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0A1628]/50 via-transparent to-[#0A1628]/50" />
+          </div>
+        );
+      })}
 
-      {/* Grid overlay */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
+      {/* Subtle grid overlay */}
+      <div className="absolute inset-0 opacity-[0.07] pointer-events-none z-[2]">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(201,162,39,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.3) 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
+            backgroundImage: `linear-gradient(rgba(201,162,39,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.4) 1px, transparent 1px)`,
+            backgroundSize: "80px 80px",
           }}
         />
       </div>
 
-      <Particles count={30} />
+      <div className="absolute inset-0 z-[2] pointer-events-none">
+        <Particles count={25} />
+      </div>
 
       {/* ── Arrow Navigation ── */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-[#C9A227]/50 transition-all duration-300 backdrop-blur-sm hidden sm:flex items-center justify-center"
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 hover:border-[#C9A227]/40 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
         aria-label="Previous slide"
       >
-        <ChevronLeft className="w-5 h-5" />
+        <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-[#C9A227]/50 transition-all duration-300 backdrop-blur-sm hidden sm:flex items-center justify-center"
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 hover:border-[#C9A227]/40 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
         aria-label="Next slide"
       >
-        <ChevronRight className="w-5 h-5" />
+        <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
       </button>
 
       {/* ── Content ── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 text-center">
         {/* Badge */}
         <div
           key={`badge-${activeSlide}`}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 mb-8 animate-fade-in"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 mb-6 sm:mb-8 animate-[fadeInUp_0.6s_ease-out_both]"
         >
-          <Star className="w-4 h-4 text-[#C9A227]" />
-          <span className="text-[#C9A227] text-sm font-medium">
+          <Star className="w-3.5 h-3.5 text-[#C9A227]" />
+          <span className="text-[#C9A227] text-xs sm:text-sm font-medium tracking-wide uppercase">
             {current.badge[lang]}
           </span>
         </div>
 
-        {/* Title */}
+        {/* Title — smaller, more refined */}
         <h1
           key={`title-${activeSlide}`}
-          className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-6 leading-tight tracking-tight animate-fade-in-up"
+          className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 sm:mb-6 leading-[1.1] tracking-tight animate-[fadeInUp_0.6s_ease-out_0.1s_both]"
         >
           {current.title[lang].map((part, i) =>
             part.text === "\n" ? (
@@ -211,60 +234,44 @@ export default function HeroSection() {
         {/* Subtitle */}
         <p
           key={`subtitle-${activeSlide}`}
-          className="text-xl text-white/60 max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-in-up"
-          style={{ animationDelay: "100ms" }}
+          className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed animate-[fadeInUp_0.6s_ease-out_0.2s_both]"
         >
           {current.subtitle[lang]}
         </p>
+      </div>
 
-        {/* CTAs */}
-        <div
-          key={`ctas-${activeSlide}`}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
-          style={{ animationDelay: "200ms" }}
-        >
-          <Link
-            href="/projects"
-            className="group flex items-center gap-2 px-8 py-4 bg-[#C9A227] text-[#0A1628] font-bold rounded-xl hover:bg-[#C9A227]/90 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#C9A227]/20"
-          >
-            {t(lang, "common.viewProjects")}
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link
-            href="/contact"
-            className="flex items-center gap-2 px-8 py-4 border-2 border-white/20 text-white font-semibold rounded-xl hover:bg-white/5 hover:border-[#C9A227]/50 transition-all duration-300"
-          >
-            <Phone className="w-5 h-5" />
-            {t(lang, "common.contactUs")}
-          </Link>
+      {/* ── Bottom Controls ── */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-4">
+        {/* Progress Dots */}
+        <div className="flex items-center gap-3">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => goTo(idx)}
+              className="relative h-1 rounded-full overflow-hidden transition-all duration-300 bg-white/20"
+              style={{ width: idx === activeSlide ? 48 : 8 }}
+              aria-label={`Go to slide ${idx + 1}`}
+            >
+              {idx === activeSlide && (
+                <div
+                  className="absolute inset-y-0 left-0 bg-[#C9A227] rounded-full transition-all duration-100 ease-linear"
+                  style={{ width: `${progress}%` }}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Slide counter */}
+        <div className="text-[10px] sm:text-xs font-medium text-white/30 tracking-[0.2em] uppercase">
+          <span className="text-white/60">0{activeSlide + 1}</span>
+          <span className="mx-2">/</span>
+          <span>0{slides.length}</span>
         </div>
       </div>
 
-      {/* ── Dot Indicators ── */}
-      <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
-        {slides.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setActiveSlide(idx)}
-            className={`relative h-2 rounded-full transition-all duration-500 ${idx === activeSlide
-                ? "w-8 bg-[#C9A227]"
-                : "w-2 bg-white/30 hover:bg-white/50"
-              }`}
-            aria-label={`Go to slide ${idx + 1}`}
-          >
-            {idx === activeSlide && (
-              <span className="absolute inset-0 rounded-full bg-[#C9A227] animate-pulse opacity-50" />
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
-        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-          <div className="w-1.5 h-3 bg-[#C9A227] rounded-full animate-pulse" />
-        </div>
-      </div>
+      {/* Bottom vignette for depth */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0A1628] to-transparent z-[5] pointer-events-none" />
     </section>
   );
 }
