@@ -1,11 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  /* Group Base */
-  --color-hgc-navy: #0A1628;
-  --color-hgc-gold: #C9A227;
-  
-  /* Company Brands */
+  /* ═══ NEW HGC Premium Blue-Gold Palette ═══ */
+  --color-hgc-navy: #0F2B5B;
+  --color-hgc-navy-deep: #0A1E42;
+  --color-hgc-navy-light: #1A3A6B;
+  --color-hgc-gold: #D4AF37;
+  --color-hgc-gold-bright: #F0C94A;
+  --color-hgc-gold-dim: #B8941F;
+
+  /* Body & Surface */
+  --color-hgc-body: #F0F4FA;
+  --color-hgc-surface: #FFFFFF;
+  --color-hgc-surface-elevated: #FFFFFF;
+  --color-hgc-border: #D6DEE8;
+  --color-hgc-border-light: #E8EDF3;
+
+  /* Text */
+  --color-hgc-text: #0F172A;
+  --color-hgc-text-secondary: #475569;
+  --color-hgc-text-muted: #94A3B8;
+
+  /* Company Brands (unchanged) */
   --color-hcrc-red: #B22222;
   --color-hcrc-dark: #1A1A1A;
   --color-albahrain-blue: #1A237E;
@@ -29,36 +45,56 @@
   direction: ltr;
 }
 
+/* ═══ HGC Premium Stripe Pattern ═══ */
+.hgc-stripe-bg {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 12px,
+      rgba(255, 255, 255, 0.015) 12px,
+      rgba(255, 255, 255, 0.015) 24px
+    ),
+    linear-gradient(180deg, #0F2B5B 0%, #0A1E42 50%, #0F2B5B 100%);
+  background-size: 100% 100%, 100% 100%;
+}
+
+.hgc-stripe-bg-footer {
+  background:
+    repeating-linear-gradient(
+      -135deg,
+      transparent,
+      transparent 12px,
+      rgba(255, 255, 255, 0.015) 12px,
+      rgba(255, 255, 255, 0.015) 24px
+    ),
+    linear-gradient(180deg, #0A1E42 0%, #0F2B5B 50%, #0A1E42 100%);
+}
+
+/* Subtle shimmer on stripes */
+@keyframes stripe-shimmer {
+  0% { background-position: 0% 0%, 0% 0%; }
+  100% { background-position: 48px 48px, 0% 0%; }
+}
+
+.animate-stripe-shimmer {
+  animation: stripe-shimmer 8s linear infinite;
+}
 
 /* ─── HGC Homepage Animations ─── */
-
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-fade-in {
@@ -74,22 +110,22 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - now light themed */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A1628;
+  background: #F0F4FA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C9A22740;
+  background: #0F2B5B30;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #C9A22780;
+  background: #0F2B5B60;
 }
 
 /* Line clamp utility */
@@ -101,25 +137,19 @@ html {
 }
 
 @keyframes gold-float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-15px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
 }
 
 .animate-gold-float {
   animation: gold-float 4s ease-in-out infinite;
 }
 
-
-/* TipTap rendered content styles */
+/* TipTap rendered content styles - updated for light theme */
 .story-content p {
   margin-bottom: 1em;
   line-height: 1.7;
+  color: #475569;
 }
 
 .story-content p:last-child {
@@ -127,13 +157,13 @@ html {
 }
 
 .story-content strong {
-  color: rgba(255, 255, 255, 0.8);
+  color: #0F172A;
   font-weight: 700;
 }
 
 .story-content em {
   font-style: italic;
-  color: rgba(255, 255, 255, 0.65);
+  color: #64748B;
 }
 
 .story-content ul {
@@ -150,41 +180,48 @@ html {
 
 .story-content li {
   margin-bottom: 0.3em;
+  color: #475569;
 }
 
 .story-content blockquote {
-  border-left: 3px solid #C9A227;
+  border-left: 3px solid #D4AF37;
   padding-left: 1em;
   margin: 1em 0;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.5);
+  color: #64748B;
 }
 
 .story-content hr {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid #E2E8F0;
   margin: 1.5em 0;
 }
 
 .story-content a {
-  color: #C9A227;
+  color: #0F2B5B;
   text-decoration: underline;
+  font-weight: 500;
+}
+
+.story-content a:hover {
+  color: #D4AF37;
 }
 
 .story-content h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: #0F172A;
   margin: 1em 0 0.5em;
 }
 
 .story-content h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: #1E293B;
   margin: 0.8em 0 0.4em;
 }
 
+/* Hero Ken Burns */
 @keyframes kenBurnsIn {
   0%   { transform: scale(1) translate(0, 0); }
   100% { transform: scale(1.15) translate(-2%, -1%); }
@@ -218,4 +255,13 @@ html {
 @keyframes progress {
   from { width: 0%; }
   to   { width: 100%; }
+}
+
+/* Card hover lift effect */
+.card-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px -12px rgba(15, 43, 91, 0.15);
 }

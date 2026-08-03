@@ -87,11 +87,7 @@ interface SiteSettings {
 }
 
 // ── Icon Maps ───────────────────────────────────────────────────────
-// const companyIconMap: Record<string, React.ElementType> = {
-//   Building2, Mountain, HardHat, Store, Landmark, Truck,
-// };
 function resolveCompanyIcon(iconName: string): LucideIcon {
-  // Normalize: ensure PascalCase
   const normalized = iconName.charAt(0).toUpperCase() + iconName.slice(1);
   const Icon = (LucideIcons as Record<string, unknown>)[normalized];
   return (Icon as LucideIcon) || LucideIcons.Building2;
@@ -110,7 +106,6 @@ function resolveIcon(iconName: string): LucideIcon {
 function getSocialIcon(url: string): React.ReactNode {
   const lower = url.toLowerCase();
 
-  // Facebook
   if (lower.includes("facebook.com") || lower.includes("fb.me")) {
     return (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -119,7 +114,6 @@ function getSocialIcon(url: string): React.ReactNode {
     );
   }
 
-  // X / Twitter
   if (lower.includes("twitter.com") || lower.includes("x.com")) {
     return (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -128,7 +122,6 @@ function getSocialIcon(url: string): React.ReactNode {
     );
   }
 
-  // LinkedIn
   if (lower.includes("linkedin.com")) {
     return (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -137,7 +130,6 @@ function getSocialIcon(url: string): React.ReactNode {
     );
   }
 
-  // Instagram
   if (lower.includes("instagram.com")) {
     return (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -146,7 +138,6 @@ function getSocialIcon(url: string): React.ReactNode {
     );
   }
 
-  // YouTube
   if (lower.includes("youtube.com") || lower.includes("youtu.be")) {
     return (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -155,7 +146,6 @@ function getSocialIcon(url: string): React.ReactNode {
     );
   }
 
-  // Telegram
   if (lower.includes("t.me") || lower.includes("telegram.me")) {
     return (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -164,7 +154,6 @@ function getSocialIcon(url: string): React.ReactNode {
     );
   }
 
-  // WhatsApp
   if (lower.includes("wa.me") || lower.includes("whatsapp.com")) {
     return (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -173,14 +162,10 @@ function getSocialIcon(url: string): React.ReactNode {
     );
   }
 
-  // Generic fallback
   return <LucideIcons.Globe className="w-4 h-4" />;
 }
 
-
-
 // ── Helpers ───────────────────────────────────────────────────────────
-// const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
 function getLocalizedText(
@@ -205,7 +190,7 @@ export default function Footer() {
   const [loadingCompanies, setLoadingCompanies] = useState(true);
   const [loadingSettings, setLoadingSettings] = useState(true);
 
-  // Fetch companies (existing API)
+  // Fetch companies
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
@@ -224,7 +209,7 @@ export default function Footer() {
     fetchCompanies();
   }, [lang]);
 
-  // Fetch site settings (NEW API - uses key-value site_settings + contact_infos)
+  // Fetch site settings
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -246,8 +231,8 @@ export default function Footer() {
   // Loading skeleton
   if (loadingSettings) {
     return (
-      <footer className="relative bg-[#0A1628] overflow-hidden" dir={dir}>
-        <div className="absolute top-0 left-0 right-0 h-px bg-[#C9A227]/20" />
+      <footer className="relative hgc-stripe-bg-footer overflow-hidden" dir={dir}>
+        <div className="absolute top-0 left-0 right-0 h-px bg-[#D4AF37]/30" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="animate-pulse grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-4 space-y-4">
@@ -280,7 +265,7 @@ export default function Footer() {
 
   if (!settings) {
     return (
-      <footer className="relative bg-[#0A1628] py-12" dir={dir}>
+      <footer className="relative hgc-stripe-bg-footer py-12" dir={dir}>
         <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-white/40 text-sm">Failed to load footer content.</p>
         </div>
@@ -304,34 +289,35 @@ export default function Footer() {
   const contactTitle = lang === "en" ? "Contact" : lang === "dari" ? "تماس" : "اړیکه";
 
   return (
-    <footer className="relative bg-[#0A1628] overflow-hidden" dir={dir}>
-      <div className="absolute top-0 left-0 right-0 h-px bg-[#C9A227]/20" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#C9A227]/5 rounded-full blur-3xl -translate-y-1/2" />
+    <footer className="relative hgc-stripe-bg-footer overflow-hidden" dir={dir}>
+      {/* Gold accent top border */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-[#D4AF37]/30" />
+
+      {/* Ambient glow effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-3xl -translate-y-1/2" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#1A237E]/10 rounded-full blur-3xl translate-y-1/2" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
 
-          {/* ── Column 1: Brand (DYNAMIC from site_settings) ── */}
+          {/* ── Column 1: Brand ── */}
           <div className="lg:col-span-4 space-y-6">
             <Link href="/" className="inline-flex items-center gap-3 group">
               <div className="relative w-14 h-14 flex items-center justify-center">
-                <div className="absolute inset-0 bg-[#C9A227] rounded-xl rotate-3 group-hover:rotate-6 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-[#0A1628] rounded-xl border-2 border-[#C9A227] flex items-center justify-center">
-                  <span className="text-[#C9A227] font-bold text-xl">HGC</span>
+                <div className="absolute inset-0 bg-[#D4AF37] rounded-xl rotate-3 group-hover:rotate-6 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-[#0F2B5B] rounded-xl border-2 border-[#D4AF37] flex items-center justify-center">
+                  <span className="text-[#D4AF37] font-bold text-xl">HGC</span>
                 </div>
               </div>
               <div>
                 <h2 className="text-white font-bold text-lg leading-tight">{brandTitle}</h2>
-                <p className="text-[#C9A227] text-xs tracking-[0.2em] uppercase">{brandSubtitle}</p>
+                <p className="text-[#D4AF37] text-xs tracking-[0.2em] uppercase">{brandSubtitle}</p>
               </div>
             </Link>
 
             <p className="text-white/50 text-sm leading-relaxed max-w-xs">{brandDesc}</p>
 
-            {/* Social Links (DYNAMIC from contact_infos or site_settings) */}
-
-
+            {/* Social Links */}
             <div className="flex items-center gap-3">
               {settings.socialLinks
                 ?.filter((s) => s.is_active)
@@ -341,20 +327,19 @@ export default function Footer() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-[#C9A227] hover:border-[#C9A227]/30 hover:bg-[#C9A227]/5 transition-all duration-300 group"
+                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 hover:bg-[#D4AF37]/5 transition-all duration-300 group"
                     aria-label={social.label}
                   >
                     {getSocialIcon(social.url)}
                   </a>
                 ))}
             </div>
-
           </div>
 
-          {/* ── Column 2: Quick Links (DYNAMIC from site_settings JSON) ── */}
+          {/* ── Column 2: Quick Links ── */}
           <div className="lg:col-span-2">
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
               {quickLinksTitle}
             </h3>
             <ul className="space-y-2.5">
@@ -364,13 +349,14 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="group flex items-center gap-2 text-white/50 hover:text-[#C9A227] transition-colors duration-200 text-sm"
+                      className="group flex items-center gap-2 text-white/50 hover:text-[#D4AF37] transition-colors duration-200 text-sm"
                     >
                       <ChevronRight
-                        className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${dir === "rtl"
-                          ? "-mr-5 group-hover:mr-0 group-hover:opacity-100 rotate-180"
-                          : "-ml-5 group-hover:ml-0 group-hover:opacity-100"
-                          }`}
+                        className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${
+                          dir === "rtl"
+                            ? "-mr-5 group-hover:mr-0 group-hover:opacity-100 rotate-180"
+                            : "-ml-5 group-hover:ml-0 group-hover:opacity-100"
+                        }`}
                       />
                       {getLocalizedText(lang, link.label_en, link.label_dari, link.label_pashto)}
                     </Link>
@@ -379,15 +365,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* ── Column 3: Companies (DYNAMIC - existing API) ── */}
+          {/* ── Column 3: Companies ── */}
           <div className="lg:col-span-3">
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
               {ourCompaniesTitle}
             </h3>
             {loadingCompanies ? (
               <div className="flex items-center justify-center py-4">
-                <Loader2 className="w-5 h-5 text-[#C9A227] animate-spin" />
+                <Loader2 className="w-5 h-5 text-[#D4AF37] animate-spin" />
               </div>
             ) : companies.length === 0 ? (
               <p className="text-white/40 text-sm">
@@ -396,7 +382,6 @@ export default function Footer() {
             ) : (
               <ul className="space-y-2">
                 {companies.map((company) => {
-                  // const Icon = companyIconMap[company.icon_name] || Building2;
                   const Icon = resolveCompanyIcon(company.icon_name);
                   const isHovered = hoveredCompany === company.slug;
                   return (
@@ -418,7 +403,7 @@ export default function Footer() {
                           <Icon className="w-4 h-4 transition-colors duration-200" style={{ color: company.accent_color }} />
                         </div>
                         <span className="text-white/60 group-hover:text-white text-sm transition-colors flex-1">{company.name}</span>
-                        <ArrowUpRight className={`w-3.5 h-3.5 transition-all duration-200 ${isHovered ? "text-[#C9A227] opacity-100" : "text-white/20 opacity-0"}`} />
+                        <ArrowUpRight className={`w-3.5 h-3.5 transition-all duration-200 ${isHovered ? "text-[#D4AF37] opacity-100" : "text-white/20 opacity-0"}`} />
                       </Link>
                     </li>
                   );
@@ -427,19 +412,19 @@ export default function Footer() {
             )}
           </div>
 
-          {/* ── Column 4: Contact (DYNAMIC from contact_infos table) ── */}
+          {/* ── Column 4: Contact ── */}
           <div className="lg:col-span-3">
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
               {contactTitle}
             </h3>
 
             <div className="space-y-4">
               {/* Address */}
-              <div className="group p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#C9A227]/20 hover:bg-white/[0.04] transition-all duration-300">
+              <div className="group p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[#D4AF37]/20 hover:bg-white/[0.06] transition-all duration-300">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#C9A227]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <MapPin className="w-4 h-4 text-[#C9A227]" />
+                  <div className="w-9 h-9 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <MapPin className="w-4 h-4 text-[#D4AF37]" />
                   </div>
                   <div>
                     <p className="text-white font-medium text-sm mb-1">{officeLabel}</p>
@@ -449,18 +434,18 @@ export default function Footer() {
               </div>
 
               {/* Phone */}
-              <div className="group p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#C9A227]/20 hover:bg-white/[0.04] transition-all duration-300">
+              <div className="group p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[#D4AF37]/20 hover:bg-white/[0.06] transition-all duration-300">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#C9A227]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Phone className="w-4 h-4 text-[#C9A227]" />
+                  <div className="w-9 h-9 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Phone className="w-4 h-4 text-[#D4AF37]" />
                   </div>
                   <div>
                     <p className="text-white font-medium text-sm mb-1">{phoneLabel}</p>
-                    <a href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`} className="text-white/40 text-xs hover:text-[#C9A227] transition-colors block">
+                    <a href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`} className="text-white/40 text-xs hover:text-[#D4AF37] transition-colors block">
                       {settings.phonePrimary}
                     </a>
                     {settings.phoneSecondary && (
-                      <a href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`} className="text-white/40 text-xs hover:text-[#C9A227] transition-colors block">
+                      <a href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`} className="text-white/40 text-xs hover:text-[#D4AF37] transition-colors block">
                         {settings.phoneSecondary}
                       </a>
                     )}
@@ -469,14 +454,14 @@ export default function Footer() {
               </div>
 
               {/* Email */}
-              <div className="group p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#C9A227]/20 hover:bg-white/[0.04] transition-all duration-300">
+              <div className="group p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[#D4AF37]/20 hover:bg-white/[0.06] transition-all duration-300">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#C9A227]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Mail className="w-4 h-4 text-[#C9A227]" />
+                  <div className="w-9 h-9 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Mail className="w-4 h-4 text-[#D4AF37]" />
                   </div>
                   <div>
                     <p className="text-white font-medium text-sm mb-1">{emailLabel}</p>
-                    <a href={`mailto:${settings.emailAddress}`} className="text-white/40 text-xs hover:text-[#C9A227] transition-colors">
+                    <a href={`mailto:${settings.emailAddress}`} className="text-white/40 text-xs hover:text-[#D4AF37] transition-colors">
                       {settings.emailAddress}
                     </a>
                   </div>
@@ -486,7 +471,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ── Bottom Bar (DYNAMIC) ── */}
+        {/* ── Bottom Bar ── */}
         <div className="mt-12 pt-6 border-t border-white/5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-white/30 text-xs">{copyright}</p>

@@ -10,16 +10,16 @@ const SLIDE_DURATION = 5000;
 const slides = [
   {
     image: "/images/hero-construction.webp",
-    kenBurns: "zoom-in", // or "zoom-out", "pan-left", "pan-right"
+    kenBurns: "zoom-in",
     badge: {
       en: "Since 2001 — Building Afghanistan's Future",
       dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
       pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
     },
     title: {
-      en: ["Building ", "Afghanistan's", "\nFuture"],
-      dari: ["", "آینده", " افغانستان", "\nرا می سازیم"],
-      pashto: ["د ", "افغانستان", "", "\nراتلونکی جوړوو"],
+      en: ["Building ", "Afghanistan's", "Future"],
+      dari: ["", "آینده", " افغانستان", "را می سازیم"],
+      pashto: ["د ", "افغانستان", "", "راتلونکی جوړوو"],
     },
     highlights: { en: [1], dari: [1], pashto: [1] },
     subtitle: {
@@ -29,7 +29,7 @@ const slides = [
     },
   },
   {
-    image: "/images/contact-hero.webp",
+    image: "/images/hero-mining.webp",
     kenBurns: "pan-right",
     badge: {
       en: "Responsible Mining Operations",
@@ -37,9 +37,9 @@ const slides = [
       pashto: "د مسؤلانه کانونو استخراج عملیات",
     },
     title: {
-      en: ["Extracting ", "Value", "\nFrom the Earth"],
-      dari: ["استخراج ", "ارزش", "\nاز زمین"],
-      pashto: ["د ځمکې څخه ", "ارزښت", "\nاستخراج"],
+      en: ["Extracting ", "Value", "From the Earth"],
+      dari: ["استخراج ", "ارزش", "از زمین"],
+      pashto: ["د ځمکې څخه ", "ارزښت", " استخراج"],
     },
     highlights: { en: [1], dari: [1], pashto: [1] },
     subtitle: {
@@ -57,9 +57,9 @@ const slides = [
       pashto: "د ټول هیواد لوجستیک شبکه",
     },
     title: {
-      en: ["Connecting ", "Every", "\nProvince"],
-      dari: ["اتصال ", "هر", "\nولایت"],
-      pashto: ["د ", "هر", "\nولایت نښلول"],
+      en: ["Connecting ", "Every", "Province"],
+      dari: ["اتصال ", "هر", "ولایت"],
+      pashto: ["د ", "هر", "ولایت نښلول"],
     },
     highlights: { en: [1], dari: [1], pashto: [1] },
     subtitle: {
@@ -70,7 +70,6 @@ const slides = [
   },
 ];
 
-/* ── Ken Burns keyframe helper (per-slide) ── */
 const getKenBurnsClass = (type: string) => {
   switch (type) {
     case "zoom-in":
@@ -134,11 +133,6 @@ export default function HeroSection() {
         const isNext = idx === (active + 1) % slides.length;
         const isLeaving = isPrev || isNext;
 
-        /* 
-         * EXIT TRANSFORMS:
-         * When navigating NEXT, the previous slide exits left (scale up + pan left).
-         * When navigating PREV, the next slide exits right (scale up + pan right).
-         */
         const exitTransform =
           isPrev && direction === "next"
             ? "scale-[1.12] -translate-x-[8%] opacity-0"
@@ -157,11 +151,6 @@ export default function HeroSection() {
                   : "opacity-0 z-0 scale-105"
             }`}
           >
-            {/* 
-              Image with Ken Burns — ALWAYS animating, not just when active.
-              This ensures the animation state is preserved so when a slide
-              returns it doesn't jump from a reset position.
-            */}
             <div
               className={`absolute inset-[-5%] w-[110%] h-[110%] bg-cover bg-center will-change-transform ${getKenBurnsClass(
                 slide.kenBurns
@@ -172,16 +161,16 @@ export default function HeroSection() {
         );
       })}
 
-      {/* Overlays — lighter so images show through */}
-      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0A1628]/50 via-[#0A1628]/30 to-[#0A1628]/80" />
-      <div className="absolute inset-0 z-[2] bg-gradient-to-r from-[#0A1628]/60 via-transparent to-[#0A1628]/60" />
+      {/* Overlays — matching new navy blue theme */}
+      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0F2B5B]/55 via-[#0F2B5B]/35 to-[#0F2B5B]/85" />
+      <div className="absolute inset-0 z-[2] bg-gradient-to-r from-[#0F2B5B]/65 via-transparent to-[#0F2B5B]/65" />
 
       {/* Grid + Particles */}
       <div className="absolute inset-0 z-[3] opacity-[0.06] pointer-events-none">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(201,162,39,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.35) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(212,175,55,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.4) 1px, transparent 1px)`,
             backgroundSize: "80px 80px",
           }}
         />
@@ -193,14 +182,14 @@ export default function HeroSection() {
       {/* ── Arrows ── */}
       <button
         onClick={prev}
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full border border-white/10 bg-white/[0.03] text-white/50 hover:text-white hover:bg-white/10 hover:border-[#C9A227]/30 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full border border-white/10 bg-white/[0.03] text-white/50 hover:text-white hover:bg-white/10 hover:border-[#D4AF37]/30 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
         aria-label="Previous"
       >
         <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
       </button>
       <button
         onClick={next}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full border border-white/10 bg-white/[0.03] text-white/50 hover:text-white hover:bg-white/10 hover:border-[#C9A227]/30 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full border border-white/10 bg-white/[0.03] text-white/50 hover:text-white hover:bg-white/10 hover:border-[#D4AF37]/30 transition-all duration-300 backdrop-blur-md hidden sm:flex items-center justify-center group"
         aria-label="Next"
       >
         <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -211,31 +200,31 @@ export default function HeroSection() {
         {/* Badge */}
         <div
           key={`b-${active}`}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 mb-6 overflow-hidden"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/20 mb-6 overflow-hidden"
         >
           <div className="animate-[slideDown_0.5s_ease-out_both] flex items-center gap-2">
-            <Star className="w-3.5 h-3.5 text-[#C9A227]" />
-            <span className="text-[#C9A227] text-xs font-medium tracking-widest uppercase">
+            <Star className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <span className="text-[#D4AF37] text-xs font-medium tracking-widest uppercase">
               {current.badge[lang]}
             </span>
           </div>
         </div>
 
-        {/* Title — cinematic line reveal */}
+        {/* Title */}
         <div className="overflow-hidden mb-5">
           <h1
             key={`t-${active}`}
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight animate-[slideUp_0.7s_ease-out_0.1s_both]"
           >
             {current.title[lang].map((part, i) =>
-              part === "\n" ? (
+              part === "" ? (
                 <br key={i} />
               ) : (
                 <span
                   key={i}
                   className={
                     current.highlights[lang].includes(i)
-                      ? "text-[#C9A227]"
+                      ? "text-[#D4AF37]"
                       : ""
                   }
                 >
@@ -272,7 +261,7 @@ export default function HeroSection() {
               {idx === active && (
                 <div
                   ref={idx === active ? progressRef : null}
-                  className="absolute inset-y-0 left-0 bg-[#C9A227] rounded-full"
+                  className="absolute inset-y-0 left-0 bg-[#D4AF37] rounded-full"
                   style={{
                     animation: isPaused
                       ? "none"
@@ -292,8 +281,8 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Bottom vignette */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0A1628] via-[#0A1628]/50 to-transparent z-[5] pointer-events-none" />
+      {/* Bottom vignette — navy blue to match body */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#F0F4FA] via-[#F0F4FA]/60 to-transparent z-[5] pointer-events-none" />
     </section>
   );
 }
