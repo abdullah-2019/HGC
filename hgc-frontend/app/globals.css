@@ -35,6 +35,17 @@
   --color-hgc-about-card-hover: #E8EEF4;
   --color-hgc-about-overlay: #0F172A;
 
+  /* ═══ Companies Section Palette ═══ */
+  --color-hgc-companies-bg: #F8FAFC;
+  --color-hgc-companies-card-bg: #FFFFFF;
+  --color-hgc-companies-card-border: #E2E8F0;
+  --color-hgc-companies-card-hover: #F1F5F9;
+  --color-hgc-companies-text: #0F172A;
+  --color-hgc-companies-text-secondary: #475569;
+  --color-hgc-companies-text-muted: #94A3B8;
+  --color-hgc-companies-gold: #D4AF37;
+  --color-hgc-companies-gold-bright: #F0C94A;
+
   /* Company Brands (unchanged) */
   --color-hcrc-red: #B22222;
   --color-hcrc-dark: #1A1A1A;

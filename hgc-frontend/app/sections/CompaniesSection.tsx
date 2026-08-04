@@ -56,38 +56,38 @@ export default function CompaniesSection() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-hgc-companies-bg">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="animate-pulse text-[#64748B]">Loading companies...</div>
+          <div className="animate-pulse text-hgc-companies-text-secondary">Loading companies...</div>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#C9A227/5_0%,_transparent_50%)]" />
+    <section className="py-24 bg-hgc-companies-bg relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--color-hgc-companies-gold)/5_0%,_transparent_50%)]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-sm font-medium mb-4">
+          <span className="inline-block px-4 py-1 rounded-full bg-hgc-companies-gold/10 text-hgc-companies-gold text-sm font-medium mb-4">
             {lang === "en" ? "Our Group" : lang === "dari" ? "گروپ ما" : "زموږ ګروپ"}
           </span>
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl lg:text-5xl font-bold text-hgc-companies-text mb-4">
             {lang === "en" ? (
               <>
-                Six Specialized <span className="text-[#C9A227]">Companies</span>
+                Six Specialized <span className="text-hgc-companies-gold">Companies</span>
               </>
             ) : lang === "dari" ? (
               <>
-                شش شرکت <span className="text-[#C9A227]">تخصصی</span>
+                شش شرکت <span className="text-hgc-companies-gold">تخصصی</span>
               </>
             ) : (
               <>
-                شپږ <span className="text-[#C9A227]">تخصصي</span> شرکتونه
+                شپږ <span className="text-hgc-companies-gold">تخصصي</span> شرکتونه
               </>
             )}
           </h2>
-          <p className="text-[#64748B] max-w-2xl mx-auto">
+          <p className="text-hgc-companies-text-secondary max-w-2xl mx-auto">
             {lang === "en"
               ? "Each company brings unique expertise to deliver comprehensive solutions across Afghanistan."
               : lang === "dari"
@@ -106,7 +106,7 @@ export default function CompaniesSection() {
                 href={`/companies/${company.slug}`}
                 onMouseEnter={() => setHoveredCompany(company.slug)}
                 onMouseLeave={() => setHoveredCompany(null)}
-                className="group relative bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 hover:bg-[#F1F5F9] hover:border-[#E2E8F0] transition-all duration-500 overflow-hidden"
+                className="group relative bg-hgc-companies-card-bg border border-hgc-companies-card-border rounded-2xl p-6 hover:bg-hgc-companies-card-hover hover:border-hgc-companies-card-border transition-all duration-500 overflow-hidden"
               >
                 <div
                   className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl transition-all duration-500"
@@ -127,13 +127,13 @@ export default function CompaniesSection() {
                     <Icon className="w-7 h-7 transition-colors duration-300" style={{ color: company.accent_color }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-bold text-lg mb-1 group-hover:text-[#C9A227] transition-colors">
+                    <h3 className="text-hgc-companies-text font-bold text-lg mb-1 group-hover:text-hgc-companies-gold transition-colors">
                       {company.name}
                     </h3>
-                    <p className="text-[#94A3B8] text-sm mb-3">
+                    <p className="text-hgc-companies-text-muted text-sm mb-3">
                       {company.description}
                     </p>
-                    <span className="inline-flex items-center gap-1 text-sm text-[#C9A227]/70 group-hover:text-[#C9A227] transition-colors">
+                    <span className="inline-flex items-center gap-1 text-sm text-hgc-companies-gold/70 group-hover:text-hgc-companies-gold transition-colors">
                       {t(lang, "common.visit")}
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </span>
