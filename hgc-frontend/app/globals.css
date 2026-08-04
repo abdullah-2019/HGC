@@ -21,6 +21,20 @@
   --color-hgc-text-secondary: #475569;
   --color-hgc-text-muted: #94A3B8;
 
+  /* ═══ About Section Palette ═══ */
+  --color-hgc-about-bg: #F8FAFC;
+  --color-hgc-about-surface: #FFFFFF;
+  --color-hgc-about-text: #0F172A;
+  --color-hgc-about-text-secondary: #475569;
+  --color-hgc-about-text-muted: #94A3B8;
+  --color-hgc-about-gold: #D4AF37;
+  --color-hgc-about-gold-bright: #F0C94A;
+  --color-hgc-about-gold-dim: #B8941F;
+  --color-hgc-about-card-bg: #F1F5F9;
+  --color-hgc-about-card-border: #E2E8F0;
+  --color-hgc-about-card-hover: #E8EEF4;
+  --color-hgc-about-overlay: #0F172A;
+
   /* Company Brands (unchanged) */
   --color-hcrc-red: #B22222;
   --color-hcrc-dark: #1A1A1A;
