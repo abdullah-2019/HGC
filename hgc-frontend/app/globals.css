@@ -46,14 +46,15 @@
 }
 
 /* ═══ HGC Premium Stripe Pattern ═══ */
+/* ═══ HGC Premium Stripe Pattern ═══ */
 .hgc-stripe-bg {
   background:
     repeating-linear-gradient(
       135deg,
       transparent,
-      transparent 12px,
-      rgba(255, 255, 255, 0.015) 12px,
-      rgba(255, 255, 255, 0.015) 24px
+      transparent 10px,
+      rgba(255, 255, 255, 0.008) 10px,
+      rgba(255, 255, 255, 0.008) 12px
     ),
     linear-gradient(180deg, #0F2B5B 0%, #0A1E42 50%, #0F2B5B 100%);
   background-size: 100% 100%, 100% 100%;
@@ -64,9 +65,9 @@
     repeating-linear-gradient(
       -135deg,
       transparent,
-      transparent 12px,
-      rgba(255, 255, 255, 0.015) 12px,
-      rgba(255, 255, 255, 0.015) 24px
+      transparent 10px,
+      rgba(255, 255, 255, 0.008) 10px,
+      rgba(255, 255, 255, 0.008) 12px
     ),
     linear-gradient(180deg, #0A1E42 0%, #0F2B5B 50%, #0A1E42 100%);
 }

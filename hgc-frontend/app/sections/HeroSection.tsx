@@ -29,7 +29,67 @@ const slides = [
     },
   },
   {
-    image: "/images/hero-mining.webp",
+    image: "/images/hero-construction.webp",
+    kenBurns: "zoom-in",
+    badge: {
+      en: "Since 2001 — Building Afghanistan's Future",
+      dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
+      pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
+    },
+    title: {
+      en: ["Building ", "Afghanistan's", "Future"],
+      dari: ["", "آینده", " افغانستان", "را می سازیم"],
+      pashto: ["د ", "افغانستان", "", "راتلونکی جوړوو"],
+    },
+    highlights: { en: [1], dari: [1], pashto: [1] },
+    subtitle: {
+      en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
+      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
+      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — ملي پراختیا په ۳۸+ ولایتونو کې.",
+    },
+  },
+  {
+    image: "/images/hero-construction.webp",
+    kenBurns: "zoom-in",
+    badge: {
+      en: "Since 2001 — Building Afghanistan's Future",
+      dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
+      pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
+    },
+    title: {
+      en: ["Building ", "Afghanistan's", "Future"],
+      dari: ["", "آینده", " افغانستان", "را می سازیم"],
+      pashto: ["د ", "افغانستان", "", "راتلونکی جوړوو"],
+    },
+    highlights: { en: [1], dari: [1], pashto: [1] },
+    subtitle: {
+      en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
+      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
+      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — ملي پراختیا په ۳۸+ ولایتونو کې.",
+    },
+  },
+  {
+    image: "/images/hero-construction.webp",
+    kenBurns: "zoom-in",
+    badge: {
+      en: "Since 2001 — Building Afghanistan's Future",
+      dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
+      pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
+    },
+    title: {
+      en: ["Building ", "Afghanistan's", "Future"],
+      dari: ["", "آینده", " افغانستان", "را می سازیم"],
+      pashto: ["د ", "افغانستان", "", "راتلونکی جوړوو"],
+    },
+    highlights: { en: [1], dari: [1], pashto: [1] },
+    subtitle: {
+      en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
+      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
+      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — ملي پراختیا په ۳۸+ ولایتونو کې.",
+    },
+  },
+  {
+    image: "/images/contact-hero.webp",
     kenBurns: "pan-right",
     badge: {
       en: "Responsible Mining Operations",
@@ -143,13 +203,12 @@ export default function HeroSection() {
         return (
           <div
             key={idx}
-            className={`absolute inset-0 will-change-transform transition-all duration-[1400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
-              isActive
+            className={`absolute inset-0 will-change-transform transition-all duration-[1400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${isActive
                 ? "opacity-100 z-[1] scale-100 translate-x-0"
                 : isLeaving
                   ? exitTransform
                   : "opacity-0 z-0 scale-105"
-            }`}
+              }`}
           >
             <div
               className={`absolute inset-[-5%] w-[110%] h-[110%] bg-cover bg-center will-change-transform ${getKenBurnsClass(
@@ -162,9 +221,11 @@ export default function HeroSection() {
       })}
 
       {/* Overlays — matching new navy blue theme */}
-      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0F2B5B]/55 via-[#0F2B5B]/35 to-[#0F2B5B]/85" />
-      <div className="absolute inset-0 z-[2] bg-gradient-to-r from-[#0F2B5B]/65 via-transparent to-[#0F2B5B]/65" />
+      {/* <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0F2B5B]/55 via-[#0F2B5B]/35 to-[#0F2B5B]/85" /> */}
+      {/* <div className="absolute inset-0 z-[2] bg-gradient-to-r from-[#0F2B5B]/65 via-transparent to-[#0F2B5B]/65" /> */}
 
+      {/* Dark overlay so white text stays readable */}
+      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0F2B5B]/60 via-[#0F2B5B]/30 to-[#0F2B5B]/80" />
       {/* Grid + Particles */}
       <div className="absolute inset-0 z-[3] opacity-[0.06] pointer-events-none">
         <div
@@ -280,9 +341,8 @@ export default function HeroSection() {
           <span className="tabular-nums">0{slides.length}</span>
         </div>
       </div>
-
-      {/* Bottom vignette — navy blue to match body */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#F0F4FA] via-[#F0F4FA]/60 to-transparent z-[5] pointer-events-none" />
+      {/* Tiny bottom fade into the next section (optional) */}
+      {/* <div className="absolute bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-[#F0F4FA] to-transparent z-[5] pointer-events-none" /> */}
     </section>
   );
 }
