@@ -84,24 +84,24 @@ export default function ProductsSection() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-hgc-bg relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-10 h-10 text-[#C9A227] animate-spin" />
+          <Loader2 className="w-10 h-10 text-hgc-gold animate-spin" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="py-24 bg-hgc-bg relative overflow-hidden">
       {/* Subtle background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#C9A227]/[0.02] rounded-full blur-[120px]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-hgc-gold/[0.03] rounded-full blur-[120px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-14">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 text-[#C9A227] text-sm font-medium mb-5">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-hgc-gold/10 border border-hgc-gold/20 text-hgc-gold text-sm font-medium mb-5">
               <Package className="w-4 h-4" />
               {lang === "en"
                 ? "Products & Services"
@@ -109,25 +109,25 @@ export default function ProductsSection() {
                 ? "محصولات و خدمات"
                 : "محصولات او خدمات"}
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#0F172A] mb-4 tracking-tight">
+            <h2 className="text-4xl lg:text-5xl font-bold text-hgc-text mb-4 tracking-tight">
               {lang === "en" ? (
                 <>
                   Featured{" "}
-                  <span className="text-[#C9A227]">Products</span>
+                  <span className="text-hgc-gold">Products</span>
                 </>
               ) : lang === "dari" ? (
                 <>
                   محصولات{" "}
-                  <span className="text-[#C9A227]">برجسته</span>
+                  <span className="text-hgc-gold">برجسته</span>
                 </>
               ) : (
                 <>
                   ټاکل شوي{" "}
-                  <span className="text-[#C9A227]">محصولات</span>
+                  <span className="text-hgc-gold">محصولات</span>
                 </>
               )}
             </h2>
-            <p className="text-[#0F172A]/40 text-lg leading-relaxed">
+            <p className="text-hgc-text-secondary text-lg leading-relaxed">
               {lang === "en"
                 ? "High-quality construction materials, energy solutions, and logistics services from our own production facilities."
                 : lang === "dari"
@@ -137,7 +137,7 @@ export default function ProductsSection() {
           </div>
           <Link
             href="/products"
-            className="group mt-6 lg:mt-0 inline-flex items-center gap-2 text-[#C9A227] font-semibold hover:gap-3 transition-all"
+            className="group mt-6 lg:mt-0 inline-flex items-center gap-2 text-hgc-gold font-semibold hover:gap-3 transition-all"
           >
             {lang === "en"
               ? "View All Products"
@@ -150,7 +150,7 @@ export default function ProductsSection() {
 
         {/* Products Grid */}
         {products.length === 0 ? (
-          <div className="text-center text-[#0F172A]/30 py-16">
+          <div className="text-center text-hgc-text-muted py-16">
             {lang === "en"
               ? "No products found."
               : lang === "dari"
@@ -160,7 +160,7 @@ export default function ProductsSection() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => {
-              const accentColor = product.company?.accent_color || "#C9A227";
+              const accentColor = product.company?.accent_color || "#D4AF37";
 
               const imageUrl =
                 product.hero_image_url ||
@@ -175,7 +175,7 @@ export default function ProductsSection() {
                 <Link
                   key={product.slug}
                   href={`/products/${product.slug}`}
-                  className="group relative bg-[#0F1D32] border border-white/[0.06] rounded-2xl overflow-hidden hover:border-[#C9A227]/25 hover:bg-[#0F1D32]/80 transition-all duration-500"
+                  className="group relative bg-hgc-card border border-hgc-border rounded-2xl overflow-hidden hover:border-hgc-gold/30 hover:bg-hgc-card-hover hover:shadow-lg hover:shadow-hgc-overlay/5 transition-all duration-500"
                 >
                   {/* Image Area */}
                   <div className="aspect-[16/10] relative overflow-hidden">
@@ -187,11 +187,11 @@ export default function ProductsSection() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     {/* Soft gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F1D32] via-[#0F1D32]/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-hgc-overlay/40 via-transparent to-transparent" />
 
                     {/* Top badges */}
                     <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-                      <span className="px-3 py-1.5 rounded-lg bg-white/80 backdrop-blur-md text-[#0F172A]/80 text-xs font-medium border border-[#E2E8F0]">
+                      <span className="px-3 py-1.5 rounded-lg bg-hgc-surface/80 backdrop-blur-md text-hgc-text/80 text-xs font-medium border border-hgc-border">
                         {product.category?.name || "Product"}
                       </span>
                       <span
@@ -210,20 +210,20 @@ export default function ProductsSection() {
                   {/* Content */}
                   <div className="p-6">
                     {/* Product name */}
-                    <h3 className="text-[#0F172A] font-bold text-lg mb-2 group-hover:text-[#C9A227] transition-colors duration-300">
+                    <h3 className="text-hgc-text font-bold text-lg mb-2 group-hover:text-hgc-gold transition-colors duration-300">
                       {product.name}
                     </h3>
 
                     {/* Tagline */}
                     {plainTagline && (
-                      <p className="text-[#C9A227]/70 text-sm font-medium mb-3">
+                      <p className="text-hgc-gold/70 text-sm font-medium mb-3">
                         {plainTagline}
                       </p>
                     )}
 
                     {/* Description */}
                     {plainDescription && (
-                      <p className="text-[#0F172A]/35 text-sm leading-relaxed mb-5 line-clamp-2">
+                      <p className="text-hgc-text-muted text-sm leading-relaxed mb-5 line-clamp-2">
                         {plainDescription}
                       </p>
                     )}
@@ -237,9 +237,9 @@ export default function ProductsSection() {
                               key={i}
                               className="flex items-center gap-2.5 text-sm"
                             >
-                              <CheckCircle2 className="w-4 h-4 text-[#C9A227]/50 shrink-0" />
-                              <span className="text-[#0F172A]/40 truncate">
-                                <span className="text-[#0F172A]/55">
+                              <CheckCircle2 className="w-4 h-4 text-hgc-gold/50 shrink-0" />
+                              <span className="text-hgc-text-muted truncate">
+                                <span className="text-hgc-text-secondary">
                                   {spec.label}:
                                 </span>{" "}
                                 {spec.value}
@@ -250,20 +250,20 @@ export default function ProductsSection() {
                       )}
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
+                    <div className="flex items-center justify-between pt-4 border-t border-hgc-border">
                       <div className="flex items-center gap-3">
                         {product.origin && (
-                          <span className="text-[#0F172A]/25 text-xs">
+                          <span className="text-hgc-text-muted text-xs">
                             {product.origin}
                           </span>
                         )}
                         {product.grade && (
-                          <span className="text-[#C9A227]/60 text-xs font-medium px-2 py-0.5 rounded bg-[#C9A227]/8">
+                          <span className="text-hgc-gold text-xs font-medium px-2 py-0.5 rounded bg-hgc-gold/10">
                             {product.grade}
                           </span>
                         )}
                       </div>
-                      <ExternalLink className="w-4 h-4 text-[#0F172A]/20 group-hover:text-[#C9A227]/60 transition-colors" />
+                      <ExternalLink className="w-4 h-4 text-hgc-text-muted group-hover:text-hgc-gold transition-colors" />
                     </div>
                   </div>
                 </Link>

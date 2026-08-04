@@ -1,65 +1,80 @@
 @import "tailwindcss";
 
 @theme {
-  /* ═══ NEW HGC Premium Blue-Gold Palette ═══ */
-  --color-hgc-navy: #0f2b5b;
-  --color-hgc-navy-deep: #0a1e42;
-  --color-hgc-navy-light: #1a3a6b;
-  --color-hgc-gold: #d4af37;
-  --color-hgc-gold-bright: #f0c94a;
-  --color-hgc-gold-dim: #b8941f;
+  /* ═══ HGC Light Theme Palette ═══ */
 
-  /* Body & Surface */
-  --color-hgc-body: #f0f4fa;
-  --color-hgc-surface: #ffffff;
-  --color-hgc-surface-elevated: #ffffff;
-  --color-hgc-border: #d6dee8;
-  --color-hgc-border-light: #e8edf3;
+  /* Primary Colors */
+  --color-hgc-navy: #0F2B5B;
+  --color-hgc-navy-deep: #0A1E42;
+  --color-hgc-navy-light: #1A3A6B;
+
+  /* Gold Accent */
+  --color-hgc-gold: #D4AF37;
+  --color-hgc-gold-bright: #F0C94A;
+  --color-hgc-gold-dim: #B8941F;
+
+  /* Backgrounds */
+  --color-hgc-bg: #FFFFFF;
+  --color-hgc-bg-alt: #F8FAFC;
+  --color-hgc-surface: #FFFFFF;
+  --color-hgc-surface-elevated: #F1F5F9;
+
+  /* Cards */
+  --color-hgc-card: #FFFFFF;
+  --color-hgc-card-alt: #F8FAFC;
+  --color-hgc-card-hover: #F1F5F9;
+
+  /* Borders */
+  --color-hgc-border: #E2E8F0;
+  --color-hgc-border-light: #F1F5F9;
 
   /* Text */
-  --color-hgc-text: #0f172a;
+  --color-hgc-text: #0F172A;
   --color-hgc-text-secondary: #475569;
-  --color-hgc-text-muted: #94a3b8;
+  --color-hgc-text-muted: #94A3B8;
+
+  /* Overlays */
+  --color-hgc-overlay: #0F172A;
 
   /* ═══ About Section Palette ═══ */
-  --color-hgc-about-bg: #f8fafc;
-  --color-hgc-about-surface: #ffffff;
-  --color-hgc-about-text: #0f172a;
+  --color-hgc-about-bg: #F8FAFC;
+  --color-hgc-about-surface: #FFFFFF;
+  --color-hgc-about-text: #0F172A;
   --color-hgc-about-text-secondary: #475569;
-  --color-hgc-about-text-muted: #94a3b8;
-  --color-hgc-about-gold: #d4af37;
-  --color-hgc-about-gold-bright: #f0c94a;
-  --color-hgc-about-gold-dim: #b8941f;
-  --color-hgc-about-card-bg: #f1f5f9;
-  --color-hgc-about-card-border: #e2e8f0;
-  --color-hgc-about-card-hover: #e8eef4;
-  --color-hgc-about-overlay: #0f172a;
+  --color-hgc-about-text-muted: #94A3B8;
+  --color-hgc-about-gold: #D4AF37;
+  --color-hgc-about-gold-bright: #F0C94A;
+  --color-hgc-about-gold-dim: #B8941F;
+  --color-hgc-about-card-bg: #F1F5F9;
+  --color-hgc-about-card-border: #E2E8F0;
+  --color-hgc-about-card-hover: #E8EEF4;
+  --color-hgc-about-overlay: #0F172A;
 
   /* ═══ Companies Section Palette ═══ */
-  --color-hgc-companies-bg: #f8fafc;
-  --color-hgc-companies-card-bg: #ffffff;
-  --color-hgc-companies-card-border: #e2e8f0;
-  --color-hgc-companies-card-hover: #f1f5f9;
-  --color-hgc-companies-text: #0f172a;
+  --color-hgc-companies-bg: #F8FAFC;
+  --color-hgc-companies-card-bg: #FFFFFF;
+  --color-hgc-companies-card-border: #E2E8F0;
+  --color-hgc-companies-card-hover: #F1F5F9;
+  --color-hgc-companies-text: #0F172A;
   --color-hgc-companies-text-secondary: #475569;
-  --color-hgc-companies-text-muted: #94a3b8;
-  --color-hgc-companies-gold: #d4af37;
-  --color-hgc-companies-gold-bright: #f0c94a;
+  --color-hgc-companies-text-muted: #94A3B8;
+  --color-hgc-companies-gold: #D4AF37;
+  --color-hgc-companies-gold-bright: #F0C94A;
 
   /* Company Brands (unchanged) */
-  --color-hcrc-red: #b22222;
-  --color-hcrc-dark: #1a1a1a;
-  --color-albahrain-blue: #1a237e;
-  --color-albahrain-cyan: #00bcd4;
-  --color-zain-orange: #f57c00;
-  --color-zain-blue: #1565c0;
-  --color-madinah-green: #2e7d32;
-  --color-haramain-gold: #ffd700;
-  --color-alkoozi-teal: #00838f;
+  --color-hcrc-red: #B22222;
+  --color-hcrc-dark: #1A1A1A;
+  --color-albahrain-blue: #1A237E;
+  --color-albahrain-cyan: #00BCD4;
+  --color-zain-orange: #F57C00;
+  --color-zain-blue: #1565C0;
+  --color-madinah-green: #2E7D32;
+  --color-haramain-gold: #FFD700;
+  --color-alkoozi-teal: #00838F;
 
   /* Fonts */
-  --font-sans: "Inter", "Vazirmatn", sans-serif;
-  --font-display: "Inter", "Vazirmatn", sans-serif;
+  --font-sans: 'Inter', 'Vazirmatn', sans-serif;
+  --font-display: 'Inter', 'Vazirmatn', sans-serif;
 }
 
 /* Custom Text Direction Utilities */
@@ -80,10 +95,8 @@
       rgba(255, 255, 255, 0.008) 10px,
       rgba(255, 255, 255, 0.008) 12px
     ),
-    linear-gradient(180deg, #0f2b5b 0%, #0a1e42 50%, #0f2b5b 100%);
-  background-size:
-    100% 100%,
-    100% 100%;
+    linear-gradient(180deg, #0F2B5B 0%, #0A1E42 50%, #0F2B5B 100%);
+  background-size: 100% 100%, 100% 100%;
 }
 
 .hgc-stripe-bg-footer {
@@ -95,21 +108,13 @@
       rgba(255, 255, 255, 0.008) 10px,
       rgba(255, 255, 255, 0.008) 12px
     ),
-    linear-gradient(180deg, #0a1e42 0%, #0f2b5b 50%, #0a1e42 100%);
+    linear-gradient(180deg, #0A1E42 0%, #0F2B5B 50%, #0A1E42 100%);
 }
 
 /* Subtle shimmer on stripes */
 @keyframes stripe-shimmer {
-  0% {
-    background-position:
-      0% 0%,
-      0% 0%;
-  }
-  100% {
-    background-position:
-      48px 48px,
-      0% 0%;
-  }
+  0% { background-position: 0% 0%, 0% 0%; }
+  100% { background-position: 48px 48px, 0% 0%; }
 }
 
 .animate-stripe-shimmer {
@@ -118,33 +123,18 @@
 
 /* ─── HGC Homepage Animations ─── */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-fade-in {
@@ -160,22 +150,22 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar - now light themed */
+/* Custom scrollbar - light themed */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f0f4fa;
+  background: #F0F4FA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #0f2b5b30;
+  background: #0F2B5B30;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0f2b5b60;
+  background: #0F2B5B60;
 }
 
 /* Line clamp utility */
@@ -187,20 +177,15 @@ html {
 }
 
 @keyframes gold-float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
 }
 
 .animate-gold-float {
   animation: gold-float 4s ease-in-out infinite;
 }
 
-/* TipTap rendered content styles - updated for light theme */
+/* TipTap rendered content styles - light theme */
 .story-content p {
   margin-bottom: 1em;
   line-height: 1.7;
@@ -212,13 +197,13 @@ html {
 }
 
 .story-content strong {
-  color: #0f172a;
+  color: #0F172A;
   font-weight: 700;
 }
 
 .story-content em {
   font-style: italic;
-  color: #64748b;
+  color: #64748B;
 }
 
 .story-content ul {
@@ -239,116 +224,82 @@ html {
 }
 
 .story-content blockquote {
-  border-left: 3px solid #d4af37;
+  border-left: 3px solid #D4AF37;
   padding-left: 1em;
   margin: 1em 0;
   font-style: italic;
-  color: #64748b;
+  color: #64748B;
 }
 
 .story-content hr {
   border: none;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #E2E8F0;
   margin: 1.5em 0;
 }
 
 .story-content a {
-  color: #0f2b5b;
+  color: #0F2B5B;
   text-decoration: underline;
   font-weight: 500;
 }
 
 .story-content a:hover {
-  color: #d4af37;
+  color: #D4AF37;
 }
 
 .story-content h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #0F172A;
   margin: 1em 0 0.5em;
 }
 
 .story-content h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #1E293B;
   margin: 0.8em 0 0.4em;
 }
 
 /* Hero Ken Burns */
 @keyframes kenBurnsIn {
-  0% {
-    transform: scale(1) translate(0, 0);
-  }
-  100% {
-    transform: scale(1.15) translate(-2%, -1%);
-  }
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.15) translate(-2%, -1%); }
 }
 
 @keyframes kenBurnsOut {
-  0% {
-    transform: scale(1.15) translate(-2%, -1%);
-  }
-  100% {
-    transform: scale(1) translate(0, 0);
-  }
+  0%   { transform: scale(1.15) translate(-2%, -1%); }
+  100% { transform: scale(1) translate(0, 0); }
 }
 
 @keyframes kenBurnsRight {
-  0% {
-    transform: scale(1) translate(-3%, 0);
-  }
-  100% {
-    transform: scale(1.12) translate(3%, 0);
-  }
+  0%   { transform: scale(1) translate(-3%, 0); }
+  100% { transform: scale(1.12) translate(3%, 0); }
 }
 
 @keyframes kenBurnsLeft {
-  0% {
-    transform: scale(1) translate(3%, 0);
-  }
-  100% {
-    transform: scale(1.12) translate(-3%, 0);
-  }
+  0%   { transform: scale(1) translate(3%, 0); }
+  100% { transform: scale(1.12) translate(-3%, 0); }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes progress {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
+  from { width: 0%; }
+  to   { width: 100%; }
 }
 
 /* Card hover lift effect */
 .card-lift {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .card-lift:hover {
   transform: translateY(-4px);

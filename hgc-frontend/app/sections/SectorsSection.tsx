@@ -71,41 +71,41 @@ export default function SectorsSection() {
 
   if (loading) {
     return (
-      <section className="py-20 bg-white border-y border-[#E2E8F0]">
+      <section className="py-20 bg-hgc-bg border-y border-hgc-border">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-[#C9A227] animate-spin" />
+          <Loader2 className="w-8 h-8 text-hgc-gold animate-spin" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-20 bg-white border-y border-[#E2E8F0]">
+    <section className="py-20 bg-hgc-bg border-y border-hgc-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-sm font-medium mb-4">
+          <span className="inline-block px-4 py-1 rounded-full bg-hgc-gold/10 text-hgc-gold text-sm font-medium mb-4">
             {lang === "en"
               ? "Business Verticals"
               : lang === "dari"
                 ? "حوزه های کاری"
                 : "د سوداګرۍ عمودي"}
           </span>
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold text-hgc-text mb-4">
             {lang === "en" ? (
               <>
-                Our <span className="text-[#C9A227]">Sectors</span>
+                Our <span className="text-hgc-gold">Sectors</span>
               </>
             ) : lang === "dari" ? (
               <>
-                <span className="text-[#C9A227]">حوزه‌های</span> کاری ما
+                <span className="text-hgc-gold">حوزه‌های</span> کاری ما
               </>
             ) : (
               <>
-                زموږ <span className="text-[#C9A227]">سکتورونه</span>
+                زموږ <span className="text-hgc-gold">سکتورونه</span>
               </>
             )}
           </h2>
-          <p className="text-[#64748B] max-w-2xl mx-auto text-lg">
+          <p className="text-hgc-text-secondary max-w-2xl mx-auto text-lg">
             {lang === "en"
               ? "Mining, Construction, Energy, and General Trading solutions driving sustainable growth across Afghanistan."
               : lang === "dari"
@@ -115,7 +115,7 @@ export default function SectorsSection() {
         </div>
 
         {sectors.length === 0 ? (
-          <div className="text-center text-[#94A3B8] py-8">
+          <div className="text-center text-hgc-text-muted py-8">
             {lang === "en"
               ? "No sectors found."
               : lang === "dari"
@@ -130,15 +130,15 @@ export default function SectorsSection() {
                 <Link
                   key={sector.slug}
                   href={`/sectors/${sector.slug}`}
-                  className="group text-center p-6 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#E2E8F0] hover:border-[#C9A227]/20 transition-all duration-300 w-36 sm:w-40 lg:w-44"
+                  className="group text-center p-6 rounded-2xl bg-hgc-card-alt border border-hgc-border hover:bg-hgc-card-hover hover:border-hgc-gold/20 transition-all duration-300 w-36 sm:w-40 lg:w-44"
                 >
-                  <div className="w-12 h-12 mx-auto rounded-xl bg-[#C9A227]/10 flex items-center justify-center mb-3 group-hover:bg-[#C9A227]/20 group-hover:scale-110 transition-all duration-300">
-                    <Icon className="w-6 h-6 text-[#C9A227]" />
+                  <div className="w-12 h-12 mx-auto rounded-xl bg-hgc-gold/10 flex items-center justify-center mb-3 group-hover:bg-hgc-gold/20 group-hover:scale-110 transition-all duration-300">
+                    <Icon className="w-6 h-6 text-hgc-gold" />
                   </div>
-                  <p className="text-white font-medium text-sm mb-1 group-hover:text-[#C9A227] transition-colors">
+                  <p className="text-hgc-text font-medium text-sm mb-1 group-hover:text-hgc-gold transition-colors">
                     {sector.name}
                   </p>
-                  <p className="text-[#C9A227] text-xs font-bold">
+                  <p className="text-hgc-gold text-xs font-bold">
                     {sector.projects_count}+
                   </p>
                 </Link>
