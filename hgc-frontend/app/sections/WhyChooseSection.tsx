@@ -91,21 +91,21 @@ export default function WhyChooseSection() {
   // Loading skeleton
   if (loading) {
     return (
-      <section className="py-24 bg-[#0A1628] relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_#C9A227/5_0%,_transparent_50%)]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16 animate-pulse">
-            <div className="h-4 w-20 bg-white/10 rounded-full mx-auto mb-4" />
-            <div className="h-12 w-72 bg-white/10 rounded-lg mx-auto" />
+            <div className="h-4 w-20 bg-[#E2E8F0] rounded-full mx-auto mb-4" />
+            <div className="h-12 w-72 bg-[#E2E8F0] rounded-lg mx-auto" />
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="bg-white/[0.02] border border-white/5 rounded-2xl p-8"
+                className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-8"
               >
                 <div className="w-16 h-16 rounded-2xl bg-white/5 mb-6" />
-                <div className="h-6 w-40 bg-white/10 rounded mb-3" />
+                <div className="h-6 w-40 bg-[#E2E8F0] rounded mb-3" />
                 <div className="h-4 w-full bg-white/5 rounded" />
               </div>
             ))}
@@ -118,17 +118,17 @@ export default function WhyChooseSection() {
   // Error state
   if (error) {
     return (
-      <section className="py-24 bg-[#0A1628] relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-red-400 mb-2">Failed to load features</p>
-          <p className="text-white/40 text-sm">{error}</p>
+          <p className="text-[#0F172A]/40 text-sm">{error}</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-24 bg-[#0A1628] relative overflow-hidden">
+    <section className="py-24 bg-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_#C9A227/5_0%,_transparent_50%)]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Header */}
@@ -136,7 +136,7 @@ export default function WhyChooseSection() {
           <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-sm font-medium mb-4">
             {sectionLabel}
           </span>
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl lg:text-5xl font-bold text-[#0F172A] mb-4">
             {sectionTitle}
           </h2>
         </div>
@@ -148,15 +148,15 @@ export default function WhyChooseSection() {
             return (
               <div
                 key={feature.id}
-                className="group relative bg-white/[0.02] border border-white/5 rounded-2xl p-8 hover:bg-white/[0.04] hover:border-[#C9A227]/20 transition-all duration-500"
+                className="group relative bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-8 hover:bg-[#F1F5F9] hover:border-[#C9A227]/20 transition-all duration-500"
               >
                 <div className="w-16 h-16 rounded-2xl bg-[#C9A227]/10 flex items-center justify-center mb-6 group-hover:bg-[#C9A227]/20 group-hover:scale-110 transition-all duration-500">
                   <Icon className="w-8 h-8 text-[#C9A227]" />
                 </div>
-                <h3 className="text-white font-bold text-xl mb-3">
+                <h3 className="text-[#0F172A] font-bold text-xl mb-3">
                   {getTitle(feature)}
                 </h3>
-                <p className="text-white/50 text-sm leading-relaxed">
+                <p className="text-[#0F172A]/50 text-sm leading-relaxed">
                   {getDesc(feature)}
                 </p>
               </div>

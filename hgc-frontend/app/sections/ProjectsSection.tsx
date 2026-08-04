@@ -168,24 +168,24 @@ export default function ProjectsSection() {
   // Loading skeleton
   if (loading) {
     return (
-      <section className="py-24 bg-[#0A1628] relative">
+      <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse">
-            <div className="h-4 w-24 bg-white/10 rounded-full mb-4" />
-            <div className="h-12 w-64 bg-white/10 rounded-lg mb-12" />
+            <div className="h-4 w-24 bg-[#E2E8F0] rounded-full mb-4" />
+            <div className="h-12 w-64 bg-[#E2E8F0] rounded-lg mb-12" />
             <div className="flex gap-2 mb-10">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-9 w-20 bg-white/10 rounded-lg" />
+                <div key={i} className="h-9 w-20 bg-[#E2E8F0] rounded-lg" />
               ))}
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden">
+                <div key={i} className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl overflow-hidden">
                   <div className="aspect-[4/3] bg-white/5" />
                   <div className="p-5 space-y-3">
-                    <div className="h-3 w-20 bg-white/10 rounded" />
-                    <div className="h-5 w-full bg-white/10 rounded" />
-                    <div className="h-3 w-32 bg-white/10 rounded" />
+                    <div className="h-3 w-20 bg-[#E2E8F0] rounded" />
+                    <div className="h-5 w-full bg-[#E2E8F0] rounded" />
+                    <div className="h-3 w-32 bg-[#E2E8F0] rounded" />
                   </div>
                 </div>
               ))}
@@ -199,17 +199,17 @@ export default function ProjectsSection() {
   // Error state
   if (error) {
     return (
-      <section className="py-24 bg-[#0A1628] relative">
+      <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-red-400 mb-2">Failed to load projects</p>
-          <p className="text-white/40 text-sm">{error}</p>
+          <p className="text-[#0F172A]/40 text-sm">{error}</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-24 bg-[#0A1628] relative">
+    <section className="py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-12">
@@ -217,7 +217,7 @@ export default function ProjectsSection() {
             <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-sm font-medium mb-4">
               {portfolioLabel}
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white">
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#0F172A]">
               {sectionTitle.pre}
               <span className="text-[#C9A227]">{sectionTitle.highlight}</span>
             </h2>
@@ -238,7 +238,7 @@ export default function ProjectsSection() {
               onClick={() => setActiveCategory("all")}
               className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeCategory === "all"
                 ? "bg-[#C9A227] text-[#0A1628]"
-                : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                : "bg-white/5 text-[#0F172A]/60 hover:bg-[#E2E8F0] hover:text-[#0F172A]"
                 }`}
             >
               {allLabel}
@@ -249,7 +249,7 @@ export default function ProjectsSection() {
                 onClick={() => setActiveCategory(filter.key)}
                 className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeCategory === filter.key
                   ? "bg-[#C9A227] text-[#0A1628]"
-                  : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                  : "bg-white/5 text-[#0F172A]/60 hover:bg-[#E2E8F0] hover:text-[#0F172A]"
                   }`}
               >
                 {getLabel(filter)}
@@ -264,7 +264,7 @@ export default function ProjectsSection() {
             <Link
               key={project.id}
               href={`/projects/${project.slug}`}
-              className="group relative bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden hover:border-[#C9A227]/20 transition-all duration-500"
+              className="group relative bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl overflow-hidden hover:border-[#C9A227]/20 transition-all duration-500"
             >
               {/* Cover Image — replaces the old Building2 icon placeholder */}
               <div className="aspect-[4/3] relative overflow-hidden">
@@ -275,7 +275,7 @@ export default function ProjectsSection() {
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 />
-                <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors" />
+                <div className="absolute inset-0 bg-white/40 group-hover:bg-white/20 transition-colors" />
 
                 {/* Status Badge */}
                 <div className="absolute top-4 left-4">
@@ -292,7 +292,7 @@ export default function ProjectsSection() {
                 {/* Completion percent badge (if available and not 100%) */}
                 {project.completionPercent > 0 && project.completionPercent < 100 && (
                   <div className="absolute bottom-4 right-4">
-                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-black/50 text-white backdrop-blur-sm border border-white/10">
+                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-black/50 text-[#0F172A] backdrop-blur-sm border border-[#E2E8F0]">
                       {project.completionPercent}%
                     </span>
                   </div>
@@ -301,20 +301,20 @@ export default function ProjectsSection() {
 
               {/* Card Content */}
               <div className="p-5">
-                <div className="flex items-center gap-2 text-white/40 text-xs mb-2">
+                <div className="flex items-center gap-2 text-[#0F172A]/40 text-xs mb-2">
                   <MapPin className="w-3.5 h-3.5" />
                   {getLocation(project)}
                 </div>
-                <h3 className="text-white font-bold text-lg mb-2 group-hover:text-[#C9A227] transition-colors line-clamp-2">
+                <h3 className="text-[#0F172A] font-bold text-lg mb-2 group-hover:text-[#C9A227] transition-colors line-clamp-2">
                   {getProjectName(project)}
                 </h3>
-                <div className="flex items-center gap-4 text-xs text-white/40 mb-3">
+                <div className="flex items-center gap-4 text-xs text-[#0F172A]/40 mb-3">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5" />
                     {project.duration}
                   </span>
                 </div>
-                <p className="text-white/30 text-xs line-clamp-2">
+                <p className="text-[#0F172A]/30 text-xs line-clamp-2">
                   {getClient(project)}
                 </p>
               </div>
@@ -325,7 +325,7 @@ export default function ProjectsSection() {
         {/* Empty state */}
         {filteredProjects.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-white/40">
+            <p className="text-[#0F172A]/40">
               {lang === "en"
                 ? "No projects found in this category."
                 : lang === "dari"

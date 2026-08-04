@@ -56,16 +56,16 @@ export default function CompaniesSection() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-[#0A1628]">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="animate-pulse text-white/50">Loading companies...</div>
+          <div className="animate-pulse text-[#64748B]">Loading companies...</div>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-24 bg-[#0A1628] relative overflow-hidden">
+    <section className="py-24 bg-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#C9A227/5_0%,_transparent_50%)]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
@@ -87,7 +87,7 @@ export default function CompaniesSection() {
               </>
             )}
           </h2>
-          <p className="text-white/50 max-w-2xl mx-auto">
+          <p className="text-[#64748B] max-w-2xl mx-auto">
             {lang === "en"
               ? "Each company brings unique expertise to deliver comprehensive solutions across Afghanistan."
               : lang === "dari"
@@ -106,7 +106,7 @@ export default function CompaniesSection() {
                 href={`/companies/${company.slug}`}
                 onMouseEnter={() => setHoveredCompany(company.slug)}
                 onMouseLeave={() => setHoveredCompany(null)}
-                className="group relative bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500 overflow-hidden"
+                className="group relative bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 hover:bg-[#F1F5F9] hover:border-[#E2E8F0] transition-all duration-500 overflow-hidden"
               >
                 <div
                   className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl transition-all duration-500"
@@ -130,7 +130,7 @@ export default function CompaniesSection() {
                     <h3 className="text-white font-bold text-lg mb-1 group-hover:text-[#C9A227] transition-colors">
                       {company.name}
                     </h3>
-                    <p className="text-white/40 text-sm mb-3">
+                    <p className="text-[#94A3B8] text-sm mb-3">
                       {company.description}
                     </p>
                     <span className="inline-flex items-center gap-1 text-sm text-[#C9A227]/70 group-hover:text-[#C9A227] transition-colors">

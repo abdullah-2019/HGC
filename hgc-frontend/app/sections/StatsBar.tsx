@@ -76,11 +76,11 @@ function StatItem({ stat }: { stat: Stat }) {
       <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#C9A227]/10 mb-4 group-hover:bg-[#C9A227]/20 transition-colors">
         <Icon className="w-7 h-7 text-[#C9A227]" />
       </div>
-      <div className="text-4xl lg:text-5xl font-bold text-white mb-2">
+      <div className="text-4xl lg:text-5xl font-bold text-[#0F172A] mb-2">
         {count}
         <span className="text-[#C9A227]">{stat.suffix}</span>
       </div>
-      <p className="text-white/50 text-sm">{stat.label}</p>
+      <p className="text-[#0F172A]/50 text-sm">{stat.label}</p>
     </div>
   );
 }
@@ -123,7 +123,7 @@ export default function StatsBar() {
 
   if (loading) {
     return (
-      <section className="relative py-16 bg-[#0A1628] border-y border-white/5">
+      <section className="relative py-16 bg-white border-y border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center min-h-[200px]">
           <Loader2 className="w-8 h-8 text-[#C9A227] animate-spin" />
         </div>
@@ -132,7 +132,7 @@ export default function StatsBar() {
   }
 
   return (
-    <section className="relative py-16 bg-[#0A1628] border-y border-white/5">
+    <section className="relative py-16 bg-white border-y border-[#E2E8F0]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat) => (

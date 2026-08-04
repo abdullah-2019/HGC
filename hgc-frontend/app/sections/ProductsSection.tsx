@@ -84,7 +84,7 @@ export default function ProductsSection() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-[#0A1628] relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center min-h-[400px]">
           <Loader2 className="w-10 h-10 text-[#C9A227] animate-spin" />
         </div>
@@ -93,7 +93,7 @@ export default function ProductsSection() {
   }
 
   return (
-    <section className="py-24 bg-[#0A1628] relative overflow-hidden">
+    <section className="py-24 bg-white relative overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#C9A227]/[0.02] rounded-full blur-[120px]" />
 
@@ -109,7 +109,7 @@ export default function ProductsSection() {
                 ? "محصولات و خدمات"
                 : "محصولات او خدمات"}
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#0F172A] mb-4 tracking-tight">
               {lang === "en" ? (
                 <>
                   Featured{" "}
@@ -127,7 +127,7 @@ export default function ProductsSection() {
                 </>
               )}
             </h2>
-            <p className="text-white/40 text-lg leading-relaxed">
+            <p className="text-[#0F172A]/40 text-lg leading-relaxed">
               {lang === "en"
                 ? "High-quality construction materials, energy solutions, and logistics services from our own production facilities."
                 : lang === "dari"
@@ -150,7 +150,7 @@ export default function ProductsSection() {
 
         {/* Products Grid */}
         {products.length === 0 ? (
-          <div className="text-center text-white/30 py-16">
+          <div className="text-center text-[#0F172A]/30 py-16">
             {lang === "en"
               ? "No products found."
               : lang === "dari"
@@ -191,7 +191,7 @@ export default function ProductsSection() {
 
                     {/* Top badges */}
                     <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-                      <span className="px-3 py-1.5 rounded-lg bg-[#0A1628]/80 backdrop-blur-md text-white/80 text-xs font-medium border border-white/10">
+                      <span className="px-3 py-1.5 rounded-lg bg-white/80 backdrop-blur-md text-[#0F172A]/80 text-xs font-medium border border-[#E2E8F0]">
                         {product.category?.name || "Product"}
                       </span>
                       <span
@@ -210,7 +210,7 @@ export default function ProductsSection() {
                   {/* Content */}
                   <div className="p-6">
                     {/* Product name */}
-                    <h3 className="text-white font-bold text-lg mb-2 group-hover:text-[#C9A227] transition-colors duration-300">
+                    <h3 className="text-[#0F172A] font-bold text-lg mb-2 group-hover:text-[#C9A227] transition-colors duration-300">
                       {product.name}
                     </h3>
 
@@ -223,7 +223,7 @@ export default function ProductsSection() {
 
                     {/* Description */}
                     {plainDescription && (
-                      <p className="text-white/35 text-sm leading-relaxed mb-5 line-clamp-2">
+                      <p className="text-[#0F172A]/35 text-sm leading-relaxed mb-5 line-clamp-2">
                         {plainDescription}
                       </p>
                     )}
@@ -238,8 +238,8 @@ export default function ProductsSection() {
                               className="flex items-center gap-2.5 text-sm"
                             >
                               <CheckCircle2 className="w-4 h-4 text-[#C9A227]/50 shrink-0" />
-                              <span className="text-white/40 truncate">
-                                <span className="text-white/55">
+                              <span className="text-[#0F172A]/40 truncate">
+                                <span className="text-[#0F172A]/55">
                                   {spec.label}:
                                 </span>{" "}
                                 {spec.value}
@@ -253,7 +253,7 @@ export default function ProductsSection() {
                     <div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
                       <div className="flex items-center gap-3">
                         {product.origin && (
-                          <span className="text-white/25 text-xs">
+                          <span className="text-[#0F172A]/25 text-xs">
                             {product.origin}
                           </span>
                         )}
@@ -263,7 +263,7 @@ export default function ProductsSection() {
                           </span>
                         )}
                       </div>
-                      <ExternalLink className="w-4 h-4 text-white/20 group-hover:text-[#C9A227]/60 transition-colors" />
+                      <ExternalLink className="w-4 h-4 text-[#0F172A]/20 group-hover:text-[#C9A227]/60 transition-colors" />
                     </div>
                   </div>
                 </Link>

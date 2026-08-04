@@ -167,7 +167,7 @@ export default function AboutSection() {
   // ─── Loading State ───────────────────────────────────────────────
   if (loading) {
     return (
-      <section className="py-28 bg-[#0A1628] relative overflow-hidden">
+      <section className="py-28 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center min-h-[400px]">
           <Loader2 className="w-8 h-8 text-[#C9A227] animate-spin" />
         </div>
@@ -178,9 +178,9 @@ export default function AboutSection() {
   // ─── Error / No Data State ───────────────────────────────────────
   if (error || !data?.story) {
     return (
-      <section className="py-28 bg-[#0A1628] relative overflow-hidden">
+      <section className="py-28 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <p className="text-white/40 text-sm">
+          <p className="text-[#94A3B8] text-sm">
             {error ? `Error: ${error}` : "No about data available"}
           </p>
           <button
@@ -204,7 +204,7 @@ export default function AboutSection() {
     : [];
 
   return (
-    <section className="py-28 bg-[#0A1628] relative overflow-hidden">
+    <section className="py-28 bg-white relative overflow-hidden">
       {/* Animated background blobs */}
       <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-[#C9A227]/[0.03] rounded-full blur-[100px] animate-pulse" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#1A237E]/[0.05] rounded-full blur-[100px]" />
@@ -252,7 +252,7 @@ export default function AboutSection() {
               {story.paragraphs && story.paragraphs.length > 0 ? (
                 <motion.div
                   variants={staggerItem}
-                  className="story-content text-white/60 leading-relaxed space-y-4"
+                  className="story-content text-[#475569] leading-relaxed space-y-4"
                 >
                   {story.paragraphs.map((paragraph, idx) => (
                     <div
@@ -264,7 +264,7 @@ export default function AboutSection() {
               ) : (
                 <motion.p
                   variants={staggerItem}
-                  className="text-white/30 text-sm italic"
+                  className="text-[#CBD5E1] text-sm italic"
                 >
                   No content available.
                 </motion.p>
@@ -281,7 +281,7 @@ export default function AboutSection() {
                     return (
                       <div
                         key={idx}
-                        className="relative rounded-xl bg-white/[0.03] border border-white/10 p-4 text-center group hover:bg-white/[0.06] hover:border-[#C9A227]/30 transition-all duration-300"
+                        className="relative rounded-xl bg-[#F1F5F9] border border-[#E2E8F0] p-4 text-center group hover:bg-[#E2E8F0] hover:border-[#C9A227]/30 transition-all duration-300"
                       >
                         <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[#C9A227]/10 mb-2 group-hover:bg-[#C9A227]/20 transition-colors">
                           <Icon className="w-5 h-5 text-[#C9A227]" />
@@ -289,7 +289,7 @@ export default function AboutSection() {
                         <div className="text-2xl font-bold text-white mb-0.5">
                           {highlight.value}
                         </div>
-                        <div className="text-white/40 text-xs font-medium leading-tight">
+                        <div className="text-[#94A3B8] text-xs font-medium leading-tight">
                           {highlight.label}
                         </div>
                       </div>
@@ -358,7 +358,7 @@ export default function AboutSection() {
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                         sizes="(max-width: 1024px) 33vw, 20vw"
                       />
-                      <div className="absolute inset-0 bg-[#0A1628]/30 group-hover:bg-[#0A1628]/10 transition-colors duration-500" />
+                      <div className="absolute inset-0 bg-white/30 group-hover:bg-[#E2E8F0] transition-colors duration-500" />
                     </motion.div>
                   ))}
                 </div>

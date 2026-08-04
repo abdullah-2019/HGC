@@ -71,7 +71,7 @@ export default function SectorsSection() {
 
   if (loading) {
     return (
-      <section className="py-20 bg-[#0A1628] border-y border-white/5">
+      <section className="py-20 bg-white border-y border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center">
           <Loader2 className="w-8 h-8 text-[#C9A227] animate-spin" />
         </div>
@@ -80,7 +80,7 @@ export default function SectorsSection() {
   }
 
   return (
-    <section className="py-20 bg-[#0A1628] border-y border-white/5">
+    <section className="py-20 bg-white border-y border-[#E2E8F0]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-sm font-medium mb-4">
@@ -105,7 +105,7 @@ export default function SectorsSection() {
               </>
             )}
           </h2>
-          <p className="text-white/50 max-w-2xl mx-auto text-lg">
+          <p className="text-[#64748B] max-w-2xl mx-auto text-lg">
             {lang === "en"
               ? "Mining, Construction, Energy, and General Trading solutions driving sustainable growth across Afghanistan."
               : lang === "dari"
@@ -115,7 +115,7 @@ export default function SectorsSection() {
         </div>
 
         {sectors.length === 0 ? (
-          <div className="text-center text-white/40 py-8">
+          <div className="text-center text-[#94A3B8] py-8">
             {lang === "en"
               ? "No sectors found."
               : lang === "dari"
@@ -130,7 +130,7 @@ export default function SectorsSection() {
                 <Link
                   key={sector.slug}
                   href={`/sectors/${sector.slug}`}
-                  className="group text-center p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-[#C9A227]/20 transition-all duration-300 w-36 sm:w-40 lg:w-44"
+                  className="group text-center p-6 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#E2E8F0] hover:border-[#C9A227]/20 transition-all duration-300 w-36 sm:w-40 lg:w-44"
                 >
                   <div className="w-12 h-12 mx-auto rounded-xl bg-[#C9A227]/10 flex items-center justify-center mb-3 group-hover:bg-[#C9A227]/20 group-hover:scale-110 transition-all duration-300">
                     <Icon className="w-6 h-6 text-[#C9A227]" />
