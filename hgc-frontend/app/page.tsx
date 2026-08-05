@@ -6,6 +6,8 @@ import CompaniesSection from "./sections/CompaniesSection";
 import ProductsSection from "./sections/ProductsSection";
 import SectorsSection from "./sections/SectorsSection";
 import ProjectsSection from "./sections/ProjectsSection";
+import NewsSection from "./sections/NewsSection";
+import EventsSection from "./sections/EventsSection";
 import WhyChooseSection from "./sections/WhyChooseSection";
 import CTASection from "./sections/CTASection";
 
@@ -25,6 +27,8 @@ export default function HomePage() {
       <ProductsSection />
       <SectorsSection />
       <ProjectsSection />
+      <NewsSection />
+      <EventsSection />
       <WhyChooseSection />
       <CTASection />
     </div>

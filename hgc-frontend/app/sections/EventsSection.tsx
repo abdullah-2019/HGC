@@ -1,0 +1,441 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  CalendarDays,
+  ArrowRight,
+  ArrowLeft,
+  MapPin,
+  Clock,
+  Users,
+  ChevronRight,
+  Ticket,
+} from "lucide-react";
+import { useI18n } from "@/components/useI18nStore";
+import { motion, AnimatePresence } from "framer-motion";
+
+// ─── Static Dummy Data ─────────────────────────────────────────────
+const DUMMY_EVENTS = [
+  {
+    id: 1,
+    slug: "afghanistan-infrastructure-summit-2026",
+    title: "Afghanistan Infrastructure & Development Summit 2026",
+    description:
+      "Join industry leaders, government officials, and international partners for a two-day summit focused on Afghanistan's infrastructure roadmap. Keynote speakers include ministers of public works and representatives from the World Bank.",
+    location: "Kabul International Conference Center",
+    event_date: "2026-09-15",
+    event_time: "09:00 AM - 05:00 PM",
+    cover_image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80",
+    is_upcoming: true,
+  },
+  {
+    id: 2,
+    slug: "hgc-annual-safety-workshop",
+    title: "HGC Annual Construction Safety & Standards Workshop",
+    description:
+      "A comprehensive training program for engineers, site managers, and safety officers across all HGC subsidiaries. Covers OSHA standards, hazard identification, and emergency response protocols.",
+    location: "HGC Training Center, Kabul",
+    event_date: "2026-08-25",
+    event_time: "08:30 AM - 04:00 PM",
+    cover_image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80",
+    is_upcoming: false,
+  },
+  {
+    id: 3,
+    slug: "herat-mining-expo-2026",
+    title: "Herat Mining & Minerals Expo 2026",
+    description:
+      "Showcasing Afghanistan's rich mineral resources and investment opportunities. Al-Bahrain Mining Company will present its latest extraction technologies and sustainability initiatives.",
+    location: "Herat Exhibition Grounds",
+    event_date: "2026-10-05",
+    event_time: "10:00 AM - 06:00 PM",
+    cover_image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80",
+    is_upcoming: true,
+  },
+  
+];
+
+// ─── Helpers ───────────────────────────────────────────────────────
+function formatEventDate(dateStr: string, lang: string): { day: string; month: string; year: string; weekday: string } {
+  const date = new Date(dateStr);
+  const day = date.getDate().toString().padStart(2, "0");
+  const year = date.getFullYear().toString();
+
+  let month = "";
+  let weekday = "";
+  if (lang === "en") {
+    month = date.toLocaleDateString("en-US", { month: "short" });
+    weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+  } else if (lang === "dari") {
+    month = date.toLocaleDateString("fa-AF", { month: "short" });
+    weekday = date.toLocaleDateString("fa-AF", { weekday: "long" });
+  } else {
+    month = date.toLocaleDateString("ps-AF", { month: "short" });
+    weekday = date.toLocaleDateString("ps-AF", { weekday: "long" });
+  }
+
+  return { day, month, year, weekday };
+}
+
+// ─── Component ─────────────────────────────────────────────────────
+export default function EventsSection() {
+  const { lang } = useI18n();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const events = DUMMY_EVENTS;
+  const total = events.length;
+
+  const goTo = useCallback(
+    (index: number) => {
+      const newDir = index > activeIndex ? 1 : -1;
+      setDirection(newDir);
+      setActiveIndex((index + total) % total);
+    },
+    [activeIndex, total]
+  );
+
+  const next = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
+  const prev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
+
+  // Auto-play
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(next, 7000);
+    return () => clearInterval(timer);
+  }, [isPaused, next]);
+
+  // Clamp activeIndex if it exceeds bounds (e.g. after removing items)
+  useEffect(() => {
+    if (activeIndex >= total) {
+      setActiveIndex(0);
+      setDirection(1);
+    }
+  }, [total, activeIndex]);
+
+  // ─── Don't render if no events ─────────────────────────────────
+  if (events.length === 0) return null;
+
+  const current = events[activeIndex] || events[0];
+  const dateParts = formatEventDate(current.event_date, lang);
+
+  const sectionLabel =
+    lang === "en"
+      ? "Upcoming Events"
+      : lang === "dari"
+      ? "رویدادهای پیش رو"
+      : "راتلونکې پیښې";
+
+  const sectionTitle =
+    lang === "en" ? (
+      <>
+        Events & <span className="text-hgc-gold">Conferences</span>
+      </>
+    ) : lang === "dari" ? (
+      <>
+        <span className="text-hgc-gold">رویدادها</span> و کنفرانس‌ها
+      </>
+    ) : (
+      <>
+        <span className="text-hgc-gold">پیښې</span> او کنفرانسونه
+      </>
+    );
+
+  const viewAllLabel =
+    lang === "en"
+      ? "View All Events"
+      : lang === "dari"
+      ? "مشاهده همه رویدادها"
+      : "ټولې پیښې وګورئ";
+
+  const learnMoreLabel =
+    lang === "en"
+      ? "Learn More"
+      : lang === "dari"
+      ? "بیشتر بدانید"
+      : "نور معلومات";
+
+  // Animation variants
+  const imageVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 80 : -80,
+      opacity: 0,
+      scale: 1.05,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? -80 : 80,
+      opacity: 0,
+      scale: 0.98,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    }),
+  };
+
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: 0.15 + i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+    }),
+  };
+
+  return (
+    <section
+      className="py-24 bg-hgc-bg-alt relative overflow-hidden"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Background decorations */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-hgc-gold/[0.02] rounded-full blur-[150px] translate-x-1/3 -translate-y-1/3" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-hgc-navy/[0.02] rounded-full blur-[120px] -translate-x-1/4 translate-y-1/4" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* ─── Section Header ────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-12"
+        >
+          <div>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-hgc-gold/10 border border-hgc-gold/20 text-hgc-gold text-sm font-medium mb-5">
+              <CalendarDays className="w-4 h-4" />
+              {sectionLabel}
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-hgc-text tracking-tight">
+              {sectionTitle}
+            </h2>
+          </div>
+          <Link
+            href="/events"
+            className="group mt-6 lg:mt-0 inline-flex items-center gap-2 text-hgc-gold font-semibold hover:gap-3 transition-all"
+          >
+            {viewAllLabel}
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </motion.div>
+
+        {/* ─── Split Layout: Featured + List ─────────────────────── */}
+        <div className="grid lg:grid-cols-12 gap-8">
+          {/* ── Left: Featured Event (Large) ── */}
+          <div className="lg:col-span-7 relative">
+            <div className="relative aspect-[4/3] lg:aspect-[16/10] rounded-3xl overflow-hidden bg-hgc-card-alt">
+              <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                <motion.div
+                  key={activeIndex}
+                  custom={direction}
+                  variants={imageVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={current.cover_image}
+                    alt={current.title}
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-hgc-overlay/90 via-hgc-overlay/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-hgc-overlay/60 to-transparent" />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Date badge — floating top-left */}
+              <div className="absolute top-6 left-6 z-10">
+                <div className="bg-hgc-surface/95 backdrop-blur-md rounded-2xl p-4 text-center shadow-xl border border-hgc-border">
+                  <span className="block text-hgc-gold text-xs font-bold uppercase tracking-wider">
+                    {dateParts.month}
+                  </span>
+                  <span className="block text-hgc-text text-3xl font-black leading-none mt-1">
+                    {dateParts.day}
+                  </span>
+                  <span className="block text-hgc-text-muted text-xs mt-1">
+                    {dateParts.weekday}
+                  </span>
+                </div>
+              </div>
+
+              {/* Upcoming badge */}
+              {current.is_upcoming && (
+                <div className="absolute top-6 right-6 z-10">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-hgc-gold text-hgc-text text-xs font-bold shadow-lg">
+                    <Ticket className="w-3.5 h-3.5" />
+                    {lang === "en"
+                      ? "Upcoming"
+                      : lang === "dari"
+                      ? "پیش رو"
+                      : "راتلونکی"}
+                  </span>
+                </div>
+              )}
+
+              {/* Content overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <h3 className="text-hgc-surface font-bold text-xl lg:text-3xl mb-3 leading-snug max-w-xl">
+                      {current.title}
+                    </h3>
+
+                    <div className="flex flex-wrap items-center gap-4 mb-5 text-hgc-surface/70 text-sm">
+                      {current.location && (
+                        <span className="inline-flex items-center gap-1.5">
+                          <MapPin className="w-4 h-4 text-hgc-gold" />
+                          {current.location}
+                        </span>
+                      )}
+                      {current.event_time && (
+                        <span className="inline-flex items-center gap-1.5">
+                          <Clock className="w-4 h-4 text-hgc-gold" />
+                          {current.event_time}
+                        </span>
+                      )}
+                    </div>
+
+                  
+
+                    <div className="flex items-center gap-3">
+                      
+                      <Link
+                        href={`/events/${current.slug}`}
+                        className="inline-flex items-center gap-1 text-hgc-surface text-sm font-medium hover:text-hgc-gold transition-colors"
+                      >
+                        {learnMoreLabel}
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Navigation arrows on featured image */}
+              <div className="absolute right-6 bottom-6 z-10 flex items-center gap-2">
+                <button
+                  onClick={prev}
+                  className="w-10 h-10 rounded-full bg-hgc-surface/10 backdrop-blur-md border border-hgc-surface/20 flex items-center justify-center text-hgc-surface hover:bg-hgc-gold hover:border-hgc-gold hover:text-hgc-text transition-all duration-300"
+                  aria-label="Previous"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={next}
+                  className="w-10 h-10 rounded-full bg-hgc-surface/10 backdrop-blur-md border border-hgc-surface/20 flex items-center justify-center text-hgc-surface hover:bg-hgc-gold hover:border-hgc-gold hover:text-hgc-text transition-all duration-300"
+                  aria-label="Next"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Right: Event List ── */}
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            {events.map((event, idx) => {
+              const isActive = idx === activeIndex;
+              const dp = formatEventDate(event.event_date, lang);
+              
+
+              return (
+                <button
+                  key={event.id}
+                  onClick={() => goTo(idx)}
+                  className={`group relative flex items-start gap-4 p-4 rounded-2xl border text-left transition-all duration-500 ${
+                    isActive
+                      ? "bg-hgc-card border-hgc-gold/40 shadow-lg shadow-hgc-gold/5"
+                      : "bg-hgc-card border-hgc-border hover:border-hgc-gold/20 hover:bg-hgc-card-hover"
+                  }`}
+                >
+                  {/* Date column */}
+                  <div
+                    className={`flex-shrink-0 w-16 h-16 rounded-xl flex flex-col items-center justify-center transition-colors duration-300 ${
+                      isActive
+                        ? "bg-hgc-gold text-hgc-text"
+                        : "bg-hgc-card-alt text-hgc-text-muted group-hover:bg-hgc-gold/10 group-hover:text-hgc-gold"
+                    }`}
+                  >
+                    <span className="text-lg font-black leading-none">{dp.day}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5">
+                      {dp.month}
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <h4
+                      className={`font-bold text-sm mb-1.5 line-clamp-1 transition-colors ${
+                        isActive ? "text-hgc-gold" : "text-hgc-text group-hover:text-hgc-gold"
+                      }`}
+                    >
+                      {event.title}
+                    </h4>
+                    <div className="flex flex-wrap items-center gap-3 text-hgc-text-muted text-xs">
+                      {event.location && (
+                        <span className="inline-flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          {event.location}
+                        </span>
+                      )}
+                      {event.event_time && (
+                        <span className="inline-flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {event.event_time}
+                        </span>
+                      )}
+                    </div>
+                    
+                  </div>
+
+                  {/* Active indicator */}
+                  <div
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-full transition-all duration-300 ${
+                      isActive ? "bg-hgc-gold opacity-100" : "bg-hgc-gold opacity-0"
+                    }`}
+                  />
+                </button>
+              );
+            })}
+
+            {/* Counter */}
+            <div className="flex items-center justify-between mt-2 px-2">
+              <span className="text-hgc-text-muted text-xs font-medium">
+                {activeIndex + 1} / {total}
+              </span>
+              <div className="flex items-center gap-1.5">
+                {events.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => goTo(idx)}
+                    className={`transition-all duration-300 rounded-full ${
+                      idx === activeIndex
+                        ? "w-6 h-1.5 bg-hgc-gold"
+                        : "w-1.5 h-1.5 bg-hgc-border hover:bg-hgc-gold/50"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
