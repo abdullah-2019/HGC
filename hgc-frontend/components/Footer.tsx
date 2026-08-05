@@ -176,10 +176,10 @@ function getSocialIcon(url: string): React.ReactNode {
 function getSocialBrandStyle(url: string) {
   if (!url) {
     return {
-      text: "text-white/50",
-      hoverText: "hover:text-[#D4AF37]",
-      border: "hover:border-[#D4AF37]/30",
-      bg: "hover:bg-[#D4AF37]/5",
+      text: "text-hgc-header-text-faint",
+      hoverText: "hover:text-hgc-accent",
+      border: "hover:border-hgc-accent/30",
+      bg: "hover:bg-hgc-accent/5",
     };
   }
 
@@ -192,72 +192,72 @@ function getSocialBrandStyle(url: string) {
 
   if (domain.includes("facebook") || domain.includes("fb.me")) {
     return {
-      text: "text-[#1877F2]",
-      hoverText: "hover:text-[#1877F2]",
-      border: "hover:border-[#1877F2]/30",
-      bg: "hover:bg-[#1877F2]/10",
+      text: "text-hgc-social-facebook",
+      hoverText: "hover:text-hgc-social-facebook",
+      border: "hover:border-hgc-social-facebook/30",
+      bg: "hover:bg-hgc-social-facebook/10",
     };
   }
 
   if (domain.includes("twitter") || domain.includes("x.com")) {
     return {
-      text: "text-white/80",
-      hoverText: "hover:text-white",
-      border: "hover:border-white/30",
-      bg: "hover:bg-white/10",
+      text: "text-hgc-header-text/80",
+      hoverText: "hover:text-hgc-header-text",
+      border: "hover:border-hgc-header-border-hover",
+      bg: "hover:bg-hgc-header-bg-hover",
     };
   }
 
   if (domain.includes("linkedin")) {
     return {
-      text: "text-[#0A66C2]",
-      hoverText: "hover:text-[#0A66C2]",
-      border: "hover:border-[#0A66C2]/30",
-      bg: "hover:bg-[#0A66C2]/10",
+      text: "text-hgc-social-linkedin",
+      hoverText: "hover:text-hgc-social-linkedin",
+      border: "hover:border-hgc-social-linkedin/30",
+      bg: "hover:bg-hgc-social-linkedin/10",
     };
   }
 
   if (domain.includes("instagram")) {
     return {
-      text: "text-[#E4405F]",
-      hoverText: "hover:text-[#E4405F]",
-      border: "hover:border-[#E4405F]/30",
-      bg: "hover:bg-[#E4405F]/10",
+      text: "text-hgc-social-instagram",
+      hoverText: "hover:text-hgc-social-instagram",
+      border: "hover:border-hgc-social-instagram/30",
+      bg: "hover:bg-hgc-social-instagram/10",
     };
   }
 
   if (domain.includes("youtube") || domain.includes("youtu.be") || domain.includes("yt.be")) {
     return {
-      text: "text-[#FF0000]",
-      hoverText: "hover:text-[#FF0000]",
-      border: "hover:border-[#FF0000]/30",
-      bg: "hover:bg-[#FF0000]/10",
+      text: "text-hgc-social-youtube",
+      hoverText: "hover:text-hgc-social-youtube",
+      border: "hover:border-hgc-social-youtube/30",
+      bg: "hover:bg-hgc-social-youtube/10",
     };
   }
 
   if (domain.includes("t.me") || domain.includes("telegram")) {
     return {
-      text: "text-[#26A5E4]",
-      hoverText: "hover:text-[#26A5E4]",
-      border: "hover:border-[#26A5E4]/30",
-      bg: "hover:bg-[#26A5E4]/10",
+      text: "text-hgc-social-telegram",
+      hoverText: "hover:text-hgc-social-telegram",
+      border: "hover:border-hgc-social-telegram/30",
+      bg: "hover:bg-hgc-social-telegram/10",
     };
   }
 
   if (domain.includes("wa.me") || domain.includes("whatsapp")) {
     return {
-      text: "text-[#25D366]",
-      hoverText: "hover:text-[#25D366]",
-      border: "hover:border-[#25D366]/30",
-      bg: "hover:bg-[#25D366]/10",
+      text: "text-hgc-social-whatsapp",
+      hoverText: "hover:text-hgc-social-whatsapp",
+      border: "hover:border-hgc-social-whatsapp/30",
+      bg: "hover:bg-hgc-social-whatsapp/10",
     };
   }
 
   return {
-    text: "text-white/50",
-    hoverText: "hover:text-[#D4AF37]",
-    border: "hover:border-[#D4AF37]/30",
-    bg: "hover:bg-[#D4AF37]/5",
+    text: "text-hgc-header-text-faint",
+    hoverText: "hover:text-hgc-accent",
+    border: "hover:border-hgc-accent/30",
+    bg: "hover:bg-hgc-accent/5",
   };
 }
 
@@ -328,30 +328,30 @@ export default function Footer() {
   if (loadingSettings) {
     return (
       <footer className="relative hgc-stripe-bg-footer overflow-hidden" dir={dir}>
-        <div className="absolute top-0 left-0 right-0 h-px bg-[#D4AF37]/30" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-hgc-accent/30" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="animate-pulse grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-4 space-y-4">
-              <div className="h-14 w-14 bg-white/5 rounded-xl" />
-              <div className="h-4 w-48 bg-white/5 rounded" />
-              <div className="h-3 w-full bg-white/5 rounded" />
-              <div className="h-3 w-2/3 bg-white/5 rounded" />
+              <div className="h-14 w-14 bg-hgc-accent/20 rounded-xl" />
+              <div className="h-4 w-48 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-full bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-2/3 bg-hgc-accent/5 rounded" />
             </div>
             <div className="lg:col-span-2 space-y-3">
-              <div className="h-4 w-24 bg-white/5 rounded" />
-              <div className="h-3 w-20 bg-white/5 rounded" />
-              <div className="h-3 w-20 bg-white/5 rounded" />
-              <div className="h-3 w-20 bg-white/5 rounded" />
+              <div className="h-4 w-24 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-20 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-20 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-20 bg-hgc-accent/5 rounded" />
             </div>
             <div className="lg:col-span-3 space-y-3">
-              <div className="h-4 w-28 bg-white/5 rounded" />
-              <div className="h-3 w-full bg-white/5 rounded" />
-              <div className="h-3 w-full bg-white/5 rounded" />
+              <div className="h-4 w-28 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-full bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-full bg-hgc-accent/5 rounded" />
             </div>
             <div className="lg:col-span-3 space-y-3">
-              <div className="h-4 w-24 bg-white/5 rounded" />
-              <div className="h-16 w-full bg-white/5 rounded-xl" />
-              <div className="h-16 w-full bg-white/5 rounded-xl" />
+              <div className="h-4 w-24 bg-hgc-accent/5 rounded" />
+              <div className="h-16 w-full bg-hgc-accent/20 rounded-xl" />
+              <div className="h-16 w-full bg-hgc-accent/20 rounded-xl" />
             </div>
           </div>
         </div>
@@ -363,7 +363,7 @@ export default function Footer() {
     return (
       <footer className="relative hgc-stripe-bg-footer py-12" dir={dir}>
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-white/40 text-sm">Failed to load footer content.</p>
+          <p className="text-hgc-header-text-faint text-sm">Failed to load footer content.</p>
         </div>
       </footer>
     );
@@ -387,11 +387,11 @@ export default function Footer() {
   return (
     <footer className="relative hgc-stripe-bg-footer overflow-hidden" dir={dir}>
       {/* Gold accent top border */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-[#D4AF37]/30" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-hgc-accent/30" />
 
       {/* Ambient glow effects */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-3xl -translate-y-1/2" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#1A237E]/10 rounded-full blur-3xl translate-y-1/2" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-hgc-accent/5 rounded-full blur-3xl -translate-y-1/2" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-hgc-footer-glow/10 rounded-full blur-3xl translate-y-1/2" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
@@ -400,18 +400,18 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-6">
             <Link href="/" className="inline-flex items-center gap-3 group">
               <div className="relative w-14 h-14 flex items-center justify-center">
-                <div className="absolute inset-0 bg-[#D4AF37] rounded-xl rotate-3 group-hover:rotate-6 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-[#0F2B5B] rounded-xl border-2 border-[#D4AF37] flex items-center justify-center">
-                  <span className="text-[#D4AF37] font-bold text-xl">HGC</span>
+                <div className="absolute inset-0 bg-hgc-accent rounded-xl rotate-3 group-hover:rotate-6 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-hgc-logo-bg rounded-xl border-2 border-hgc-accent flex items-center justify-center">
+                  <span className="text-hgc-logo-text font-bold text-xl">HGC</span>
                 </div>
               </div>
               <div>
-                <h2 className="text-white font-bold text-lg leading-tight">{brandTitle}</h2>
-                <p className="text-[#D4AF37] text-xs tracking-[0.2em] uppercase">{brandSubtitle}</p>
+                <h2 className="text-hgc-header-text font-bold text-lg leading-tight">{brandTitle}</h2>
+                <p className="text-hgc-accent text-xs tracking-[0.2em] uppercase">{brandSubtitle}</p>
               </div>
             </Link>
 
-            <p className="text-white/50 text-sm leading-relaxed max-w-xs">{brandDesc}</p>
+            <p className="text-hgc-header-text-faint text-sm leading-relaxed max-w-xs">{brandDesc}</p>
 
             {/* Social Links */}
             <div className="flex items-center gap-3">
@@ -425,7 +425,7 @@ export default function Footer() {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center ${brand.text} ${brand.hoverText} ${brand.border} ${brand.bg} transition-all duration-300 group`}
+                      className={`w-10 h-10 rounded-xl bg-hgc-accent/20 border border-hgc-header-border flex items-center justify-center ${brand.text} ${brand.hoverText} ${brand.border} ${brand.bg} transition-all duration-300 group`}
                       aria-label={social.label}
                     >
                       {getSocialIcon(social.url)}
@@ -437,8 +437,8 @@ export default function Footer() {
 
           {/* ── Column 2: Quick Links ── */}
           <div className="lg:col-span-2">
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+            <h3 className="text-hgc-header-text font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-hgc-accent" />
               {quickLinksTitle}
             </h3>
             <ul className="space-y-2.5">
@@ -448,7 +448,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="group flex items-center gap-2 text-white/50 hover:text-[#D4AF37] transition-colors duration-200 text-sm"
+                      className="group flex items-center gap-2 text-hgc-header-text-faint hover:text-hgc-accent transition-colors duration-200 text-sm"
                     >
                       <ChevronRight
                         className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${
@@ -466,16 +466,16 @@ export default function Footer() {
 
           {/* ── Column 3: Companies ── */}
           <div className="lg:col-span-3">
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+            <h3 className="text-hgc-header-text font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-hgc-accent" />
               {ourCompaniesTitle}
             </h3>
             {loadingCompanies ? (
               <div className="flex items-center justify-center py-4">
-                <Loader2 className="w-5 h-5 text-[#D4AF37] animate-spin" />
+                <Loader2 className="w-5 h-5 text-hgc-accent animate-spin" />
               </div>
             ) : companies.length === 0 ? (
-              <p className="text-white/40 text-sm">
+              <p className="text-hgc-header-text-faint text-sm">
                 {lang === "en" ? "No companies found." : lang === "dari" ? "هیچ شرکتی یافت نشد." : "هیڅ شرکت ونه موندل شو."}
               </p>
             ) : (
@@ -491,7 +491,7 @@ export default function Footer() {
                     >
                       <Link
                         href={`/companies/${company.slug}`}
-                        className="group flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-white/5 transition-all duration-200"
+                        className="group flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-hgc-accent/5 transition-all duration-200"
                       >
                         <div
                           className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300"
@@ -501,8 +501,8 @@ export default function Footer() {
                         >
                           <Icon className="w-4 h-4 transition-colors duration-200" style={{ color: company.accent_color }} />
                         </div>
-                        <span className="text-white/60 group-hover:text-white text-sm transition-colors flex-1">{company.name}</span>
-                        <ArrowUpRight className={`w-3.5 h-3.5 transition-all duration-200 ${isHovered ? "text-[#D4AF37] opacity-100" : "text-white/20 opacity-0"}`} />
+                        <span className="text-hgc-header-text/60 group-hover:text-hgc-header-text text-sm transition-colors flex-1">{company.name}</span>
+                        <ArrowUpRight className={`w-3.5 h-3.5 transition-all duration-200 ${isHovered ? "text-hgc-accent opacity-100" : "text-hgc-accent/20 opacity-0"}`} />
                       </Link>
                     </li>
                   );
@@ -513,38 +513,38 @@ export default function Footer() {
 
           {/* ── Column 4: Contact ── */}
           <div className="lg:col-span-3">
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+            <h3 className="text-hgc-header-text font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-hgc-accent" />
               {contactTitle}
             </h3>
 
             <div className="space-y-4">
               {/* Address */}
-              <div className="group p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[#D4AF37]/20 hover:bg-white/[0.06] transition-all duration-300">
+              <div className="group p-4 rounded-xl bg-hgc-accent/5 border border-hgc-header-border hover:border-hgc-accent/20 hover:bg-hgc-accent/8 transition-all duration-300">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <MapPin className="w-4 h-4 text-[#D4AF37]" />
+                  <div className="w-9 h-9 rounded-lg bg-hgc-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <MapPin className="w-4 h-4 text-hgc-accent" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm mb-1">{officeLabel}</p>
-                    <p className="text-white/40 text-xs leading-relaxed">{address}</p>
+                    <p className="text-hgc-header-text font-medium text-sm mb-1">{officeLabel}</p>
+                    <p className="text-hgc-header-text-faint text-xs leading-relaxed">{address}</p>
                   </div>
                 </div>
               </div>
 
               {/* Phone */}
-              <div className="group p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[#D4AF37]/20 hover:bg-white/[0.06] transition-all duration-300">
+              <div className="group p-4 rounded-xl bg-hgc-accent/5 border border-hgc-header-border hover:border-hgc-accent/20 hover:bg-hgc-accent/8 transition-all duration-300">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Phone className="w-4 h-4 text-[#D4AF37]" />
+                  <div className="w-9 h-9 rounded-lg bg-hgc-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Phone className="w-4 h-4 text-hgc-accent" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm mb-1">{phoneLabel}</p>
-                    <a href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`} className="text-white/40 text-xs hover:text-[#D4AF37] transition-colors block">
+                    <p className="text-hgc-header-text font-medium text-sm mb-1">{phoneLabel}</p>
+                    <a href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`} className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block">
                       {settings.phonePrimary}
                     </a>
                     {settings.phoneSecondary && (
-                      <a href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`} className="text-white/40 text-xs hover:text-[#D4AF37] transition-colors block">
+                      <a href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`} className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block">
                         {settings.phoneSecondary}
                       </a>
                     )}
@@ -553,14 +553,14 @@ export default function Footer() {
               </div>
 
               {/* Email */}
-              <div className="group p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[#D4AF37]/20 hover:bg-white/[0.06] transition-all duration-300">
+              <div className="group p-4 rounded-xl bg-hgc-accent/5 border border-hgc-header-border hover:border-hgc-accent/20 hover:bg-hgc-accent/8 transition-all duration-300">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Mail className="w-4 h-4 text-[#D4AF37]" />
+                  <div className="w-9 h-9 rounded-lg bg-hgc-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Mail className="w-4 h-4 text-hgc-accent" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm mb-1">{emailLabel}</p>
-                    <a href={`mailto:${settings.emailAddress}`} className="text-white/40 text-xs hover:text-[#D4AF37] transition-colors">
+                    <p className="text-hgc-header-text font-medium text-sm mb-1">{emailLabel}</p>
+                    <a href={`mailto:${settings.emailAddress}`} className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors">
                       {settings.emailAddress}
                     </a>
                   </div>
@@ -571,12 +571,12 @@ export default function Footer() {
         </div>
 
         {/* ── Bottom Bar ── */}
-        <div className="mt-12 pt-6 border-t border-white/5">
+        <div className="mt-12 pt-6 border-t border-hgc-header-border">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-white/30 text-xs">{copyright}</p>
+            <p className="text-hgc-header-text-ghost text-xs">{copyright}</p>
             {/* <div className="flex items-center gap-6"> */}
-              {/* <Link href="/privacy" className="text-white/30 hover:text-white/60 text-xs transition-colors">{privacyText}</Link> */}
-              {/* <Link href="/terms" className="text-white/30 hover:text-white/60 text-xs transition-colors">{termsText}</Link> */}
+              {/* <Link href="/privacy" className="text-hgc-header-text-ghost hover:text-hgc-header-text-muted text-xs transition-colors">{privacyText}</Link> */}
+              {/* <Link href="/terms" className="text-hgc-header-text-ghost hover:text-hgc-header-text-muted text-xs transition-colors">{termsText}</Link> */}
             {/* </div> */}
           </div>
         </div>

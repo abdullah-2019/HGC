@@ -127,8 +127,8 @@ export default function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? "hgc-stripe-bg shadow-2xl shadow-[#0F2B5B]/30 border-b border-white/10"
-            : "hgc-stripe-bg border-b border-white/5"
+            ? "hgc-stripe-bg shadow-2xl shadow-hgc-header-text/10 border-b border-hgc-header-border"
+            : "hgc-stripe-bg border-b border-hgc-header-border"
         }`}
         dir={dir}
       >
@@ -137,18 +137,18 @@ export default function Header() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center">
-                <div className="absolute inset-0 bg-[#D4AF37] rounded-lg rotate-3 group-hover:rotate-6 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-[#0F2B5B] rounded-lg border-2 border-[#D4AF37] flex items-center justify-center">
-                  <span className="text-[#D4AF37] font-bold text-lg lg:text-xl tracking-tighter">
+                <div className="absolute inset-0 bg-hgc-accent rounded-lg rotate-3 group-hover:rotate-6 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-hgc-logo-bg rounded-lg border-2 border-hgc-accent flex items-center justify-center">
+                  <span className="text-hgc-logo-text font-bold text-lg lg:text-xl tracking-tighter">
                     HGC
                   </span>
                 </div>
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-white font-bold text-sm lg:text-base leading-tight tracking-wide">
+                <h1 className="text-hgc-header-text font-bold text-sm lg:text-base leading-tight tracking-wide">
                   HAFEZ GROUP
                 </h1>
-                <p className="text-[#D4AF37] text-[10px] lg:text-xs tracking-[0.2em] uppercase">
+                <p className="text-hgc-accent text-[10px] lg:text-xs tracking-[0.2em] uppercase">
                   {t(lang, "footer.brandSubtitle") || "of Companies"}
                 </p>
               </div>
@@ -162,13 +162,13 @@ export default function Header() {
                   href={link.href}
                   className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${
                     isActive(link.href)
-                      ? "text-[#D4AF37]"
-                      : "text-white/80 hover:text-white"
+                      ? "text-hgc-accent"
+                      : "text-hgc-header-text/80 hover:text-hgc-header-text"
                   }`}
                 >
                   {t(lang, link.key)}
                   <span
-                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-[#D4AF37] transition-all duration-300 rounded-full ${
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-hgc-accent transition-all duration-300 rounded-full ${
                       isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
                     }`}
                   />
@@ -184,8 +184,8 @@ export default function Header() {
                 <button
                   className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
                     pathname.startsWith("/companies")
-                      ? "text-[#D4AF37]"
-                      : "text-white/80 hover:text-white"
+                      ? "text-hgc-accent"
+                      : "text-hgc-header-text/80 hover:text-hgc-header-text"
                   }`}
                 >
                   {t(lang, "nav.companies")}
@@ -205,13 +205,13 @@ export default function Header() {
                       : "opacity-0 -translate-y-2 pointer-events-none"
                   }`}
                 >
-                  <div className="bg-[#0F2B5B]/98 backdrop-blur-2xl border border-[#D4AF37]/20 rounded-2xl shadow-2xl shadow-[#0A1E42]/50 p-3 w-[420px]">
+                  <div className="bg-hgc-dropdown-bg/98 backdrop-blur-2xl border border-hgc-dropdown-border rounded-2xl shadow-2xl shadow-hgc-header-text/10 p-3 w-[420px]">
                     {loadingCompanies ? (
                       <div className="flex items-center justify-center py-8">
-                        <Loader2 className="w-5 h-5 text-[#D4AF37] animate-spin" />
+                        <Loader2 className="w-5 h-5 text-hgc-accent animate-spin" />
                       </div>
                     ) : companies.length === 0 ? (
-                      <div className="py-6 text-center text-white/40 text-sm">
+                      <div className="py-6 text-center text-hgc-dropdown-text-muted text-sm">
                         {lang === "en"
                           ? "No companies found."
                           : lang === "dari"
@@ -226,7 +226,7 @@ export default function Header() {
                             <Link
                               key={company.slug}
                               href={`/companies/${company.slug}`}
-                              className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 group/item"
+                              className="flex items-center gap-3 p-3 rounded-xl hover:bg-hgc-header-bg-hover transition-all duration-200 group/item"
                             >
                               <div
                                 className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 group-hover/item:scale-110"
@@ -240,15 +240,15 @@ export default function Header() {
                                 />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-white text-sm font-medium truncate group-hover/item:text-[#D4AF37] transition-colors">
+                                <p className="text-hgc-dropdown-text text-sm font-medium truncate group-hover/item:text-hgc-header-text-muted transition-colors">
                                   {company.name}
                                 </p>
-                                <p className="text-white/40 text-xs line-clamp-1">
+                                <p className="text-hgc-dropdown-text-muted text-xs line-clamp-1">
                                   {company.description}
                                 </p>
                               </div>
                               <ArrowRight
-                                className={`w-4 h-4 transition-all duration-200 text-white/20 group-hover/item:text-[#D4AF37] ${
+                                className={`w-4 h-4 transition-all duration-200 text-hgc-dropdown-text/20 group-hover/item:text-hgc-header-text-muted ${
                                   dir === "rtl" ? "rotate-180" : ""
                                 }`}
                               />
@@ -268,16 +268,16 @@ export default function Header() {
               <div className="relative w-32">
                 <button
                   onClick={() => setLangMenuOpen(!langMenuOpen)}
-                  className="flex items-center justify-between w-full px-3 py-1.5 rounded-lg bg-white/10 border border-white/10 hover:bg-white/15 hover:border-[#D4AF37]/30 transition-all duration-300 text-sm"
+                  className="flex items-center justify-between w-full px-3 py-1.5 rounded-lg bg-hgc-header-bg-hover border border-hgc-header-border hover:bg-hgc-header-bg-active hover:border-hgc-accent/30 transition-all duration-300 text-sm"
                 >
                   <div className="flex items-center gap-2 truncate">
-                    <Globe className="w-4 h-4 text-[#D4AF37] shrink-0" />
-                    <span className="text-white font-medium truncate">
+                    <Globe className="w-4 h-4 text-hgc-accent shrink-0" />
+                    <span className="text-hgc-header-text font-medium truncate">
                       {languages.find((l) => l.code === lang)?.label}
                     </span>
                   </div>
                   <ChevronDown
-                    className={`w-3 h-3 text-white/50 transition-transform shrink-0 ${
+                    className={`w-3 h-3 text-hgc-header-text/50 transition-transform shrink-0 ${
                       langMenuOpen ? "rotate-180" : ""
                     }`}
                   />
@@ -289,7 +289,7 @@ export default function Header() {
                       className="fixed inset-0 z-10"
                       onClick={() => setLangMenuOpen(false)}
                     />
-                    <div className="absolute top-full mt-2 left-0 right-0 z-20 bg-[#0F2B5B]/98 backdrop-blur-2xl border border-[#D4AF37]/20 rounded-xl shadow-2xl p-1.5 w-full">
+                    <div className="absolute top-full mt-2 left-0 right-0 z-20 bg-hgc-dropdown-bg/98 backdrop-blur-2xl border border-hgc-dropdown-border rounded-xl shadow-2xl p-1.5 w-full">
                       <div className="flex flex-col gap-0.5">
                         {languages.map((l) => (
                           <button
@@ -301,8 +301,8 @@ export default function Header() {
                             dir={l.code === "en" ? "ltr" : "rtl"}
                             className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
                               lang === l.code
-                                ? "bg-[#D4AF37]/15 text-[#D4AF37] font-semibold"
-                                : "text-white/70 hover:bg-white/5 hover:text-white"
+                                ? "bg-hgc-header-text/10 text-hgc-header-text font-semibold"
+                                : "text-hgc-dropdown-text-muted hover:bg-hgc-header-bg-hover hover:text-hgc-dropdown-text"
                             }`}
                           >
                             <span className="w-full text-start">{l.label}</span>
@@ -317,12 +317,12 @@ export default function Header() {
               {/* Mobile Toggle */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden p-2 rounded-lg bg-white/10 border border-white/10 hover:bg-white/15 transition-colors"
+                className="lg:hidden p-2 rounded-lg bg-hgc-header-bg-hover border border-hgc-header-border hover:bg-hgc-header-bg-active transition-colors"
               >
                 {mobileOpen ? (
-                  <X className="w-5 h-5 text-white" />
+                  <X className="w-5 h-5 text-hgc-header-text" />
                 ) : (
-                  <Menu className="w-5 h-5 text-white" />
+                  <Menu className="w-5 h-5 text-hgc-header-text" />
                 )}
               </button>
             </div>
@@ -347,8 +347,8 @@ export default function Header() {
               href={link.href}
               className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${
                 isActive(link.href)
-                  ? "bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/25"
-                  : "text-white/80 hover:text-white hover:bg-white/5"
+                  ? "bg-hgc-accent/15 text-hgc-accent border border-hgc-accent/25"
+                  : "text-hgc-header-text/80 hover:text-hgc-header-text hover:bg-hgc-header-bg-hover"
               }`}
             >
               {t(lang, link.key)}
@@ -356,12 +356,12 @@ export default function Header() {
           ))}
 
           <div className="pt-4">
-            <p className="px-4 text-xs uppercase tracking-wider text-[#D4AF37]/60 mb-3">
+            <p className="px-4 text-xs uppercase tracking-wider text-hgc-accent/60 mb-3">
               {t(lang, "footer.ourCompanies")}
             </p>
             {loadingCompanies ? (
               <div className="flex items-center justify-center py-4">
-                <Loader2 className="w-5 h-5 text-[#D4AF37] animate-spin" />
+                <Loader2 className="w-5 h-5 text-hgc-accent animate-spin" />
               </div>
             ) : (
               <div className="space-y-1">
@@ -371,7 +371,7 @@ export default function Header() {
                     <Link
                       key={company.slug}
                       href={`/companies/${company.slug}`}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-colors"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-hgc-header-bg-hover transition-colors"
                     >
                       <div
                         className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
@@ -384,7 +384,7 @@ export default function Header() {
                           style={{ color: company.accent_color }}
                         />
                       </div>
-                      <span className="text-white/80 text-sm">
+                      <span className="text-hgc-header-text/80 text-sm">
                         {company.name}
                       </span>
                     </Link>

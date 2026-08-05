@@ -72,9 +72,54 @@
   --color-haramain-gold: #FFD700;
   --color-alkoozi-teal: #00838F;
 
+  /* ═══ Header/Footer Theme (Light Blue + Navy + White Accent) ═══ */
+  --color-hgc-header-text: #0F2B5B;
+  --color-hgc-header-text-muted: #1A3A6B;
+  --color-hgc-header-text-faint: #475569;
+  --color-hgc-header-text-ghost: #64748B;
+
+  --color-hgc-accent: #FFFFFF;
+  --color-hgc-accent-muted: rgba(255,255,255,0.70);
+  --color-hgc-accent-faint: rgba(255,255,255,0.40);
+  --color-hgc-accent-ghost: rgba(255,255,255,0.18);
+
+  --color-hgc-logo-bg: #0F2B5B;
+  --color-hgc-logo-text: #FFFFFF;
+
+  --color-hgc-header-bg-start: #29B6F6;
+  --color-hgc-header-bg-mid: #039BE5;
+  --color-hgc-header-bg-end: #29B6F6;
+
+  --color-hgc-footer-bg-start: #29B6F6;
+  --color-hgc-footer-bg-mid: #0288D1;
+  --color-hgc-footer-bg-end: #29B6F6;
+
+  --color-hgc-header-border: rgba(255,255,255,0.12);
+  --color-hgc-header-border-hover: rgba(255,255,255,0.25);
+  --color-hgc-header-bg-hover: rgba(255,255,255,0.06);
+  --color-hgc-header-bg-active: rgba(255,255,255,0.10);
+
+  --color-hgc-dropdown-bg: #FFFFFF;
+  --color-hgc-dropdown-text: #0F2B5B;
+  --color-hgc-dropdown-text-muted: #475569;
+  --color-hgc-dropdown-border: rgba(15,43,91,0.08);
+
+  /* Social Brand Colors */
+  --color-hgc-social-facebook: #1877F2;
+  --color-hgc-social-linkedin: #0A66C2;
+  --color-hgc-social-instagram: #E4405F;
+  --color-hgc-social-youtube: #FF0000;
+  --color-hgc-social-telegram: #26A5E4;
+  --color-hgc-social-whatsapp: #25D366;
+  --color-hgc-footer-glow: #1A237E;
+
   /* Fonts */
   --font-sans: 'Inter', 'Vazirmatn', sans-serif;
   --font-display: 'Inter', 'Vazirmatn', sans-serif;
+}
+
+:root {
+  --hgc-stripe-line: rgba(255, 255, 255, 0.05);
 }
 
 /* Custom Text Direction Utilities */
@@ -91,11 +136,11 @@
     repeating-linear-gradient(
       135deg,
       transparent,
-      transparent 10px,
-      rgba(255, 255, 255, 0.008) 10px,
-      rgba(255, 255, 255, 0.008) 12px
+      transparent 30px,
+      var(--hgc-stripe-line) 30px,
+      var(--hgc-stripe-line) 31px
     ),
-    linear-gradient(180deg, #0F2B5B 0%, #0A1E42 50%, #0F2B5B 100%);
+    linear-gradient(180deg, var(--color-hgc-header-bg-start) 0%, var(--color-hgc-header-bg-mid) 50%, var(--color-hgc-header-bg-end) 100%);
   background-size: 100% 100%, 100% 100%;
 }
 
@@ -104,11 +149,11 @@
     repeating-linear-gradient(
       -135deg,
       transparent,
-      transparent 10px,
-      rgba(255, 255, 255, 0.008) 10px,
-      rgba(255, 255, 255, 0.008) 12px
+      transparent 30px,
+      var(--hgc-stripe-line) 30px,
+      var(--hgc-stripe-line) 31px
     ),
-    linear-gradient(180deg, #0A1E42 0%, #0F2B5B 50%, #0A1E42 100%);
+    linear-gradient(180deg, var(--color-hgc-footer-bg-start) 0%, var(--color-hgc-footer-bg-mid) 50%, var(--color-hgc-footer-bg-end) 100%);
 }
 
 /* Subtle shimmer on stripes */
