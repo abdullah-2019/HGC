@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -10,6 +10,8 @@ import {
   Globe,
   ArrowRight,
   Loader2,
+  Building2,
+  Layers,
 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -61,6 +63,10 @@ export default function Header() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loadingCompanies, setLoadingCompanies] = useState(true);
   const pathname = usePathname();
+
+  const companiesBtnRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [arrowLeft, setArrowLeft] = useState<number | null>(null);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -120,7 +126,46 @@ export default function Header() {
     setLangMenuOpen(false);
   }, [pathname]);
 
+  // ── Arrow Position Calculator ───────────────────────────────────
+  const updateArrowPosition = useCallback(() => {
+    if (companiesBtnRef.current && dropdownRef.current) {
+      const btnRect = companiesBtnRef.current.getBoundingClientRect();
+      const dropdownRect = dropdownRef.current.getBoundingClientRect();
+
+      const btnCenter = btnRect.left + btnRect.width / 2;
+      const dropdownLeft = dropdownRect.left;
+
+      let pos = btnCenter - dropdownLeft;
+      pos = Math.max(16, Math.min(pos, dropdownRect.width - 16));
+      setArrowLeft(pos);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateArrowPosition();
+    window.addEventListener("resize", updateArrowPosition);
+    return () => window.removeEventListener("resize", updateArrowPosition);
+  }, [updateArrowPosition]);
+
+  useEffect(() => {
+    if (companiesOpen) {
+      const t = setTimeout(updateArrowPosition, 50);
+      return () => clearTimeout(t);
+    }
+  }, [companiesOpen, updateArrowPosition]);
+
   const isActive = (href: string) => pathname === href;
+
+  const companiesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const openCompanies = () => {
+    if (companiesTimeoutRef.current) clearTimeout(companiesTimeoutRef.current);
+    setCompaniesOpen(true);
+  };
+  const closeCompanies = () => {
+    companiesTimeoutRef.current = setTimeout(() => {
+      setCompaniesOpen(false);
+    }, 150);
+  };
 
   return (
     <>
@@ -132,7 +177,7 @@ export default function Header() {
         }`}
         dir={dir}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
@@ -175,11 +220,12 @@ export default function Header() {
                 </Link>
               ))}
 
-              {/* Companies Dropdown */}
+              {/* Companies Button */}
               <div
-                className="relative"
-                onMouseEnter={() => setCompaniesOpen(true)}
-                onMouseLeave={() => setCompaniesOpen(false)}
+                ref={companiesBtnRef}
+                className="relative h-full flex items-center"
+                onMouseEnter={openCompanies}
+                onMouseLeave={closeCompanies}
               >
                 <button
                   className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
@@ -195,70 +241,6 @@ export default function Header() {
                     }`}
                   />
                 </button>
-
-                <div
-                  className={`absolute top-full ${
-                    dir === "rtl" ? "right-0" : "left-0"
-                  } pt-2 transition-all duration-300 ${
-                    companiesOpen
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 -translate-y-2 pointer-events-none"
-                  }`}
-                >
-                  <div className="bg-hgc-dropdown-bg/98 backdrop-blur-2xl border border-hgc-dropdown-border rounded-2xl shadow-2xl shadow-hgc-header-text/10 p-3 w-[420px]">
-                    {loadingCompanies ? (
-                      <div className="flex items-center justify-center py-8">
-                        <Loader2 className="w-5 h-5 text-hgc-accent animate-spin" />
-                      </div>
-                    ) : companies.length === 0 ? (
-                      <div className="py-6 text-center text-hgc-dropdown-text-muted text-sm">
-                        {lang === "en"
-                          ? "No companies found."
-                          : lang === "dari"
-                            ? "هیچ شرکتی یافت نشد."
-                            : "هیڅ شرکت ونه موندل شو."}
-                      </div>
-                    ) : (
-                      <div className="grid gap-1">
-                        {companies.map((company) => {
-                          const Icon = resolveIcon(company.icon_name);
-                          return (
-                            <Link
-                              key={company.slug}
-                              href={`/companies/${company.slug}`}
-                              className="flex items-center gap-3 p-3 rounded-xl hover:bg-hgc-header-bg-hover transition-all duration-200 group/item"
-                            >
-                              <div
-                                className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 group-hover/item:scale-110"
-                                style={{
-                                  backgroundColor: `${company.accent_color}15`,
-                                }}
-                              >
-                                <Icon
-                                  className="w-5 h-5"
-                                  style={{ color: company.accent_color }}
-                                />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-hgc-dropdown-text text-sm font-medium truncate group-hover/item:text-hgc-header-text-muted transition-colors">
-                                  {company.name}
-                                </p>
-                                <p className="text-hgc-dropdown-text-muted text-xs line-clamp-1">
-                                  {company.description}
-                                </p>
-                              </div>
-                              <ArrowRight
-                                className={`w-4 h-4 transition-all duration-200 text-hgc-dropdown-text/20 group-hover/item:text-hgc-header-text-muted ${
-                                  dir === "rtl" ? "rotate-180" : ""
-                                }`}
-                              />
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                </div>
               </div>
             </nav>
 
@@ -327,12 +309,167 @@ export default function Header() {
               </button>
             </div>
           </div>
+
+          {/* ═══════════════════════════════════════════════════════════════
+              MEGA MENU — Companies (3 Columns + Upward Triangle Arrow)
+              ═══════════════════════════════════════════════════════════════ */}
+          <div
+            ref={dropdownRef}
+            className={`hidden lg:block absolute left-1/2 -translate-x-1/2 top-full z-50 transition-all duration-300 ${
+              companiesOpen
+                ? "opacity-100 translate-y-0 pointer-events-auto"
+                : "opacity-0 -translate-y-3 pointer-events-none"
+            }`}
+            onMouseEnter={openCompanies}
+            onMouseLeave={closeCompanies}
+          >
+            <div className="relative">
+              {/* ▼ Arrow Pointer — upward triangle pointing to Companies button */}
+              {/* Border triangle (slightly larger, behind) */}
+              <div
+                className="absolute z-[9] w-0 h-0"
+                style={{
+                  left: arrowLeft !== null ? `${arrowLeft}px` : "50%",
+                  top: "-11px",
+                  transform: "translateX(-50%)",
+                  borderLeft: "11px solid transparent",
+                  borderRight: "11px solid transparent",
+                  borderBottom: "11px solid var(--hgc-dropdown-border, #e5e7eb)",
+                }}
+              />
+              {/* Fill triangle (front) */}
+              <div
+                className="absolute z-10 w-0 h-0"
+                style={{
+                  left: arrowLeft !== null ? `${arrowLeft}px` : "50%",
+                  top: "-10px",
+                  transform: "translateX(-50%)",
+                  borderLeft: "10px solid transparent",
+                  borderRight: "10px solid transparent",
+                  borderBottom: "10px solid var(--hgc-dropdown-bg, #ffffff)",
+                }}
+              />
+
+              <div className="relative z-20 bg-hgc-dropdown-bg/98 backdrop-blur-2xl border border-hgc-dropdown-border rounded-2xl shadow-2xl shadow-hgc-header-text/10 w-[900px] max-w-[95vw] overflow-hidden">
+                {/* Mega Menu Header */}
+                <div className="px-6 py-4 border-b border-hgc-dropdown-border/50 bg-hgc-header-bg-hover/50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-hgc-accent/10 flex items-center justify-center">
+                      <Layers className="w-5 h-5 text-hgc-accent" />
+                    </div>
+                    <div>
+                      <h3 className="text-hgc-header-text font-semibold text-sm">
+                        {t(lang, "footer.ourCompanies") || "Our Companies"}
+                      </h3>
+                      <p className="text-hgc-dropdown-text-muted text-xs mt-0.5">
+                        {lang === "en"
+                          ? "Explore our diverse portfolio of businesses"
+                          : lang === "dari"
+                            ? "سبد متنوع کسب‌وکارهای ما را کشف کنید"
+                            : "زموږ د سوداګرۍ متنوع پورټفولیو وګورئ"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mega Menu Content — 3 COLUMNS */}
+                <div className="p-4">
+                  {loadingCompanies ? (
+                    <div className="flex items-center justify-center py-10">
+                      <Loader2 className="w-6 h-6 text-hgc-accent animate-spin" />
+                    </div>
+                  ) : companies.length === 0 ? (
+                    <div className="py-8 text-center text-hgc-dropdown-text-muted text-sm">
+                      {lang === "en"
+                        ? "No companies found."
+                        : lang === "dari"
+                          ? "هیچ شرکتی یافت نشد."
+                          : "هیڅ شرکت ونه موندل شو."}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-3 gap-2">
+                      {companies.map((company) => {
+                        const Icon = resolveIcon(company.icon_name);
+                        return (
+                          <Link
+                            key={company.slug}
+                            href={`/companies/${company.slug}`}
+                            className="group/item flex items-start gap-3 p-3 rounded-xl hover:bg-hgc-header-bg-hover transition-all duration-200 border border-transparent hover:border-hgc-dropdown-border/50"
+                          >
+                            {/* Icon / Logo */}
+                            <div
+                              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 group-hover/item:scale-110 group-hover/item:shadow-lg"
+                              style={{
+                                backgroundColor: `${company.accent_color}18`,
+                                boxShadow: `0 0 0 0 ${company.accent_color}00`,
+                              }}
+                            >
+                              {company.logo_url ? (
+                                <img
+                                  src={company.logo_url}
+                                  alt={company.short_name}
+                                  className="w-6 h-6 object-contain"
+                                />
+                              ) : (
+                                <Icon
+                                  className="w-5 h-5"
+                                  style={{ color: company.accent_color }}
+                                />
+                              )}
+                            </div>
+
+                            {/* Text Content */}
+                            <div className="flex-1 min-w-0 pt-0.5">
+                              <div className="flex items-center gap-1.5">
+                                <p className="text-hgc-dropdown-text text-sm font-semibold truncate group-hover/item:text-hgc-accent transition-colors">
+                                  {company.name}
+                                </p>
+                                <ArrowRight
+                                  className={`w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-200 text-hgc-accent shrink-0 ${
+                                    dir === "rtl" ? "rotate-180" : ""
+                                  }`}
+                                />
+                              </div>
+                              <p className="text-hgc-dropdown-text-muted text-xs line-clamp-2 mt-1 leading-relaxed">
+                                {company.description}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Mega Menu Footer */}
+                {!loadingCompanies && companies.length > 0 && (
+                  <div className="px-4 py-3 border-t border-hgc-dropdown-border/50 bg-hgc-header-bg-hover/30">
+                    <Link
+                      href="/companies"
+                      className="flex items-center justify-center gap-2 text-xs font-medium text-hgc-accent hover:text-hgc-header-text-muted transition-colors group/all"
+                    >
+                      <span>
+                        {lang === "en"
+                          ? "View All Companies"
+                          : lang === "dari"
+                            ? "مشاهده همه شرکت‌ها"
+                            : "ټول شرکتونه وګورئ"}
+                      </span>
+                      <ArrowRight
+                        className={`w-3.5 h-3.5 transition-transform duration-200 group-hover/all:translate-x-0.5 ${
+                          dir === "rtl" ? "rotate-180" : ""
+                        }`}
+                      />
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* ═══════════════════════════════════════════════════════════════
-          MOBILE MENU — OUTSIDE <header> so z-[9999] works globally
-          ═══════════════════════════════════════════════════════════════ */}
+      {/* Mobile Menu */}
       <div
         className={`lg:hidden fixed inset-x-0 bottom-0 top-20 z-[9999] hgc-stripe-bg transition-all duration-500 ${
           mobileOpen
