@@ -65,7 +65,7 @@ export default function CompaniesSection() {
   }
 
   return (
-    <section className="py-24 bg-hgc-companies-bg relative overflow-hidden">
+    <section className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--color-hgc-companies-gold)/5_0%,_transparent_50%)]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">

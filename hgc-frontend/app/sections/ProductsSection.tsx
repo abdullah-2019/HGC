@@ -84,7 +84,7 @@ export default function ProductsSection() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-hgc-bg relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center min-h-[400px]">
           <Loader2 className="w-10 h-10 text-hgc-gold animate-spin" />
         </div>
@@ -93,7 +93,7 @@ export default function ProductsSection() {
   }
 
   return (
-    <section className="py-24 bg-hgc-bg relative overflow-hidden">
+    <section className="py-24 relative overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-hgc-gold/[0.03] rounded-full blur-[120px]" />
 
