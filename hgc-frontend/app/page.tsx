@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import HeroSection from "./sections/HeroSection";
 import StatsBar from "./sections/StatsBar";
 import AboutSection from "./sections/AboutSection";
+import VideoSection from "./sections/VideoSection";
 import CompaniesSection from "./sections/CompaniesSection";
 import ProductsSection from "./sections/ProductsSection";
 import SectorsSection from "./sections/SectorsSection";
@@ -23,6 +24,7 @@ export default function HomePage() {
       <HeroSection />
       <StatsBar />
       <AboutSection />
+      <VideoSection />
       <CompaniesSection />
       <ProductsSection />
       <SectorsSection />
