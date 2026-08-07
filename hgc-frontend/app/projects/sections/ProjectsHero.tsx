@@ -40,14 +40,14 @@ export default function ProjectsHero() {
       </div>
 
       {/* Overlays */}
-      <div className="absolute inset-0 bg-[#0A1628]/70" />
+      {/* <div className="absolute inset-0 bg-[#0A1628]/70" />
       <div
         className="absolute inset-0"
         style={{
           background:
             "linear-gradient(to bottom, rgba(10,22,40,0.2) 0%, rgba(10,22,40,0.8) 70%, #0A1628 100%)",
         }}
-      />
+      /> */}
 
       {/* Gold accent line */}
       <div className="absolute top-0 left-0 right-0 h-[2px]">
