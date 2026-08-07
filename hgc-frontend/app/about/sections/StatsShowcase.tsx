@@ -90,7 +90,7 @@ export default function StatsShowcase({ stats }: StatsShowcaseProps) {
   return (
     <section 
       ref={sectionRef} 
-      className="about-section py-16 bg-white relative overflow-hidden"
+      className="about-section py-16 color-hgc-bg relative overflow-hidden border-y border-[#E2E8F0]"
     >
       <div className="absolute inset-0 grid-pattern opacity-30" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.06)_0%,_transparent_70%)]" />

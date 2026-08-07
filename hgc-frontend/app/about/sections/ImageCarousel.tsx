@@ -54,7 +54,7 @@ export default function ImageCarousel({ slides }: ImageCarouselProps) {
   const currentSlide = displaySlides[current];
 
   return (
-    <section className="about-section py-24 bg-[#0A1628]">
+    <section className="about-section py-24 bg-hgc-about-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-6">
@@ -64,7 +64,7 @@ export default function ImageCarousel({ slides }: ImageCarouselProps) {
             </span>
             <div className="gold-line" />
           </div>
-          <h2 className="about-section-title font-bold text-white">
+          <h2 className="about-section-title font-bold">
             {lang === "en" ? (<>Projects That <span className="text-gold-gradient">Define Us</span></>) :
              lang === "dari" ? (<>پروژه‌هایی که <span className="text-gold-gradient">ما را تعریف می‌کنند</span></>) :
              (<>پروژې چې <span className="text-gold-gradient">موږ تعریفوي</span></>)}

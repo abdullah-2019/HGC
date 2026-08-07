@@ -90,7 +90,7 @@ export default function MissionSection({ mission }: MissionSectionProps) {
   };
 
   return (
-    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-[#080F1A] relative overflow-hidden">
+    <section ref={sectionRef} className="about-section py-24 lg:py-32 color-hgc-bg relative overflow-hidden bg-white border-y border-[#E2E8F0]">
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,_rgba(201,162,39,0.06)_0%,_transparent_60%)]" />
       <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#C9A227]/5 rounded-full blur-3xl" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -114,15 +114,15 @@ export default function MissionSection({ mission }: MissionSectionProps) {
               <div className="gold-line" />
               <span className="text-[#C9A227] text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
             </div>
-            <h2 className="about-section-title font-bold text-white mb-8">{renderTitle()}</h2>
-            <p className="about-body-text text-white/60 mb-10">{description}</p>
+            <h2 className="about-section-title font-bold mb-8">{renderTitle()}</h2>
+            <p className="about-body-text mb-10">{description}</p>
             <div className="space-y-5">
               {data.points.map((point, idx) => (
                 <div key={idx} className={`flex items-start gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: `${400 + idx * 150}ms` }}>
                   <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#C9A227]/10 flex items-center justify-center mt-0.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#C9A227]" />
+                    <CheckCircle2 className="w-4 h-4" />
                   </div>
-                  <p className="text-white/70 text-sm leading-relaxed">{getText(point.text, lang)}</p>
+                  <p className=" text-sm leading-relaxed">{getText(point.text, lang)}</p>
                 </div>
               ))}
             </div>

@@ -45,7 +45,7 @@ const fallback: AboutVisionData = {
   image: "/images/placeholder.png",
   badge: { value: "2030", label: { en: "Vision Target", dari: "هدف چشم‌انداز", pashto: "د لید هدف" } },
   pillars: [
-    { icon: "Compass", title: { en: "Trusted Enterprise", dari: "مؤسسه مورد اعتماد", pashto: "باوري سازمان" }, description: { en: "To be recognized as Afghanistan's most trusted conglomerate, synonymous with quality and integrity.", dari: "شناخته شدن به عنوان معتبرترین گروه افغانستان، مترادف با کیفیت و صداقت.", pashto: "د افغانستان تر ټولو باوري شرکت په توګه پیژندل شوي، چې د کیفیت او صداقت مترادف وي." } },
+    { icon: "Compass", title: { en: "Trusted Enterprise", dari: "مؤسسه مورد اعتماد", pashto: "باوري سازمان" }, description: { en: "To be recognized as Afghanistan's most trusted conglomerate, synonymous with quality and integrity.", dari: "شناخته شدن به عنوان معتبرترین گروه افغانستان، مترادف با کیفیت و صداقت.", pashto: "د افغانستان تر ټولو باوري شرکت په توګه پیژندل شوي، چې د کیفیت او صداقت مترادم وي." } },
     { icon: "Lightbulb", title: { en: "Innovation Leader", dari: "رهبر نوآوری", pashto: "د نوښت رهبر" }, description: { en: "Pioneering modern infrastructure solutions and sustainable mining practices across the region.", dari: "پیشگام راه‌حل‌های زیرساختی مدرن و شیوه‌های پایدار استخراج معادن در سراسر منطقه.", pashto: "د سیمې په اوږدو کې د عصري زیربنايي حلونو او دوامداره د کانونو د استخراج د کړنو مخکښوالی." } },
     { icon: "Heart", title: { en: "Community Impact", dari: "تأثیر جامعه", pashto: "د ټولنې اغیز" }, description: { en: "Creating lasting positive change through employment, education, and economic development.", dari: "ایجاد تغییر مثبت پایدار از طریق اشتغال، آموزش و توسعه اقتصادی.", pashto: "د دندو، زده‌کړې او اقتصادي پراختیا له لارې دوامداره مثبت بدلون رامنځته کول." } },
   ],
@@ -88,29 +88,30 @@ export default function VisionSection({ vision }: VisionSectionProps) {
   };
 
   return (
-    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-[#0A1628] relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(201,162,39,0.05)_0%,_transparent_60%)]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C9A227]/3 rounded-full blur-3xl" />
+    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-hgc-about-bg relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(212,175,55,0.05)_0%,_transparent_60%)]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-hgc-about-gold/5 rounded-full blur-3xl" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+          {/* Text Content */}
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
             <div className="flex items-center gap-3 mb-6">
               <div className="gold-line" />
-              <span className="text-[#C9A227] text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
+              <span className="text-hgc-about-gold text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
             </div>
-            <h2 className="about-section-title font-bold text-white mb-8">{renderTitle()}</h2>
-            <p className="about-body-text text-white/60 mb-10">{description}</p>
+            <h2 className="about-section-title font-bold text-hgc-about-text mb-8">{renderTitle()}</h2>
+            <p className="about-body-text text-hgc-about-text-secondary mb-10">{description}</p>
             <div className="space-y-6">
               {data.pillars.map((pillar, idx) => {
                 const Icon = iconMap[pillar.icon] || Compass;
                 return (
                   <div key={idx} className={`glass-card rounded-xl p-5 flex items-start gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: `${300 + idx * 150}ms` }}>
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-[#C9A227]/10 flex items-center justify-center">
-                      <Icon className="w-6 h-6 text-[#C9A227]" />
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-hgc-about-gold/10 flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-hgc-about-gold" />
                     </div>
                     <div>
-                      <h4 className="text-white font-semibold mb-1">{getText(pillar.title, lang)}</h4>
-                      <p className="text-white/50 text-sm leading-relaxed">{getText(pillar.description, lang)}</p>
+                      <h4 className="text-hgc-about-text font-semibold mb-1">{getText(pillar.title, lang)}</h4>
+                      <p className="text-hgc-about-text-muted text-sm leading-relaxed">{getText(pillar.description, lang)}</p>
                     </div>
                   </div>
                 );
@@ -118,19 +119,24 @@ export default function VisionSection({ vision }: VisionSectionProps) {
             </div>
           </div>
 
+          {/* Image Side */}
           <div className={`relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden aspect-[3/4]">
                 <div className="absolute inset-0 bg-cover bg-center img-zoom" style={{ backgroundImage: `url(${data.image})` }} />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/50 via-transparent to-[#0A1628]/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-hgc-navy-deep/50 via-transparent to-hgc-navy-deep/20" />
               </div>
-              <div className="absolute top-8 -left-4 lg:-left-8 bg-[#0A1628] border border-[#C9A227]/30 rounded-2xl p-5 shadow-2xl">
-                <Eye className="w-8 h-8 text-[#C9A227] mb-2" />
-                <p className="text-white font-bold text-lg">{data.badge.value}</p>
-                <p className="text-white/50 text-xs">{badgeLabel}</p>
+
+              {/* Floating Badge Card — Light Theme */}
+              <div className="absolute top-8 -left-4 lg:-left-8 bg-white border border-hgc-about-gold/30 rounded-2xl p-5 shadow-xl">
+                <Eye className="w-8 h-8 text-hgc-about-gold mb-2" />
+                <p className="text-hgc-about-text font-bold text-lg">{data.badge.value}</p>
+                <p className="text-hgc-about-text-muted text-xs">{badgeLabel}</p>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-48 h-48 border border-[#C9A227]/10 rounded-full" />
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 border border-[#C9A227]/20 rounded-full" />
+
+              {/* Decorative rings */}
+              <div className="absolute -bottom-6 -right-6 w-48 h-48 border border-hgc-about-gold/10 rounded-full" />
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 border border-hgc-about-gold/20 rounded-full" />
             </div>
           </div>
         </div>

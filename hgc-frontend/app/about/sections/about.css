@@ -169,7 +169,7 @@
   font-feature-settings: "tnum";
 }
 
-/* ─── Carousel Dot ─────────────────────── */
+/* ─── Carousel Dot (Light Theme) ───────── */
 .carousel-dot {
   width: 8px;
   height: 8px;
@@ -215,7 +215,7 @@
   background: linear-gradient(90deg, var(--color-hgc-about-gold), var(--color-hgc-about-gold-bright), var(--color-hgc-about-gold));
 }
 
-/* ─── Story Content HTML Rendering ─────────────────── */
+/* ─── Story Content HTML Rendering (Light Theme) ─────────────────── */
 .story-content p {
   margin-bottom: 1rem;
   line-height: 1.7;
