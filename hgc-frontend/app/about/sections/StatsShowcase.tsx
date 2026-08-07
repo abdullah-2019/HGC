@@ -26,6 +26,7 @@ interface AboutStat {
   icon: string;
 }
 
+// ── ADD THIS INTERFACE ──
 interface StatsShowcaseProps {
   stats: AboutStat[];
 }
@@ -51,9 +52,9 @@ function AnimatedCounter({ end, suffix, isVisible }: { end: number; suffix: stri
   }, [isVisible, end]);
 
   return (
-    <span className="counter-number">
+    <span className="text-hgc-navy">
       {count.toLocaleString()}
-      <span className="text-[#C9A227]">{suffix}</span>
+      <span className="text-hgc-gold">{suffix}</span>
     </span>
   );
 }
@@ -84,32 +85,15 @@ export default function StatsShowcase({ stats }: StatsShowcaseProps) {
     return () => observer.disconnect();
   }, []);
 
-  // Debug: Log whenever stats prop changes
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.log("[StatsShowcase] Received stats:", stats);
-      console.log("[StatsShowcase] Is array?", Array.isArray(stats));
-      console.log("[StatsShowcase] Length:", stats?.length);
-    }
-  }, [stats]);
-
   const displayStats = safeArray(stats, fallbackStats);
-
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.log("[StatsShowcase] displayStats length:", displayStats.length);
-      console.log("[StatsShowcase] First stat key:", displayStats[0]?.key);
-      console.log("[StatsShowcase] Using fallback?", displayStats === fallbackStats);
-    }
-  }, [displayStats]);
 
   return (
     <section 
       ref={sectionRef} 
-      className="about-section py-16 bg-[#080F1A] relative overflow-hidden"
+      className="about-section py-16 bg-white relative overflow-hidden"
     >
       <div className="absolute inset-0 grid-pattern opacity-30" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(201,162,39,0.05)_0%,_transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.06)_0%,_transparent_70%)]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           {displayStats.map((stat, idx) => {
@@ -120,13 +104,13 @@ export default function StatsShowcase({ stats }: StatsShowcaseProps) {
                 className={`text-center group transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 style={{ transitionDelay: `${idx * 100}ms` }}
               >
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#C9A227]/5 border border-[#C9A227]/10 mb-3 group-hover:bg-[#C9A227]/10 group-hover:border-[#C9A227]/20 transition-all duration-500">
-                  <Icon className="w-5 h-5 text-[#C9A227]" />
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-hgc-gold/5 border border-hgc-gold/10 mb-3 group-hover:bg-hgc-gold/10 group-hover:border-hgc-gold/20 transition-all duration-500">
+                  <Icon className="w-5 h-5 text-hgc-gold" />
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-white mb-1">
+                <div className="text-2xl md:text-3xl font-bold text-hgc-navy mb-1">
                   <AnimatedCounter end={stat.value} suffix={stat.suffix} isVisible={isVisible} />
                 </div>
-                <p className="text-white/40 text-xs font-medium uppercase tracking-wider">
+                <p className="text-hgc-text-secondary text-xs font-medium uppercase tracking-wider">
                   {getText(stat.label, lang)}
                 </p>
               </div>
