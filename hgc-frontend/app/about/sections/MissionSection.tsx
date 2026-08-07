@@ -90,39 +90,46 @@ export default function MissionSection({ mission }: MissionSectionProps) {
   };
 
   return (
-    <section ref={sectionRef} className="about-section py-24 lg:py-32 color-hgc-bg relative overflow-hidden bg-white border-y border-[#E2E8F0]">
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,_rgba(201,162,39,0.06)_0%,_transparent_60%)]" />
-      <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#C9A227]/5 rounded-full blur-3xl" />
+    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-hgc-bg relative overflow-hidden border-y border-hgc-border">
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,_rgba(212,175,55,0.06)_0%,_transparent_60%)]" />
+      <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-hgc-about-gold/5 rounded-full blur-3xl" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-top">
+          {/* Image Side */}
           <div className={`relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden aspect-square">
                 <div className="absolute inset-0 bg-cover bg-center img-zoom" style={{ backgroundImage: `url(${data.image})` }} />
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0A1628]/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-br from-hgc-navy-deep/30 to-transparent" />
               </div>
-              <div className="absolute -bottom-8 -right-4 lg:-right-8 bg-[#0A1628] border border-[#C9A227]/20 rounded-2xl p-6 shadow-2xl max-w-[280px]">
-                <Target className="w-8 h-8 text-[#C9A227] mb-3" />
-                <p className="text-white/80 text-sm italic leading-relaxed">&ldquo;{quoteText}&rdquo;</p>
+
+              {/* Floating Quote Card — Light Theme */}
+              <div className="absolute -bottom-8 -right-4 lg:-right-8 bg-white border border-hgc-about-card-border rounded-2xl p-6 shadow-xl max-w-[280px]">
+                <Target className="w-8 h-8 text-hgc-about-gold mb-3" />
+                <p className="text-hgc-about-text-secondary text-sm italic leading-relaxed">&ldquo;{quoteText}&rdquo;</p>
               </div>
-              <div className="absolute -top-4 -left-4 w-full h-full border border-[#C9A227]/10 rounded-2xl -z-10" />
+
+              {/* Decorative border */}
+              <div className="absolute -top-4 -left-4 w-full h-full border border-hgc-about-gold/10 rounded-2xl -z-10" />
             </div>
           </div>
 
+          {/* Text Content */}
           <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
             <div className="flex items-center gap-3 mb-6">
               <div className="gold-line" />
-              <span className="text-[#C9A227] text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
+              <span className="text-hgc-about-gold text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
             </div>
-            <h2 className="about-section-title font-bold mb-8">{renderTitle()}</h2>
-            <p className="about-body-text mb-10">{description}</p>
+            <h2 className="about-section-title font-bold text-hgc-about-text mb-8">{renderTitle()}</h2>
+            <p className="about-body-text text-hgc-about-text-secondary mb-10">{description}</p>
+
             <div className="space-y-5">
               {data.points.map((point, idx) => (
                 <div key={idx} className={`flex items-start gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: `${400 + idx * 150}ms` }}>
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#C9A227]/10 flex items-center justify-center mt-0.5">
-                    <CheckCircle2 className="w-4 h-4" />
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-hgc-about-gold/10 flex items-center justify-center mt-0.5">
+                    <CheckCircle2 className="w-4 h-4 text-hgc-about-gold" />
                   </div>
-                  <p className=" text-sm leading-relaxed">{getText(point.text, lang)}</p>
+                  <p className="text-hgc-about-text-secondary text-sm leading-relaxed">{getText(point.text, lang)}</p>
                 </div>
               ))}
             </div>
