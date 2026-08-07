@@ -40,7 +40,7 @@ export default function CompanyFilter({ activeCompany, onCompanyChange, companie
   ];
 
   return (
-    <section className="relative py-8 bg-[#0A1628] border-b border-white/5 sticky top-0 z-40 backdrop-blur-xl bg-[#0A1628]/90">
+    <section className="relative py-8 bg-hgc-bg border-b border-hgc-border sticky top-0 z-40 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {filterCompanies.map((company) => {
@@ -53,8 +53,8 @@ export default function CompanyFilter({ activeCompany, onCompanyChange, companie
                 onClick={() => onCompanyChange(company.slug)}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
                   isActive
-                    ? "text-white shadow-lg"
-                    : "text-white/50 hover:text-white/80 hover:bg-white/5"
+                    ? "text-hgc-navy shadow-lg"
+                    : "text-hgc-text-muted hover:text-hgc-text-secondary hover:bg-hgc-surface-elevated"
                 }`}
                 style={{
                   backgroundColor: isActive ? `${company.color}20` : "transparent",
