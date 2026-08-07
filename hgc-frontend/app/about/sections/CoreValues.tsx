@@ -80,29 +80,29 @@ export default function CoreValues({ coreValues }: CoreValuesProps) {
   };
 
   return (
-    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-[#080F1A] relative">
+    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-hgc-bg relative">
       <div className="absolute inset-0 grid-pattern opacity-20" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(201,162,39,0.04)_0%,_transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.04)_0%,_transparent_60%)]" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="gold-line" />
-            <span className="text-[#C9A227] text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
+            <span className="text-hgc-about-gold text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
             <div className="gold-line" />
           </div>
-          <h2 className="about-section-title font-bold text-white mb-4">{renderTitle()}</h2>
-          <p className="text-white/40 max-w-2xl mx-auto">{sectionDescription}</p>
+          <h2 className="about-section-title font-bold text-hgc-about-text mb-4">{renderTitle()}</h2>
+          <p className="text-hgc-about-text-muted max-w-2xl mx-auto">{sectionDescription}</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.values.map((value, idx) => {
             const Icon = iconMap[value.icon] || Shield;
             return (
               <div key={idx} className={`glass-card rounded-2xl p-8 group transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${idx * 100}ms` }}>
-                <div className="value-ring inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#C9A227]/5 mb-6 group-hover:bg-[#C9A227]/10 transition-colors">
-                  <Icon className="w-7 h-7 text-[#C9A227]" />
+                <div className="value-ring inline-flex items-center justify-center w-14 h-14 rounded-full bg-hgc-about-gold/5 mb-6 group-hover:bg-hgc-about-gold/10 transition-colors">
+                  <Icon className="w-7 h-7 text-hgc-about-gold" />
                 </div>
-                <h3 className="text-white font-bold text-xl mb-3 group-hover:text-[#C9A227] transition-colors">{getText(value.title, lang)}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{getText(value.description, lang)}</p>
+                <h3 className="text-hgc-about-text font-bold text-xl mb-3 group-hover:text-hgc-about-gold transition-colors">{getText(value.title, lang)}</h3>
+                <p className="text-hgc-about-text-secondary text-sm leading-relaxed">{getText(value.description, lang)}</p>
               </div>
             );
           })}
