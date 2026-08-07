@@ -61,7 +61,7 @@
   --color-hgc-companies-gold: #D4AF37;
   --color-hgc-companies-gold-bright: #F0C94A;
 
-  /* Company Brands (unchanged) */
+  /* Company Brands */
   --color-hcrc-red: #B22222;
   --color-hcrc-dark: #1A1A1A;
   --color-albahrain-blue: #1A237E;
@@ -72,7 +72,7 @@
   --color-haramain-gold: #FFD700;
   --color-alkoozi-teal: #00838F;
 
-  /* ═══ Header/Footer Theme (Light Blue + Navy + White Accent) ═══ */
+  /* ═══ Header/Footer Theme ═══ */
   --color-hgc-header-text: #0F2B5B;
   --color-hgc-header-text-muted: #1A3A6B;
   --color-hgc-header-text-faint: #475569;
@@ -116,7 +116,6 @@
   /* Fonts */
   --font-sans: 'Inter', 'Vazirmatn', sans-serif;
   --font-display: 'Inter', 'Vazirmatn', sans-serif;
-  
 }
 
 :root {
@@ -343,11 +342,11 @@ html {
   to   { width: 100%; }
 }
 
-/* Card hover lift effect */
+/* Card hover lift effect - light theme */
 .card-lift {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .card-lift:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px -12px rgba(15, 43, 91, 0.15);
+  box-shadow: 0 12px 40px -12px rgba(15, 43, 91, 0.12);
 }

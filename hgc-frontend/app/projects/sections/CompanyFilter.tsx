@@ -30,7 +30,7 @@ export default function CompanyFilter({ activeCompany, onCompanyChange, companie
 
   // Fallback if API companies not loaded yet
   const filterCompanies = companies.length > 0 ? companies : [
-    { id: "all", slug: "all", nameEn: "All Projects", nameDari: "همه پروژه‌ها", icon: "Building2", color: "#C9A227" },
+    { id: "all", slug: "all", nameEn: "All Projects", nameDari: "همه پروژه‌ها", icon: "Building2", color: "#D4AF37" },
     { id: "hcrc", slug: "hcrc", nameEn: "Hafez Construction", nameDari: "حافظ ساختمان", icon: "Building2", color: "#B22222" },
     { id: "albahrain", slug: "albahrain", nameEn: "Al-Bahrain Mining", nameDari: "البحرین معادن", icon: "Mountain", color: "#1A237E" },
     { id: "zainnoorain", slug: "zainnoorain", nameEn: "Zain Noorain", nameDari: "زین نورین", icon: "HardHat", color: "#F57C00" },
@@ -46,7 +46,7 @@ export default function CompanyFilter({ activeCompany, onCompanyChange, companie
           {filterCompanies.map((company) => {
             const Icon = iconMap[company.icon] || iconMap.default;
             const isActive = activeCompany === company.slug;
-            
+
             return (
               <button
                 key={company.id}
@@ -57,10 +57,10 @@ export default function CompanyFilter({ activeCompany, onCompanyChange, companie
                     : "text-hgc-text-muted hover:text-hgc-text-secondary hover:bg-hgc-surface-elevated"
                 }`}
                 style={{
-                  backgroundColor: isActive ? `${company.color}20` : "transparent",
+                  backgroundColor: isActive ? `${company.color}18` : "transparent",
                   borderColor: isActive ? `${company.color}40` : "transparent",
                   borderWidth: "1px",
-                  boxShadow: isActive ? `0 4px 20px ${company.color}15` : "none",
+                  boxShadow: isActive ? `0 4px 20px ${company.color}12` : "none",
                 }}
               >
                 <Icon

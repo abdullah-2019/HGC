@@ -34,23 +34,23 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
   const statusConfig = {
     completed: {
-      bg: "bg-green-500/15",
-      text: "text-green-400",
-      border: "border-green-500/20",
+      bg: "bg-green-500/10",
+      text: "text-green-600",
+      border: "border-green-500/30",
       labelEn: "Completed",
       labelDari: "تکمیل شده",
     },
     ongoing: {
-      bg: "bg-amber-500/15",
-      text: "text-amber-400",
-      border: "border-amber-500/20",
+      bg: "bg-amber-500/10",
+      text: "text-amber-600",
+      border: "border-amber-500/30",
       labelEn: "In Progress",
       labelDari: "در حال اجرا",
     },
     planned: {
-      bg: "bg-blue-500/15",
-      text: "text-blue-400",
-      border: "border-blue-500/20",
+      bg: "bg-blue-500/10",
+      text: "text-blue-600",
+      border: "border-blue-500/30",
       labelEn: "Planned",
       labelDari: "برنامه‌ریزی شده",
     },
@@ -65,7 +65,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       onMouseLeave={() => setIsHovered(false)}
       className="group relative block"
     >
-      <div className="relative bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden hover:border-[#C9A227]/20 transition-all duration-500 h-full">
+      <div className="relative bg-hgc-card border border-hgc-border rounded-2xl overflow-hidden hover:border-hgc-gold/30 transition-all duration-500 h-full shadow-sm hover:shadow-md">
         {/* Image Container */}
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image
@@ -75,10 +75,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          
+
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-[#0A1628]/40 group-hover:bg-[#0A1628]/20 transition-colors duration-500" />
-          
+          <div className="absolute inset-0 bg-hgc-navy/30 group-hover:bg-hgc-navy/10 transition-colors duration-500" />
+
           {/* Company color accent bar */}
           <div
             className="absolute top-0 left-0 right-0 h-1 transition-all duration-500"
@@ -98,7 +98,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Completion bar for ongoing projects */}
           {project.status === "ongoing" && (
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10">
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-hgc-border">
               <div
                 className="h-full transition-all duration-1000 ease-out"
                 style={{
@@ -111,13 +111,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Hover arrow */}
           <div
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#0A1628]/80 border border-white/10 flex items-center justify-center transition-all duration-300"
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm border border-hgc-border flex items-center justify-center transition-all duration-300 shadow-lg"
             style={{
               opacity: isHovered ? 1 : 0,
               transform: isHovered ? "translateY(0)" : "translateY(-10px)",
             }}
           >
-            <ArrowUpRight className="w-4 h-4 text-[#C9A227]" />
+            <ArrowUpRight className="w-4 h-4 text-hgc-gold" />
           </div>
         </div>
 
@@ -127,7 +127,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           <span
             className="inline-block px-2.5 py-1 rounded-md text-xs font-medium mb-3"
             style={{
-              backgroundColor: `${project.companyColor}15`,
+              backgroundColor: `${project.companyColor}12`,
               color: project.companyColor,
             }}
           >
@@ -135,31 +135,31 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </span>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#C9A227] transition-colors duration-300 line-clamp-2">
+          <h3 className="text-lg font-bold text-hgc-text mb-2 group-hover:text-hgc-gold transition-colors duration-300 line-clamp-2">
             {lang === "en" ? project.nameEn : project.nameDari}
           </h3>
 
           {/* Description */}
-          <p className="text-white/40 text-sm leading-relaxed mb-4 line-clamp-2">
+          <p className="text-hgc-text-muted text-sm leading-relaxed mb-4 line-clamp-2">
             {lang === "en" ? project.descriptionEn : project.descriptionDari}
           </p>
 
           {/* Meta info */}
-          <div className="flex flex-wrap items-center gap-4 text-xs text-white/30">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-hgc-text-muted">
             <span className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5" />
+              <MapPin className="w-3.5 h-3.5 text-hgc-gold" />
               {lang === "en" ? project.locationEn : project.locationDari}
             </span>
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-3.5 h-3.5 text-hgc-gold" />
               {project.duration}
             </span>
           </div>
 
           {/* Client */}
-          <div className="mt-4 pt-4 border-t border-white/5">
-            <p className="text-white/30 text-xs">
-              <span className="text-white/50">
+          <div className="mt-4 pt-4 border-t border-hgc-border">
+            <p className="text-hgc-text-muted text-xs">
+              <span className="text-hgc-text-secondary">
                 {lang === "en" ? "Client: " : lang === "dari" ? "کارفرما: " : "پیرودونکی: "}
               </span>
               {lang === "en" ? project.clientEn : project.clientDari}

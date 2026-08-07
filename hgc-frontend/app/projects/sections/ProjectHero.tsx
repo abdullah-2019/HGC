@@ -23,9 +23,9 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
   const parallaxOffset = scrollY * 0.3;
 
   const statusConfig = {
-    completed: { bg: "bg-green-500/15", text: "text-green-400", border: "border-green-500/20", icon: CheckCircle2 },
-    ongoing: { bg: "bg-amber-500/15", text: "text-amber-400", border: "border-amber-500/20", icon: Clock },
-    planned: { bg: "bg-blue-500/15", text: "text-blue-400", border: "border-blue-500/20", icon: Clock },
+    completed: { bg: "bg-green-500/10", text: "text-green-600", border: "border-green-500/30", icon: CheckCircle2 },
+    ongoing: { bg: "bg-amber-500/10", text: "text-amber-600", border: "border-amber-500/30", icon: Clock },
+    planned: { bg: "bg-blue-500/10", text: "text-blue-600", border: "border-blue-500/30", icon: Clock },
   };
 
   const status = statusConfig[project.status as keyof typeof statusConfig] || statusConfig.ongoing;
@@ -46,14 +46,14 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
       </div>
 
       {/* Overlays */}
-      <div className="absolute inset-0 bg-[#0A1628]/60" />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,22,40,0.3) 0%, rgba(10,22,40,0.85) 70%, #0A1628 100%)" }} />
+      <div className="absolute inset-0 bg-hgc-navy/50" />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(15,43,91,0.3) 0%, rgba(15,43,91,0.85) 70%, #F8FAFC 100%)" }} />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col justify-end h-full pb-16 lg:pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto w-full">
           {/* Status badge */}
-          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${status.bg} ${status.text} border ${status.border} mb-6`}>
+          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${status.bg} ${status.text} border ${status.border} mb-6 backdrop-blur-sm`}>
             <StatusIcon className="w-4 h-4" />
             <span className="text-sm font-medium">
               {project.status === "completed"
@@ -63,7 +63,7 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
                   : (lang === "en" ? "Planned" : lang === "dari" ? "برنامه‌ریزی شده" : "پلان شوی")}
             </span>
             {project.completionDate && (
-              <span className="text-white/40 text-xs ml-1">
+              <span className="text-white/50 text-xs ml-1">
                 • {project.completionDate}
               </span>
             )}
@@ -76,19 +76,19 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
 
           {/* Tagline */}
           {project.taglineEn && (
-            <p className="text-xl text-[#C9A227] mb-8 max-w-2xl">
+            <p className="text-xl text-hgc-gold mb-8 max-w-2xl">
               {lang === "en" ? project.taglineEn : project.taglineDari}
             </p>
           )}
 
           {/* Meta row */}
-          <div className="flex flex-wrap items-center gap-6 text-white/50 text-sm">
+          <div className="flex flex-wrap items-center gap-6 text-white/60 text-sm">
             <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-[#C9A227]" />
+              <MapPin className="w-4 h-4 text-hgc-gold" />
               {lang === "en" ? project.location : project.locationDari}
             </span>
             <span className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-[#C9A227]" />
+              <Calendar className="w-4 h-4 text-hgc-gold" />
               {lang === "en" ? project.duration : project.durationDari}
             </span>
             <span className="flex items-center gap-2">

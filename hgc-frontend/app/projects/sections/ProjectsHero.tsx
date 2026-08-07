@@ -39,22 +39,22 @@ export default function ProjectsHero() {
         />
       </div>
 
-      {/* Overlays */}
-      {/* <div className="absolute inset-0 bg-[#0A1628]/70" />
+      {/* Overlays — dark navy only, no white fade */}
+      <div className="absolute inset-0 bg-hgc-navy/60" />
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(10,22,40,0.2) 0%, rgba(10,22,40,0.8) 70%, #0A1628 100%)",
+            "linear-gradient(to bottom, rgba(15,43,91,0.2) 0%, rgba(15,43,91,0.85) 70%, rgba(15,43,91,1) 100%)",
         }}
-      /> */}
+      />
 
       {/* Gold accent line */}
       <div className="absolute top-0 left-0 right-0 h-[2px]">
         <div
           className="h-full w-full"
           style={{
-            background: "linear-gradient(90deg, transparent, #C9A227, transparent)",
+            background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
             backgroundSize: "200% 100%",
             animation: "shimmerLine 3s ease-in-out infinite",
           }}
@@ -64,11 +64,11 @@ export default function ProjectsHero() {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
         <div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 mb-6"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-hgc-gold/10 border border-hgc-gold/20 mb-6"
           style={{ animation: "fadeInDown 1s ease-out 0.3s both" }}
         >
-          <Briefcase className="w-4 h-4 text-[#C9A227]" />
-          <span className="text-[#C9A227] text-sm font-medium tracking-wider uppercase">
+          <Briefcase className="w-4 h-4 text-hgc-gold" />
+          <span className="text-hgc-gold text-sm font-medium tracking-wider uppercase">
             {lang === "en"
               ? "Portfolio"
               : lang === "dari"
@@ -78,7 +78,7 @@ export default function ProjectsHero() {
         </div>
 
         <h1
-          className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-6 tracking-tight"
+          className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-hgc-gold mb-6 tracking-tight"
           style={{
             animation: "fadeInUp 1s ease-out 0.5s both",
             textShadow: "0 4px 30px rgba(0,0,0,0.3)",
@@ -86,21 +86,21 @@ export default function ProjectsHero() {
         >
           {lang === "en" ? (
             <>
-              Our <span className="text-[#C9A227]">Projects</span>
+              Our <span className="text-hgc-gold-bright">Projects</span>
             </>
           ) : lang === "dari" ? (
             <>
-              <span className="text-[#C9A227]">پروژه‌های</span> ما
+              <span className="text-hgc-gold-bright">پروژه‌های</span> ما
             </>
           ) : (
             <>
-              زموږ <span className="text-[#C9A227]">پروژې</span>
+              زموږ <span className="text-hgc-gold-bright">پروژې</span>
             </>
           )}
         </h1>
 
         <p
-          className="text-lg sm:text-xl text-white/60 max-w-2xl leading-relaxed"
+          className="text-lg sm:text-xl text-white/70 max-w-2xl leading-relaxed"
           style={{ animation: "fadeInUp 1s ease-out 0.7s both" }}
         >
           {lang === "en"
@@ -115,10 +115,10 @@ export default function ProjectsHero() {
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           style={{ animation: "fadeInUp 1s ease-out 1.2s both" }}
         >
-          <span className="text-white/40 text-xs tracking-widest uppercase">
+          <span className="text-white/50 text-xs tracking-widest uppercase">
             {lang === "en" ? "Explore" : lang === "dari" ? "کاوش" : "وګورئ"}
           </span>
-          <ChevronDown className="w-5 h-5 text-[#C9A227] animate-bounce" />
+          <ChevronDown className="w-5 h-5 text-hgc-gold animate-bounce" />
         </div>
       </div>
 

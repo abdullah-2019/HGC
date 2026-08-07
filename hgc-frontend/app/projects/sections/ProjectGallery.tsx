@@ -25,10 +25,10 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
 
   if (gallery.length === 0) {
     return (
-      <section className="py-16 bg-[#0A1628]">
+      <section className="py-16 bg-hgc-bg-alt">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Project Gallery</h2>
-          <p className="text-white/30">No gallery images available.</p>
+          <h2 className="text-2xl font-bold text-hgc-text mb-4">Project Gallery</h2>
+          <p className="text-hgc-text-muted">No gallery images available.</p>
         </div>
       </section>
     );
@@ -45,10 +45,10 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
   const goNext = () => setActiveIndex((i) => (i === gallery.length - 1 ? 0 : i + 1));
 
   return (
-    <section className="py-16 bg-[#0A1628]">
+    <section className="py-16 bg-hgc-bg-alt">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-white mb-2">Project Gallery</h2>
-        <p className="text-white/40 text-sm mb-8">
+        <h2 className="text-2xl font-bold text-hgc-text mb-2">Project Gallery</h2>
+        <p className="text-hgc-text-muted text-sm mb-8">
           {gallery.length} image{gallery.length > 1 ? "s" : ""}
         </p>
 
@@ -58,7 +58,7 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
             <button
               key={idx}
               onClick={() => openLightbox(idx)}
-              className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-white/5 border border-white/5 text-left hover:border-[#C9A227]/30 transition-all duration-300"
+              className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-hgc-surface-elevated border border-hgc-border text-left hover:border-hgc-gold/40 transition-all duration-300"
             >
               <Image
                 src={img.src}
@@ -69,7 +69,7 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
                 unoptimized={img.src.startsWith("http")}
               />
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-hgc-navy/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               {/* Caption */}
               <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                 <p className="text-white text-sm font-medium line-clamp-2">
@@ -84,13 +84,13 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
       {/* Lightbox */}
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-50 bg-[#0A1628]/95 backdrop-blur-sm flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-hgc-bg/95 backdrop-blur-sm flex items-center justify-center"
           onClick={closeLightbox}
         >
           {/* Close */}
           <button
             onClick={closeLightbox}
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-hgc-surface-elevated border border-hgc-border flex items-center justify-center text-hgc-text hover:bg-hgc-card-hover transition-colors shadow-sm"
           >
             <X className="w-5 h-5" />
           </button>
@@ -99,7 +99,7 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
           {gallery.length > 1 && (
             <button
               onClick={(e) => { e.stopPropagation(); goPrev(); }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-hgc-surface-elevated border border-hgc-border flex items-center justify-center text-hgc-text hover:bg-hgc-card-hover transition-colors shadow-sm"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -125,18 +125,18 @@ export default function ProjectGallery({ project }: ProjectGalleryProps) {
           {gallery.length > 1 && (
             <button
               onClick={(e) => { e.stopPropagation(); goNext(); }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-hgc-surface-elevated border border-hgc-border flex items-center justify-center text-hgc-text hover:bg-hgc-card-hover transition-colors shadow-sm"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
           )}
 
           {/* Caption bar */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#0A1628]/80 border border-white/10 rounded-lg px-4 py-2 text-center">
-            <p className="text-white text-sm">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-hgc-card border border-hgc-border rounded-lg px-4 py-2 text-center shadow-lg">
+            <p className="text-hgc-text text-sm font-medium">
               {activeIndex + 1} / {gallery.length}
             </p>
-            <p className="text-white/50 text-xs mt-1">
+            <p className="text-hgc-text-muted text-xs mt-1">
               {gallery[activeIndex].captionEn}
             </p>
           </div>
