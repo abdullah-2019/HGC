@@ -66,8 +66,8 @@ export default function ProductsHero() {
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${backgrounds[currentBg]})` }}
           />
-          <div className="absolute inset-0 bg-hgc-bg/80" />
-          <div className="absolute inset-0 bg-hgc-bg/30" />
+          <div className="absolute inset-0 bg-white/30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/40" />
         </motion.div>
       </AnimatePresence>
 

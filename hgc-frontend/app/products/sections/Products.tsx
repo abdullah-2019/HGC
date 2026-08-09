@@ -133,7 +133,7 @@ export default function ProductCategories() {
                   className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
                     isActive
                       ? "bg-hgc-gold/15 text-hgc-gold border border-hgc-gold/30 shadow-lg"
-                      : "bg-hgc-surface-elevated text-hgc-text-muted hover:bg-hgc-card-hover hover:text-hgc-text border border-hgc-border"
+                      : "bg-hgc-surface-elevated text-hgc-text-secondary hover:bg-hgc-card-hover hover:text-hgc-text border border-hgc-border"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -160,7 +160,7 @@ export default function ProductCategories() {
                 className="h-64 sm:h-80 bg-cover bg-center"
                 style={{ backgroundImage: `url(${activeCat?.image_url})` }}
               />
-              <div className="absolute inset-0 bg-hgc-bg/80" />
+              <div className="absolute inset-0 bg-white/40" />
               <div className="absolute inset-0 flex items-center">
                 <div className="max-w-3xl px-8 sm:px-12">
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-hgc-gold/20">
