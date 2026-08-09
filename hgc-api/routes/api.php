@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\AboutPageAdminController;
 use App\Http\Controllers\Api\AboutController;
 use App\Http\Controllers\Api\WhyChooseController;
 use App\Http\Controllers\Api\SiteSettingController;
+use App\Http\Controllers\Api\HeroSlideController;
 
 // ─── Auth ───
 Route::get('/user', function (Request $request) {
@@ -54,6 +55,9 @@ Route::prefix('companies')->group(function () {
 
 // ─── Stats ───
 Route::get('/stats', [StatController::class, 'index']);
+
+// ─── Hero Slides - Home page ───
+Route::get('/hero-slides', [HeroSlideController::class, 'index']);
 
 // ─── Projects ───
 Route::prefix('projects')->group(function () {

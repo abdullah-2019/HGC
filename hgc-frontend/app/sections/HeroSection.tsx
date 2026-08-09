@@ -1,134 +1,21 @@
 "use client";
 
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import Particles from "@/app/components/Particles";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 const SLIDE_DURATION = 5000;
 
-const slides = [
-  {
-    image: "/images/hero-construction.webp",
-    kenBurns: "zoom-in",
-    badge: {
-      en: "Since 2001 — Building Afghanistan's Future",
-      dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
-      pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
-    },
-    title: {
-      en: ["Building ", "Afghanistan's", "Future"],
-      dari: ["", "آینده", " افغانستان", "را می سازیم"],
-      pashto: ["د ", "افغانستان", "", "راتلونکی جوړوو"],
-    },
-    highlights: { en: [1], dari: [1], pashto: [1] },
-    subtitle: {
-      en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
-      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
-      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — ملي پراختیا په ۳۸+ ولایتونو کې.",
-    },
-  },
-  {
-    image: "/images/hero-construction.webp",
-    kenBurns: "zoom-in",
-    badge: {
-      en: "Since 2001 — Building Afghanistan's Future",
-      dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
-      pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
-    },
-    title: {
-      en: ["Building ", "Afghanistan's", "Future"],
-      dari: ["", "آینده", " افغانستان", "را می سازیم"],
-      pashto: ["د ", "افغانستان", "", "راتلونکی جوړوو"],
-    },
-    highlights: { en: [1], dari: [1], pashto: [1] },
-    subtitle: {
-      en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
-      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
-      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — ملي پراختیا په ۳۸+ ولایتونو کې.",
-    },
-  },
-  {
-    image: "/images/hero-construction.webp",
-    kenBurns: "zoom-in",
-    badge: {
-      en: "Since 2001 — Building Afghanistan's Future",
-      dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
-      pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
-    },
-    title: {
-      en: ["Building ", "Afghanistan's", "Future"],
-      dari: ["", "آینده", " افغانستان", "را می سازیم"],
-      pashto: ["د ", "افغانستان", "", "راتلونکی جوړوو"],
-    },
-    highlights: { en: [1], dari: [1], pashto: [1] },
-    subtitle: {
-      en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
-      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
-      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — ملي پراختیا په ۳۸+ ولایتونو کې.",
-    },
-  },
-  {
-    image: "/images/hero-construction.webp",
-    kenBurns: "zoom-in",
-    badge: {
-      en: "Since 2001 — Building Afghanistan's Future",
-      dari: "از سال ۲۰۰۱ — ساختن آینده افغانستان",
-      pashto: "له ۲۰۰۱ کال راهیسې — د افغانستان راتلونکی جوړول",
-    },
-    title: {
-      en: ["Building ", "Afghanistan's", "Future"],
-      dari: ["", "آینده", " افغانستان", "را می سازیم"],
-      pashto: ["د ", "افغانستان", "", "راتلونکی جوړوو"],
-    },
-    highlights: { en: [1], dari: [1], pashto: [1] },
-    subtitle: {
-      en: "Construction • Mining • Logistics • Financial Services — driving national development across 38+ provinces.",
-      dari: "ساختمان • استخراج معادن • لوژستیک • خدمات مالی — توسعه ملی در ۳۸+ ولایت.",
-      pashto: "ودانۍ • د کانونو استخراج • لوجستیک • مالي خدمات — ملي پراختیا په ۳۸+ ولایتونو کې.",
-    },
-  },
-  {
-    image: "/images/contact-hero.webp",
-    kenBurns: "pan-right",
-    badge: {
-      en: "Responsible Mining Operations",
-      dari: "عملیات مسئولانه استخراج معادن",
-      pashto: "د مسؤلانه کانونو استخراج عملیات",
-    },
-    title: {
-      en: ["Extracting ", "Value", "From the Earth"],
-      dari: ["استخراج ", "ارزش", "از زمین"],
-      pashto: ["د ځمکې څخه ", "ارزښت", " استخراج"],
-    },
-    highlights: { en: [1], dari: [1], pashto: [1] },
-    subtitle: {
-      en: "Sustainable mineral extraction powering Afghanistan's industrial growth and lasting economic impact.",
-      dari: "استخراج پایدار مواد معدنی که رشد صنعتی افغانستان را تقویت می‌کند.",
-      pashto: "د معدني موادو دوامداره استخراج چې د افغانستان صنعتي وده ځواکمنوي.",
-    },
-  },
-  {
-    image: "/images/hero-logistics.webp",
-    kenBurns: "zoom-out",
-    badge: {
-      en: "Nationwide Logistics Network",
-      dari: "شبکه لوژستیک سراسری",
-      pashto: "د ټول هیواد لوجستیک شبکه",
-    },
-    title: {
-      en: ["Connecting ", "Every", "Province"],
-      dari: ["اتصال ", "هر", "ولایت"],
-      pashto: ["د ", "هر", "ولایت نښلول"],
-    },
-    highlights: { en: [1], dari: [1], pashto: [1] },
-    subtitle: {
-      en: "Reliable transportation and supply chain solutions delivering across all 38+ provinces of Afghanistan.",
-      dari: "حمل و نقل و زنجیره تأمین قابل اعتماد در سراسر ۳۸+ ولایت افغانستان.",
-      pashto: "د باوري لیږد او عرضې زنځیر حلونه په ټولو ۳۸+ ولایتونو کې.",
-    },
-  },
-];
+interface Slide {
+  id: number;
+  image: string;
+  ken_burns: string;
+  badge: string;
+  title: string[];
+  highlights: number[];
+  subtitle: string;
+}
 
 const getKenBurnsClass = (type: string) => {
   switch (type) {
@@ -147,10 +34,46 @@ const getKenBurnsClass = (type: string) => {
 
 export default function HeroSection() {
   const { lang } = useI18n();
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [direction, setDirection] = useState<"next" | "prev">("next");
+  const [loading, setLoading] = useState(true);
   const progressRef = useRef<HTMLDivElement>(null);
+
+  /* Fetch slides from API — re-fetches when language changes */
+  useEffect(() => {
+    const fetchSlides = async () => {
+      try {
+        setLoading(true);
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/hero-slides?lang=${lang}`;
+        const res = await fetch(apiUrl, {
+          headers: { Accept: "application/json" },
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const contentType = res.headers.get("content-type");
+        if (!contentType?.includes("application/json")) {
+          const text = await res.text();
+          throw new Error(`Expected JSON, got: ${text.substring(0, 100)}`);
+        }
+
+        const json = await res.json();
+        if (json.success) {
+          setSlides(json.data);
+          setActive(0);
+        }
+      } catch (err) {
+        console.error("Hero slides fetch error:", err);
+        setSlides([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSlides();
+  }, [lang]);
 
   const goTo = useCallback(
     (idx: number, dir: "next" | "prev" = "next") => {
@@ -163,19 +86,37 @@ export default function HeroSection() {
   const next = useCallback(() => {
     setDirection("next");
     setActive((p) => (p + 1) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   const prev = useCallback(() => {
     setDirection("prev");
     setActive((p) => (p - 1 + slides.length) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   /* Autoplay */
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || slides.length === 0) return;
     const t = setInterval(next, SLIDE_DURATION);
     return () => clearInterval(t);
-  }, [isPaused, next]);
+  }, [isPaused, next, slides.length]);
+
+  /* Loading state */
+  if (loading) {
+    return (
+      <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden select-none bg-[#0F2B5B]">
+        <Loader2 className="w-10 h-10 text-[#D4AF37] animate-spin" />
+      </section>
+    );
+  }
+
+  /* Empty state */
+  if (slides.length === 0) {
+    return (
+      <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden select-none bg-[#0F2B5B]">
+        <p className="text-white/50 text-sm">No slides available</p>
+      </section>
+    );
+  }
 
   const current = slides[active];
 
@@ -202,27 +143,24 @@ export default function HeroSection() {
 
         return (
           <div
-            key={idx}
-            className={`absolute inset-0 will-change-transform transition-all duration-[1400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${isActive
+            key={slide.id}
+            className={`absolute inset-0 will-change-transform transition-all duration-[1400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+              isActive
                 ? "opacity-100 z-[1] scale-100 translate-x-0"
                 : isLeaving
                   ? exitTransform
                   : "opacity-0 z-0 scale-105"
-              }`}
+            }`}
           >
             <div
               className={`absolute inset-[-5%] w-[110%] h-[110%] bg-cover bg-center will-change-transform ${getKenBurnsClass(
-                slide.kenBurns
+                slide.ken_burns
               )}`}
               style={{ backgroundImage: `url('${slide.image}')` }}
             />
           </div>
         );
       })}
-
-      {/* Overlays — matching new navy blue theme */}
-      {/* <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0F2B5B]/55 via-[#0F2B5B]/35 to-[#0F2B5B]/85" /> */}
-      {/* <div className="absolute inset-0 z-[2] bg-gradient-to-r from-[#0F2B5B]/65 via-transparent to-[#0F2B5B]/65" /> */}
 
       {/* Dark overlay so white text stays readable */}
       <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0F2B5B]/60 via-[#0F2B5B]/30 to-[#0F2B5B]/80" />
@@ -266,7 +204,7 @@ export default function HeroSection() {
           <div className="animate-[slideDown_0.5s_ease-out_both] flex items-center gap-2">
             <Star className="w-3.5 h-3.5 text-[#D4AF37]" />
             <span className="text-[#D4AF37] text-xs font-medium tracking-widest uppercase">
-              {current.badge[lang]}
+              {current.badge}
             </span>
           </div>
         </div>
@@ -277,14 +215,14 @@ export default function HeroSection() {
             key={`t-${active}`}
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight animate-[slideUp_0.7s_ease-out_0.1s_both]"
           >
-            {current.title[lang].map((part, i) =>
+            {current.title.map((part, i) =>
               part === "" ? (
                 <br key={i} />
               ) : (
                 <span
                   key={i}
                   className={
-                    current.highlights[lang].includes(i)
+                    current.highlights.includes(i)
                       ? "text-[#D4AF37]"
                       : ""
                   }
@@ -302,7 +240,7 @@ export default function HeroSection() {
             key={`s-${active}`}
             className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed animate-[slideUp_0.7s_ease-out_0.25s_both]"
           >
-            {current.subtitle[lang]}
+            {current.subtitle}
           </p>
         </div>
       </div>
@@ -341,8 +279,6 @@ export default function HeroSection() {
           <span className="tabular-nums">0{slides.length}</span>
         </div>
       </div>
-      {/* Tiny bottom fade into the next section (optional) */}
-      {/* <div className="absolute bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-[#F0F4FA] to-transparent z-[5] pointer-events-none" /> */}
     </section>
   );
 }

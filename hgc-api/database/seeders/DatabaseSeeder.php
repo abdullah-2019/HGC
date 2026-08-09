@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             StatSeeder::class,
             CompanyValueSeeder::class,
             CompanyAwardSeeder::class,
-
+            HeroSlideSeeder::class,
         ]);
     }
 }
