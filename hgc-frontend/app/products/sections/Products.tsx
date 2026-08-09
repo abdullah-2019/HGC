@@ -6,13 +6,15 @@ import {
   ArrowRight,
   Loader2,
   Boxes,
-  type LucideIcon,
 } from "lucide-react";
+import type { LucideProps } from "lucide-react";
 import * as Icons from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
 import { getCategories, getProducts, type CategoryItem, type ProductListItem } from "@/lib/api";
 import ScrollReveal from "@/components/ScrollReveal";
+
+type LucideIcon = React.ComponentType<LucideProps>;
 
 function getIcon(iconName: string | null | undefined): LucideIcon {
   if (!iconName) return Boxes;
@@ -38,7 +40,6 @@ export default function ProductCategories() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Fetch categories + ALL active products in parallel
         const [catRes, prodRes] = await Promise.all([
           getCategories(lang, "product"),
           getProducts(lang),
@@ -51,7 +52,6 @@ export default function ProductCategories() {
 
         const allProducts = prodRes.data;
 
-        // Match products to categories (main category + pivot categories)
         const catsWithProducts = catRes.data
           .map((cat) => ({
             ...cat,
@@ -61,7 +61,6 @@ export default function ProductCategories() {
               return false;
             }),
           }))
-          // Hide tabs that have zero active products
           .filter((cat) => cat.products.length > 0);
 
         if (!cancelled) {
@@ -84,9 +83,9 @@ export default function ProductCategories() {
 
   if (loading) {
     return (
-      <section id="categories" className="py-24 relative" dir={dir}>
+      <section id="categories" className="py-24 relative bg-hgc-bg-alt" dir={dir}>
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
-          <Loader2 className="w-8 h-8 text-[#C9A227] animate-spin" />
+          <Loader2 className="w-8 h-8 text-hgc-gold animate-spin" />
         </div>
       </section>
     );
@@ -94,10 +93,10 @@ export default function ProductCategories() {
 
   if (categories.length === 0) {
     return (
-      <section id="categories" className="py-24 relative" dir={dir}>
+      <section id="categories" className="py-24 relative bg-hgc-bg-alt" dir={dir}>
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <Boxes className="w-12 h-12 text-white/20 mx-auto mb-4" />
-          <p className="text-white/40 text-lg font-medium">
+          <Boxes className="w-12 h-12 text-hgc-text-muted mx-auto mb-4" />
+          <p className="text-hgc-text-secondary text-lg font-medium">
             {t(lang, "products.categories.noProducts")}
           </p>
         </div>
@@ -109,14 +108,14 @@ export default function ProductCategories() {
   const CatIcon = getIcon(activeCat?.icon_name);
 
   return (
-    <section id="categories" className="py-24 relative" dir={dir}>
+    <section id="categories" className="py-24 relative bg-hgc-bg-alt" dir={dir}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <div className="text-center mb-16">
-            <span className="text-[#C9A227] text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">
+            <span className="text-hgc-gold text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">
               {t(lang, "products.categories.sectionSubtitle")}
             </span>
-            <p className="text-white/40 max-w-2xl mx-auto text-lg">
+            <p className="text-hgc-text-muted max-w-2xl mx-auto text-lg">
               {t(lang, "products.categories.sectionDesc")}
             </p>
           </div>
@@ -133,18 +132,9 @@ export default function ProductCategories() {
                   onClick={() => setActiveCategory(idx)}
                   className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
                     isActive
-                      ? "shadow-lg"
-                      : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5"
+                      ? "bg-hgc-gold/15 text-hgc-gold border border-hgc-gold/30 shadow-lg"
+                      : "bg-hgc-surface-elevated text-hgc-text-muted hover:bg-hgc-card-hover hover:text-hgc-text border border-hgc-border"
                   }`}
-                  style={
-                    isActive
-                      ? {
-                          backgroundColor: "#C9A22720",
-                          border: "1px solid #C9A22740",
-                          color: "#C9A227",
-                        }
-                      : {}
-                  }
                 >
                   <Icon className="w-4 h-4" />
                   <span>{cat.name}</span>
@@ -170,16 +160,16 @@ export default function ProductCategories() {
                 className="h-64 sm:h-80 bg-cover bg-center"
                 style={{ backgroundImage: `url(${activeCat?.image_url})` }}
               />
-              <div className="absolute inset-0 bg-[#0A1628]/60" />
+              <div className="absolute inset-0 bg-hgc-bg/80" />
               <div className="absolute inset-0 flex items-center">
                 <div className="max-w-3xl px-8 sm:px-12">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-[#C9A227]/20">
-                    <CatIcon className="w-7 h-7 text-[#C9A227]" />
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-hgc-gold/20">
+                    <CatIcon className="w-7 h-7 text-hgc-gold" />
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-hgc-text mb-3">
                     {activeCat?.name}
                   </h3>
-                  <p className="text-white/60 text-sm sm:text-base leading-relaxed max-w-xl">
+                  <p className="text-hgc-text-secondary text-sm sm:text-base leading-relaxed max-w-xl">
                     {activeCat?.description}
                   </p>
                 </div>
@@ -194,7 +184,7 @@ export default function ProductCategories() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: idx * 0.1 }}
-                    className="group relative bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#C9A227]/30 transition-all duration-500"
+                    className="group relative bg-hgc-card border border-hgc-border rounded-2xl overflow-hidden hover:border-hgc-gold/30 transition-all duration-500 shadow-sm hover:shadow-md"
                   >
                     <div className="relative h-48 overflow-hidden">
                       <div
@@ -207,18 +197,18 @@ export default function ProductCategories() {
                           })`,
                         }}
                       />
-                      <div className="absolute inset-0 bg-[#0A1628]/30 group-hover:bg-[#0A1628]/10 transition-colors duration-500" />
+                      <div className="absolute inset-0 bg-hgc-navy/10 group-hover:bg-hgc-navy/5 transition-colors duration-500" />
                       <div
                         className={`absolute top-3 ${
                           isRTL ? "left-3" : "right-3"
-                        } w-9 h-9 rounded-lg flex items-center justify-center backdrop-blur-sm bg-[#C9A227]/20`}
+                        } w-9 h-9 rounded-lg flex items-center justify-center backdrop-blur-sm bg-hgc-gold/20`}
                       >
-                        <CatIcon className="w-4 h-4 text-[#C9A227]" />
+                        <CatIcon className="w-4 h-4 text-hgc-gold" />
                       </div>
-                      <div className="absolute inset-0 bg-[#0A1628]/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-hgc-navy/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <a
                           href={`/products/${product.slug}`}
-                          className="px-5 py-2.5 bg-[#C9A227] text-[#0A1628] font-semibold rounded-xl text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 flex items-center gap-2"
+                          className="px-5 py-2.5 bg-hgc-gold text-hgc-navy font-semibold rounded-xl text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 flex items-center gap-2"
                         >
                           {t(lang, "products.categories.viewDetails")}
                           <ArrowRight
@@ -229,14 +219,14 @@ export default function ProductCategories() {
                     </div>
 
                     <div className="p-5 space-y-3">
-                      <h4 className="text-white font-semibold text-base group-hover:text-[#C9A227] transition-colors duration-300">
+                      <h4 className="text-hgc-text font-semibold text-base group-hover:text-hgc-gold transition-colors duration-300">
                         {product.name}
                       </h4>
-                      <p className="text-white/40 text-sm leading-relaxed line-clamp-2">
+                      <p className="text-hgc-text-muted text-sm leading-relaxed line-clamp-2">
                         {product.tagline || product.description}
                       </p>
                       {product.availability_label && (
-                        <span className="inline-block text-xs px-2 py-1 rounded-md bg-white/5 text-[#C9A227] border border-[#C9A227]/20">
+                        <span className="inline-block text-xs px-2 py-1 rounded-md bg-hgc-gold/10 text-hgc-gold border border-hgc-gold/20">
                           {product.availability_label}
                         </span>
                       )}
@@ -245,9 +235,9 @@ export default function ProductCategories() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 bg-white/[0.02] rounded-2xl border border-white/5">
-                <Boxes className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                <p className="text-white/40 text-lg font-medium">
+              <div className="text-center py-16 bg-hgc-surface-elevated rounded-2xl border border-hgc-border">
+                <Boxes className="w-12 h-12 text-hgc-text-muted mx-auto mb-4" />
+                <p className="text-hgc-text-secondary text-lg font-medium">
                   {t(lang, "products.categories.noProducts")}
                 </p>
               </div>

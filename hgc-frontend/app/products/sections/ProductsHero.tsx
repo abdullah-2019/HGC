@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ArrowRight, Factory, Loader2, Boxes, type LucideIcon } from "lucide-react";
+import { ChevronDown, ArrowRight, Factory, Boxes } from "lucide-react";
+import type { LucideProps } from "lucide-react";
 import * as Icons from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { t } from "@/components/translations";
@@ -13,6 +14,8 @@ function seededRandom(seed: number) {
 }
 
 // Dynamic icon resolver
+type LucideIcon = React.ComponentType<LucideProps>;
+
 function getIcon(iconName: string | null | undefined): LucideIcon {
   if (!iconName) return Boxes;
   const Icon = (Icons as unknown as Record<string, LucideIcon>)[iconName];
@@ -22,9 +25,7 @@ function getIcon(iconName: string | null | undefined): LucideIcon {
 export default function ProductsHero() {
   const { lang, dir } = useI18n();
   const [currentBg, setCurrentBg] = useState(0);
-  const [loading, setLoading] = useState(true);
 
-  // const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
   const backgrounds = [
@@ -65,8 +66,8 @@ export default function ProductsHero() {
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${backgrounds[currentBg]})` }}
           />
-          <div className="absolute inset-0 bg-[#0A1628]/75" />
-          <div className="absolute inset-0 bg-[#0A1628]/30" />
+          <div className="absolute inset-0 bg-hgc-bg/80" />
+          <div className="absolute inset-0 bg-hgc-bg/30" />
         </motion.div>
       </AnimatePresence>
 
@@ -74,7 +75,7 @@ export default function ProductsHero() {
         {particles.map((p) => (
           <motion.div
             key={p.id}
-            className="absolute w-1 h-1 bg-[#C9A227]/30 rounded-full"
+            className="absolute w-1 h-1 bg-hgc-gold/30 rounded-full"
             style={{ left: p.left, top: p.top }}
             animate={{ y: [0, -40, 0], opacity: [0.2, 0.7, 0.2] }}
             transition={{ duration: p.duration, repeat: Infinity, delay: p.delay }}
@@ -89,30 +90,30 @@ export default function ProductsHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A227]/15 text-[#C9A227] text-sm font-semibold border border-[#C9A227]/20 mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-hgc-gold/15 text-hgc-gold text-sm font-semibold border border-hgc-gold/20 mb-6">
               <Factory className="w-4 h-4" />
               {t(lang, "products.hero.badge")}
             </span>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-[1.1] mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-hgc-text leading-[1.1] mb-6">
               {t(lang, "products.hero.title")}
             </h1>
 
-            <p className="text-white/50 text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl mx-auto">
+            <p className="text-hgc-text-secondary text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl mx-auto">
               {t(lang, "products.hero.subtitle")}
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
               <a
                 href="#categories"
-                className="group inline-flex items-center gap-2 px-8 py-4 bg-[#C9A227] text-[#0A1628] font-bold rounded-xl hover:bg-[#C9A227]/90 transition-all duration-300"
+                className="group inline-flex items-center gap-2 px-8 py-4 bg-hgc-gold text-hgc-navy font-bold rounded-xl hover:bg-hgc-gold-bright transition-all duration-300"
               >
                 {t(lang, "products.hero.exploreBtn")}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white font-medium rounded-xl hover:bg-white/10 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-hgc-surface-elevated border border-hgc-border text-hgc-text font-medium rounded-xl hover:bg-hgc-card-hover transition-all duration-300"
               >
                 {t(lang, "products.hero.contactBtn")}
               </a>
@@ -126,7 +127,7 @@ export default function ProductsHero() {
         transition={{ duration: 2, repeat: Infinity }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <ChevronDown className="w-6 h-6 text-white/30" />
+        <ChevronDown className="w-6 h-6 text-hgc-text-muted" />
       </motion.div>
     </section>
   );
