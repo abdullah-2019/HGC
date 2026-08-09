@@ -365,8 +365,8 @@ export default function Header() {
                         {lang === "en"
                           ? "Explore our diverse portfolio of businesses"
                           : lang === "dari"
-                            ? "سبد متنوع کسب‌وکارهای ما را کشف کنید"
-                            : "زموږ د سوداګرۍ متنوع پورټفولیو وګورئ"}
+                            ? "مجموعه متنوع کسب و کارهای ما را بررسی کنید"
+                            : "زموږ د سوداګرۍ متنوع پورټ فولیو وپلټئ"}
                       </p>
                     </div>
                   </div>
