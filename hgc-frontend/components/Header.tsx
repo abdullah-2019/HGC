@@ -354,8 +354,8 @@ export default function Header() {
                 {/* Mega Menu Header */}
                 <div className="px-6 py-4 border-b border-hgc-dropdown-border/50 bg-hgc-header-bg-hover/50">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-hgc-accent/10 flex items-center justify-center">
-                      <Layers className="w-5 h-5 text-hgc-accent" />
+                    <div className="w-10 h-10 rounded-xl bg-hgc-gold/15 flex items-center justify-center">
+                      <Layers className="w-5 h-5 text-hgc-gold" />
                     </div>
                     <div>
                       <h3 className="text-hgc-header-text font-semibold text-sm">
