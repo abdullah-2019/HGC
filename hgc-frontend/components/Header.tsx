@@ -421,7 +421,7 @@ export default function Header() {
                             {/* Text Content */}
                             <div className="flex-1 min-w-0 pt-0.5">
                               <div className="flex items-center gap-1.5">
-                                <p className="text-hgc-dropdown-text text-sm font-semibold truncate group-hover/item:text-hgc-accent transition-colors">
+                                <p className="text-hgc-dropdown-text text-sm font-semibold truncate group-hover/item:text-hgc-gold transition-colors">
                                   {company.name}
                                 </p>
                                 <ArrowRight
