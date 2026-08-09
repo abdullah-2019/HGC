@@ -34,7 +34,6 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
     { icon: Award, labelKey: "profile.about_experience", value: yearsOfExperience ? `${yearsOfExperience}+` : "25+" },
   ];
 
-  // Get the about text based on language
   const getAboutText = () => {
     if (lang === "dari" && company.about_dari) return company.about_dari;
     if (lang === "pashto" && company.about_pashto) return company.about_pashto;
@@ -43,7 +42,6 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
 
   const aboutText = getAboutText();
 
-  // Fallback text when about is empty
   const fallbackText = {
     en: "With a commitment to quality and innovation, we continue to expand our services and impact across multiple sectors.",
     dari: "با تعهد به کیفیت و نوآوری، ما به توسعه خدمات و تأثیر خود در بخش‌های مختلف ادامه می‌دهیم.",
@@ -51,9 +49,8 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
   };
 
   return (
-    <section className="py-20" dir={dir}>
+    <section className="py-20 bg-hgc-about-bg" dir={dir}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Changed: items-start instead of items-center */}
         <div className="grid gap-16 lg:grid-cols-2 items-start">
           {/* Left - Image */}
           <motion.div
@@ -63,13 +60,13 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="relative h-[500px] rounded-2xl overflow-hidden border border-white/10">
+            <div className="relative h-[500px] rounded-2xl overflow-hidden border border-hgc-border">
               <img
                 src={company.hero_image_url || company.logo_url || "/images/placeholder.png"}
                 alt={company.name}
                 className="h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#0A1628]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-hgc-navy/40 to-transparent" />
             </div>
             {establishedYear && (
               <div
@@ -90,7 +87,7 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="flex flex-col" // Added flex flex-col
+            className="flex flex-col"
           >
             <div
               className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium w-fit"
@@ -103,7 +100,7 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
               {lang === "en" ? "About Us" : lang === "dari" ? "درباره ما" : "زموږ په اړه"}
             </div>
 
-            <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">
+            <h2 className="mb-6 text-3xl font-bold text-hgc-text md:text-4xl">
               {lang === "en"
                 ? `About ${company.name}`
                 : lang === "dari"
@@ -111,30 +108,28 @@ export default function CompanyAbout({ company }: CompanyAboutProps) {
                   : `په اړه ${company.name_pashto || company.name}`}
             </h2>
 
-            {/* About text - always render HTML if available, show fallback if empty */}
             {aboutText ? (
               <div
-                className="mb-8 text-white/60 leading-relaxed prose prose-invert max-w-none"
+                className="mb-8 text-hgc-text-secondary leading-relaxed prose max-w-none"
                 dangerouslySetInnerHTML={{ __html: aboutText }}
               />
             ) : (
-              <p className="mb-8 text-white/60 leading-relaxed">
+              <p className="mb-8 text-hgc-text-secondary leading-relaxed">
                 {fallbackText[lang as keyof typeof fallbackText] || fallbackText.en}
               </p>
             )}
 
-            {/* Spacer to push highlights to bottom when text is short */}
             <div className="flex-1" />
 
             <div className="grid grid-cols-2 gap-4">
               {highlights.map((item) => (
                 <div
                   key={item.labelKey}
-                  className="rounded-xl bg-white/5 border border-white/10 p-4 transition-all duration-300 hover:bg-white/10"
+                  className="rounded-xl bg-hgc-card-alt border border-hgc-border p-4 transition-all duration-300 hover:bg-hgc-card-hover"
                 >
                   <item.icon className="mb-2 h-6 w-6" style={{ color: company.accent_color }} />
-                  <p className="text-2xl font-bold text-white">{item.value}</p>
-                  <p className="text-sm text-white/50">
+                  <p className="text-2xl font-bold text-hgc-text">{item.value}</p>
+                  <p className="text-sm text-hgc-text-muted">
                     {lang === "en"
                       ? item.labelKey === "profile.about_founded"
                         ? "Founded"

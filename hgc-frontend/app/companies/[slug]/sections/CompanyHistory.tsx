@@ -25,7 +25,6 @@ export default function CompanyHistory({ company }: CompanyHistoryProps) {
   const { lang, dir } = useI18n();
   const startYear = company.details.established_year || company.details.founded_year || 2001;
 
-  // Generate timeline based on company start year
   const generateTimeline = (): TimelineEvent[] => {
     const events: TimelineEvent[] = [];
     const currentYear = new Date().getFullYear();
@@ -41,14 +40,14 @@ export default function CompanyHistory({ company }: CompanyHistoryProps) {
           lang === "en"
             ? `Milestone ${i + 1}`
             : lang === "dari"
-            ? `نقطه عطف ${i + 1}`
-            : `نقطه ${i + 1}`,
+              ? `نقطه عطف ${i + 1}`
+              : `نقطه ${i + 1}`,
         desc:
           lang === "en"
             ? `A significant achievement for ${company.name} in ${year}.`
             : lang === "dari"
-            ? `یک دستاورد مهم برای ${company.name} در سال ${year}.`
-            : `د ${company.name} لپاره په ${year} کې یو مهم لاسته راوړنه.`,
+              ? `یک دستاورد مهم برای ${company.name} در سال ${year}.`
+              : `د ${company.name} لپاره په ${year} کې یو مهم لاسته راوړنه.`,
       });
     }
 
@@ -58,7 +57,7 @@ export default function CompanyHistory({ company }: CompanyHistoryProps) {
   const events = generateTimeline();
 
   return (
-    <section className="py-20 bg-[#070F1A]" dir={dir}>
+    <section className="py-20 bg-hgc-bg" dir={dir}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -76,12 +75,12 @@ export default function CompanyHistory({ company }: CompanyHistoryProps) {
           >
             {lang === "en" ? "Our Journey" : lang === "dari" ? "سفر ما" : "زموږ سفر"}
           </div>
-          <h2 className="text-3xl font-bold text-white md:text-4xl">
+          <h2 className="text-3xl font-bold text-hgc-text md:text-4xl">
             {lang === "en"
               ? `History of ${company.name}`
               : lang === "dari"
-              ? `تاریخچه ${company.name}`
-              : `د ${company.name} تاریخ`}
+                ? `تاریخچه ${company.name}`
+                : `د ${company.name} تاریخ`}
           </h2>
         </motion.div>
 
@@ -103,16 +102,14 @@ export default function CompanyHistory({ company }: CompanyHistoryProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`relative flex items-center gap-8 ${
-                    isLeft ? "md:flex-row" : "md:flex-row-reverse"
-                  } flex-col`}
+                  className={`relative flex items-center gap-8 ${isLeft ? "md:flex-row" : "md:flex-row-reverse"
+                    } flex-col`}
                 >
                   <div
-                    className={`flex-1 ${
-                      isLeft ? "md:text-right" : "md:text-left"
-                    } text-center`}
+                    className={`flex-1 ${isLeft ? "md:text-right" : "md:text-left"
+                      } text-center`}
                   >
-                    <div className="inline-block rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/20">
+                    <div className="inline-block rounded-2xl bg-hgc-card border border-hgc-border p-6 transition-all hover:shadow-md">
                       <span
                         className="inline-block mb-2 rounded-lg px-3 py-1 text-sm font-bold"
                         style={{
@@ -122,8 +119,8 @@ export default function CompanyHistory({ company }: CompanyHistoryProps) {
                       >
                         {event.year}
                       </span>
-                      <h3 className="mb-2 text-lg font-bold text-white">{event.title}</h3>
-                      <p className="text-white/60 text-sm leading-relaxed">{event.desc}</p>
+                      <h3 className="mb-2 text-lg font-bold text-hgc-text">{event.title}</h3>
+                      <p className="text-hgc-text-secondary text-sm leading-relaxed">{event.desc}</p>
                     </div>
                   </div>
 
@@ -134,7 +131,7 @@ export default function CompanyHistory({ company }: CompanyHistoryProps) {
                       boxShadow: `0 0 20px ${company.accent_color}40`,
                     }}
                   >
-                    <div className="h-4 w-4 rounded-full bg-[#0A1628]" />
+                    <div className="h-4 w-4 rounded-full bg-hgc-bg" />
                   </div>
 
                   <div className="flex-1 hidden md:block" />

@@ -32,7 +32,7 @@ export default function CompanyValues({ company }: CompanyValuesProps) {
   if (!company.values || company.values.length === 0) return null;
 
   return (
-    <section className="py-20" dir={dir}>
+    <section className="py-20 bg-hgc-bg-alt" dir={dir}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -50,7 +50,7 @@ export default function CompanyValues({ company }: CompanyValuesProps) {
           >
             {t(lang, "profile.values_badge")}
           </div>
-          <h2 className="text-3xl font-bold text-white md:text-4xl">
+          <h2 className="text-3xl font-bold text-hgc-text md:text-4xl">
             {t(lang, "profile.values_title")}
           </h2>
         </motion.div>
@@ -67,7 +67,7 @@ export default function CompanyValues({ company }: CompanyValuesProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 hover:border-white/20"
+                className="group rounded-2xl bg-hgc-card border border-hgc-border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
               >
                 <div
                   className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
@@ -75,8 +75,8 @@ export default function CompanyValues({ company }: CompanyValuesProps) {
                 >
                   <Icon size={28} style={{ color: company.accent_color }} />
                 </div>
-                <h3 className="mb-2 text-lg font-bold text-white">{value.title}</h3>
-                <p className="text-white/60 text-sm leading-relaxed">{value.description}</p>
+                <h3 className="mb-2 text-lg font-bold text-hgc-text">{value.title}</h3>
+                <p className="text-hgc-text-secondary text-sm leading-relaxed">{value.description}</p>
               </motion.div>
             );
           })}

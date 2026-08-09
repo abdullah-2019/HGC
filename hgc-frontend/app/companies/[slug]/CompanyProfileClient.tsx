@@ -164,10 +164,10 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0A1628] flex items-center justify-center">
+      <div className="min-h-screen bg-hgc-bg flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-10 h-10 text-[#C9A227] animate-spin mx-auto mb-4" />
-          <p className="text-white/50 text-sm">{t(lang, "companies.loading.profile")}</p>
+          <Loader2 className="w-10 h-10 text-hgc-gold animate-spin mx-auto mb-4" />
+          <p className="text-hgc-text-muted text-sm">{t(lang, "companies.loading.profile")}</p>
         </div>
       </div>
     );
@@ -176,18 +176,18 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
   if (error || !company) {
     const Icon = iconMap.Building2;
     return (
-      <div className="min-h-screen bg-[#0A1628] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-hgc-bg flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-6">
-            <Icon className="w-8 h-8 text-red-400" />
+            <Icon className="w-8 h-8 text-red-500" />
           </div>
-          <h2 className="text-white text-xl font-bold mb-2">
+          <h2 className="text-hgc-text text-xl font-bold mb-2">
             {t(lang, "error.companyNotFound")}
           </h2>
-          <p className="text-white/40 text-sm mb-6">{error}</p>
+          <p className="text-hgc-text-muted text-sm mb-6">{error}</p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#C9A227]/10 border border-[#C9A227]/20 text-[#C9A227] hover:bg-[#C9A227]/20 transition-all text-sm font-medium"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-hgc-gold/10 border border-hgc-gold/20 text-hgc-gold hover:bg-hgc-gold/20 transition-all text-sm font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
             {t(lang, "nav.home")}
@@ -198,7 +198,7 @@ export default function CompanyProfileClient({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A1628]" dir={dir}>
+    <div className="min-h-screen bg-hgc-bg" dir={dir}>
       <CompanyProfileHero company={company} />
       <CompanyAbout company={company} />
       <CompanyMissionVision company={company} />

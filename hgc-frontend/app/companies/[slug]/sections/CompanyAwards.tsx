@@ -1,4 +1,3 @@
-// components/company/CompanyAwards.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -17,7 +16,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-// Map icon names to Lucide components
 const iconMap: Record<string, LucideIcon> = {
   Trophy,
   Star,
@@ -65,12 +63,10 @@ interface CompanyAwardsProps {
 export default function CompanyAwards({ company, awards }: CompanyAwardsProps) {
   const { lang, dir } = useI18n();
 
-  // 🛡️ HIDE ENTIRE SECTION if no awards data
   if (!awards || awards.length === 0) {
     return null;
   }
 
-  // Helper to get localized content with fallback
   const getLocalized = (
     localized: string | null,
     en: string | null,
@@ -82,19 +78,18 @@ export default function CompanyAwards({ company, awards }: CompanyAwardsProps) {
     return localized ?? en ?? null;
   };
 
-  // Section title translations
   const sectionTitle =
     lang === "en"
       ? "Awards & Achievements"
       : lang === "dari"
-      ? "جوایز و دستاوردها"
-      : "جایزې او لاسته راوړنې";
+        ? "جوایز و دستاوردها"
+        : "جایزې او لاسته راوړنې";
 
   const sectionBadge =
     lang === "en" ? "Recognition" : lang === "dari" ? "تقدیر" : "ستاینه";
 
   return (
-    <section className="py-20" dir={dir}>
+    <section className="py-20 bg-hgc-bg-alt" dir={dir}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -113,18 +108,16 @@ export default function CompanyAwards({ company, awards }: CompanyAwardsProps) {
             <Award size={18} />
             {sectionBadge}
           </div>
-          <h2 className="text-3xl font-bold text-white md:text-4xl">
+          <h2 className="text-3xl font-bold text-hgc-text md:text-4xl">
             {sectionTitle}
           </h2>
         </motion.div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {awards.map((award, index) => {
-            // Resolve icon dynamically
             const AwardIcon =
               (award.icon_name && iconMap[award.icon_name]) || Award;
 
-            // Get localized values with proper fallbacks
             const title = getLocalized(
               award.title,
               award.title_en,
@@ -144,7 +137,6 @@ export default function CompanyAwards({ company, awards }: CompanyAwardsProps) {
               award.organization_pashto
             );
 
-            // Skip rendering if no title (minimum required field)
             if (!title) return null;
 
             return (
@@ -154,7 +146,7 @@ export default function CompanyAwards({ company, awards }: CompanyAwardsProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group flex items-start gap-5 rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/20"
+                className="group flex items-start gap-5 rounded-2xl bg-hgc-card border border-hgc-border p-6 transition-all hover:shadow-md"
               >
                 <div
                   className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
@@ -166,7 +158,6 @@ export default function CompanyAwards({ company, awards }: CompanyAwardsProps) {
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  {/* Year badge */}
                   {award.year && (
                     <span
                       className="inline-block mb-1 rounded px-2 py-0.5 text-xs font-bold"
@@ -179,21 +170,18 @@ export default function CompanyAwards({ company, awards }: CompanyAwardsProps) {
                     </span>
                   )}
 
-                  {/* Title - always shown */}
-                  <h3 className="mb-1 text-base font-bold text-white">
+                  <h3 className="mb-1 text-base font-bold text-hgc-text">
                     {title}
                   </h3>
 
-                  {/* Description - hidden if null */}
                   {description && (
-                    <p className="mb-1 text-sm text-white/70 line-clamp-2">
+                    <p className="mb-1 text-sm text-hgc-text-secondary line-clamp-2">
                       {description}
                     </p>
                   )}
 
-                  {/* Organization - hidden if null */}
                   {organization && (
-                    <p className="text-sm text-white/50">{organization}</p>
+                    <p className="text-sm text-hgc-text-muted">{organization}</p>
                   )}
                 </div>
               </motion.div>

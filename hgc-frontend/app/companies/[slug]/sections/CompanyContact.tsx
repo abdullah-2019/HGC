@@ -3,245 +3,245 @@
 import { motion } from "framer-motion";
 import { useI18n } from "@/components/useI18nStore";
 import {
-    MapPin,
-    Phone,
-    Mail,
-    Globe,
-    ExternalLink,
-    MessageCircle,
-    Briefcase,
-    AtSign,
-    Camera,
+  MapPin,
+  Phone,
+  Mail,
+  Globe,
+  ExternalLink,
+  MessageCircle,
+  Briefcase,
+  AtSign,
+  Camera,
 } from "lucide-react";
 
 interface CompanyContactProps {
-    company: {
-        name: string;
-        accent_color: string;
-        contact: {
-            email: string | null;
-            phone: string | null;
-            address: string | null;
-            latitude: string | null;
-            longitude: string | null;
-        };
-        web: {
-            website: string | null;
-            facebook: string | null;
-            linkedin: string | null;
-            twitter: string | null;
-            instagram: string | null;
-        };
+  company: {
+    name: string;
+    accent_color: string;
+    contact: {
+      email: string | null;
+      phone: string | null;
+      address: string | null;
+      latitude: string | null;
+      longitude: string | null;
     };
+    web: {
+      website: string | null;
+      facebook: string | null;
+      linkedin: string | null;
+      twitter: string | null;
+      instagram: string | null;
+    };
+  };
 }
 
 const socialConfig = [
-    { key: "website", icon: Globe, label: "Website", color: "#C9A227" },
-    { key: "facebook", icon: MessageCircle, label: "Facebook", color: "#1877F2" },
-    { key: "linkedin", icon: Briefcase, label: "LinkedIn", color: "#0A66C2" },
-    { key: "twitter", icon: AtSign, label: "Twitter", color: "#1DA1F2" },
-    { key: "instagram", icon: Camera, label: "Instagram", color: "#E4405F" },
+  { key: "website", icon: Globe, label: "Website", color: "#D4AF37" },
+  { key: "facebook", icon: MessageCircle, label: "Facebook", color: "#1877F2" },
+  { key: "linkedin", icon: Briefcase, label: "LinkedIn", color: "#0A66C2" },
+  { key: "twitter", icon: AtSign, label: "Twitter", color: "#1DA1F2" },
+  { key: "instagram", icon: Camera, label: "Instagram", color: "#E4405F" },
 ];
 
 export default function CompanyContact({ company }: CompanyContactProps) {
-    const { lang, dir } = useI18n();
+  const { lang, dir } = useI18n();
 
-    const hasContact =
-        company.contact.email ||
-        company.contact.phone ||
-        company.contact.address;
+  const hasContact =
+    company.contact.email ||
+    company.contact.phone ||
+    company.contact.address;
 
-    const hasMap =
-        company.contact.latitude && company.contact.longitude;
+  const hasMap =
+    company.contact.latitude && company.contact.longitude;
 
-    const hasSocial = Object.values(company.web).some((v) => v);
+  const hasSocial = Object.values(company.web).some((v) => v);
 
-    if (!hasContact && !hasMap && !hasSocial) return null;
+  if (!hasContact && !hasMap && !hasSocial) return null;
 
-    const translations = {
-        en: {
-            badge: "Get in Touch",
-            title: "Contact Us",
-            addr: "Address",
-            phone: "Phone",
-            email: "Email",
-            follow: "Follow Us",
-            noMap: "Map location not available",
-        },
-        dari: {
-            badge: "در تماس باشید",
-            title: "تماس با ما",
-            addr: "آدرس",
-            phone: "تلفن",
-            email: "ایمیل",
-            follow: "ما را دنبال کنید",
-            noMap: "موقعیت نقشه در دسترس نیست",
-        },
-        pashto: {
-            badge: "اړیکه ونیسئ",
-            title: "زموږ سره اړیکه",
-            addr: "پته",
-            phone: "تلیفون",
-            email: "برېښنالیک",
-            follow: "موږ تعقیب کړئ",
-            noMap: "د نقشې موقعیت شتون نلري",
-        },
-    };
+  const translations = {
+    en: {
+      badge: "Get in Touch",
+      title: "Contact Us",
+      addr: "Address",
+      phone: "Phone",
+      email: "Email",
+      follow: "Follow Us",
+      noMap: "Map location not available",
+    },
+    dari: {
+      badge: "در تماس باشید",
+      title: "تماس با ما",
+      addr: "آدرس",
+      phone: "تلفن",
+      email: "ایمیل",
+      follow: "ما را دنبال کنید",
+      noMap: "موقعیت نقشه در دسترس نیست",
+    },
+    pashto: {
+      badge: "اړیکه ونیسئ",
+      title: "زموږ سره اړیکه",
+      addr: "پته",
+      phone: "تلیفون",
+      email: "برېښنالیک",
+      follow: "موږ تعقیب کړئ",
+      noMap: "د نقشې موقعیت شتون نلري",
+    },
+  };
 
-    const t = translations[lang as keyof typeof translations] ?? translations.en;
+  const t = translations[lang as keyof typeof translations] ?? translations.en;
 
-    return (
-        <section className="py-20 bg-[#070F1A]" dir={dir}>
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mb-16 text-center"
+  return (
+    <section className="py-20 bg-hgc-bg" dir={dir}>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16 text-center"
+        >
+          <div
+            className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
+            style={{
+              backgroundColor: `${company.accent_color}15`,
+              color: company.accent_color,
+              border: `1px solid ${company.accent_color}30`,
+            }}
+          >
+            {t.badge}
+          </div>
+          <h2 className="text-3xl font-bold text-hgc-text md:text-4xl">
+            {t.title}
+          </h2>
+        </motion.div>
+
+        <div className="grid gap-8 lg:grid-cols-2">
+          {/* Left: Contact Cards */}
+          <motion.div
+            initial={{ opacity: 0, x: dir === "rtl" ? 50 : -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="space-y-5"
+          >
+            {company.contact.address && (
+              <div className="flex items-start gap-4 rounded-2xl bg-hgc-card border border-hgc-border p-6 transition-all hover:shadow-md">
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: `${company.accent_color}15` }}
                 >
-                    <div
-                        className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
-                        style={{
-                            backgroundColor: `${company.accent_color}15`,
-                            color: company.accent_color,
-                            border: `1px solid ${company.accent_color}30`,
-                        }}
-                    >
-                        {t.badge}
-                    </div>
-                    <h2 className="text-3xl font-bold text-white md:text-4xl">
-                        {t.title}
-                    </h2>
-                </motion.div>
-
-                <div className="grid gap-8 lg:grid-cols-2">
-                    {/* Left: Contact Cards */}
-                    <motion.div
-                        initial={{ opacity: 0, x: dir === "rtl" ? 50 : -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="space-y-5"
-                    >
-                        {company.contact.address && (
-                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6 transition-all hover:bg-white/10">
-                                <div
-                                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-                                    style={{ backgroundColor: `${company.accent_color}15` }}
-                                >
-                                    <MapPin size={24} style={{ color: company.accent_color }} />
-                                </div>
-                                <div>
-                                    <h3 className="mb-1 text-lg font-bold text-white">{t.addr}</h3>
-                                    <p className="text-white/60 leading-relaxed">
-                                        {company.contact.address}
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-
-                        {company.contact.phone && (
-                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6 transition-all hover:bg-white/10">
-                                <div
-                                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-                                    style={{ backgroundColor: `${company.accent_color}15` }}
-                                >
-                                    <Phone size={24} style={{ color: company.accent_color }} />
-                                </div>
-                                <div>
-                                    <h3 className="mb-1 text-lg font-bold text-white">{t.phone}</h3>
-                                    <a
-                                        href={`tel:${company.contact.phone}`}
-                                        className="text-white/60 hover:text-white transition-colors"
-                                    >
-                                        {company.contact.phone}
-                                    </a>
-                                </div>
-                            </div>
-                        )}
-
-                        {company.contact.email && (
-                            <div className="flex items-start gap-4 rounded-2xl bg-white/5 border border-white/10 p-6 transition-all hover:bg-white/10">
-                                <div
-                                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-                                    style={{ backgroundColor: `${company.accent_color}15` }}
-                                >
-                                    <Mail size={24} style={{ color: company.accent_color }} />
-                                </div>
-                                <div>
-                                    <h3 className="mb-1 text-lg font-bold text-white">{t.email}</h3>
-                                    <a
-                                        href={`mailto:${company.contact.email}`}
-                                        className="text-white/60 hover:text-white transition-colors"
-                                    >
-                                        {company.contact.email}
-                                    </a>
-                                </div>
-                            </div>
-                        )}
-                    </motion.div>
-
-                    {/* Right: Map + Social */}
-                    <motion.div
-                        initial={{ opacity: 0, x: dir === "rtl" ? -50 : 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="flex flex-col gap-6"
-                    >
-                        {hasMap ? (
-                            <div className="rounded-2xl overflow-hidden border border-white/10 h-[320px]">
-                                <iframe
-                                    width="100%"
-                                    height="100%"
-                                    style={{
-                                        border: 0,
-                                        filter: "grayscale(100%) invert(92%) contrast(83%)",
-                                    }}
-                                    loading="lazy"
-                                    allowFullScreen
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                    src={`https://maps.google.com/maps?q=${company.contact.latitude},${company.contact.longitude}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                                />
-                            </div>
-                        ) : (
-                            <div className="flex h-[320px] items-center justify-center rounded-2xl bg-white/5 border border-white/10">
-                                <p className="text-white/30 text-sm">{t.noMap}</p>
-                            </div>
-                        )}
-
-                        {hasSocial && (
-                            <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                                <h3 className="mb-4 text-lg font-bold text-white">
-                                    {t.follow}
-                                </h3>
-                                <div className="flex flex-wrap gap-3">
-                                    {socialConfig.map((s) => {
-                                        const url = company.web[s.key as keyof typeof company.web];
-                                        if (!url) return null;
-                                        return (
-                                            <a
-                                                key={s.key}
-                                                href={url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all hover:scale-105"
-                                                style={{
-                                                    backgroundColor: `${s.color}15`,
-                                                    border: `1px solid ${s.color}30`,
-                                                    color: s.color,
-                                                }}
-                                            >
-                                                <s.icon size={18} />
-                                                <span>{s.label}</span>
-                                                <ExternalLink size={12} className="opacity-50" />
-                                            </a>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        )}
-                    </motion.div>
+                  <MapPin size={24} style={{ color: company.accent_color }} />
                 </div>
-            </div>
-        </section>
-    );
+                <div>
+                  <h3 className="mb-1 text-lg font-bold text-hgc-text">{t.addr}</h3>
+                  <p className="text-hgc-text-secondary leading-relaxed">
+                    {company.contact.address}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {company.contact.phone && (
+              <div className="flex items-start gap-4 rounded-2xl bg-hgc-card border border-hgc-border p-6 transition-all hover:shadow-md">
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: `${company.accent_color}15` }}
+                >
+                  <Phone size={24} style={{ color: company.accent_color }} />
+                </div>
+                <div>
+                  <h3 className="mb-1 text-lg font-bold text-hgc-text">{t.phone}</h3>
+                  <a
+                    href={`tel:${company.contact.phone}`}
+                    className="text-hgc-text-secondary hover:text-hgc-text transition-colors"
+                  >
+                    {company.contact.phone}
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {company.contact.email && (
+              <div className="flex items-start gap-4 rounded-2xl bg-hgc-card border border-hgc-border p-6 transition-all hover:shadow-md">
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: `${company.accent_color}15` }}
+                >
+                  <Mail size={24} style={{ color: company.accent_color }} />
+                </div>
+                <div>
+                  <h3 className="mb-1 text-lg font-bold text-hgc-text">{t.email}</h3>
+                  <a
+                    href={`mailto:${company.contact.email}`}
+                    className="text-hgc-text-secondary hover:text-hgc-text transition-colors"
+                  >
+                    {company.contact.email}
+                  </a>
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Right: Map + Social */}
+          <motion.div
+            initial={{ opacity: 0, x: dir === "rtl" ? -50 : 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col gap-6"
+          >
+            {hasMap ? (
+              <div className="rounded-2xl overflow-hidden border border-hgc-border h-[320px]">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  style={{
+                    border: 0,
+                    filter: "grayscale(100%) contrast(90%)",
+                  }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={`https://maps.google.com/maps?q=${company.contact.latitude},${company.contact.longitude}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                />
+              </div>
+            ) : (
+              <div className="flex h-[320px] items-center justify-center rounded-2xl bg-hgc-card-alt border border-hgc-border">
+                <p className="text-hgc-text-muted text-sm">{t.noMap}</p>
+              </div>
+            )}
+
+            {hasSocial && (
+              <div className="rounded-2xl bg-hgc-card border border-hgc-border p-6">
+                <h3 className="mb-4 text-lg font-bold text-hgc-text">
+                  {t.follow}
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {socialConfig.map((s) => {
+                    const url = company.web[s.key as keyof typeof company.web];
+                    if (!url) return null;
+                    return (
+                      <a
+                        key={s.key}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all hover:scale-105"
+                        style={{
+                          backgroundColor: `${s.color}15`,
+                          border: `1px solid ${s.color}30`,
+                          color: s.color,
+                        }}
+                      >
+                        <s.icon size={18} />
+                        <span>{s.label}</span>
+                        <ExternalLink size={12} className="opacity-50" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
 }

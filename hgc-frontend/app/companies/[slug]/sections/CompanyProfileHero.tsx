@@ -45,7 +45,8 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
             }}
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A1628]/70 via-[#0A1628]/50 to-[#0A1628]" />
+        {/* Dark overlay — no white fade at bottom */}
+        <div className="absolute inset-0 bg-hgc-navy/70" />
       </div>
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4">
@@ -57,7 +58,7 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
         >
           {/* Sector Badge */}
           {company.sector && (
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#C9A227]/15 border border-[#C9A227]/30 px-5 py-2 text-[#C9A227]">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-hgc-gold/15 border border-hgc-gold/30 px-5 py-2 text-hgc-gold">
               <Icon size={18} />
               <span className="text-sm font-medium tracking-wide uppercase">
                 {company.sector}
@@ -65,7 +66,8 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
             </div>
           )}
 
-          <h1 className="mb-6 text-5xl font-bold text-white md:text-6xl lg:text-7xl">
+          {/* Company name — slightly smaller */}
+          <h1 className="mb-6 text-4xl font-bold text-white md:text-5xl lg:text-6xl">
             {company.name}
           </h1>
 
@@ -85,7 +87,7 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
           transition={{ delay: 1, duration: 1 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2"
         >
-          <ChevronDown className="w-8 h-8 text-[#C9A227] animate-bounce" />
+          <ChevronDown className="w-8 h-8 text-hgc-gold animate-bounce" />
         </motion.div>
       </div>
     </section>

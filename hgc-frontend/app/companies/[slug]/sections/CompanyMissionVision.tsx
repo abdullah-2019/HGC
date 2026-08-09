@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useI18n } from "@/components/useI18nStore";
-import { t } from "@/components/translations"; 
+import { t } from "@/components/translations";
 import { Eye, Target, Compass } from "lucide-react";
 
 interface CompanyMissionVisionProps {
@@ -62,7 +62,7 @@ export default function CompanyMissionVision({ company }: CompanyMissionVisionPr
   if (cards.length === 0) return null;
 
   return (
-    <section className="py-20" dir={dir}>
+    <section className="py-20 bg-hgc-bg-alt" dir={dir}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -70,10 +70,10 @@ export default function CompanyMissionVision({ company }: CompanyMissionVisionPr
           viewport={{ once: true }}
           className="mb-16 text-center"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 px-4 py-2 text-[#C9A227]">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-hgc-gold/10 border border-hgc-gold/20 px-4 py-2 text-hgc-gold">
             <span className="text-sm font-medium">{t(lang, "missionVision.badge")}</span>
           </div>
-          <h2 className="text-3xl font-bold text-white md:text-4xl">
+          <h2 className="text-3xl font-bold text-hgc-text md:text-4xl">
             {t(lang, "missionVision.heading")}
           </h2>
         </motion.div>
@@ -86,7 +86,7 @@ export default function CompanyMissionVision({ company }: CompanyMissionVisionPr
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="group relative rounded-2xl bg-white/5 border border-white/10 p-8 backdrop-blur-sm transition-all hover:-translate-y-2 hover:bg-white/10 hover:border-white/20"
+              className="group relative rounded-2xl bg-hgc-card border border-hgc-border p-8 transition-all hover:-translate-y-2 hover:shadow-lg"
             >
               <div
                 className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-110"
@@ -94,13 +94,10 @@ export default function CompanyMissionVision({ company }: CompanyMissionVisionPr
               >
                 <card.icon size={32} style={{ color: card.color }} />
               </div>
-              <h3 className="mb-4 text-xl font-bold text-white">{t(lang, card.titleKey)}</h3>
-              
-              {/* CHANGED: Use plain text instead of dangerouslySetInnerHTML for debugging */}
-              <p className="text-white/60 leading-relaxed">
+              <h3 className="mb-4 text-xl font-bold text-hgc-text">{t(lang, card.titleKey)}</h3>
+              <p className="text-hgc-text-secondary leading-relaxed">
                 {card.desc}
               </p>
-              
               <div
                 className="absolute bottom-0 left-0 h-1 w-0 rounded-b-2xl transition-all duration-500 group-hover:w-full"
                 style={{ backgroundColor: card.color }}

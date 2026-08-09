@@ -82,7 +82,7 @@ export default function CompanyStats({ company }: CompanyStatsProps) {
   ];
 
   return (
-    <section className="py-20 bg-[#070F1A]" dir={dir}>
+    <section className="py-20 color-hgc-bg border-y border-hgc-border" dir={dir}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
@@ -109,10 +109,10 @@ export default function CompanyStats({ company }: CompanyStatsProps) {
               >
                 <stat.icon size={32} style={{ color: company.accent_color }} />
               </div>
-              <p className="text-3xl font-bold text-white mb-1">
+              <p className="text-3xl font-bold text-hgc-text mb-1">
                 <AnimatedCounter target={stat.value} suffix={stat.suffix} />
               </p>
-              <p className="text-sm text-white/50">{stat.label}</p>
+              <p className="text-sm text-hgc-text-muted">{stat.label}</p>
             </motion.div>
           ))}
         </motion.div>
