@@ -86,13 +86,13 @@
   --color-hgc-logo-bg: #0F2B5B;
   --color-hgc-logo-text: #FFFFFF;
 
-  --color-hgc-header-bg-start: #29B6F6;
-  --color-hgc-header-bg-mid: #039BE5;
-  --color-hgc-header-bg-end: #29B6F6;
+  --color-hgc-header-bg-start: #1E9CE2;
+  --color-hgc-header-bg-mid: #0277BD;
+  --color-hgc-header-bg-end: #1E9CE2;
 
-  --color-hgc-footer-bg-start: #29B6F6;
-  --color-hgc-footer-bg-mid: #0288D1;
-  --color-hgc-footer-bg-end: #29B6F6;
+  --color-hgc-footer-bg-start: #1E9CE2;
+  --color-hgc-footer-bg-mid: #026AA7;
+  --color-hgc-footer-bg-end: #1E9CE2;
 
   --color-hgc-header-border: rgba(255,255,255,0.12);
   --color-hgc-header-border-hover: rgba(255,255,255,0.25);
