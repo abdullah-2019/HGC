@@ -22,6 +22,8 @@ use App\Http\Controllers\Admin\About\AboutVisionController;
 use App\Http\Controllers\Admin\About\AboutCoreValueController;
 use App\Http\Controllers\Admin\About\AboutStoryController;
 use App\Http\Controllers\Admin\About\AboutStoryHighlightController;
+use App\Http\Controllers\Admin\HeroSlideController;
+
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
@@ -90,5 +92,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::patch('projects/{project}/toggle-featured', [ProjectController::class, 'toggleFeatured'])->name('projects.toggle-featured');
     Route::patch('projects/{project}/toggle-active', [ProjectController::class, 'toggleActive'])->name('projects.toggle-active');
     Route::post('projects/{project}/gallery/delete', [ProjectController::class, 'deleteGalleryImage'])->name('projects.gallery.delete');
+
+    // Hero Slides
+    Route::resource('hero-slides', HeroSlideController::class)->except(['show']);
 
 });
