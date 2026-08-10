@@ -24,7 +24,6 @@ use App\Http\Controllers\Admin\About\AboutStoryController;
 use App\Http\Controllers\Admin\About\AboutStoryHighlightController;
 use App\Http\Controllers\Admin\HeroSlideController;
 
-
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
     // Dashboard Portal
@@ -47,8 +46,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::resource('testimonials', TestimonialController::class);
 
     // News Articles
-    Route::resource('news', NewsArticleController::class)->parameters(['news' => 'newsArticle']);
-
+    //Route::resource('news', NewsArticleController::class)->parameters(['news' => 'newsArticle']);
+    Route::get('/news', [NewsArticleController::class, 'index'])->name('news.index');
+    Route::get('/news/create', [NewsArticleController::class, 'create'])->name('news.create');
+    Route::post('/news', [NewsArticleController::class, 'store'])->name('news.store');
+    Route::get('/news/{article}/edit', [NewsArticleController::class, 'edit'])->name('news.edit');
+    Route::put('/news/{article}', [NewsArticleController::class, 'update'])->name('news.update');
+    Route::delete('/news/{article}', [NewsArticleController::class, 'destroy'])->name('news.destroy');
+    
     // Communications & Inbound Portals
     Route::get('contacts/submissions', [ContactSubmissionController::class, 'index'])->name('contacts.submissions');
     Route::get('contacts/inquiries', [ContactInquiryController::class, 'index'])->name('contacts.inquiries');

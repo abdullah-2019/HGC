@@ -307,6 +307,28 @@
                 </a>
             </div>
 
+            <!-- News -->
+            <div
+                class="flex flex-col bg-gray-800 border border-gray-700 rounded-lg hover:border-red-500 transition-all group">
+                <a href="{{ route('admin.news.index') }}" class="flex items-center gap-3 p-3 flex-1">
+                    <div
+                        class="w-9 h-9 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-red-500/20">
+                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-300 group-hover:text-white">News</span>
+                </a>
+                <a href="{{ route('admin.news.create') }}"
+                    class="flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-red-400 bg-red-500/5 border-t border-gray-700 rounded-b-lg hover:bg-red-500/10 hover:text-red-300 transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add Article
+                </a>
+            </div>
+
         </div>
     </div>
 
