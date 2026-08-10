@@ -209,28 +209,33 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Title */}
+        {/* Title — FIXED: spaces inserted between parts automatically */}
         <div className="overflow-hidden mb-5">
           <h1
             key={`t-${active}`}
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight animate-[slideUp_0.7s_ease-out_0.1s_both]"
           >
-            {current.title.map((part, i) =>
-              part === "" ? (
-                <br key={i} />
-              ) : (
-                <span
-                  key={i}
-                  className={
-                    current.highlights.includes(i)
-                      ? "text-[#D4AF37]"
-                      : ""
-                  }
-                >
-                  {part}
+            {current.title.map((part, i) => {
+              if (part === "") return <br key={i} />;
+
+              const isLast = i === current.title.length - 1;
+              const nextIsEmpty = !isLast && current.title[i + 1] === "";
+
+              return (
+                <span key={i}>
+                  <span
+                    className={
+                      current.highlights.includes(i)
+                        ? "text-[#D4AF37]"
+                        : ""
+                    }
+                  >
+                    {part}
+                  </span>
+                  {!isLast && !nextIsEmpty && " "}
                 </span>
-              )
-            )}
+              );
+            })}
           </h1>
         </div>
 
