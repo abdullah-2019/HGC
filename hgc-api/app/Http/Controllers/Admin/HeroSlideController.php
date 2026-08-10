@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\HeroSlide;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class HeroSlideController extends Controller
 {
@@ -22,7 +24,7 @@ class HeroSlideController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'image' => 'required|string|max:255',
+            'image_file' => 'required|image|mimes:webp,jpg,jpeg,png|max:2048',
             'ken_burns' => 'required|in:zoom-in,zoom-out,pan-right,pan-left',
             'badge_en' => 'required|string|max:255',
             'badge_dari' => 'required|string|max:255',
@@ -40,7 +42,16 @@ class HeroSlideController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        // Convert newlines to arrays for titles
+        /* ── Handle file upload ── */
+        if ($request->hasFile('image_file')) {
+            $file = $request->file('image_file');
+            $ext = $file->getClientOriginalExtension();
+            $name = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . time();
+            $path = $file->storeAs('uploads', $name . '.' . $ext, 'public');
+            $validated['image'] = $path; // e.g. uploads/project-hero-1234567890.webp
+        }
+
+        /* ── Convert textareas to arrays ── */
         foreach (['en', 'dari', 'pashto'] as $lang) {
             $validated["title_{$lang}"] = array_values(array_filter(array_map('trim', explode("\n", $validated["title_{$lang}"]))));
             $validated["highlights_{$lang}"] = $validated["highlights_{$lang}"]
@@ -63,7 +74,7 @@ class HeroSlideController extends Controller
     public function update(Request $request, HeroSlide $heroSlide)
     {
         $validated = $request->validate([
-            'image' => 'required|string|max:255',
+            'image_file' => 'nullable|image|mimes:webp,jpg,jpeg,png|max:2048',
             'ken_burns' => 'required|in:zoom-in,zoom-out,pan-right,pan-left',
             'badge_en' => 'required|string|max:255',
             'badge_dari' => 'required|string|max:255',
@@ -81,6 +92,24 @@ class HeroSlideController extends Controller
             'is_active' => 'boolean',
         ]);
 
+        /* ── Handle file upload ── */
+        if ($request->hasFile('image_file')) {
+            // Delete old image
+            if ($heroSlide->image && Storage::disk('public')->exists($heroSlide->image)) {
+                Storage::disk('public')->delete($heroSlide->image);
+            }
+
+            $file = $request->file('image_file');
+            $ext = $file->getClientOriginalExtension();
+            $name = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . time();
+            $path = $file->storeAs('uploads', $name . '.' . $ext, 'public');
+            $validated['image'] = $path;
+        } else {
+            // Keep existing image; don't overwrite with empty value
+            unset($validated['image']);
+        }
+
+        /* ── Convert textareas to arrays ── */
         foreach (['en', 'dari', 'pashto'] as $lang) {
             $validated["title_{$lang}"] = array_values(array_filter(array_map('trim', explode("\n", $validated["title_{$lang}"]))));
             $validated["highlights_{$lang}"] = $validated["highlights_{$lang}"]
@@ -97,6 +126,11 @@ class HeroSlideController extends Controller
 
     public function destroy(HeroSlide $heroSlide)
     {
+        // Delete image file
+        if ($heroSlide->image && Storage::disk('public')->exists($heroSlide->image)) {
+            Storage::disk('public')->delete($heroSlide->image);
+        }
+
         $heroSlide->delete();
         return redirect()->route('admin.hero-slides.index')->with('success', 'Hero slide deleted successfully.');
     }

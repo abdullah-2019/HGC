@@ -156,7 +156,7 @@ export default function HeroSection() {
               className={`absolute inset-[-5%] w-[110%] h-[110%] bg-cover bg-center will-change-transform ${getKenBurnsClass(
                 slide.ken_burns
               )}`}
-              style={{ backgroundImage: `url('${slide.image}')` }}
+              style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/storage/${slide.image}')` }}
             />
           </div>
         );
