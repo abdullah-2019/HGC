@@ -9,56 +9,28 @@ import {
   ArrowLeft,
   MapPin,
   Clock,
-  Users,
-  ChevronRight,
   Ticket,
+  Loader2,
 } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import { motion, AnimatePresence } from "framer-motion";
 
-// ─── Static Dummy Data ─────────────────────────────────────────────
-const DUMMY_EVENTS = [
-  {
-    id: 1,
-    slug: "afghanistan-infrastructure-summit-2026",
-    title: "Afghanistan Infrastructure & Development Summit 2026",
-    description:
-      "Join industry leaders, government officials, and international partners for a two-day summit focused on Afghanistan's infrastructure roadmap. Keynote speakers include ministers of public works and representatives from the World Bank.",
-    location: "Kabul International Conference Center",
-    event_date: "2026-09-15",
-    event_time: "09:00 AM - 05:00 PM",
-    cover_image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80",
-    is_upcoming: true,
-  },
-  {
-    id: 2,
-    slug: "hgc-annual-safety-workshop",
-    title: "HGC Annual Construction Safety & Standards Workshop",
-    description:
-      "A comprehensive training program for engineers, site managers, and safety officers across all HGC subsidiaries. Covers OSHA standards, hazard identification, and emergency response protocols.",
-    location: "HGC Training Center, Kabul",
-    event_date: "2026-08-25",
-    event_time: "08:30 AM - 04:00 PM",
-    cover_image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80",
-    is_upcoming: false,
-  },
-  {
-    id: 3,
-    slug: "herat-mining-expo-2026",
-    title: "Herat Mining & Minerals Expo 2026",
-    description:
-      "Showcasing Afghanistan's rich mineral resources and investment opportunities. Al-Bahrain Mining Company will present its latest extraction technologies and sustainability initiatives.",
-    location: "Herat Exhibition Grounds",
-    event_date: "2026-10-05",
-    event_time: "10:00 AM - 06:00 PM",
-    cover_image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80",
-    is_upcoming: true,
-  },
-  
-];
+interface EventItem {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  location: string | null;
+  event_date: string;
+  event_time: string | null;
+  cover_image: string | null;
+  is_upcoming: boolean;
+}
 
-// ─── Helpers ───────────────────────────────────────────────────────
-function formatEventDate(dateStr: string, lang: string): { day: string; month: string; year: string; weekday: string } {
+function formatEventDate(
+  dateStr: string,
+  lang: string
+): { day: string; month: string; year: string; weekday: string } {
   const date = new Date(dateStr);
   const day = date.getDate().toString().padStart(2, "0");
   const year = date.getFullYear().toString();
@@ -79,14 +51,39 @@ function formatEventDate(dateStr: string, lang: string): { day: string; month: s
   return { day, month, year, weekday };
 }
 
-// ─── Component ─────────────────────────────────────────────────────
 export default function EventsSection() {
   const { lang } = useI18n();
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const events = DUMMY_EVENTS;
+  /* Fetch events from API */
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/events?lang=${lang}`,
+          { headers: { Accept: "application/json" } }
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (json.success) {
+          setEvents(json.data);
+          setActiveIndex(0);
+        }
+      } catch (err) {
+        console.error("Events fetch error:", err);
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, [lang]);
+
   const total = events.length;
 
   const goTo = useCallback(
@@ -103,21 +100,34 @@ export default function EventsSection() {
 
   // Auto-play
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || total === 0) return;
     const timer = setInterval(next, 7000);
     return () => clearInterval(timer);
-  }, [isPaused, next]);
+  }, [isPaused, next, total]);
 
-  // Clamp activeIndex if it exceeds bounds (e.g. after removing items)
+  // Clamp activeIndex if it exceeds bounds
   useEffect(() => {
-    if (activeIndex >= total) {
+    if (activeIndex >= total && total > 0) {
       setActiveIndex(0);
       setDirection(1);
     }
   }, [total, activeIndex]);
 
-  // ─── Don't render if no events ─────────────────────────────────
-  if (events.length === 0) return null;
+  /* Loading state — still render section while loading to avoid layout shift */
+  if (loading) {
+    return (
+      <section className="py-24 bg-hgc-bg-alt relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-10 h-10 text-hgc-gold animate-spin" />
+        </div>
+      </section>
+    );
+  }
+
+  /* No events — hide the entire section */
+  if (events.length === 0) {
+    return null;
+  }
 
   const current = events[activeIndex] || events[0];
   const dateParts = formatEventDate(current.event_date, lang);
@@ -126,8 +136,8 @@ export default function EventsSection() {
     lang === "en"
       ? "Upcoming Events"
       : lang === "dari"
-      ? "رویدادهای پیش رو"
-      : "راتلونکې پیښې";
+        ? "رویدادهای پیش رو"
+        : "راتلونکې پیښې";
 
   const sectionTitle =
     lang === "en" ? (
@@ -148,15 +158,18 @@ export default function EventsSection() {
     lang === "en"
       ? "View All Events"
       : lang === "dari"
-      ? "مشاهده همه رویدادها"
-      : "ټولې پیښې وګورئ";
+        ? "مشاهده همه رویدادها"
+        : "ټولې پیښې وګورئ";
 
   const learnMoreLabel =
     lang === "en"
       ? "Learn More"
       : lang === "dari"
-      ? "بیشتر بدانید"
-      : "نور معلومات";
+        ? "بیشتر بدانید"
+        : "نور معلومات";
+
+  const upcomingLabel =
+    lang === "en" ? "Upcoming" : lang === "dari" ? "پیش رو" : "راتلونکی";
 
   // Animation variants
   const imageVariants = {
@@ -176,15 +189,6 @@ export default function EventsSection() {
       opacity: 0,
       scale: 0.98,
       transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-    }),
-  };
-
-  const textVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: 0.15 + i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
     }),
   };
 
@@ -240,14 +244,18 @@ export default function EventsSection() {
                   exit="exit"
                   className="absolute inset-0"
                 >
-                  <Image
-                    src={current.cover_image}
-                    alt={current.title}
-                    fill
-                    className="object-cover"
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                  />
+                  {current.cover_image ? (
+                    <Image
+                      src={current.cover_image}
+                      alt={current.title}
+                      fill
+                      className="object-cover"
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 60vw"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0F2B5B] to-[#1a1a2e]" />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-hgc-overlay/90 via-hgc-overlay/30 to-transparent" />
                   <div className="absolute inset-0 bg-gradient-to-r from-hgc-overlay/60 to-transparent" />
                 </motion.div>
@@ -273,11 +281,7 @@ export default function EventsSection() {
                 <div className="absolute top-6 right-6 z-10">
                   <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-hgc-gold text-hgc-text text-xs font-bold shadow-lg">
                     <Ticket className="w-3.5 h-3.5" />
-                    {lang === "en"
-                      ? "Upcoming"
-                      : lang === "dari"
-                      ? "پیش رو"
-                      : "راتلونکی"}
+                    {upcomingLabel}
                   </span>
                 </div>
               )}
@@ -311,10 +315,7 @@ export default function EventsSection() {
                       )}
                     </div>
 
-                  
-
                     <div className="flex items-center gap-3">
-                      
                       <Link
                         href={`/events/${current.slug}`}
                         className="inline-flex items-center gap-1 text-hgc-surface text-sm font-medium hover:text-hgc-gold transition-colors"
@@ -352,7 +353,6 @@ export default function EventsSection() {
             {events.map((event, idx) => {
               const isActive = idx === activeIndex;
               const dp = formatEventDate(event.event_date, lang);
-              
 
               return (
                 <button
@@ -401,7 +401,6 @@ export default function EventsSection() {
                         </span>
                       )}
                     </div>
-                    
                   </div>
 
                   {/* Active indicator */}

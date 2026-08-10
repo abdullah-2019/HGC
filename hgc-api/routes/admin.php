@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\About\AboutCoreValueController;
 use App\Http\Controllers\Admin\About\AboutStoryController;
 use App\Http\Controllers\Admin\About\AboutStoryHighlightController;
 use App\Http\Controllers\Admin\HeroSlideController;
+use App\Http\Controllers\Admin\EventController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
@@ -46,7 +47,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::resource('testimonials', TestimonialController::class);
 
     // News Articles
-    //Route::resource('news', NewsArticleController::class)->parameters(['news' => 'newsArticle']);
     Route::get('/news', [NewsArticleController::class, 'index'])->name('news.index');
     Route::get('/news/create', [NewsArticleController::class, 'create'])->name('news.create');
     Route::post('/news', [NewsArticleController::class, 'store'])->name('news.store');
@@ -54,6 +54,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::put('/news/{article}', [NewsArticleController::class, 'update'])->name('news.update');
     Route::delete('/news/{article}', [NewsArticleController::class, 'destroy'])->name('news.destroy');
     
+    // Events
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+
     // Communications & Inbound Portals
     Route::get('contacts/submissions', [ContactSubmissionController::class, 'index'])->name('contacts.submissions');
     Route::get('contacts/inquiries', [ContactInquiryController::class, 'index'])->name('contacts.inquiries');

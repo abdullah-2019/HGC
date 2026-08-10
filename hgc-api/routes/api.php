@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\WhyChooseController;
 use App\Http\Controllers\Api\SiteSettingController;
 use App\Http\Controllers\Api\HeroSlideController;
 use App\Http\Controllers\Api\NewsArticleController;
+use App\Http\Controllers\Api\EventController;
 
 // ─── Auth ───
 Route::get('/user', function (Request $request) {
@@ -138,4 +139,10 @@ Route::get('/site-settings', [SiteSettingController::class, 'index']);
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsArticleController::class, 'index']);
     Route::get('/{slug}', [NewsArticleController::class, 'show']);
+});
+
+// ─── Events ───
+Route::prefix('events')->group(function () {
+    Route::get('/', [EventController::class, 'index']);
+    Route::get('/{slug}', [EventController::class, 'show']);
 });
