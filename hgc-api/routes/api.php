@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\AboutController;
 use App\Http\Controllers\Api\WhyChooseController;
 use App\Http\Controllers\Api\SiteSettingController;
 use App\Http\Controllers\Api\HeroSlideController;
+use App\Http\Controllers\Api\NewsArticleController;
 
 // ─── Auth ───
 Route::get('/user', function (Request $request) {
@@ -116,15 +117,15 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     // });
 
     Route::prefix('about')->group(function () {
-    Route::get('/', [AboutPageController::class, 'index']);
-    Route::get('/settings', [AboutPageController::class, 'settings']);
-    Route::get('/story', [AboutPageController::class, 'story']);
-    Route::get('/stats', [AboutPageController::class, 'stats']);
-    Route::get('/carousel', [AboutPageController::class, 'carousel']);
-    Route::get('/mission', [AboutPageController::class, 'mission']);
-    Route::get('/vision', [AboutPageController::class, 'vision']);
-    Route::get('/core-values', [AboutPageController::class, 'coreValues']);
-});
+        Route::get('/', [AboutPageController::class, 'index']);
+        Route::get('/settings', [AboutPageController::class, 'settings']);
+        Route::get('/story', [AboutPageController::class, 'story']);
+        Route::get('/stats', [AboutPageController::class, 'stats']);
+        Route::get('/carousel', [AboutPageController::class, 'carousel']);
+        Route::get('/mission', [AboutPageController::class, 'mission']);
+        Route::get('/vision', [AboutPageController::class, 'vision']);
+        Route::get('/core-values', [AboutPageController::class, 'coreValues']);
+    });
 
 });
 
@@ -132,3 +133,9 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 Route::get('/homepage-about', [AboutController::class, 'index']);
 Route::get('/why-choose', [WhyChooseController::class, 'index']);
 Route::get('/site-settings', [SiteSettingController::class, 'index']);
+
+// ─── News ───
+Route::prefix('news')->group(function () {
+    Route::get('/', [NewsArticleController::class, 'index']);
+    Route::get('/{slug}', [NewsArticleController::class, 'show']);
+});
