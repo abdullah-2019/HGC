@@ -352,6 +352,30 @@
                 </a>
             </div>
 
+            <!-- Videos -->
+            <div
+                class="flex flex-col bg-gray-800 border border-gray-700 rounded-lg hover:border-pink-500 transition-all group">
+                <a href="{{ route('admin.videos.index') }}" class="flex items-center gap-3 p-3 flex-1">
+                    <div
+                        class="w-9 h-9 rounded-lg bg-pink-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-pink-500/20">
+                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-300 group-hover:text-white">Videos</span>
+                </a>
+                <a href="{{ route('admin.videos.create') }}"
+                    class="flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-pink-400 bg-pink-500/5 border-t border-gray-700 rounded-b-lg hover:bg-pink-500/10 hover:text-pink-300 transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add Video
+                </a>
+            </div>
+
         </div>
     </div>
 

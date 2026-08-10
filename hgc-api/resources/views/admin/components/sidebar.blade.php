@@ -267,7 +267,21 @@
                 </a>
             </li>
 
-            <!-- Settings -->
+            {{-- Videos --}}
+            <li>
+                <a href="{{ route('admin.videos.index') }}"
+                    class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.videos.*') ? 'bg-primary-500/10 text-primary-400' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Videos</span>
+                </a>
+            <li>
+
+                <!-- Settings -->
             <li>
                 <a href="{{ route('admin.settings.index') }}"
                     class="flex items-center p-2.5 text-white rounded-lg hover:bg-gray-700 group transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-gray-700' : '' }}">

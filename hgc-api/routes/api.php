@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\SiteSettingController;
 use App\Http\Controllers\Api\HeroSlideController;
 use App\Http\Controllers\Api\NewsArticleController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\SiteVideoController;
+
 
 // ─── Auth ───
 Route::get('/user', function (Request $request) {
@@ -146,3 +148,5 @@ Route::prefix('events')->group(function () {
     Route::get('/', [EventController::class, 'index']);
     Route::get('/{slug}', [EventController::class, 'show']);
 });
+
+Route::get('/videos', [SiteVideoController::class, 'index']);

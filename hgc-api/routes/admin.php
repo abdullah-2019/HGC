@@ -24,6 +24,8 @@ use App\Http\Controllers\Admin\About\AboutStoryController;
 use App\Http\Controllers\Admin\About\AboutStoryHighlightController;
 use App\Http\Controllers\Admin\HeroSlideController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\SiteVideoController;
+
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
@@ -109,4 +111,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // Hero Slides
     Route::resource('hero-slides', HeroSlideController::class)->except(['show']);
 
+    Route::resource('videos', SiteVideoController::class)->except(['show'])->names([
+        'index' => 'videos.index',
+        'create' => 'videos.create',
+        'store' => 'videos.store',
+        'edit' => 'videos.edit',
+        'update' => 'videos.update',
+        'destroy' => 'videos.destroy',
+    ]);
+
 });
+
