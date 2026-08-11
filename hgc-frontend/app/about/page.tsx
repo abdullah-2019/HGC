@@ -129,11 +129,11 @@ async function fetchAboutPageData(): Promise<AboutPageData> {
   const cacheBuster = isDev ? `?_t=${Date.now()}` : "";
 
   const fetchOptions: RequestInit = {
-    ...(isDev 
-      ? { cache: "no-store" as const } 
+    ...(isDev
+      ? { cache: "no-store" as const }
       : { next: { revalidate: 60, tags: ["about-page"] } }
     ),
-    headers: { 
+    headers: {
       Accept: "application/json",
       ...(isDev ? { "X-Skip-Cache": "true" } : {}),
     },
