@@ -70,8 +70,10 @@
 
                     <!-- Basic Info Tab -->
                     <div x-show="activeTab === 'basic'" x-cloak>
-                        <div class="space-y-6">
-                            <div>
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+
+                            <!-- Slug — full width -->
+                            <div class="md:col-span-6">
                                 <label for="slug" class="block mb-2 text-sm font-medium text-white">Slug <span
                                         class="text-red-400">*</span></label>
                                 <input type="text" id="slug" name="slug" value="{{ old('slug') }}" required
@@ -82,8 +84,8 @@
                                 @enderror
                             </div>
 
-                            <!-- Name EN -->
-                            <div>
+                            <!-- Name EN — full width -->
+                            <div class="md:col-span-6">
                                 <label for="name_en" class="block mb-2 text-sm font-medium text-white">Name (English) <span
                                         class="text-red-400">*</span></label>
                                 <input type="text" id="name_en" name="name_en" value="{{ old('name_en') }}" required
@@ -94,8 +96,8 @@
                                 @enderror
                             </div>
 
-                            <!-- Name Dari -->
-                            <div>
+                            <!-- Name Dari — full width -->
+                            <div class="md:col-span-6">
                                 <label for="name_dari" class="block mb-2 text-sm font-medium text-white">Name (Dari)</label>
                                 <input type="text" id="name_dari" name="name_dari" value="{{ old('name_dari') }}"
                                     dir="rtl"
@@ -106,8 +108,8 @@
                                 @enderror
                             </div>
 
-                            <!-- Name Pashto -->
-                            <div>
+                            <!-- Name Pashto — full width -->
+                            <div class="md:col-span-6">
                                 <label for="name_pashto" class="block mb-2 text-sm font-medium text-white">Name
                                     (Pashto)</label>
                                 <input type="text" id="name_pashto" name="name_pashto" value="{{ old('name_pashto') }}"
@@ -119,8 +121,8 @@
                                 @enderror
                             </div>
 
-                            <!-- Category -->
-                            <div>
+                            <!-- Category — half row -->
+                            <div class="md:col-span-3">
                                 <label for="category_id" class="block mb-2 text-sm font-medium text-white">Category <span
                                         class="text-red-400">*</span></label>
                                 <select id="category_id" name="category_id" required
@@ -138,8 +140,8 @@
                                 @enderror
                             </div>
 
-                            <!-- Company -->
-                            <div>
+                            <!-- Company — half row -->
+                            <div class="md:col-span-3">
                                 <label for="company_id" class="block mb-2 text-sm font-medium text-white">Company</label>
                                 <select id="company_id" name="company_id"
                                     class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
@@ -156,8 +158,8 @@
                                 @enderror
                             </div>
 
-                            <!-- Origin -->
-                            <div>
+                            <!-- Origin — 1/3 row -->
+                            <div class="md:col-span-2">
                                 <label for="origin" class="block mb-2 text-sm font-medium text-white">Origin</label>
                                 <input type="text" id="origin" name="origin" value="{{ old('origin') }}"
                                     class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
@@ -167,8 +169,8 @@
                                 @enderror
                             </div>
 
-                            <!-- Grade -->
-                            <div>
+                            <!-- Grade — 1/3 row -->
+                            <div class="md:col-span-2">
                                 <label for="grade" class="block mb-2 text-sm font-medium text-white">Grade</label>
                                 <input type="text" id="grade" name="grade" value="{{ old('grade') }}"
                                     class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
@@ -178,8 +180,8 @@
                                 @enderror
                             </div>
 
-                            <!-- Purity -->
-                            <div>
+                            <!-- Purity — 1/3 row -->
+                            <div class="md:col-span-2">
                                 <label for="purity" class="block mb-2 text-sm font-medium text-white">Purity</label>
                                 <input type="text" id="purity" name="purity" value="{{ old('purity') }}"
                                     class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
@@ -188,9 +190,9 @@
                                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
+
                         </div>
                     </div>
-
                     <!-- Content Tab -->
                     <div x-show="activeTab === 'content'" x-cloak>
                         <div class="space-y-6">

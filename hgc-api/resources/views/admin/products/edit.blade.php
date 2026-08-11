@@ -72,68 +72,64 @@
 
                     <!-- Basic Info Tab -->
                     <div x-show="activeTab === 'basic'" x-cloak>
-                        <!-- FIX: Changed from grid-cols-2 to grid-cols-9 on large screens, with a clean md layout step down -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-9 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
 
-                            <!-- Slug (FIX: Changed from col-span-2 to a single grid-column slot) -->
-                            <div class="col-span-1">
-                                <label for="slug" class="block mb-2 text-sm font-medium text-white truncate">Slug <span
+                            <!-- Slug — full width -->
+                            <div class="md:col-span-6">
+                                <label for="slug" class="block mb-2 text-sm font-medium text-white">Slug <span
                                         class="text-red-400">*</span></label>
-                                <input type="text" id="slug" name="slug"
-                                    value="{{ old('slug', $product->slug) }}" required
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500"
+                                <input type="text" id="slug" name="slug" value="{{ old('slug', $product->slug) }}" required
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
                                     placeholder="product-slug">
                                 @error('slug')
                                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Name EN -->
-                            <div class="col-span-1">
-                                <label for="name_en" class="block mb-2 text-sm font-medium text-white truncate">Name (EN)
-                                    <span class="text-red-400">*</span></label>
-                                <input type="text" id="name_en" name="name_en"
-                                    value="{{ old('name_en', $product->name_en) }}" required
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500"
-                                    placeholder="English name">
+                            <!-- Name EN — full width -->
+                            <div class="md:col-span-6">
+                                <label for="name_en" class="block mb-2 text-sm font-medium text-white">Name (English) <span
+                                        class="text-red-400">*</span></label>
+                                <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $product->name_en) }}" required
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                                    placeholder="Product name in English">
                                 @error('name_en')
                                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Name Dari -->
-                            <div class="col-span-1">
-                                <label for="name_dari" class="block mb-2 text-sm font-medium text-white truncate">Name
-                                    (Dari)</label>
-                                <input type="text" id="name_dari" name="name_dari"
-                                    value="{{ old('name_dari', $product->name_dari) }}" dir="rtl"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500"
-                                    placeholder="دری">
+                            <!-- Name Dari — full width -->
+                            <div class="md:col-span-6">
+                                <label for="name_dari" class="block mb-2 text-sm font-medium text-white">Name (Dari)</label>
+                                <input type="text" id="name_dari" name="name_dari" value="{{ old('name_dari', $product->name_dari) }}"
+                                    dir="rtl"
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                                    placeholder="نام محصول به دری">
                                 @error('name_dari')
                                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Name Pashto -->
-                            <div class="col-span-1">
-                                <label for="name_pashto" class="block mb-2 text-sm font-medium text-white truncate">Name
+                            <!-- Name Pashto — full width -->
+                            <div class="md:col-span-6">
+                                <label for="name_pashto" class="block mb-2 text-sm font-medium text-white">Name
                                     (Pashto)</label>
-                                <input type="text" id="name_pashto" name="name_pashto"
-                                    value="{{ old('name_pashto', $product->name_pashto) }}" dir="rtl"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500"
-                                    placeholder="پښتو">
+                                <input type="text" id="name_pashto" name="name_pashto" value="{{ old('name_pashto', $product->name_pashto) }}"
+                                    dir="rtl"
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                                    placeholder="د محصول نوم په پښتو">
                                 @error('name_pashto')
                                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Category -->
-                            <div class="col-span-1">
-                                <label for="category_id" class="block mb-2 text-sm font-medium text-white truncate">Category
-                                    <span class="text-red-400">*</span></label>
+                            <!-- Category — half row -->
+                            <div class="md:col-span-3">
+                                <label for="category_id" class="block mb-2 text-sm font-medium text-white">Category <span
+                                        class="text-red-400">*</span></label>
                                 <select id="category_id" name="category_id" required
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-pointer">
-                                    <option value="">Select</option>
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                    <option value="">Select Category</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}"
                                             {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
@@ -146,13 +142,12 @@
                                 @enderror
                             </div>
 
-                            <!-- Company -->
-                            <div class="col-span-1">
-                                <label for="company_id"
-                                    class="block mb-2 text-sm font-medium text-white truncate">Company</label>
+                            <!-- Company — half row -->
+                            <div class="md:col-span-3">
+                                <label for="company_id" class="block mb-2 text-sm font-medium text-white">Company</label>
                                 <select id="company_id" name="company_id"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-pointer">
-                                    <option value="">Select</option>
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                    <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
                                             {{ old('company_id', $product->company_id) == $company->id ? 'selected' : '' }}>
@@ -165,47 +160,41 @@
                                 @enderror
                             </div>
 
-                            <!-- Origin -->
-                            <div class="col-span-1">
-                                <label for="origin"
-                                    class="block mb-2 text-sm font-medium text-white truncate">Origin</label>
-                                <input type="text" id="origin" name="origin"
-                                    value="{{ old('origin', $product->origin) }}"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500"
-                                    placeholder="e.g. Kabul">
+                            <!-- Origin — 1/3 row -->
+                            <div class="md:col-span-2">
+                                <label for="origin" class="block mb-2 text-sm font-medium text-white">Origin</label>
+                                <input type="text" id="origin" name="origin" value="{{ old('origin', $product->origin) }}"
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                                    placeholder="e.g. Afghanistan, China">
                                 @error('origin')
                                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Grade -->
-                            <div class="col-span-1">
-                                <label for="grade"
-                                    class="block mb-2 text-sm font-medium text-white truncate">Grade</label>
-                                <input type="text" id="grade" name="grade"
-                                    value="{{ old('grade', $product->grade) }}"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500"
-                                    placeholder="e.g. A Grade">
+                            <!-- Grade — 1/3 row -->
+                            <div class="md:col-span-2">
+                                <label for="grade" class="block mb-2 text-sm font-medium text-white">Grade</label>
+                                <input type="text" id="grade" name="grade" value="{{ old('grade', $product->grade) }}"
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                                    placeholder="e.g. A Grade, M25">
                                 @error('grade')
                                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Purity -->
-                            <div class="col-span-1">
-                                <!-- This is where your closing div tags join your code cleanly -->
-                                <label for="purity"
-                                    class="block mb-2 text-sm font-medium text-white truncate">Purity</label>
-                                <input type="text" id="purity" name="purity"
-                                    value="{{ old('purity', $product->purity ?? '') }}"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500"
-                                    placeholder="e.g. 99%">
+                            <!-- Purity — 1/3 row -->
+                            <div class="md:col-span-2">
+                                <label for="purity" class="block mb-2 text-sm font-medium text-white">Purity</label>
+                                <input type="text" id="purity" name="purity" value="{{ old('purity', $product->purity ?? '') }}"
+                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                                    placeholder="e.g. 98%, 99.5%">
+                                @error('purity')
+                                    <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
 
                         </div>
                     </div>
-
-
                     <!-- Content Tab -->
                     <div x-show="activeTab === 'content'" x-cloak>
                         <div class="space-y-6">
