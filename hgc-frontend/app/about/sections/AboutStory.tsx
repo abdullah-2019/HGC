@@ -138,7 +138,7 @@ export default function AboutStory({ story }: AboutStoryProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-hgc-navy/40 via-transparent to-transparent" />
               </div>
 
-              {/* Floating Card — light theme */}
+              {/* Floating Card */}
               <div className={`absolute -bottom-6 bg-white border border-hgc-about-card-border rounded-2xl p-5 shadow-xl glow-gold max-w-[200px] ${lang === 'dari' || lang === 'pashto' ? '-right-6' : '-left-6'}`}>
                 <p className="text-hgc-about-gold text-3xl font-bold mb-1">{data.floatingCard.value}</p>
                 <p className="text-hgc-about-text-muted text-sm">{floatingLabel}</p>
