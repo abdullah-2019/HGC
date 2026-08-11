@@ -36,7 +36,6 @@ export default function VideoSection() {
     fetchVideo();
   }, []);
 
-  /* Loading */
   if (loading) {
     return (
       <section className="py-16 bg-hgc-bg-alt">
@@ -47,12 +46,10 @@ export default function VideoSection() {
     );
   }
 
-  /* No active video — hide entire section */
   if (!video || (!video.video_file && !video.video_url)) {
     return null;
   }
 
-  /* Safe local copy for TypeScript */
   const videoUrl = video.video_url ?? "";
   const isYouTube =
     videoUrl.includes("youtube") || videoUrl.includes("youtu.be");
@@ -63,24 +60,26 @@ export default function VideoSection() {
         <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden bg-hgc-card-alt shadow-2xl border border-hgc-border">
           <div className="relative aspect-video">
             {video.video_file ? (
-              /* Local video takes priority */
+              /* Local video — autoplay muted (browser requirement) */
               <video
                 src={video.video_file}
-                controls
+                autoPlay
+                muted
+                loop
                 playsInline
+                controls
                 className="absolute inset-0 w-full h-full"
               />
             ) : isYouTube ? (
-              /* YouTube fallback */
+              /* YouTube — autoplay=1 & mute=1 required */
               <iframe
-                src={`${videoUrl}${videoUrl.includes("?") ? "&" : "?"}rel=0&modestbranding=1`}
+                src={`${videoUrl}${videoUrl.includes("?") ? "&" : "?"}autoplay=1&mute=1&rel=0&modestbranding=1&loop=1&playlist=${extractYouTubeId(videoUrl)}`}
                 title="Video"
                 className="absolute inset-0 w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
             ) : (
-              /* Generic embed fallback */
               <iframe
                 src={videoUrl}
                 title="Video"
@@ -93,4 +92,10 @@ export default function VideoSection() {
       </div>
     </section>
   );
+}
+
+/* Helper to extract YouTube ID for loop playlist param */
+function extractYouTubeId(url: string): string {
+  const match = url.match(/(?:embed\/|v=|\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : "";
 }

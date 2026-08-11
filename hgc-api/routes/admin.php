@@ -64,6 +64,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
+    Route::resource('videos', SiteVideoController::class)->except(['show'])->names([
+        'index' => 'videos.index',
+        'create' => 'videos.create',
+        'store' => 'videos.store',
+        'edit' => 'videos.edit',
+        'update' => 'videos.update',
+        'destroy' => 'videos.destroy',
+    ]);
+    
     // Communications & Inbound Portals
     Route::get('contacts/submissions', [ContactSubmissionController::class, 'index'])->name('contacts.submissions');
     Route::get('contacts/inquiries', [ContactInquiryController::class, 'index'])->name('contacts.inquiries');
@@ -110,15 +119,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     // Hero Slides
     Route::resource('hero-slides', HeroSlideController::class)->except(['show']);
-
-    Route::resource('videos', SiteVideoController::class)->except(['show'])->names([
-        'index' => 'videos.index',
-        'create' => 'videos.create',
-        'store' => 'videos.store',
-        'edit' => 'videos.edit',
-        'update' => 'videos.update',
-        'destroy' => 'videos.destroy',
-    ]);
 
 });
 
