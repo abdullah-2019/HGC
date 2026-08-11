@@ -73,10 +73,11 @@
   --color-alkoozi-teal: #00838F;
 
   /* ═══ Header/Footer Theme ═══ */
-  --color-hgc-header-text: #0F2B5B;
-  --color-hgc-header-text-muted: #1A3A6B;
-  --color-hgc-header-text-faint: #475569;
-  --color-hgc-header-text-ghost: #64748B;
+  /* UPDATED: All header/footer text colors darkened to near-black for visibility */
+  --color-hgc-header-text: #0A0A0A;
+  --color-hgc-header-text-muted: #1A1A1A;
+  --color-hgc-header-text-faint: #2A2A2A;
+  --color-hgc-header-text-ghost: #404040;
 
   --color-hgc-accent: #FFFFFF;
   --color-hgc-accent-muted: rgba(255,255,255,0.70);
@@ -99,9 +100,10 @@
   --color-hgc-header-bg-hover: rgba(255,255,255,0.06);
   --color-hgc-header-bg-active: rgba(255,255,255,0.10);
 
+  /* UPDATED: Dropdown text also darkened */
   --color-hgc-dropdown-bg: #FFFFFF;
-  --color-hgc-dropdown-text: #0F2B5B;
-  --color-hgc-dropdown-text-muted: #475569;
+  --color-hgc-dropdown-text: #0A0A0A;
+  --color-hgc-dropdown-text-muted: #333333;
   --color-hgc-dropdown-border: rgba(15,43,91,0.08);
 
   /* Social Brand Colors */
