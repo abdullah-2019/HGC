@@ -494,12 +494,21 @@ export default function Footer() {
                         className="group flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-hgc-accent/5 transition-all duration-200"
                       >
                         <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 overflow-hidden"
                           style={{
                             backgroundColor: isHovered ? `${company.accent_color}25` : `${company.accent_color}10`,
                           }}
                         >
-                          <Icon className="w-4 h-4 transition-colors duration-200" style={{ color: company.accent_color }} />
+                          {company.logo_url ? (
+                            <img
+                              src={company.logo_url}
+                              alt={company.short_name}
+                              className="w-5 h-5 object-contain"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <Icon className="w-4 h-4 transition-colors duration-200" style={{ color: company.accent_color }} />
+                          )}
                         </div>
                         <span className="text-hgc-header-text/60 group-hover:text-hgc-header-text text-sm transition-colors flex-1">{company.name}</span>
                         <ArrowUpRight className={`w-3.5 h-3.5 transition-all duration-200 ${isHovered ? "text-hgc-accent opacity-100" : "text-hgc-accent/20 opacity-0"}`} />
