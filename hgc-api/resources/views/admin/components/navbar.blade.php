@@ -57,7 +57,6 @@
                         <p class="text-xs text-gray-400">Administrator</p>
                     </div>
                     <a href="{{route('profile.edit')}}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Profile</a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Settings</a>
                     <div class="border-t border-gray-700 my-1"></div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
