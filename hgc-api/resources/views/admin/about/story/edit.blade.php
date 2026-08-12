@@ -452,24 +452,19 @@
                 </div>
 
 
-                                {{-- Story Highlights Card --}}
+                {{-- Story Highlights Card --}}
                 <div class="p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
                     <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-700">
                         <div class="flex items-center gap-2">
-                            <span class="flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-yellow-500 rounded-full">
+                            <span
+                                class="flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-yellow-500 rounded-full">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                                 </svg>
                             </span>
                             <h3 class="text-base font-semibold text-white">Story Highlights</h3>
                         </div>
-                        <button type="button" onclick="addHighlightRow()" 
-                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-yellow-400 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 hover:text-yellow-300 focus:ring-2 focus:ring-yellow-500">
-                            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            Add Highlight
-                        </button>
                     </div>
 
                     <div id="highlights-container" class="space-y-3">
@@ -480,87 +475,103 @@
                             }
                         @endphp
 
-                        @foreach($highlights as $index => $highlight)
-                            <div class="highlight-row p-3 bg-gray-700 rounded-lg border border-gray-600" data-index="{{ $index }}">
-                                <input type="hidden" name="highlights[{{ $index }}][id]" value="{{ $highlight['id'] ?? '' }}">
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                        @foreach ($highlights as $index => $highlight)
+                            <div class="highlight-row p-4 bg-gray-700 rounded-lg border border-gray-600"
+                                data-index="{{ $index }}">
+                                <input type="hidden" name="highlights[{{ $index }}][id]"
+                                    value="{{ $highlight['id'] ?? '' }}">
+
+                                <div class="grid grid-cols-1 gap-3">
                                     {{-- Icon --}}
-                                    <div class="md:col-span-2">
+                                    <div>
                                         <label class="block mb-1 text-xs font-medium text-gray-400">Icon</label>
-                                        <select name="highlights[{{ $index }}][icon_name]" 
-                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2">
-                                            <option value="Building2" {{ ($highlight['icon_name'] ?? '') == 'Building2' ? 'selected' : '' }}>Building</option>
-                                            <option value="Globe" {{ ($highlight['icon_name'] ?? '') == 'Globe' ? 'selected' : '' }}>Globe</option>
-                                            <option value="TrendingUp" {{ ($highlight['icon_name'] ?? '') == 'TrendingUp' ? 'selected' : '' }}>Trending Up</option>
-                                            <option value="Users" {{ ($highlight['icon_name'] ?? '') == 'Users' ? 'selected' : '' }}>Users</option>
-                                            <option value="Award" {{ ($highlight['icon_name'] ?? '') == 'Award' ? 'selected' : '' }}>Award</option>
-                                            <option value="Star" {{ ($highlight['icon_name'] ?? '') == 'Star' ? 'selected' : '' }}>Star</option>
-                                            <option value="Heart" {{ ($highlight['icon_name'] ?? '') == 'Heart' ? 'selected' : '' }}>Heart</option>
-                                            <option value="Zap" {{ ($highlight['icon_name'] ?? '') == 'Zap' ? 'selected' : '' }}>Zap</option>
+                                        <select name="highlights[{{ $index }}][icon_name]"
+                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5">
+                                            <option value="Building2"
+                                                {{ ($highlight['icon_name'] ?? '') == 'Building2' ? 'selected' : '' }}>
+                                                Building</option>
+                                            <option value="Globe"
+                                                {{ ($highlight['icon_name'] ?? '') == 'Globe' ? 'selected' : '' }}>Globe
+                                            </option>
+                                            <option value="TrendingUp"
+                                                {{ ($highlight['icon_name'] ?? '') == 'TrendingUp' ? 'selected' : '' }}>
+                                                Trending Up</option>
+                                            <option value="Users"
+                                                {{ ($highlight['icon_name'] ?? '') == 'Users' ? 'selected' : '' }}>Users
+                                            </option>
+                                            <option value="Award"
+                                                {{ ($highlight['icon_name'] ?? '') == 'Award' ? 'selected' : '' }}>Award
+                                            </option>
+                                            <option value="Star"
+                                                {{ ($highlight['icon_name'] ?? '') == 'Star' ? 'selected' : '' }}>Star
+                                            </option>
+                                            <option value="Heart"
+                                                {{ ($highlight['icon_name'] ?? '') == 'Heart' ? 'selected' : '' }}>Heart
+                                            </option>
+                                            <option value="Zap"
+                                                {{ ($highlight['icon_name'] ?? '') == 'Zap' ? 'selected' : '' }}>Zap
+                                            </option>
                                         </select>
                                     </div>
 
                                     {{-- Value Text --}}
-                                    <div class="md:col-span-2">
+                                    <div>
                                         <label class="block mb-1 text-xs font-medium text-gray-400">Value</label>
-                                        <input type="text" name="highlights[{{ $index }}][value_text]" 
+                                        <input type="text" name="highlights[{{ $index }}][value_text]"
                                             value="{{ $highlight['value_text'] ?? '' }}"
-                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2 placeholder-gray-500"
+                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 placeholder-gray-500"
                                             placeholder="e.g. 60">
                                     </div>
 
                                     {{-- Label EN --}}
-                                    <div class="md:col-span-2">
+                                    <div>
                                         <label class="block mb-1 text-xs font-medium text-gray-400">Label (EN)</label>
-                                        <input type="text" name="highlights[{{ $index }}][label_en]" 
+                                        <input type="text" name="highlights[{{ $index }}][label_en]"
                                             value="{{ $highlight['label_en'] ?? '' }}"
-                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2 placeholder-gray-500"
+                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 placeholder-gray-500"
                                             placeholder="e.g. 6 Companies">
                                     </div>
 
                                     {{-- Label Dari --}}
-                                    <div class="md:col-span-2">
-                                        <label class="block mb-1 text-xs font-medium text-gray-400">Label (DR)</label>
-                                        <input type="text" name="highlights[{{ $index }}][label_dari]" dir="rtl"
-                                            value="{{ $highlight['label_dari'] ?? '' }}"
-                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2 placeholder-gray-500"
+                                    <div>
+                                        <label class="block mb-1 text-xs font-medium text-gray-400">Label (Dari)</label>
+                                        <input type="text" name="highlights[{{ $index }}][label_dari]"
+                                            dir="rtl" value="{{ $highlight['label_dari'] ?? '' }}"
+                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 placeholder-gray-500"
                                             placeholder="به دری">
                                     </div>
 
                                     {{-- Label Pashto --}}
-                                    <div class="md:col-span-2">
-                                        <label class="block mb-1 text-xs font-medium text-gray-400">Label (PS)</label>
-                                        <input type="text" name="highlights[{{ $index }}][label_pashto]" dir="rtl"
-                                            value="{{ $highlight['label_pashto'] ?? '' }}"
-                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2 placeholder-gray-500"
+                                    <div>
+                                        <label class="block mb-1 text-xs font-medium text-gray-400">Label (Pashto)</label>
+                                        <input type="text" name="highlights[{{ $index }}][label_pashto]"
+                                            dir="rtl" value="{{ $highlight['label_pashto'] ?? '' }}"
+                                            class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 placeholder-gray-500"
                                             placeholder="په پښتو">
                                     </div>
 
                                     {{-- Sort + Active + Delete --}}
-                                    <div class="md:col-span-2 flex items-end gap-2">
+                                    <div class="flex items-end gap-3 pt-1">
                                         <div class="flex-1">
-                                            <label class="block mb-1 text-xs font-medium text-gray-400">Order</label>
-                                            <input type="number" name="highlights[{{ $index }}][sort_order]" 
+                                            <label class="block mb-1 text-xs font-medium text-gray-400">Sort Order</label>
+                                            <input type="number" name="highlights[{{ $index }}][sort_order]"
                                                 value="{{ $highlight['sort_order'] ?? $index }}"
-                                                class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2">
+                                                class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5">
                                         </div>
-                                        
-                                        <label class="flex items-center cursor-pointer mb-1">
-                                            <input type="hidden" name="highlights[{{ $index }}][is_active]" value="0">
-                                            <input type="checkbox" name="highlights[{{ $index }}][is_active]" value="1" 
-                                                {{ ($highlight['is_active'] ?? true) ? 'checked' : '' }}
-                                                class="sr-only peer">
-                                            <div class="w-9 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-yellow-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-yellow-500 relative"></div>
-                                        </label>
 
-                                        <button type="button" onclick="removeHighlightRow(this)" 
-                                            class="p-2 text-red-400 bg-gray-800 border border-gray-600 rounded-lg hover:bg-red-900 hover:text-red-300"
-                                            title="Remove">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                            </svg>
-                                        </button>
+                                        <div class="flex flex-col items-center gap-1">
+                                            <label class="block text-xs font-medium text-gray-400">Active</label>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="hidden" name="highlights[{{ $index }}][is_active]"
+                                                    value="0">
+                                                <input type="checkbox" name="highlights[{{ $index }}][is_active]"
+                                                    value="1" {{ $highlight['is_active'] ?? true ? 'checked' : '' }}
+                                                    class="sr-only peer">
+                                                <div
+                                                    class="w-9 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-yellow-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-yellow-500 relative">
+                                                </div>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -569,14 +580,17 @@
 
                     {{-- Empty state (hidden when rows exist) --}}
                     <div id="highlights-empty" class="hidden text-center py-8">
-                        <svg class="w-12 h-12 text-gray-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        <svg class="w-12 h-12 text-gray-600 mx-auto mb-3" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                         </svg>
                         <p class="text-gray-400 text-sm mb-3">No highlights yet.</p>
-                        <button type="button" onclick="addHighlightRow()" 
+                        <button type="button" onclick="addHighlightRow()"
                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-800">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
                             </svg>
                             Add First Highlight
                         </button>
@@ -1089,20 +1103,20 @@
             });
         });
 
-            // Highlights management
-    let highlightIndex = {{ count($highlights) }};
+        // Highlights management
+        let highlightIndex = {{ count($highlights) }};
 
-    function addHighlightRow() {
-        const container = document.getElementById('highlights-container');
-        const emptyState = document.getElementById('highlights-empty');
-        
-        emptyState.classList.add('hidden');
-        
-        const row = document.createElement('div');
-        row.className = 'highlight-row p-3 bg-gray-700 rounded-lg border border-gray-600';
-        row.dataset.index = highlightIndex;
-        
-        row.innerHTML = `
+        function addHighlightRow() {
+            const container = document.getElementById('highlights-container');
+            const emptyState = document.getElementById('highlights-empty');
+
+            emptyState.classList.add('hidden');
+
+            const row = document.createElement('div');
+            row.className = 'highlight-row p-3 bg-gray-700 rounded-lg border border-gray-600';
+            row.dataset.index = highlightIndex;
+
+            row.innerHTML = `
             <input type="hidden" name="highlights[${highlightIndex}][id]" value="">
             
             <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
@@ -1173,34 +1187,33 @@
                 </div>
             </div>
         `;
-        
-        container.appendChild(row);
-        highlightIndex++;
-    }
 
-    function removeHighlightRow(btn) {
-        const row = btn.closest('.highlight-row');
-        row.remove();
-        
-        const container = document.getElementById('highlights-container');
-        const emptyState = document.getElementById('highlights-empty');
-        
-        if (container.children.length === 0) {
-            emptyState.classList.remove('hidden');
+            container.appendChild(row);
+            highlightIndex++;
         }
-        
-        // Re-index remaining rows
-        Array.from(container.children).forEach((child, idx) => {
-            child.dataset.index = idx;
-            child.querySelectorAll('[name]').forEach(input => {
-                const name = input.getAttribute('name');
-                const newName = name.replace(/highlights\[\d+\]/, `highlights[${idx}]`);
-                input.setAttribute('name', newName);
+
+        function removeHighlightRow(btn) {
+            const row = btn.closest('.highlight-row');
+            row.remove();
+
+            const container = document.getElementById('highlights-container');
+            const emptyState = document.getElementById('highlights-empty');
+
+            if (container.children.length === 0) {
+                emptyState.classList.remove('hidden');
+            }
+
+            // Re-index remaining rows
+            Array.from(container.children).forEach((child, idx) => {
+                child.dataset.index = idx;
+                child.querySelectorAll('[name]').forEach(input => {
+                    const name = input.getAttribute('name');
+                    const newName = name.replace(/highlights\[\d+\]/, `highlights[${idx}]`);
+                    input.setAttribute('name', newName);
+                });
             });
-        });
-        
-        highlightIndex = container.children.length;
-    }
-    
+
+            highlightIndex = container.children.length;
+        }
     </script>
 @endpush

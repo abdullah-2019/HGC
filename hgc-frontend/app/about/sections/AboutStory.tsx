@@ -51,7 +51,7 @@ const fallback: AboutStoryData = {
     { en: "Our partnerships with international organizations including UNOPS, World Bank, USACE, and UNICEF reflect our commitment to global standards and sustainable development. We don't just build structures — we build trust, communities, and the foundation for Afghanistan's prosperous future.", dari: "مشارکت‌های ما با سازمان‌های بین‌المللی از جمله UNOPS، بانک جهانی، USACE و UNICEF تعهد ما را به استانداردهای جهانی و توسعه پایدار منعکس می‌کند. ما فقط سازه‌ها را نمی‌سازیم — ما اعتماد، جوامع و بنیان آینده شکوفای افغانستان را می‌سازیم.", pashto: "زموږ د UNOPS، نړیوال بانک، USACE، او UNICEF په ګډون د نړیوالو سازمانونو سره شریکي زموږ د نړیوالو معیارونو او پایدارې پراختیا ته ژمنه منعکسوي. موږ یوازې جوړښتونه نه جوړوو — موږ باور، ټولنې، او د افغانستان د ګټور راتلونکي بنسټ جوړوو." },
   ],
   mainImage: "/images/placeholder.png",
-  floatingCard: { value: "24+", label: { en: "Years of Excellence", dari: "سال excellence", pashto: "د عالي کیفیت کالونه" } },
+  floatingCard: { value: "24+", label: { en: "Years of Excellence", dari: "سال excellence2", pashto: "د عالي کیفیت کالونه" } },
   highlights: [
     { icon: "Building2", label: { en: "6 Companies", dari: "۶ شرکت", pashto: "۶ شرکتونه" }, value: "6" },
     { icon: "Globe", label: { en: "38+ Provinces", dari: "۳۸+ ولایت", pashto: "۳۸+ ولایتونه" }, value: "38+" },
@@ -101,8 +101,8 @@ export default function AboutStory({ story }: AboutStoryProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* Text Content */}
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (lang === 'dari' || lang === 'pashto' ? 'translate-x-12' : '-translate-x-12')} ${lang === 'dari' || lang === 'pashto' ? 'lg:order-2 text-right' : 'lg:order-1 text-left'}`}>
-            <div className="flex items-center gap-3 mb-6">
+          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (lang === 'dari' || lang === 'pashto' ? 'translate-x-12' : '-translate-x-12')} ${lang === 'dari' || lang === 'pashto' ? 'text-right' : 'text-left'}`}>
+            <div className={`flex items-center gap-3 mb-6 ${lang === 'dari' || lang === 'pashto' ? 'flex-row-reverse' : ''}`}>
               <div className="gold-line" />
               <span className="text-hgc-about-gold text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
             </div>
@@ -131,7 +131,7 @@ export default function AboutStory({ story }: AboutStoryProps) {
           </div>
 
           {/* Image Side */}
-          <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (lang === 'dari' || lang === 'pashto' ? '-translate-x-12' : 'translate-x-12')} ${lang === 'dari' || lang === 'pashto' ? 'lg:order-1' : 'lg:order-2'}`}>
+          <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (lang === 'dari' || lang === 'pashto' ? '-translate-x-12' : 'translate-x-12')}`}>
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
                 <div className="absolute inset-0 bg-cover bg-center img-zoom" style={{ backgroundImage: `url(${data.mainImage})` }} />
