@@ -30,6 +30,7 @@ interface Company {
 
 export default function CompaniesSection() {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [hoveredCompany, setHoveredCompany] = useState<string | null>(null);
@@ -65,7 +66,7 @@ export default function CompaniesSection() {
   }
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section dir={isRtl ? "rtl" : "ltr"} className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--color-hgc-companies-gold)/5_0%,_transparent_50%)]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
@@ -135,7 +136,7 @@ export default function CompaniesSection() {
                     </p>
                     <span className="inline-flex items-center gap-1 text-sm text-hgc-companies-gold/70 group-hover:text-hgc-companies-gold transition-colors">
                       {t(lang, "common.visit")}
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className={`w-4 h-4 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
                     </span>
                   </div>
                 </div>
