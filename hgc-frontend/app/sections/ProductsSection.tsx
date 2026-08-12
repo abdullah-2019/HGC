@@ -48,6 +48,7 @@ function stripHtml(html: string | null): string {
 
 export default function ProductsSection() {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,7 +94,7 @@ export default function ProductsSection() {
   }
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section dir={isRtl ? "rtl" : "ltr"} className="py-24 relative overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-hgc-gold/[0.03] rounded-full blur-[120px]" />
 
@@ -144,7 +145,7 @@ export default function ProductsSection() {
               : lang === "dari"
               ? "مشاهده همه محصولات"
               : "ټول محصولات وګورئ"}
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className={`w-5 h-5 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
           </Link>
         </div>
 
