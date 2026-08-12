@@ -18,7 +18,6 @@ interface WhyChooseFeature {
   descPashto: string | null;
 }
 
-// const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
 // Safe icon resolver — falls back to Award if icon not found
@@ -29,6 +28,7 @@ function resolveIcon(iconName: string): LucideIcon {
 
 export default function WhyChooseSection() {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [features, setFeatures] = useState<WhyChooseFeature[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -128,7 +128,7 @@ export default function WhyChooseSection() {
   }
 
   return (
-    <section className="py-24 bg-hgc-bg relative overflow-hidden">
+    <section dir={isRtl ? "rtl" : "ltr"} className="py-24 bg-hgc-bg relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--color-hgc-gold)/5_0%,_transparent_50%)]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Header */}
@@ -156,7 +156,7 @@ export default function WhyChooseSection() {
                 <h3 className="text-hgc-text font-bold text-xl mb-3">
                   {getTitle(feature)}
                 </h3>
-                <p className="text-hgc-text-secondary text-sm leading-relaxed">
+                <p className="text-hgc-about-text-secondary text-sm leading-relaxed">
                   {getDesc(feature)}
                 </p>
               </div>
