@@ -9,7 +9,6 @@ import {
   Sun,
   Truck,
   Loader2,
-  ArrowRight,
 } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import Link from "next/link";
