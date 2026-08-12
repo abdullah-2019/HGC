@@ -53,13 +53,13 @@ function formatEventDate(
 
 export default function EventsSection() {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  /* Fetch events from API */
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -98,14 +98,12 @@ export default function EventsSection() {
   const next = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
   const prev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
 
-  // Auto-play
   useEffect(() => {
     if (isPaused || total === 0) return;
     const timer = setInterval(next, 7000);
     return () => clearInterval(timer);
   }, [isPaused, next, total]);
 
-  // Clamp activeIndex if it exceeds bounds
   useEffect(() => {
     if (activeIndex >= total && total > 0) {
       setActiveIndex(0);
@@ -113,7 +111,6 @@ export default function EventsSection() {
     }
   }, [total, activeIndex]);
 
-  /* Loading state — still render section while loading to avoid layout shift */
   if (loading) {
     return (
       <section className="py-24 bg-hgc-bg-alt relative overflow-hidden">
@@ -124,7 +121,6 @@ export default function EventsSection() {
     );
   }
 
-  /* No events — hide the entire section */
   if (events.length === 0) {
     return null;
   }
@@ -171,7 +167,6 @@ export default function EventsSection() {
   const upcomingLabel =
     lang === "en" ? "Upcoming" : lang === "dari" ? "پیش رو" : "راتلونکی";
 
-  // Animation variants
   const imageVariants = {
     enter: (dir: number) => ({
       x: dir > 0 ? 80 : -80,
@@ -194,16 +189,16 @@ export default function EventsSection() {
 
   return (
     <section
+      dir={isRtl ? "rtl" : "ltr"}
       className="py-24 bg-hgc-bg-alt relative overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Background decorations */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-hgc-gold/[0.02] rounded-full blur-[150px] translate-x-1/3 -translate-y-1/3" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-hgc-navy/[0.02] rounded-full blur-[120px] -translate-x-1/4 translate-y-1/4" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* ─── Section Header ────────────────────────────────────── */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -225,14 +220,14 @@ export default function EventsSection() {
             className="group mt-6 lg:mt-0 inline-flex items-center gap-2 text-hgc-gold font-semibold hover:gap-3 transition-all"
           >
             {viewAllLabel}
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className={`w-5 h-5 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
           </Link>
         </motion.div>
 
-        {/* ─── Split Layout: Featured + List ─────────────────────── */}
+        {/* Split Layout */}
         <div className="grid lg:grid-cols-12 gap-8">
-          {/* ── Left: Featured Event (Large) ── */}
-          <div className="lg:col-span-7 relative">
+          {/* Featured Event */}
+          <div className="lg:col-span-7 order-1 lg:order-1 rtl:lg:order-2 relative">
             <div className="relative aspect-[4/3] lg:aspect-[16/10] rounded-3xl overflow-hidden bg-hgc-card-alt">
               <AnimatePresence initial={false} custom={direction} mode="popLayout">
                 <motion.div
@@ -257,12 +252,16 @@ export default function EventsSection() {
                     <div className="absolute inset-0 bg-gradient-to-br from-[#0F2B5B] to-[#1a1a2e]" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-hgc-overlay/90 via-hgc-overlay/30 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-hgc-overlay/60 to-transparent" />
+                  <div
+                    className={`absolute inset-0 ${
+                      isRtl ? "bg-gradient-to-l" : "bg-gradient-to-r"
+                    } from-hgc-overlay/60 to-transparent`}
+                  />
                 </motion.div>
               </AnimatePresence>
 
-              {/* Date badge — floating top-left */}
-              <div className="absolute top-6 left-6 z-10">
+              {/* Date badge */}
+              <div className={`absolute top-6 z-10 ${isRtl ? "right-6" : "left-6"}`}>
                 <div className="bg-hgc-surface/95 backdrop-blur-md rounded-2xl p-4 text-center shadow-xl border border-hgc-border">
                   <span className="block text-hgc-gold text-xs font-bold uppercase tracking-wider">
                     {dateParts.month}
@@ -278,7 +277,7 @@ export default function EventsSection() {
 
               {/* Upcoming badge */}
               {current.is_upcoming && (
-                <div className="absolute top-6 right-6 z-10">
+                <div className={`absolute top-6 z-10 ${isRtl ? "left-6" : "right-6"}`}>
                   <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-hgc-gold text-hgc-text text-xs font-bold shadow-lg">
                     <Ticket className="w-3.5 h-3.5" />
                     {upcomingLabel}
@@ -303,13 +302,13 @@ export default function EventsSection() {
                     <div className="flex flex-wrap items-center gap-4 mb-5 text-hgc-surface/70 text-sm">
                       {current.location && (
                         <span className="inline-flex items-center gap-1.5">
-                          <MapPin className="w-4 h-4 text-hgc-gold" />
+                          <MapPin className="w-4 h-4 text-hgc-gold shrink-0" />
                           {current.location}
                         </span>
                       )}
                       {current.event_time && (
                         <span className="inline-flex items-center gap-1.5">
-                          <Clock className="w-4 h-4 text-hgc-gold" />
+                          <Clock className="w-4 h-4 text-hgc-gold shrink-0" />
                           {current.event_time}
                         </span>
                       )}
@@ -318,18 +317,18 @@ export default function EventsSection() {
                     <div className="flex items-center gap-3">
                       <Link
                         href={`/events/${current.slug}`}
-                        className="inline-flex items-center gap-1 text-hgc-surface text-sm font-medium hover:text-hgc-gold transition-colors"
+                        className="group inline-flex items-center gap-1 text-hgc-surface text-sm font-medium hover:text-hgc-gold transition-colors"
                       >
                         {learnMoreLabel}
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className={`w-4 h-4 transition-transform ${isRtl ? "rotate-180" : ""}`} />
                       </Link>
                     </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              {/* Navigation arrows on featured image */}
-              <div className="absolute right-6 bottom-6 z-10 flex items-center gap-2">
+              {/* Navigation arrows */}
+              <div className={`absolute bottom-6 z-10 flex items-center gap-2 ${isRtl ? "left-6" : "right-6"}`}>
                 <button
                   onClick={prev}
                   className="w-10 h-10 rounded-full bg-hgc-surface/10 backdrop-blur-md border border-hgc-surface/20 flex items-center justify-center text-hgc-surface hover:bg-hgc-gold hover:border-hgc-gold hover:text-hgc-text transition-all duration-300"
@@ -348,8 +347,8 @@ export default function EventsSection() {
             </div>
           </div>
 
-          {/* ── Right: Event List ── */}
-          <div className="lg:col-span-5 flex flex-col gap-4">
+          {/* Event List */}
+          <div className="lg:col-span-5 order-2 lg:order-2 rtl:lg:order-1 flex flex-col gap-4">
             {events.map((event, idx) => {
               const isActive = idx === activeIndex;
               const dp = formatEventDate(event.event_date, lang);
@@ -358,13 +357,12 @@ export default function EventsSection() {
                 <button
                   key={event.id}
                   onClick={() => goTo(idx)}
-                  className={`group relative flex items-start gap-4 p-4 rounded-2xl border text-left transition-all duration-500 ${
+                  className={`group relative flex items-start gap-4 p-4 rounded-2xl border text-start transition-all duration-500 ${
                     isActive
                       ? "bg-hgc-card border-hgc-gold/40 shadow-lg shadow-hgc-gold/5"
                       : "bg-hgc-card border-hgc-border hover:border-hgc-gold/20 hover:bg-hgc-card-hover"
                   }`}
                 >
-                  {/* Date column */}
                   <div
                     className={`flex-shrink-0 w-16 h-16 rounded-xl flex flex-col items-center justify-center transition-colors duration-300 ${
                       isActive
@@ -378,7 +376,6 @@ export default function EventsSection() {
                     </span>
                   </div>
 
-                  {/* Content */}
                   <div className="flex-1 min-w-0">
                     <h4
                       className={`font-bold text-sm mb-1.5 line-clamp-1 transition-colors ${
@@ -390,13 +387,13 @@ export default function EventsSection() {
                     <div className="flex flex-wrap items-center gap-3 text-hgc-text-muted text-xs">
                       {event.location && (
                         <span className="inline-flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
+                          <MapPin className="w-3 h-3 shrink-0" />
                           {event.location}
                         </span>
                       )}
                       {event.event_time && (
                         <span className="inline-flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
+                          <Clock className="w-3 h-3 shrink-0" />
                           {event.event_time}
                         </span>
                       )}
@@ -405,9 +402,9 @@ export default function EventsSection() {
 
                   {/* Active indicator */}
                   <div
-                    className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-full transition-all duration-300 ${
+                    className={`absolute top-1/2 -translate-y-1/2 w-1 h-10 rounded-full transition-all duration-300 ${
                       isActive ? "bg-hgc-gold opacity-100" : "bg-hgc-gold opacity-0"
-                    }`}
+                    } ${isRtl ? "right-0 rounded-l-full" : "left-0 rounded-r-full"}`}
                   />
                 </button>
               );
