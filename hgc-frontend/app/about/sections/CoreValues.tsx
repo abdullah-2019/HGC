@@ -51,6 +51,8 @@ export default function CoreValues({ coreValues }: CoreValuesProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  const isRtl = lang === "dari" || lang === "pashto";
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); } },
@@ -80,7 +82,11 @@ export default function CoreValues({ coreValues }: CoreValuesProps) {
   };
 
   return (
-    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-hgc-bg relative">
+    <section
+      ref={sectionRef}
+      dir={isRtl ? "rtl" : "ltr"}
+      className="about-section py-24 lg:py-32 bg-hgc-bg relative"
+    >
       <div className="absolute inset-0 grid-pattern opacity-20" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.04)_0%,_transparent_60%)]" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

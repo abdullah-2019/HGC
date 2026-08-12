@@ -51,6 +51,8 @@ export default function MissionSection({ mission }: MissionSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  const isRtl = lang === "dari" || lang === "pashto";
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); } },
@@ -90,32 +92,56 @@ export default function MissionSection({ mission }: MissionSectionProps) {
   };
 
   return (
-    <section ref={sectionRef} className="about-section py-24 lg:py-32 bg-hgc-bg relative overflow-hidden border-y border-hgc-border">
+    <section
+      ref={sectionRef}
+      dir={isRtl ? "rtl" : "ltr"}
+      className="about-section py-24 lg:py-32 bg-hgc-bg relative overflow-hidden border-y border-hgc-border"
+    >
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,_rgba(212,175,55,0.06)_0%,_transparent_60%)]" />
       <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-hgc-about-gold/5 rounded-full blur-3xl" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-top">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* Image Side */}
-          <div className={`relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
+          <div
+            className={`relative transition-all duration-1000 order-1 lg:order-1 rtl:lg:order-2 ${
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : isRtl
+                ? "opacity-0 translate-x-12"
+                : "opacity-0 -translate-x-12"
+            }`}
+          >
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden aspect-square">
                 <div className="absolute inset-0 bg-cover bg-center img-zoom" style={{ backgroundImage: `url(${data.image})` }} />
                 <div className="absolute inset-0 bg-gradient-to-br from-hgc-navy-deep/30 to-transparent" />
               </div>
 
-              {/* Floating Quote Card — Light Theme */}
-              <div className="absolute -bottom-8 -right-4 lg:-right-8 bg-white border border-hgc-about-card-border rounded-2xl p-6 shadow-xl max-w-[280px]">
+              {/* Floating Quote Card */}
+              <div className={`absolute -bottom-8 bg-white border border-hgc-about-card-border rounded-2xl p-6 shadow-xl max-w-[280px] ${
+                isRtl ? "-left-4 lg:-left-8" : "-right-4 lg:-right-8"
+              }`}>
                 <Target className="w-8 h-8 text-hgc-about-gold mb-3" />
                 <p className="text-hgc-about-text-secondary text-sm italic leading-relaxed">&ldquo;{quoteText}&rdquo;</p>
               </div>
 
               {/* Decorative border */}
-              <div className="absolute -top-4 -left-4 w-full h-full border border-hgc-about-gold/10 rounded-2xl -z-10" />
+              <div className={`absolute -top-4 w-full h-full border border-hgc-about-gold/10 rounded-2xl -z-10 ${
+                isRtl ? "-right-4" : "-left-4"
+              }`} />
             </div>
           </div>
 
           {/* Text Content */}
-          <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+          <div
+            className={`relative transition-all duration-1000 delay-200 order-2 lg:order-2 rtl:lg:order-1 ${
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : isRtl
+                ? "opacity-0 -translate-x-12"
+                : "opacity-0 translate-x-12"
+            }`}
+          >
             <div className="flex items-center gap-3 mb-6">
               <div className="gold-line" />
               <span className="text-hgc-about-gold text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
@@ -125,7 +151,13 @@ export default function MissionSection({ mission }: MissionSectionProps) {
 
             <div className="space-y-5">
               {data.points.map((point, idx) => (
-                <div key={idx} className={`flex items-start gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: `${400 + idx * 150}ms` }}>
+                <div
+                  key={idx}
+                  className={`flex items-start gap-4 transition-all duration-700 ${
+                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  }`}
+                  style={{ transitionDelay: `${400 + idx * 150}ms` }}
+                >
                   <div className="flex-shrink-0 w-6 h-6 rounded-full bg-hgc-about-gold/10 flex items-center justify-center mt-0.5">
                     <CheckCircle2 className="w-4 h-4 text-hgc-about-gold" />
                   </div>
