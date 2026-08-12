@@ -33,10 +33,8 @@ interface CategoryFilter {
   labelPashto: string;
 }
 
-// const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
-// Pashto translations for common categories (fallback)
 const CATEGORY_TRANSLATIONS: Record<string, { dari: string; pashto: string }> = {
   "Roads": { dari: "سرک ها", pashto: "سړکونه" },
   "Buildings": { dari: "ساختمان ها", pashto: "ودانۍ" },
@@ -49,15 +47,14 @@ const CATEGORY_TRANSLATIONS: Record<string, { dari: string; pashto: string }> = 
 
 export default function ProjectsSection() {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [projects, setProjects] = useState<Project[]>([]);
   const [categories, setCategories] = useState<CategoryFilter[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch projects from API
   useEffect(() => {
-
     const fetchProjects = async () => {
       try {
         setLoading(true);
@@ -81,20 +78,13 @@ export default function ProjectsSection() {
     fetchProjects();
   }, []);
 
-  // Build dynamic category filters from projects that actually exist
   useEffect(() => {
     if (projects.length === 0) return;
-
-    // Extract unique categories from loaded projects
     const uniqueCategories = Array.from(
       new Set(projects.map((p) => p.category).filter(Boolean))
     );
-
     const builtCategories: CategoryFilter[] = uniqueCategories.map((cat) => {
-      const translations = CATEGORY_TRANSLATIONS[cat] || {
-        dari: cat,
-        pashto: cat,
-      };
+      const translations = CATEGORY_TRANSLATIONS[cat] || { dari: cat, pashto: cat };
       return {
         key: cat,
         labelEn: cat,
@@ -102,20 +92,15 @@ export default function ProjectsSection() {
         labelPashto: translations.pashto,
       };
     });
-
-    // Sort alphabetically by English name for consistent order
     builtCategories.sort((a, b) => a.labelEn.localeCompare(b.labelEn));
-
     setCategories(builtCategories);
   }, [projects]);
 
-  // Filtered projects based on active category
   const filteredProjects = useMemo(() => {
     if (activeCategory === "all") return projects;
     return projects.filter((p) => p.category === activeCategory);
   }, [projects, activeCategory]);
 
-  // Helper to get localized text
   const getLabel = (filter: CategoryFilter) => {
     if (lang === "dari") return filter.labelDari;
     if (lang === "pashto") return filter.labelPashto;
@@ -124,7 +109,7 @@ export default function ProjectsSection() {
 
   const getProjectName = (p: Project) => {
     if (lang === "dari") return p.nameDari || p.nameEn;
-    if (lang === "pashto") return p.nameEn; // Fallback until Pashto data is available
+    if (lang === "pashto") return p.nameEn;
     return p.nameEn;
   };
 
@@ -142,10 +127,8 @@ export default function ProjectsSection() {
 
   const getStatusLabel = (status: string) => {
     const isCompleted = status === "completed";
-    if (lang === "en")
-      return isCompleted ? "Completed" : "Ongoing";
-    if (lang === "dari")
-      return isCompleted ? "تکمیل شده" : "در حال اجرا";
+    if (lang === "en") return isCompleted ? "Completed" : "Ongoing";
+    if (lang === "dari") return isCompleted ? "تکمیل شده" : "در حال اجرا";
     return isCompleted ? "بشپړه شوې" : "جریان لري";
   };
 
@@ -165,7 +148,6 @@ export default function ProjectsSection() {
   const allLabel =
     lang === "en" ? "All" : lang === "dari" ? "همه" : "ټول";
 
-  // Loading skeleton
   if (loading) {
     return (
       <section className="py-24 bg-hgc-bg relative">
@@ -196,7 +178,6 @@ export default function ProjectsSection() {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <section className="py-24 bg-hgc-bg relative">
@@ -209,7 +190,7 @@ export default function ProjectsSection() {
   }
 
   return (
-    <section className="py-24 bg-hgc-bg relative">
+    <section dir={isRtl ? "rtl" : "ltr"} className="py-24 bg-hgc-bg relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-12">
@@ -224,14 +205,14 @@ export default function ProjectsSection() {
           </div>
           <Link
             href="/projects"
-            className="mt-4 lg:mt-0 inline-flex items-center gap-2 text-hgc-gold font-semibold hover:gap-3 transition-all"
+            className="group mt-4 lg:mt-0 inline-flex items-center gap-2 text-hgc-gold font-semibold hover:gap-3 transition-all"
           >
             {viewAllLabel}
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className={`w-5 h-5 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
           </Link>
         </div>
 
-        {/* Category Filters — dynamically built from DB categories that have projects */}
+        {/* Category Filters */}
         {categories.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-10">
             <button
@@ -266,7 +247,6 @@ export default function ProjectsSection() {
               href={`/projects/${project.slug}`}
               className="group relative bg-hgc-card-alt border border-hgc-border rounded-2xl overflow-hidden hover:border-hgc-gold/20 transition-all duration-500"
             >
-              {/* Cover Image */}
               <div className="aspect-[4/3] relative overflow-hidden">
                 <Image
                   src={project.coverImage}
@@ -277,8 +257,7 @@ export default function ProjectsSection() {
                 />
                 <div className="absolute inset-0 bg-hgc-overlay/10 group-hover:bg-hgc-overlay/5 transition-colors" />
 
-                {/* Status Badge */}
-                <div className="absolute top-4 left-4">
+                <div className={`absolute top-4 ${isRtl ? "right-4" : "left-4"}`}>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium border ${project.status === "completed"
                       ? "bg-green-500/20 text-green-600 border-green-500/20"
@@ -289,9 +268,8 @@ export default function ProjectsSection() {
                   </span>
                 </div>
 
-                {/* Completion percent badge (if available and not 100%) */}
                 {project.completionPercent > 0 && project.completionPercent < 100 && (
-                  <div className="absolute bottom-4 right-4">
+                  <div className={`absolute bottom-4 ${isRtl ? "left-4" : "right-4"}`}>
                     <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-hgc-text/70 text-hgc-surface backdrop-blur-sm border border-hgc-border">
                       {project.completionPercent}%
                     </span>
@@ -299,10 +277,9 @@ export default function ProjectsSection() {
                 )}
               </div>
 
-              {/* Card Content */}
               <div className="p-5">
                 <div className="flex items-center gap-2 text-hgc-text-muted text-xs mb-2">
-                  <MapPin className="w-3.5 h-3.5" />
+                  <MapPin className="w-3.5 h-3.5 shrink-0" />
                   {getLocation(project)}
                 </div>
                 <h3 className="text-hgc-text font-bold text-lg mb-2 group-hover:text-hgc-gold transition-colors line-clamp-2">
@@ -310,7 +287,7 @@ export default function ProjectsSection() {
                 </h3>
                 <div className="flex items-center gap-4 text-xs text-hgc-text-muted mb-3">
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5" />
+                    <Calendar className="w-3.5 h-3.5 shrink-0" />
                     {project.duration}
                   </span>
                 </div>
@@ -322,7 +299,6 @@ export default function ProjectsSection() {
           ))}
         </div>
 
-        {/* Empty state */}
         {filteredProjects.length === 0 && (
           <div className="text-center py-16">
             <p className="text-hgc-text-muted">
