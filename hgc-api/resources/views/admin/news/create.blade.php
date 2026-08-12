@@ -36,7 +36,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Category</label>
-                        <input name="category"
+                        <input name="category" value="{{ old('category') }}"
                             class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-colors" />
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- Excerpts -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Excerpt (English)</label>
                         <textarea name="excerpt_en" rows="3"
@@ -75,10 +75,15 @@
                         <textarea name="excerpt_dari" rows="3" dir="rtl"
                             class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-colors">{{ old('excerpt_dari') }}</textarea>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Excerpt (Pashto)</label>
+                        <textarea name="excerpt_pashto" rows="3" dir="rtl"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-colors">{{ old('excerpt_pashto') }}</textarea>
+                    </div>
                 </div>
 
                 <!-- Content -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Content (English)</label>
                         <textarea name="content_en" rows="6"
@@ -88,6 +93,11 @@
                         <label class="block text-sm font-medium text-gray-300 mb-2">Content (Dari)</label>
                         <textarea name="content_dari" rows="6" dir="rtl"
                             class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-colors">{{ old('content_dari') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Content (Pashto)</label>
+                        <textarea name="content_pashto" rows="6" dir="rtl"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-colors">{{ old('content_pashto') }}</textarea>
                     </div>
                 </div>
 

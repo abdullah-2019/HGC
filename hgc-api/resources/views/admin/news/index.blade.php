@@ -42,8 +42,14 @@
                                     </div>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-300 max-w-xs truncate">
-                                {{ $article->title_en }}
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-300 max-w-xs">
+                                <div class="truncate font-medium">{{ $article->title_en }}</div>
+                                @if($article->title_dari)
+                                    <div class="truncate text-xs text-gray-500 mt-0.5" dir="rtl">{{ $article->title_dari }}</div>
+                                @endif
+                                @if($article->title_pashto)
+                                    <div class="truncate text-xs text-gray-500 mt-0.5" dir="rtl">{{ $article->title_pashto }}</div>
+                                @endif
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-700 text-gray-300 border border-gray-600 capitalize">
