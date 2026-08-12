@@ -35,6 +35,7 @@ interface Sector {
 
 export default function SectorsSection() {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [sectors, setSectors] = useState<Sector[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -80,7 +81,7 @@ export default function SectorsSection() {
   }
 
   return (
-    <section className="py-20 bg-hgc-bg border-y border-hgc-border">
+    <section dir={isRtl ? "rtl" : "ltr"} className="py-20 bg-hgc-bg border-y border-hgc-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1 rounded-full bg-hgc-gold/10 text-hgc-gold text-sm font-medium mb-4">
