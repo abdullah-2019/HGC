@@ -39,6 +39,7 @@ function formatDate(dateStr: string, lang: string): string {
 
 export default function NewsSection() {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -47,7 +48,6 @@ export default function NewsSection() {
   const touchStartX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  /* Fetch news from API */
   useEffect(() => {
     const fetchNews = async () => {
       try {
@@ -86,35 +86,31 @@ export default function NewsSection() {
   const next = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
   const prev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
 
-  // Auto-play
   useEffect(() => {
     if (isPaused || total === 0) return;
     const timer = setInterval(next, 6000);
     return () => clearInterval(timer);
   }, [isPaused, next, total]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") next();
-      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") isRtl ? prev() : next();
+      if (e.key === "ArrowLeft") isRtl ? next() : prev();
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [next, prev]);
+  }, [next, prev, isRtl]);
 
-  // Touch / swipe
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
   const onTouchEnd = (e: React.TouchEvent) => {
     const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) {
-      diff > 0 ? next() : prev();
+      isRtl ? (diff < 0 ? next() : prev()) : (diff > 0 ? next() : prev());
     }
   };
 
-  // Clamp activeIndex if it exceeds bounds
   useEffect(() => {
     if (activeIndex >= total && total > 0) {
       setActiveIndex(0);
@@ -122,7 +118,6 @@ export default function NewsSection() {
     }
   }, [total, activeIndex]);
 
-  /* Loading state */
   if (loading) {
     return (
       <section className="py-24 bg-hgc-bg relative overflow-hidden">
@@ -133,7 +128,6 @@ export default function NewsSection() {
     );
   }
 
-  /* Empty state */
   if (news.length === 0) {
     return (
       <section className="py-24 bg-hgc-bg relative overflow-hidden">
@@ -205,15 +199,15 @@ export default function NewsSection() {
 
   return (
     <section
+      dir={isRtl ? "rtl" : "ltr"}
       className="py-24 bg-hgc-bg relative overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-hgc-gold/[0.03] rounded-full blur-[150px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* ─── Section Header ────────────────────────────────────── */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -235,18 +229,17 @@ export default function NewsSection() {
             className="group mt-6 lg:mt-0 inline-flex items-center gap-2 text-hgc-gold font-semibold hover:gap-3 transition-all"
           >
             {viewAllLabel}
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className={`w-5 h-5 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
           </Link>
         </motion.div>
 
-        {/* ─── Main Carousel ─────────────────────────────────────── */}
+        {/* Main Carousel */}
         <div
           ref={containerRef}
           className="relative"
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
         >
-          {/* Featured Slide */}
           <div className="relative aspect-[21/9] lg:aspect-[21/8] rounded-3xl overflow-hidden bg-hgc-card-alt">
             <AnimatePresence initial={false} custom={direction} mode="popLayout">
               <motion.div
@@ -258,7 +251,6 @@ export default function NewsSection() {
                 exit="exit"
                 className="absolute inset-0"
               >
-                {/* Image or fallback gradient */}
                 {current.cover_image ? (
                   <Image
                     src={current.cover_image}
@@ -272,14 +264,15 @@ export default function NewsSection() {
                   <div className="absolute inset-0 bg-gradient-to-br from-[#0F2B5B] to-[#1a1a2e]" />
                 )}
 
-                {/* Cinematic gradient overlays */}
-                <div className="absolute inset-0 bg-gradient-to-r from-hgc-overlay/80 via-hgc-overlay/40 to-transparent" />
+                <div
+                  className={`absolute inset-0 ${
+                    isRtl ? "bg-gradient-to-l" : "bg-gradient-to-r"
+                  } from-hgc-overlay/80 via-hgc-overlay/40 to-transparent`}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-hgc-overlay/70 via-transparent to-hgc-overlay/20" />
 
-                {/* Content */}
                 <div className="absolute inset-0 flex flex-col justify-end p-8 lg:p-14">
                   <div className="max-w-2xl">
-                    {/* Category + Date row */}
                     <motion.div
                       custom={0}
                       variants={textVariants}
@@ -297,7 +290,6 @@ export default function NewsSection() {
                       </span>
                     </motion.div>
 
-                    {/* Title */}
                     <motion.h3
                       custom={1}
                       variants={textVariants}
@@ -308,7 +300,6 @@ export default function NewsSection() {
                       {current.title}
                     </motion.h3>
 
-                    {/* Excerpt */}
                     <motion.p
                       custom={2}
                       variants={textVariants}
@@ -319,7 +310,6 @@ export default function NewsSection() {
                       {current.excerpt}
                     </motion.p>
 
-                    {/* CTA */}
                     <motion.div
                       custom={3}
                       variants={textVariants}
@@ -331,7 +321,7 @@ export default function NewsSection() {
                         className="group inline-flex items-center gap-3 px-6 py-3 bg-hgc-gold text-hgc-text font-bold rounded-xl hover:bg-hgc-gold-bright transition-all duration-300 hover:shadow-lg hover:shadow-hgc-gold/30 hover:-translate-y-0.5"
                       >
                         {readMoreLabel}
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <ChevronRight className={`w-4 h-4 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
                       </Link>
                     </motion.div>
                   </div>
@@ -342,14 +332,18 @@ export default function NewsSection() {
             {/* Navigation Arrows */}
             <button
               onClick={prev}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-hgc-surface/10 backdrop-blur-md border border-hgc-surface/20 flex items-center justify-center text-hgc-surface hover:bg-hgc-gold hover:border-hgc-gold hover:text-hgc-text transition-all duration-300 z-10"
+              className={`absolute top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-hgc-surface/10 backdrop-blur-md border border-hgc-surface/20 flex items-center justify-center text-hgc-surface hover:bg-hgc-gold hover:border-hgc-gold hover:text-hgc-text transition-all duration-300 z-10 ${
+                isRtl ? "right-4" : "left-4"
+              }`}
               aria-label="Previous"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <button
               onClick={next}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-hgc-surface/10 backdrop-blur-md border border-hgc-surface/20 flex items-center justify-center text-hgc-surface hover:bg-hgc-gold hover:border-hgc-gold hover:text-hgc-text transition-all duration-300 z-10"
+              className={`absolute top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-hgc-surface/10 backdrop-blur-md border border-hgc-surface/20 flex items-center justify-center text-hgc-surface hover:bg-hgc-gold hover:border-hgc-gold hover:text-hgc-text transition-all duration-300 z-10 ${
+                isRtl ? "left-4" : "right-4"
+              }`}
               aria-label="Next"
             >
               <ArrowRight className="w-5 h-5" />
@@ -359,15 +353,16 @@ export default function NewsSection() {
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-hgc-surface/10">
               <motion.div
                 className="h-full bg-hgc-gold"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
+                initial={isRtl ? { width: "100%", x: "0%" } : { width: "0%" }}
+                animate={isRtl ? { width: "100%", x: "0%" } : { width: "100%" }}
+                style={isRtl ? { transformOrigin: "right" } : { transformOrigin: "left" }}
                 transition={{ duration: 6, ease: "linear" }}
                 key={activeIndex}
               />
             </div>
           </div>
 
-          {/* ─── Thumbnail Strip ─────────────────────────────────── */}
+          {/* Thumbnail Strip */}
           <div className="mt-6 flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {news.map((item, idx) => {
               const isActive = idx === activeIndex;
@@ -395,7 +390,7 @@ export default function NewsSection() {
                       <div className="absolute inset-0 bg-hgc-gold/20" />
                     )}
                   </div>
-                  <div className="text-left min-w-0">
+                  <div className="min-w-0 text-start">
                     <p
                       className={`text-sm font-semibold truncate transition-colors ${
                         isActive ? "text-hgc-gold" : "text-hgc-text group-hover:text-hgc-gold"
