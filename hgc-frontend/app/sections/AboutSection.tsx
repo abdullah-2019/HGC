@@ -93,6 +93,7 @@ const imageScale: Variants = {
 // ─── Component ─────────────────────────────────────────────────────
 export default function AboutSection() {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [data, setData] = useState<AboutData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -204,7 +205,10 @@ export default function AboutSection() {
     : [];
 
   return (
-    <section className="py-28 bg-hgc-about-bg relative overflow-hidden">
+    <section
+      className="py-28 bg-hgc-about-bg relative overflow-hidden"
+      dir={isRtl ? "rtl" : "ltr"}
+    >
       {/* Animated background blobs */}
       <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-hgc-about-gold/[0.03] rounded-full blur-[100px] animate-pulse" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-hgc-navy/[0.03] rounded-full blur-[100px]" />
@@ -221,8 +225,8 @@ export default function AboutSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-start">
-          {/* ─── Text Content - Left Side ──────────────────────────── */}
-          <div className="lg:col-span-5 order-2 lg:order-1">
+          {/* ─── Text Content ──────────────────────────────────────── */}
+          <div className="lg:col-span-5 order-2 lg:order-1 rtl:lg:order-2">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -306,16 +310,22 @@ export default function AboutSection() {
                   {lang === "en"
                     ? "Explore Our Story"
                     : lang === "dari"
-                      ? "داستان ما را کشف کنید"
-                      : "زموږ کیسه وګورئ"}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      ? "با داستان ما آشنا شوید"
+                      : "زموږ له کیسې سره وپیژنئ"}
+                  <ArrowRight
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      isRtl
+                        ? "rotate-180 group-hover:-translate-x-1"
+                        : "group-hover:translate-x-1"
+                    }`}
+                  />
                 </Link>
               </motion.div>
             </motion.div>
           </div>
 
-          {/* ─── Image Area - Right Side ───────────────────────────── */}
-          <div className="lg:col-span-7 order-1 lg:order-2 relative">
+          {/* ─── Image Area ────────────────────────────────────────── */}
+          <div className="lg:col-span-7 order-1 lg:order-2 rtl:lg:order-1 relative">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -338,7 +348,11 @@ export default function AboutSection() {
                 />
                 {/* Cinematic overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-hgc-about-overlay/60 via-hgc-about-overlay/20 to-transparent opacity-60" />
-                <div className="absolute inset-0 bg-gradient-to-r from-hgc-about-overlay/40 to-transparent" />
+                <div
+                  className={`absolute inset-0 ${
+                    isRtl ? "bg-gradient-to-l" : "bg-gradient-to-r"
+                  } from-hgc-about-overlay/40 to-transparent`}
+                />
               </motion.div>
 
               {/* Secondary images from carousel */}
@@ -364,10 +378,26 @@ export default function AboutSection() {
               )}
 
               {/* Decorative elements */}
-              <div className="absolute -top-6 -right-6 w-32 h-32 border border-hgc-about-gold/10 rounded-full pointer-events-none" />
-              <div className="absolute -top-6 -right-6 w-24 h-24 border border-hgc-about-gold/20 rounded-full pointer-events-none" />
-              <div className="absolute -bottom-8 right-12 w-2 h-2 bg-hgc-about-gold rounded-full animate-ping pointer-events-none" />
-              <div className="absolute top-1/2 -right-3 w-1.5 h-16 bg-hgc-about-gold/20 rounded-full pointer-events-none" />
+              <div
+                className={`absolute -top-6 w-32 h-32 border border-hgc-about-gold/10 rounded-full pointer-events-none ${
+                  isRtl ? "-left-6" : "-right-6"
+                }`}
+              />
+              <div
+                className={`absolute -top-6 w-24 h-24 border border-hgc-about-gold/20 rounded-full pointer-events-none ${
+                  isRtl ? "-left-6" : "-right-6"
+                }`}
+              />
+              <div
+                className={`absolute -bottom-8 w-2 h-2 bg-hgc-about-gold rounded-full animate-ping pointer-events-none ${
+                  isRtl ? "left-12" : "right-12"
+                }`}
+              />
+              <div
+                className={`absolute top-1/2 w-1.5 h-16 bg-hgc-about-gold/20 rounded-full pointer-events-none ${
+                  isRtl ? "-left-3" : "-right-3"
+                }`}
+              />
             </motion.div>
           </div>
         </div>
