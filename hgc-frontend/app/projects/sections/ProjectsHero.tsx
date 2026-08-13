@@ -5,7 +5,8 @@ import { ChevronDown, Briefcase } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 
 export default function ProjectsHero() {
-  const { lang, dir } = useI18n();
+  const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const [scrollY, setScrollY] = useState(0);
   const bannerRef = useRef<HTMLDivElement>(null);
 
@@ -20,6 +21,7 @@ export default function ProjectsHero() {
   return (
     <section
       ref={bannerRef}
+      dir={isRtl ? "rtl" : "ltr"}
       className="relative w-full overflow-hidden"
       style={{ height: "65vh", minHeight: 450, maxHeight: 700 }}
     >

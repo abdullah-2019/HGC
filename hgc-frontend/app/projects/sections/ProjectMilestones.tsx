@@ -1,6 +1,5 @@
 "use client";
 
-import { CheckCircle2, Circle } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -10,13 +9,31 @@ interface ProjectMilestonesProps {
 
 export default function ProjectMilestones({ project }: ProjectMilestonesProps) {
   const { lang } = useI18n();
+  const isRTL = lang !== "en";
 
   const milestones = project.milestones || [];
 
   if (milestones.length === 0) return null;
 
+  // Force Gregorian calendar for all languages
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      calendar: "gregory",
+    };
+    const locale = lang === "en" ? "en-US" : lang === "dari" ? "fa-AF" : "ps-AF";
+    return date.toLocaleDateString(locale, options);
+  };
+
   return (
-    <section className="relative py-20 lg:py-28 bg-hgc-bg-alt border-y border-hgc-border">
+    <section 
+      className="relative py-20 lg:py-28 bg-hgc-bg-alt border-y border-hgc-border"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-16">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-hgc-gold/10 text-hgc-gold text-sm font-medium mb-6">
@@ -29,30 +46,50 @@ export default function ProjectMilestones({ project }: ProjectMilestonesProps) {
 
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-6 lg:left-1/2 lg:-translate-x-px top-0 bottom-0 w-[2px] bg-hgc-border" />
+          <div className="absolute start-6 lg:start-1/2 lg:-translate-x-1/2 top-0 bottom-0 w-[2px] bg-hgc-border" />
 
           {milestones.map((milestone: any, idx: number) => {
-            const isLeft = idx % 2 === 0;
+            const isEven = idx % 2 === 0;
             const isCompleted = project.status === "completed" || idx < milestones.length - 1;
 
+            const revealDirection = isRTL
+              ? (isEven ? "right" : "left")
+              : (isEven ? "left" : "right");
+
+            // Localized title (supports both snake_case and camelCase)
+            const title = lang === "en" 
+              ? (milestone.title_en ?? milestone.titleEn ?? "")
+              : lang === "dari" 
+                ? (milestone.title_dari ?? milestone.titleDari ?? "")
+                : (milestone.title_pashto ?? milestone.titlePashto ?? "");
+
+            // Localized description (supports both snake_case and camelCase)
+            const description = lang === "en"
+              ? (milestone.description_en ?? milestone.descriptionEn ?? milestone.descEn ?? "")
+              : lang === "dari"
+                ? (milestone.description_dari ?? milestone.descriptionDari ?? milestone.descDari ?? "")
+                : (milestone.description_pashto ?? milestone.descriptionPashto ?? milestone.descPashto ?? "");
+
             return (
-              <ScrollReveal key={idx} delay={idx * 0.1} direction={isLeft ? "left" : "right"}>
-                <div className={`relative flex items-start gap-6 mb-12 last:mb-0 ${isLeft ? "lg:flex-row" : "lg:flex-row-reverse"}`}>
+              <ScrollReveal key={idx} delay={idx * 0.1} direction={revealDirection}>
+                <div className={`relative flex items-start gap-6 mb-12 last:mb-0 ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"}`}>
                   {/* Content */}
-                  <div className={`flex-1 ml-16 lg:ml-0 ${isLeft ? "lg:pr-16 lg:text-right" : "lg:pl-16"}`}>
+                  <div className={`flex-1 ms-16 lg:ms-0 ${isEven ? "lg:pe-16 lg:text-end" : "lg:ps-16"}`}>
                     <span className="text-hgc-gold text-sm font-medium mb-1 block">
-                      {milestone.date ? new Date(milestone.date).toLocaleDateString(lang === "en" ? "en-US" : "fa-AF", { year: "numeric", month: "long", day: "numeric" }) : ''}
+                      {formatDate(milestone.milestone_date ?? milestone.date)}
                     </span>
                     <h3 className="text-lg font-bold text-hgc-text mb-2">
-                      {lang === "en" ? milestone.titleEn : milestone.titleDari}
+                      {title}
                     </h3>
-                    <p className="text-hgc-text-muted text-sm">
-                      {lang === "en" ? milestone.descEn : milestone.descDari}
-                    </p>
+                    {description && (
+                      <p className="text-hgc-text-muted text-sm leading-relaxed">
+                        {description}
+                      </p>
+                    )}
                   </div>
 
                   {/* Center dot */}
-                  <div className="absolute left-6 lg:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-hgc-bg border-2 z-10 mt-1.5"
+                  <div className="absolute start-6 lg:start-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-hgc-bg border-2 z-10 mt-1.5"
                     style={{ borderColor: isCompleted ? "#D4AF37" : "#E2E8F0" }}
                   >
                     {isCompleted && <div className="w-1.5 h-1.5 rounded-full bg-hgc-gold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />}

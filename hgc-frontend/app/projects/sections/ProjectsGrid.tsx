@@ -13,10 +13,11 @@ interface ProjectsGridProps {
 
 export default function ProjectsGrid({ projects, loading, error }: ProjectsGridProps) {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
 
   if (loading) {
     return (
-      <section className="relative py-16 lg:py-24" style={{ backgroundColor: "#F8FAFC", minHeight: "60vh" }}>
+      <section dir={isRtl ? "rtl" : "ltr"} className="relative py-16 lg:py-24" style={{ backgroundColor: "#F8FAFC", minHeight: "60vh" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -39,7 +40,7 @@ export default function ProjectsGrid({ projects, loading, error }: ProjectsGridP
 
   if (error) {
     return (
-      <section className="relative py-16 lg:py-24" style={{ backgroundColor: "#F8FAFC", minHeight: "60vh" }}>
+      <section dir={isRtl ? "rtl" : "ltr"} className="relative py-16 lg:py-24" style={{ backgroundColor: "#F8FAFC", minHeight: "60vh" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center justify-center" style={{ minHeight: "50vh" }}>
           <div className="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6"
             style={{ backgroundColor: "#FEE2E2" }}>
@@ -55,12 +56,12 @@ export default function ProjectsGrid({ projects, loading, error }: ProjectsGridP
   }
 
   return (
-    <section className="relative py-16 lg:py-24" style={{ backgroundColor: "#F8FAFC", minHeight: "60vh" }}>
+    <section dir={isRtl ? "rtl" : "ltr"} className="relative py-16 lg:py-24" style={{ backgroundColor: "#F8FAFC", minHeight: "60vh" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Results count */}
         <ScrollReveal>
           <div className="flex items-center justify-between mb-10">
-            <p className="text-sm" style={{ color: "#94A3B8" }}>
+            <p className="text-sm text-start" style={{ color: "#94A3B8" }}>
               {lang === "en" ? `Showing ${projects.length} project${projects.length !== 1 ? "s" : ""}`
                 : lang === "dari" ? `${projects.length} پروژه نمایش داده شده`
                   : `${projects.length} پروژه ښودل شوې`}
@@ -68,9 +69,9 @@ export default function ProjectsGrid({ projects, loading, error }: ProjectsGridP
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "#22C55E" }} />
               <span className="text-xs" style={{ color: "#94A3B8" }}>{lang === "en" ? "Completed" : lang === "dari" ? "تکمیل شده" : "بشپړه شوې"}</span>
-              <span className="w-2 h-2 rounded-full ml-3" style={{ backgroundColor: "#F59E0B" }} />
+              <span className="w-2 h-2 rounded-full ms-3" style={{ backgroundColor: "#F59E0B" }} />
               <span className="text-xs" style={{ color: "#94A3B8" }}>{lang === "en" ? "In Progress" : lang === "dari" ? "در حال اجرا" : "جریان لري"}</span>
-              <span className="w-2 h-2 rounded-full ml-3" style={{ backgroundColor: "#3B82F6" }} />
+              <span className="w-2 h-2 rounded-full ms-3" style={{ backgroundColor: "#3B82F6" }} />
               <span className="text-xs" style={{ color: "#94A3B8" }}>{lang === "en" ? "Planned" : lang === "dari" ? "برنامه‌ریزی" : "پلان شوی"}</span>
             </div>
           </div>

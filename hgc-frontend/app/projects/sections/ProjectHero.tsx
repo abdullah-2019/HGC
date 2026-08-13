@@ -13,6 +13,7 @@ interface ProjectHeroProps {
 export default function ProjectHero({ project }: ProjectHeroProps) {
   const { lang } = useI18n();
   const [scrollY, setScrollY] = useState(0);
+  const isRTL = lang !== "en";
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -32,7 +33,11 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
   const StatusIcon = status.icon;
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ height: "75vh", minHeight: 500, maxHeight: 900 }}>
+    <section 
+      className="relative w-full overflow-hidden" 
+      style={{ height: "75vh", minHeight: 500, maxHeight: 900 }}
+      dir={isRTL ? "rtl" : "ltr"}
+    >
       {/* Parallax Background */}
       <div className="absolute inset-0 w-full h-[120%]" style={{ transform: `translateY(${parallaxOffset}px)` }}>
         <Image
@@ -55,7 +60,7 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
           {/* Status badge */}
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${status.bg} ${status.text} border ${status.border} mb-6 backdrop-blur-sm`}>
             <StatusIcon className="w-4 h-4" />
-            <span className="text-sm font-medium">
+            <span className="text-sm font-medium text-start">
               {project.status === "completed"
                 ? (lang === "en" ? "Completed" : lang === "dari" ? "تکمیل شده" : "بشپړه شوې")
                 : project.status === "ongoing"
@@ -63,20 +68,20 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
                   : (lang === "en" ? "Planned" : lang === "dari" ? "برنامه‌ریزی شده" : "پلان شوی")}
             </span>
             {project.completionDate && (
-              <span className="text-white/50 text-xs ml-1">
+              <span className="text-white/50 text-xs ms-1">
                 • {project.completionDate}
               </span>
             )}
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 leading-tight max-w-4xl">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 leading-tight max-w-4xl text-start">
             {lang === "en" ? project.nameEn : project.nameDari}
           </h1>
 
           {/* Tagline */}
           {project.taglineEn && (
-            <p className="text-xl text-hgc-gold mb-8 max-w-2xl">
+            <p className="text-xl text-hgc-gold mb-8 max-w-2xl text-start">
               {lang === "en" ? project.taglineEn : project.taglineDari}
             </p>
           )}
@@ -85,15 +90,15 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
           <div className="flex flex-wrap items-center gap-6 text-white/60 text-sm">
             <span className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-hgc-gold" />
-              {lang === "en" ? project.location : project.locationDari}
+              <span className="text-start">{lang === "en" ? project.location : project.locationDari}</span>
             </span>
             <span className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-hgc-gold" />
-              {lang === "en" ? project.duration : project.durationDari}
+              <span className="text-start">{lang === "en" ? project.duration : project.durationDari}</span>
             </span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: project.companyColor }} />
-              {lang === "en" ? project.contractor : project.contractorDari}
+              <span className="text-start">{lang === "en" ? project.contractor : project.contractorDari}</span>
             </span>
           </div>
         </div>

@@ -31,6 +31,7 @@ interface ProjectCardProps {
 export default function ProjectCard({ project }: ProjectCardProps) {
   const { lang } = useI18n();
   const [isHovered, setIsHovered] = useState(false);
+  const isRTL = lang !== "en";
 
   const statusConfig = {
     completed: {
@@ -64,6 +65,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="group relative block"
+      dir={isRTL ? "rtl" : "ltr"}
     >
       <div className="relative bg-hgc-card border border-hgc-border rounded-2xl overflow-hidden hover:border-hgc-gold/30 transition-all duration-500 h-full shadow-sm hover:shadow-md">
         {/* Image Container */}
@@ -81,7 +83,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Company color accent bar */}
           <div
-            className="absolute top-0 left-0 right-0 h-1 transition-all duration-500"
+            className="absolute top-0 start-0 end-0 h-1 transition-all duration-500"
             style={{
               backgroundColor: project.companyColor,
               opacity: isHovered ? 1 : 0.6,
@@ -89,7 +91,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           />
 
           {/* Status badge */}
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-4 start-4">
             <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border ${status.bg} ${status.text} ${status.border}`}>
               <CheckCircle2 className="w-3 h-3" />
               {lang === "en" ? status.labelEn : status.labelDari}
@@ -98,7 +100,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Completion bar for ongoing projects */}
           {project.status === "ongoing" && (
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-hgc-border">
+            <div className="absolute bottom-0 start-0 end-0 h-1 bg-hgc-border">
               <div
                 className="h-full transition-all duration-1000 ease-out"
                 style={{
@@ -111,13 +113,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Hover arrow */}
           <div
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm border border-hgc-border flex items-center justify-center transition-all duration-300 shadow-lg"
+            className="absolute top-4 end-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm border border-hgc-border flex items-center justify-center transition-all duration-300 shadow-lg"
             style={{
               opacity: isHovered ? 1 : 0,
               transform: isHovered ? "translateY(0)" : "translateY(-10px)",
             }}
           >
-            <ArrowUpRight className="w-4 h-4 text-hgc-gold" />
+            <ArrowUpRight className={`w-4 h-4 text-hgc-gold ${isRTL ? "-scale-x-100" : ""}`} />
           </div>
         </div>
 
@@ -135,12 +137,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </span>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-hgc-text mb-2 group-hover:text-hgc-gold transition-colors duration-300 line-clamp-2">
+          <h3 className="text-lg font-bold text-hgc-text mb-2 group-hover:text-hgc-gold transition-colors duration-300 line-clamp-2 text-start">
             {lang === "en" ? project.nameEn : project.nameDari}
           </h3>
 
           {/* Description */}
-          <p className="text-hgc-text-muted text-sm leading-relaxed mb-4 line-clamp-2">
+          <p className="text-hgc-text-muted text-sm leading-relaxed mb-4 line-clamp-2 text-start">
             {lang === "en" ? project.descriptionEn : project.descriptionDari}
           </p>
 
@@ -148,17 +150,19 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           <div className="flex flex-wrap items-center gap-4 text-xs text-hgc-text-muted">
             <span className="flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-hgc-gold" />
-              {lang === "en" ? project.locationEn : project.locationDari}
+              <span className="text-start">
+                {lang === "en" ? project.locationEn : project.locationDari}
+              </span>
             </span>
             <span className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-hgc-gold" />
-              {project.duration}
+              <span className="text-start">{project.duration}</span>
             </span>
           </div>
 
           {/* Client */}
           <div className="mt-4 pt-4 border-t border-hgc-border">
-            <p className="text-hgc-text-muted text-xs">
+            <p className="text-hgc-text-muted text-xs text-start">
               <span className="text-hgc-text-secondary">
                 {lang === "en" ? "Client: " : lang === "dari" ? "کارفرما: " : "پیرودونکی: "}
               </span>

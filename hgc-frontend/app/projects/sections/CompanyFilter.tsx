@@ -27,20 +27,27 @@ interface CompanyFilterProps {
 
 export default function CompanyFilter({ activeCompany, onCompanyChange, companies }: CompanyFilterProps) {
   const { lang } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
 
   // Fallback if API companies not loaded yet
   const filterCompanies = companies.length > 0 ? companies : [
-    { id: "all", slug: "all", nameEn: "All Projects", nameDari: "همه پروژه‌ها", icon: "Building2", color: "#D4AF37" },
-    { id: "hcrc", slug: "hcrc", nameEn: "Hafez Construction", nameDari: "حافظ ساختمان", icon: "Building2", color: "#B22222" },
-    { id: "albahrain", slug: "albahrain", nameEn: "Al-Bahrain Mining", nameDari: "البحرین معادن", icon: "Mountain", color: "#1A237E" },
-    { id: "zainnoorain", slug: "zainnoorain", nameEn: "Zain Noorain", nameDari: "زین نورین", icon: "HardHat", color: "#F57C00" },
-    { id: "almadinah", slug: "almadinah", nameEn: "Al-Madinah Trading", nameDari: "المدینه تجارت", icon: "Store", color: "#2E7D32" },
-    { id: "haramain", slug: "haramain", nameEn: "Haramain Financial", nameDari: "حرمین مالی", icon: "Landmark", color: "#FFD700" },
-    { id: "alkoozi", slug: "alkoozi", nameEn: "Al-Koozi Logistics", nameDari: "الکوزی لوجستیک", icon: "Truck", color: "#00838F" },
+    { id: "all", slug: "all", nameEn: "All Projects", nameDari: "همه پروژه‌ها", namePashto: "ټولې پروژې", icon: "Building2", color: "#D4AF37" },
+    { id: "hcrc", slug: "hcrc", nameEn: "Hafez Construction", nameDari: "حافظ ساختمان", namePashto: "حافظ جوړونه", icon: "Building2", color: "#B22222" },
+    { id: "albahrain", slug: "albahrain", nameEn: "Al-Bahrain Mining", nameDari: "البحرین معادن", namePashto: "البحرین کانونه", icon: "Mountain", color: "#1A237E" },
+    { id: "zainnoorain", slug: "zainnoorain", nameEn: "Zain Noorain", nameDari: "زین نورین", namePashto: "زین نورین", icon: "HardHat", color: "#F57C00" },
+    { id: "almadinah", slug: "almadinah", nameEn: "Al-Madinah Trading", nameDari: "المدینه تجارت", namePashto: "المدینه سوداګري", icon: "Store", color: "#2E7D32" },
+    { id: "haramain", slug: "haramain", nameEn: "Haramain Financial", nameDari: "حرمین مالی", namePashto: "حرمین مالي", icon: "Landmark", color: "#FFD700" },
+    { id: "alkoozi", slug: "alkoozi", nameEn: "Al-Koozi Logistics", nameDari: "الکوزی لوجستیک", namePashto: "الکوزی لوجستیک", icon: "Truck", color: "#00838F" },
   ];
 
+  const getName = (company: any) => {
+    if (lang === "en") return company.nameEn;
+    if (lang === "dari") return company.nameDari || company.nameEn;
+    return company.namePashto || company.nameDari || company.nameEn;
+  };
+
   return (
-    <section className="relative py-8 bg-hgc-bg border-b border-hgc-border sticky top-0 z-40 backdrop-blur-xl">
+    <section dir={isRtl ? "rtl" : "ltr"} className="relative py-8 bg-hgc-bg border-b border-hgc-border sticky top-0 z-40 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {filterCompanies.map((company) => {
@@ -64,13 +71,13 @@ export default function CompanyFilter({ activeCompany, onCompanyChange, companie
                 }}
               >
                 <Icon
-                  className="w-4 h-4"
+                  className="w-4 h-4 shrink-0"
                   style={{ color: isActive ? company.color : "currentColor" }}
                 />
-                <span>{lang === "en" ? company.nameEn : company.nameDari}</span>
+                <span>{getName(company)}</span>
                 {isActive && (
                   <span
-                    className="w-1.5 h-1.5 rounded-full animate-pulse"
+                    className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0"
                     style={{ backgroundColor: company.color }}
                   />
                 )}
