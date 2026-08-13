@@ -487,7 +487,7 @@
                         @forelse ($milestones as $milestone)
                             <div class="milestone-row relative p-4 bg-gray-700/50 rounded-lg border border-gray-600 mb-2"
                                 data-milestone-id="{{ $milestone->id }}">
-                                <!-- Delete Button - Top Right Corner -->
+                                <!-- Delete Button -->
                                 <button type="button" onclick="removeMilestone(this)" title="Remove milestone"
                                     style="position: absolute; top: 2px; right: 2px; color: red;">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -496,6 +496,7 @@
                                     </svg>
                                 </button>
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start pr-8">
+                                    <!-- Row 1: Titles + Date -->
                                     <div class="md:col-span-3">
                                         <label class="block mb-1 text-xs font-medium text-gray-400">Title (EN)</label>
                                         <input type="text" name="milestones[{{ $milestone->id }}][title_en]"
@@ -523,17 +524,32 @@
                                             value="{{ old('milestones.' . $milestone->id . '.milestone_date', $milestone->milestone_date?->format('Y-m-d')) }}"
                                             class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500">
                                     </div>
+
+                                    <!-- Row 2: Description EN (full width) -->
                                     <div class="md:col-span-12">
-                                        <label class="block mb-1 text-xs font-medium text-gray-400">Description</label>
-                                        <textarea name="milestones[{{ $milestone->id }}][description]" rows="2"
+                                        <label class="block mb-1 text-xs font-medium text-gray-400">Description (EN)</label>
+                                        <textarea name="milestones[{{ $milestone->id }}][description_en]" rows="2"
                                             class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="Milestone description...">{{ old('milestones.' . $milestone->id . '.description', $milestone->description) }}</textarea>
+                                            placeholder="Milestone description...">{{ old('milestones.' . $milestone->id . '.description_en', $milestone->description_en) }}</textarea>
+                                    </div>
+                                    <!-- Row 3: Description Dari (full width) -->
+                                    <div class="md:col-span-12">
+                                        <label class="block mb-1 text-xs font-medium text-gray-400">Description (Dari)</label>
+                                        <textarea name="milestones[{{ $milestone->id }}][description_dari]" rows="2" dir="rtl"
+                                            class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="توضیحات دری...">{{ old('milestones.' . $milestone->id . '.description_dari', $milestone->description_dari) }}</textarea>
+                                    </div>
+                                    <!-- Row 4: Description Pashto (full width) -->
+                                    <div class="md:col-span-12">
+                                        <label class="block mb-1 text-xs font-medium text-gray-400">Description (Pashto)</label>
+                                        <textarea name="milestones[{{ $milestone->id }}][description_pashto]" rows="2" dir="rtl"
+                                            class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="پښتو توضیحات...">{{ old('milestones.' . $milestone->id . '.description_pashto', $milestone->description_pashto) }}</textarea>
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <p id="no-milestones-msg" class="text-sm text-gray-500 italic py-2">No milestones yet. Click
-                                below to add one.</p>
+                            <p id="no-milestones-msg" class="text-sm text-gray-500 italic py-2">No milestones yet. Click below to add one.</p>
                         @endforelse
                     </div>
                     <button type="button" onclick="addMilestone()"
@@ -696,17 +712,16 @@
             var row = document.createElement('div');
             row.className = 'milestone-row relative p-4 bg-gray-700/50 rounded-lg border border-gray-600 mb-2';
             row.innerHTML =
-                '<button type="button" onclick="removeMilestone(this)" title="Remove milestone" style="position: absolute; top: 2px; right: 2px; color: red;"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg></button><div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start pr-8"><div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (EN)</label><input type="text" name="milestones_new[' +
-                idx +
-                '][title_en]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Milestone title..."></div><div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (Dari)</label><input type="text" name="milestones_new[' +
-                idx +
-                '][title_dari]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="عنوان دری..." dir="rtl"></div><div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (Pashto)</label><input type="text" name="milestones_new[' +
-                idx +
-                '][title_pashto]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="پښتو عنوان..." dir="rtl"></div><div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Date</label><input type="date" name="milestones_new[' +
-                idx +
-                '][milestone_date]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500"></div><div class="md:col-span-12"><label class="block mb-1 text-xs font-medium text-gray-400">Description</label><textarea name="milestones_new[' +
-                idx +
-                '][description]" rows="2" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Milestone description..."></textarea></div></div>';
+                '<button type="button" onclick="removeMilestone(this)" title="Remove milestone" style="position: absolute; top: 2px; right: 2px; color: red;"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg></button>' +
+                '<div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start pr-8">' +
+                '<div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (EN)</label><input type="text" name="milestones_new[' + idx + '][title_en]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Milestone title..."></div>' +
+                '<div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (Dari)</label><input type="text" name="milestones_new[' + idx + '][title_dari]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="عنوان دری..." dir="rtl"></div>' +
+                '<div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Title (Pashto)</label><input type="text" name="milestones_new[' + idx + '][title_pashto]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="پښتو عنوان..." dir="rtl"></div>' +
+                '<div class="md:col-span-3"><label class="block mb-1 text-xs font-medium text-gray-400">Date</label><input type="date" name="milestones_new[' + idx + '][milestone_date]" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500"></div>' +
+                '<div class="md:col-span-12"><label class="block mb-1 text-xs font-medium text-gray-400">Description (EN)</label><textarea name="milestones_new[' + idx + '][description_en]" rows="2" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Milestone description..."></textarea></div>' +
+                '<div class="md:col-span-12"><label class="block mb-1 text-xs font-medium text-gray-400">Description (Dari)</label><textarea name="milestones_new[' + idx + '][description_dari]" rows="2" dir="rtl" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="توضیحات دری..."></textarea></div>' +
+                '<div class="md:col-span-12"><label class="block mb-1 text-xs font-medium text-gray-400">Description (Pashto)</label><textarea name="milestones_new[' + idx + '][description_pashto]" rows="2" dir="rtl" class="block w-full text-sm bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="پښتو توضیحات..."></textarea></div>' +
+                '</div>';
             container.appendChild(row);
         }
 

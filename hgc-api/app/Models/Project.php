@@ -77,10 +77,9 @@ class Project extends Model
         'end_date' => 'date',
         'budget_amount' => 'decimal:2',
         'completion_percent' => 'integer',
-        'gallery_images' => 'json',
+        'gallery_images' => 'array',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
-        'gallery_images' => 'array',
     ];
 
     public function category(): BelongsTo

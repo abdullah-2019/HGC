@@ -325,6 +325,53 @@ class ProjectController extends Controller
     /**
      * Process milestones (update existing, create new, delete removed)
      */
+    // private function processMilestones(Request $request, Project $project)
+    // {
+    //     // Delete removed milestones
+    //     if ($request->has('milestones_delete')) {
+    //         $deleteIds = $request->input('milestones_delete', []);
+    //         ProjectMilestone::whereIn('id', $deleteIds)->where('project_id', $project->id)->delete();
+    //     }
+
+    //     // Update existing milestones
+    //     if ($request->has('milestones')) {
+    //         foreach ($request->input('milestones', []) as $milestoneId => $milestoneData) {
+    //             $milestone = ProjectMilestone::where('id', $milestoneId)
+    //                 ->where('project_id', $project->id)
+    //                 ->first();
+
+    //             if ($milestone) {
+    //                 $milestone->update([
+    //                     'title_en' => $milestoneData['title_en'] ?? null,
+    //                     'title_dari' => $milestoneData['title_dari'] ?? null,
+    //                     'title_pashto' => $milestoneData['title_pashto'] ?? null,
+    //                     'description' => $milestoneData['description'] ?? null,
+    //                     'milestone_date' => $milestoneData['milestone_date'] ?? null,
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+    //     // Create new milestones
+    //     if ($request->has('milestones_new')) {
+    //         foreach ($request->input('milestones_new', []) as $milestoneData) {
+    //             if (!empty($milestoneData['title_en']) || !empty($milestoneData['title_dari']) || !empty($milestoneData['title_pashto'])) {
+    //                 ProjectMilestone::create([
+    //                     'project_id' => $project->id,
+    //                     'title_en' => $milestoneData['title_en'] ?? null,
+    //                     'title_dari' => $milestoneData['title_dari'] ?? null,
+    //                     'title_pashto' => $milestoneData['title_pashto'] ?? null,
+    //                     'description' => $milestoneData['description'] ?? null,
+    //                     'milestone_date' => $milestoneData['milestone_date'] ?? null,
+    //                 ]);
+    //             }
+    //         }
+    //     }
+    // }
+
+        /**
+     * Process milestones (update existing, create new, delete removed)
+     */
     private function processMilestones(Request $request, Project $project)
     {
         // Delete removed milestones
@@ -345,7 +392,9 @@ class ProjectController extends Controller
                         'title_en' => $milestoneData['title_en'] ?? null,
                         'title_dari' => $milestoneData['title_dari'] ?? null,
                         'title_pashto' => $milestoneData['title_pashto'] ?? null,
-                        'description' => $milestoneData['description'] ?? null,
+                        'description_en' => $milestoneData['description_en'] ?? null,
+                        'description_dari' => $milestoneData['description_dari'] ?? null,
+                        'description_pashto' => $milestoneData['description_pashto'] ?? null,
                         'milestone_date' => $milestoneData['milestone_date'] ?? null,
                     ]);
                 }
@@ -361,7 +410,9 @@ class ProjectController extends Controller
                         'title_en' => $milestoneData['title_en'] ?? null,
                         'title_dari' => $milestoneData['title_dari'] ?? null,
                         'title_pashto' => $milestoneData['title_pashto'] ?? null,
-                        'description' => $milestoneData['description'] ?? null,
+                        'description_en' => $milestoneData['description_en'] ?? null,
+                        'description_dari' => $milestoneData['description_dari'] ?? null,
+                        'description_pashto' => $milestoneData['description_pashto'] ?? null,
                         'milestone_date' => $milestoneData['milestone_date'] ?? null,
                     ]);
                 }
