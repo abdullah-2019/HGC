@@ -1,2 +1,0 @@
-sidebar logo should be fixed.
-footer dari phone direction issue.
