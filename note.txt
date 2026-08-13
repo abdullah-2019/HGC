@@ -1,4 +1,2 @@
-refactor frontend models [remove fillable]
-working on about carouse
 sidebar logo should be fixed.
-dashboard statistic should be fixed.
+footer dari phone direction issue.

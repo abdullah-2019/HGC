@@ -547,14 +547,20 @@ export default function Footer() {
                   <div className="w-9 h-9 rounded-lg bg-hgc-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Phone className="w-4 h-4 text-hgc-accent" />
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-hgc-header-text font-medium text-sm mb-1">{phoneLabel}</p>
-                    <a href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`} className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block">
-                      {settings.phonePrimary}
+                    <a 
+                      href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`} 
+                      className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block"
+                    >
+                      <span dir="ltr" className="inline-block">{settings.phonePrimary}</span>
                     </a>
                     {settings.phoneSecondary && (
-                      <a href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`} className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block">
-                        {settings.phoneSecondary}
+                      <a 
+                        href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`} 
+                        className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block"
+                      >
+                        <span dir="ltr" className="inline-block">{settings.phoneSecondary}</span>
                       </a>
                     )}
                   </div>
@@ -583,10 +589,6 @@ export default function Footer() {
         <div className="mt-12 pt-6 border-t border-hgc-header-border">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-hgc-header-text-ghost text-xs">{copyright}</p>
-            {/* <div className="flex items-center gap-6"> */}
-              {/* <Link href="/privacy" className="text-hgc-header-text-ghost hover:text-hgc-header-text-muted text-xs transition-colors">{privacyText}</Link> */}
-              {/* <Link href="/terms" className="text-hgc-header-text-ghost hover:text-hgc-header-text-muted text-xs transition-colors">{termsText}</Link> */}
-            {/* </div> */}
           </div>
         </div>
       </div>
