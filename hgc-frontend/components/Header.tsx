@@ -28,6 +28,96 @@ function resolveIcon(iconName: string): LucideIcon {
   return (Icon as LucideIcon) || LucideIcons.Building2;
 }
 
+// ── Brand Title Splitter (matches Footer.tsx) ─────────────────────
+function splitBrandTitle(title: string, lang: string): { main: string; sub: string } {
+  const trimmed = title.trim();
+  if (!trimmed) return { main: "", sub: "" };
+
+  if (lang === "en") {
+    const match = trimmed.match(/^(HAFEZ|Hafiz|HAFIZ)\b\s*(.*)/i);
+    if (match) return { main: match[1].toUpperCase(), sub: match[2].trim() };
+    const parts = trimmed.split(/\s+/);
+    if (parts.length > 1) return { main: parts[0], sub: parts.slice(1).join(" ") };
+    return { main: trimmed, sub: "" };
+  }
+
+  const hafezVariants = ["حافظ"];
+  for (const variant of hafezVariants) {
+    const idx = trimmed.indexOf(variant);
+    if (idx >= 0) {
+      const before = trimmed.slice(0, idx).trim();
+      const after = trimmed.slice(idx + variant.length).trim();
+      return { main: variant, sub: [before, after].filter(Boolean).join(" ") };
+    }
+  }
+
+  const parts = trimmed.split(/\s+/);
+  if (parts.length > 1) return { main: parts[0], sub: parts.slice(1).join(" ") };
+  return { main: trimmed, sub: "" };
+}
+
+// ── Compact BrandBlock for Header ─────────────────────────────────
+function HeaderBrandBlock({ main, sub, lang }: { main: string; sub: string; lang: string }) {
+  const isDari = lang === "dari";
+  const isEnglish = lang === "en";
+  const isRTL = lang === "dari" || lang === "pashto";
+
+  const topText = isDari ? sub : main;
+  const bottomText = isDari ? main : sub;
+
+  const topWords = topText.trim().split(/\s+/);
+  const bottomWords = bottomText.trim().split(/\s+/);
+
+  if (!sub) {
+    return (
+      <h1 className="text-hgc-header-text font-bold text-sm lg:text-base leading-tight tracking-wide">
+        {main}
+      </h1>
+    );
+  }
+
+  return (
+    <div className="inline-grid" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Top line */}
+      <div
+        className={`flex items-baseline whitespace-nowrap gap-1 ${topWords.length > 1 ? "justify-between" : ""
+          } ${isDari
+            ? "text-[10px] lg:text-xs font-semibold text-hgc-header-text/90"
+            : isEnglish
+              ? "text-base lg:text-lg font-black text-hgc-header-text"
+              : "text-base lg:text-lg font-black text-hgc-header-text"
+          }`}
+      >
+        {topWords.map((w, i) => (
+  <span key={i} className="inline-block whitespace-nowrap">
+    {w === "حافظ" ? "حــــــافظ" : w}
+  </span>
+))}
+      </div>
+
+      {/* Gold separator */}
+      <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-hgc-gold to-transparent" />
+
+      {/* Bottom line */}
+      <div
+        className={`flex items-baseline whitespace-nowrap gap-1 ${bottomWords.length > 1 ? "justify-between" : ""
+          } ${isDari
+            ? "text-base lg:text-lg font-black text-hgc-header-text"
+            : isEnglish
+              ? "text-[9px] lg:text-[10px] font-semibold text-hgc-accent uppercase tracking-widest"
+              : "text-[10px] lg:text-xs font-semibold text-hgc-accent"
+          }`}
+      >
+        {bottomWords.map((w, i) => (
+          <span key={i} className="inline-block whitespace-nowrap">
+            {w === "حافظ" ? "حـــــــــافظ" : w}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 interface Company {
   id: number;
   slug: string;
@@ -38,6 +128,15 @@ interface Company {
   icon_name: string;
   logo_url: string | null;
   hero_image_url: string | null;
+}
+
+interface SiteSettings {
+  brandTitleEn: string;
+  brandTitleDari: string | null;
+  brandTitlePashto: string | null;
+  brandSubtitleEn: string;
+  brandSubtitleDari: string | null;
+  brandSubtitlePashto: string | null;
 }
 
 const navPaths = [
@@ -54,6 +153,19 @@ const languages: { code: Lang; label: string }[] = [
   { code: "pashto", label: "پښتو" },
 ];
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
+
+function getLocalizedText(
+  lang: string,
+  en: string,
+  dari: string | null,
+  pashto: string | null
+): string {
+  if (lang === "dari" && dari) return dari;
+  if (lang === "pashto" && pashto) return pashto;
+  return en;
+}
+
 export default function Header() {
   const { lang, setLang, dir } = useI18n();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -61,6 +173,7 @@ export default function Header() {
   const [companiesOpen, setCompaniesOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loadingCompanies, setLoadingCompanies] = useState(true);
   const pathname = usePathname();
 
@@ -84,7 +197,7 @@ export default function Header() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/companies?lang=${lang}`;
+        const apiUrl = `${API_BASE}/api/companies?lang=${lang}`;
         const res = await fetch(apiUrl, {
           headers: { Accept: "application/json" },
         });
@@ -113,6 +226,23 @@ export default function Header() {
 
     fetchCompanies();
   }, [lang]);
+
+  // Fetch site settings for translated brand title
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/site-settings`, {
+          headers: { Accept: "application/json" },
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (json.success) setSettings(json.data);
+      } catch (err) {
+        console.error("Header: Failed to fetch site settings:", err);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -167,35 +297,41 @@ export default function Header() {
     }, 150);
   };
 
+  const brandTitle = getLocalizedText(
+    lang,
+    settings?.brandTitleEn ?? "HAFEZ GROUP",
+    settings?.brandTitleDari ?? null,
+    settings?.brandTitlePashto ?? null
+  );
+  const brandParts = splitBrandTitle(brandTitle, lang);
+
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? "hgc-stripe-bg shadow-2xl shadow-hgc-header-text/10 border-b border-hgc-header-border"
-            : "hgc-stripe-bg border-b border-hgc-header-border"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+          ? "hgc-stripe-bg shadow-2xl shadow-hgc-header-text/10 border-b border-hgc-header-border"
+          : "hgc-stripe-bg border-b border-hgc-header-border"
+          }`}
         dir={dir}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-20 lg:h-24">
-            {/* Logo */}
+            {/* Logo — styled like Footer logo block */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center">
-                <div className="absolute inset-0 bg-hgc-accent rounded-lg rotate-3 group-hover:rotate-6 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-hgc-logo-bg rounded-lg border-2 border-hgc-accent flex items-center justify-center">
-                  <span className="text-hgc-logo-text font-bold text-lg lg:text-xl tracking-tighter">
-                    HGC
-                  </span>
-                </div>
+              <div className="relative shrink-0">
+                <img
+                  src="/logo.webp"
+                  alt="HGC"
+                  className="w-12 h-12 lg:w-14 lg:h-14 object-contain rounded-xl"
+                />
+                <div className="absolute inset-0 rounded-xl ring-1 ring-hgc-accent/15 group-hover:ring-hgc-accent/30 transition-all duration-300" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-hgc-header-text font-bold text-sm lg:text-base leading-tight tracking-wide">
-                  HAFEZ GROUP
-                </h1>
-                <p className="text-hgc-accent text-[10px] lg:text-xs tracking-[0.2em] uppercase">
-                  {t(lang, "footer.brandSubtitle") || "of Companies"}
-                </p>
+                <HeaderBrandBlock
+                  main={brandParts.main}
+                  sub={brandParts.sub}
+                  lang={lang}
+                />
               </div>
             </Link>
 
@@ -205,17 +341,15 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${
-                    isActive(link.href)
-                      ? "text-hgc-accent"
-                      : "text-hgc-header-text/80 hover:text-hgc-header-text"
-                  }`}
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${isActive(link.href)
+                    ? "text-hgc-accent"
+                    : "text-hgc-header-text/80 hover:text-hgc-header-text"
+                    }`}
                 >
                   {t(lang, link.key)}
                   <span
-                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-hgc-accent transition-all duration-300 rounded-full ${
-                      isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
-                    }`}
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-hgc-accent transition-all duration-300 rounded-full ${isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
+                      }`}
                   />
                 </Link>
               ))}
@@ -228,17 +362,15 @@ export default function Header() {
                 onMouseLeave={closeCompanies}
               >
                 <button
-                  className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
-                    pathname.startsWith("/companies")
-                      ? "text-hgc-accent"
-                      : "text-hgc-header-text/80 hover:text-hgc-header-text"
-                  }`}
+                  className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${pathname.startsWith("/companies")
+                    ? "text-hgc-accent"
+                    : "text-hgc-header-text/80 hover:text-hgc-header-text"
+                    }`}
                 >
                   {t(lang, "nav.companies")}
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      companiesOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 transition-transform duration-300 ${companiesOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
               </div>
@@ -259,9 +391,8 @@ export default function Header() {
                     </span>
                   </div>
                   <ChevronDown
-                    className={`w-3 h-3 text-hgc-header-text/50 transition-transform shrink-0 ${
-                      langMenuOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-3 h-3 text-hgc-header-text/50 transition-transform shrink-0 ${langMenuOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
@@ -281,11 +412,10 @@ export default function Header() {
                               setLangMenuOpen(false);
                             }}
                             dir={l.code === "en" ? "ltr" : "rtl"}
-                            className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                              lang === l.code
-                                ? "bg-hgc-header-text/10 text-hgc-header-text font-semibold"
-                                : "text-hgc-dropdown-text-muted hover:bg-hgc-header-bg-hover hover:text-hgc-dropdown-text"
-                            }`}
+                            className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${lang === l.code
+                              ? "bg-hgc-header-text/10 text-hgc-header-text font-semibold"
+                              : "text-hgc-dropdown-text-muted hover:bg-hgc-header-bg-hover hover:text-hgc-dropdown-text"
+                              }`}
                           >
                             <span className="w-full text-start">{l.label}</span>
                           </button>
@@ -315,11 +445,10 @@ export default function Header() {
               ═══════════════════════════════════════════════════════════════ */}
           <div
             ref={dropdownRef}
-            className={`hidden lg:block absolute left-1/2 -translate-x-1/2 top-full z-50 transition-all duration-300 ${
-              companiesOpen
-                ? "opacity-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 -translate-y-3 pointer-events-none"
-            }`}
+            className={`hidden lg:block absolute left-1/2 -translate-x-1/2 top-full z-50 transition-all duration-300 ${companiesOpen
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 -translate-y-3 pointer-events-none"
+              }`}
             onMouseEnter={openCompanies}
             onMouseLeave={closeCompanies}
           >
@@ -425,9 +554,8 @@ export default function Header() {
                                   {company.name}
                                 </p>
                                 <ArrowRight
-                                  className={`w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-200 text-hgc-accent shrink-0 ${
-                                    dir === "rtl" ? "rotate-180" : ""
-                                  }`}
+                                  className={`w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-200 text-hgc-accent shrink-0 ${dir === "rtl" ? "rotate-180" : ""
+                                    }`}
                                 />
                               </div>
                               <p className="text-hgc-dropdown-text-muted text-xs line-clamp-2 mt-1 leading-relaxed">
@@ -456,9 +584,8 @@ export default function Header() {
                             : "ټول شرکتونه وګورئ"}
                       </span>
                       <ArrowRight
-                        className={`w-3.5 h-3.5 transition-transform duration-200 group-hover/all:translate-x-0.5 ${
-                          dir === "rtl" ? "rotate-180" : ""
-                        }`}
+                        className={`w-3.5 h-3.5 transition-transform duration-200 group-hover/all:translate-x-0.5 ${dir === "rtl" ? "rotate-180" : ""
+                          }`}
                       />
                     </Link>
                   </div>
@@ -471,22 +598,20 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden fixed inset-x-0 bottom-0 top-20 z-[9999] hgc-stripe-bg transition-all duration-500 ${
-          mobileOpen
-            ? "opacity-100 pointer-events-auto translate-x-0"
-            : "opacity-0 pointer-events-none translate-x-full"
-        }`}
+        className={`lg:hidden fixed inset-x-0 bottom-0 top-20 z-[9999] hgc-stripe-bg transition-all duration-500 ${mobileOpen
+          ? "opacity-100 pointer-events-auto translate-x-0"
+          : "opacity-0 pointer-events-none translate-x-full"
+          }`}
       >
         <div className="h-full overflow-y-auto px-4 py-6 pb-24 space-y-2">
           {navPaths.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${
-                isActive(link.href)
-                  ? "bg-hgc-accent/15 text-hgc-accent border border-hgc-accent/25"
-                  : "text-hgc-header-text/80 hover:text-hgc-header-text hover:bg-hgc-header-bg-hover"
-              }`}
+              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${isActive(link.href)
+                ? "bg-hgc-accent/15 text-hgc-accent border border-hgc-accent/25"
+                : "text-hgc-header-text/80 hover:text-hgc-header-text hover:bg-hgc-header-bg-hover"
+                }`}
             >
               {t(lang, link.key)}
             </Link>

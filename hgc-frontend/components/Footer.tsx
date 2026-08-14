@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Building2,
@@ -261,6 +261,34 @@ function getSocialBrandStyle(url: string) {
   };
 }
 
+// ── Brand Title Splitter ────────────────────────────────────────────
+function splitBrandTitle(title: string, lang: string): { main: string; sub: string } {
+  const trimmed = title.trim();
+  if (!trimmed) return { main: "", sub: "" };
+
+  if (lang === "en") {
+    const match = trimmed.match(/^(HAFEZ|Hafiz|HAFIZ)\b\s*(.*)/i);
+    if (match) return { main: match[1].toUpperCase(), sub: match[2].trim() };
+    const parts = trimmed.split(/\s+/);
+    if (parts.length > 1) return { main: parts[0], sub: parts.slice(1).join(" ") };
+    return { main: trimmed, sub: "" };
+  }
+
+  const hafezVariants = ["حافظ"];
+  for (const variant of hafezVariants) {
+    const idx = trimmed.indexOf(variant);
+    if (idx >= 0) {
+      const before = trimmed.slice(0, idx).trim();
+      const after = trimmed.slice(idx + variant.length).trim();
+      return { main: variant, sub: [before, after].filter(Boolean).join(" ") };
+    }
+  }
+
+  const parts = trimmed.split(/\s+/);
+  if (parts.length > 1) return { main: parts[0], sub: parts.slice(1).join(" ") };
+  return { main: trimmed, sub: "" };
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
@@ -370,7 +398,6 @@ export default function Footer() {
   }
 
   const brandTitle = getLocalizedText(lang, settings.brandTitleEn, settings.brandTitleDari, settings.brandTitlePashto);
-  const brandSubtitle = getLocalizedText(lang, settings.brandSubtitleEn, settings.brandSubtitleDari, settings.brandSubtitlePashto);
   const brandDesc = getLocalizedText(lang, settings.brandDescEn, settings.brandDescDari, settings.brandDescPashto);
   const officeLabel = getLocalizedText(lang, settings.officeLabelEn, settings.officeLabelDari, settings.officeLabelPashto);
   const address = getLocalizedText(lang, settings.addressEn, settings.addressDari, settings.addressPashto);
@@ -380,9 +407,73 @@ export default function Footer() {
   const privacyText = getLocalizedText(lang, settings.privacyTextEn, settings.privacyTextDari, settings.privacyTextPashto);
   const termsText = getLocalizedText(lang, settings.termsTextEn, settings.termsTextDari, settings.termsTextPashto);
 
+  const brandParts = splitBrandTitle(brandTitle, lang);
+
   const quickLinksTitle = lang === "en" ? "Quick Links" : lang === "dari" ? "لینک‌های سریع" : "چټک لینکونه";
   const ourCompaniesTitle = lang === "en" ? "Our Companies" : lang === "dari" ? "شرکت‌های ما" : "زموږ شرکتونه";
   const contactTitle = lang === "en" ? "Contact" : lang === "dari" ? "تماس" : "اړیکه";
+
+  // ── Exact-Width Brand Block ───────────────────────────────────────
+  function BrandBlock({ main, sub, lang }: { main: string; sub: string; lang: string }) {
+    const isDari = lang === "dari";
+    const isEnglish = lang === "en";
+    const isRTL = lang === "dari" || lang === "pashto";
+
+    const topText = isDari ? sub : main;
+    const bottomText = isDari ? main : sub;
+
+    const topWords = topText.trim().split(/\s+/);
+    const bottomWords = bottomText.trim().split(/\s+/);
+
+    if (!sub) {
+      return (
+        <h2 className="text-hgc-header-text font-black text-[1.65rem] leading-none tracking-tight">
+          {main}
+        </h2>
+      );
+    }
+
+    return (
+      <div className="inline-grid" dir={isRTL ? "rtl" : "ltr"}>
+        {/* Top line */}
+        <div
+          className={`flex items-baseline whitespace-nowrap ${topWords.length > 1 ? "justify-between" : ""
+            } ${isDari
+              ? "text-[0.8rem] font-semibold text-hgc-header-text/90"
+              : isEnglish
+                ? "text-[2.4rem] font-black text-hgc-header-text"
+                : "text-[2.4rem] font-black text-hgc-header-text"
+            }`}
+        >
+          {topWords.map((w, i) => (
+            <span key={i} className="inline-block whitespace-nowrap">
+              {w}
+            </span>
+          ))}
+        </div>
+
+        {/* Gold separator */}
+        <div className="my-2 h-px w-full bg-gradient-to-r from-transparent via-hgc-gold to-transparent" />
+
+        {/* Bottom line */}
+        <div
+          className={`flex items-baseline whitespace-nowrap ${bottomWords.length > 1 ? "justify-between" : ""
+            } ${isDari
+              ? "text-[2.4rem] font-black text-hgc-header-text"
+              : isEnglish
+                ? "text-[0.7rem] font-semibold text-hgc-accent uppercase"
+                : "text-[0.8rem] font-semibold text-hgc-accent"
+            }`}
+        >
+          {bottomWords.map((w, i) => (
+            <span key={i} className="inline-block whitespace-nowrap">
+              {w}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <footer className="relative hgc-stripe-bg-footer overflow-hidden" dir={dir}>
@@ -398,17 +489,23 @@ export default function Footer() {
 
           {/* ── Column 1: Brand ── */}
           <div className="lg:col-span-4 space-y-6">
-            <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="relative w-14 h-14 flex items-center justify-center">
-                <div className="absolute inset-0 bg-hgc-accent rounded-xl rotate-3 group-hover:rotate-6 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-hgc-logo-bg rounded-xl border-2 border-hgc-accent flex items-center justify-center">
-                  <span className="text-hgc-logo-text font-bold text-xl">HGC</span>
-                </div>
+            <Link href="/" className="inline-flex items-center gap-5 lg:gap-6 group">
+              {/* Logo */}
+              <div className="relative shrink-0">
+                <img
+                  src="/logo.webp"
+                  alt="HGC"
+                  className="w-[92px] h-[92px] object-contain rounded-xl"
+                />
+                <div className="absolute inset-0 rounded-xl ring-1 ring-hgc-accent/15 group-hover:ring-hgc-accent/30 transition-all duration-300" />
               </div>
-              <div>
-                <h2 className="text-hgc-header-text font-bold text-lg leading-tight">{brandTitle}</h2>
-                <p className="text-hgc-accent text-xs tracking-[0.2em] uppercase">{brandSubtitle}</p>
-              </div>
+
+              {/* Brand block — exact same width for both lines */}
+              <BrandBlock
+                main={brandParts.main}
+                sub={brandParts.sub}
+                lang={lang}
+              />
             </Link>
 
             <p className="text-hgc-header-text-faint text-sm leading-relaxed max-w-xs">{brandDesc}</p>
@@ -451,11 +548,10 @@ export default function Footer() {
                       className="group flex items-center gap-2 text-hgc-header-text-faint hover:text-hgc-accent transition-colors duration-200 text-sm"
                     >
                       <ChevronRight
-                        className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${
-                          dir === "rtl"
-                            ? "-mr-5 group-hover:mr-0 group-hover:opacity-100 rotate-180"
-                            : "-ml-5 group-hover:ml-0 group-hover:opacity-100"
-                        }`}
+                        className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${dir === "rtl"
+                          ? "-mr-5 group-hover:mr-0 group-hover:opacity-100 rotate-180"
+                          : "-ml-5 group-hover:ml-0 group-hover:opacity-100"
+                          }`}
                       />
                       {getLocalizedText(lang, link.label_en, link.label_dari, link.label_pashto)}
                     </Link>
@@ -549,15 +645,15 @@ export default function Footer() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-hgc-header-text font-medium text-sm mb-1">{phoneLabel}</p>
-                    <a 
-                      href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`} 
+                    <a
+                      href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`}
                       className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block"
                     >
                       <span dir="ltr" className="inline-block">{settings.phonePrimary}</span>
                     </a>
                     {settings.phoneSecondary && (
-                      <a 
-                        href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`} 
+                      <a
+                        href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`}
                         className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block"
                       >
                         <span dir="ltr" className="inline-block">{settings.phoneSecondary}</span>
