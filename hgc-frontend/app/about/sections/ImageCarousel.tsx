@@ -66,8 +66,8 @@ export default function ImageCarousel({ slides }: ImageCarouselProps) {
           </div>
           <h2 className="about-section-title font-bold">
             {lang === "en" ? (<>Projects That <span className="text-gold-gradient">Define Us</span></>) :
-             lang === "dari" ? (<>پروژه‌هایی که <span className="text-gold-gradient">ما را تعریف می‌کنند</span></>) :
-             (<>پروژې چې <span className="text-gold-gradient">موږ تعریفوي</span></>)}
+              lang === "dari" ? (<>پروژه‌هایی که <span className="text-gold-gradient">ما را تعریف می‌کنند</span></>) :
+                (<>پروژې چې <span className="text-gold-gradient">موږ تعریفوي</span></>)}
           </h2>
         </div>
 
