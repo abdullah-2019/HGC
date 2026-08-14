@@ -104,9 +104,9 @@ export default function AboutStory({ story }: AboutStoryProps) {
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (lang === 'dari' || lang === 'pashto' ? 'translate-x-12' : '-translate-x-12')} ${lang === 'dari' || lang === 'pashto' ? 'text-right' : 'text-left'}`}>
             <div className={`flex items-center gap-3 mb-6 ${lang === 'dari' || lang === 'pashto' ? 'flex-row-reverse' : ''}`}>
               <div className="flex items-center gap-3 mb-6">
-  <div className="gold-line" />
-  <span className="text-hgc-about-gold text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
-</div>
+                <div className="gold-line" />
+                <span className="text-hgc-about-gold text-sm font-semibold tracking-wider uppercase">{sectionLabel}</span>
+              </div>
             </div>
             <h2 className={`about-section-title font-bold text-hgc-about-text mb-8 ${lang === 'dari' || lang === 'pashto' ? 'text-right' : 'text-left'}`}>{renderTitle()}</h2>
             <div className="story-content text-hgc-about-text-secondary leading-relaxed space-y-4">
