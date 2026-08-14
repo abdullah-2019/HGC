@@ -10,7 +10,6 @@ import {
   Globe,
   ArrowRight,
   Loader2,
-  Building2,
   Layers,
 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
@@ -56,6 +55,11 @@ function splitBrandTitle(title: string, lang: string): { main: string; sub: stri
   return { main: trimmed, sub: "" };
 }
 
+// ── Kashida helper ────────────────────────────────────────────────
+function withKashida(w: string): string {
+  return w === "حافظ" ? "حــــــافظ" : w;
+}
+
 // ── Compact BrandBlock for Header ─────────────────────────────────
 function HeaderBrandBlock({ main, sub, lang }: { main: string; sub: string; lang: string }) {
   const isDari = lang === "dari";
@@ -65,8 +69,8 @@ function HeaderBrandBlock({ main, sub, lang }: { main: string; sub: string; lang
   const topText = isDari ? sub : main;
   const bottomText = isDari ? main : sub;
 
-  const topWords = topText.trim().split(/\s+/);
-  const bottomWords = bottomText.trim().split(/\s+/);
+  const topWords = topText.trim().split(/\s+/).filter(Boolean);
+  const bottomWords = bottomText.trim().split(/\s+/).filter(Boolean);
 
   if (!sub) {
     return (
@@ -80,19 +84,21 @@ function HeaderBrandBlock({ main, sub, lang }: { main: string; sub: string; lang
     <div className="inline-grid" dir={isRTL ? "rtl" : "ltr"}>
       {/* Top line */}
       <div
-        className={`flex items-baseline whitespace-nowrap gap-1 ${topWords.length > 1 ? "justify-between" : ""
-          } ${isDari
+        className={`flex items-baseline whitespace-nowrap gap-2 ${
+          topWords.length > 1 ? "justify-between" : ""
+        } ${
+          isDari
             ? "text-[10px] lg:text-xs font-semibold text-hgc-header-text/90"
             : isEnglish
               ? "text-base lg:text-lg font-black text-hgc-header-text"
               : "text-base lg:text-lg font-black text-hgc-header-text"
-          }`}
+        }`}
       >
         {topWords.map((w, i) => (
-  <span key={i} className="inline-block whitespace-nowrap">
-    {w === "حافظ" ? "حــــــافظ" : w}
-  </span>
-))}
+          <span key={i} className="inline-block whitespace-nowrap">
+            {withKashida(w)}
+          </span>
+        ))}
       </div>
 
       {/* Gold separator */}
@@ -100,17 +106,19 @@ function HeaderBrandBlock({ main, sub, lang }: { main: string; sub: string; lang
 
       {/* Bottom line */}
       <div
-        className={`flex items-baseline whitespace-nowrap gap-1 ${bottomWords.length > 1 ? "justify-between" : ""
-          } ${isDari
+        className={`flex items-baseline whitespace-nowrap gap-2 ${
+          bottomWords.length > 1 ? "justify-between" : ""
+        } ${
+          isDari
             ? "text-base lg:text-lg font-black text-hgc-header-text"
             : isEnglish
               ? "text-[9px] lg:text-[10px] font-semibold text-hgc-accent uppercase tracking-widest"
               : "text-[10px] lg:text-xs font-semibold text-hgc-accent"
-          }`}
+        }`}
       >
         {bottomWords.map((w, i) => (
           <span key={i} className="inline-block whitespace-nowrap">
-            {w === "حافظ" ? "حـــــــــافظ" : w}
+            {withKashida(w)}
           </span>
         ))}
       </div>
@@ -308,10 +316,11 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-          ? "hgc-stripe-bg shadow-2xl shadow-hgc-header-text/10 border-b border-hgc-header-border"
-          : "hgc-stripe-bg border-b border-hgc-header-border"
-          }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled
+            ? "hgc-stripe-bg shadow-2xl shadow-hgc-header-text/10 border-b border-hgc-header-border"
+            : "hgc-stripe-bg border-b border-hgc-header-border"
+        }`}
         dir={dir}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -341,15 +350,17 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${isActive(link.href)
-                    ? "text-hgc-accent"
-                    : "text-hgc-header-text/80 hover:text-hgc-header-text"
-                    }`}
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${
+                    isActive(link.href)
+                      ? "text-hgc-accent"
+                      : "text-hgc-header-text/80 hover:text-hgc-header-text"
+                  }`}
                 >
                   {t(lang, link.key)}
                   <span
-                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-hgc-accent transition-all duration-300 rounded-full ${isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
-                      }`}
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-hgc-accent transition-all duration-300 rounded-full ${
+                      isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
+                    }`}
                   />
                 </Link>
               ))}
@@ -362,15 +373,17 @@ export default function Header() {
                 onMouseLeave={closeCompanies}
               >
                 <button
-                  className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${pathname.startsWith("/companies")
-                    ? "text-hgc-accent"
-                    : "text-hgc-header-text/80 hover:text-hgc-header-text"
-                    }`}
+                  className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
+                    pathname.startsWith("/companies")
+                      ? "text-hgc-accent"
+                      : "text-hgc-header-text/80 hover:text-hgc-header-text"
+                  }`}
                 >
                   {t(lang, "nav.companies")}
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${companiesOpen ? "rotate-180" : ""
-                      }`}
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      companiesOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
               </div>
@@ -391,8 +404,9 @@ export default function Header() {
                     </span>
                   </div>
                   <ChevronDown
-                    className={`w-3 h-3 text-hgc-header-text/50 transition-transform shrink-0 ${langMenuOpen ? "rotate-180" : ""
-                      }`}
+                    className={`w-3 h-3 text-hgc-header-text/50 transition-transform shrink-0 ${
+                      langMenuOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
 
@@ -412,10 +426,11 @@ export default function Header() {
                               setLangMenuOpen(false);
                             }}
                             dir={l.code === "en" ? "ltr" : "rtl"}
-                            className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${lang === l.code
-                              ? "bg-hgc-header-text/10 text-hgc-header-text font-semibold"
-                              : "text-hgc-dropdown-text-muted hover:bg-hgc-header-bg-hover hover:text-hgc-dropdown-text"
-                              }`}
+                            className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
+                              lang === l.code
+                                ? "bg-hgc-header-text/10 text-hgc-header-text font-semibold"
+                                : "text-hgc-dropdown-text-muted hover:bg-hgc-header-bg-hover hover:text-hgc-dropdown-text"
+                            }`}
                           >
                             <span className="w-full text-start">{l.label}</span>
                           </button>
@@ -445,10 +460,11 @@ export default function Header() {
               ═══════════════════════════════════════════════════════════════ */}
           <div
             ref={dropdownRef}
-            className={`hidden lg:block absolute left-1/2 -translate-x-1/2 top-full z-50 transition-all duration-300 ${companiesOpen
-              ? "opacity-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 -translate-y-3 pointer-events-none"
-              }`}
+            className={`hidden lg:block absolute left-1/2 -translate-x-1/2 top-full z-50 transition-all duration-300 ${
+              companiesOpen
+                ? "opacity-100 translate-y-0 pointer-events-auto"
+                : "opacity-0 -translate-y-3 pointer-events-none"
+            }`}
             onMouseEnter={openCompanies}
             onMouseLeave={closeCompanies}
           >
@@ -554,8 +570,9 @@ export default function Header() {
                                   {company.name}
                                 </p>
                                 <ArrowRight
-                                  className={`w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-200 text-hgc-accent shrink-0 ${dir === "rtl" ? "rotate-180" : ""
-                                    }`}
+                                  className={`w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-200 text-hgc-accent shrink-0 ${
+                                    dir === "rtl" ? "rotate-180" : ""
+                                  }`}
                                 />
                               </div>
                               <p className="text-hgc-dropdown-text-muted text-xs line-clamp-2 mt-1 leading-relaxed">
@@ -584,8 +601,9 @@ export default function Header() {
                             : "ټول شرکتونه وګورئ"}
                       </span>
                       <ArrowRight
-                        className={`w-3.5 h-3.5 transition-transform duration-200 group-hover/all:translate-x-0.5 ${dir === "rtl" ? "rotate-180" : ""
-                          }`}
+                        className={`w-3.5 h-3.5 transition-transform duration-200 group-hover/all:translate-x-0.5 ${
+                          dir === "rtl" ? "rotate-180" : ""
+                        }`}
                       />
                     </Link>
                   </div>
@@ -598,20 +616,22 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden fixed inset-x-0 bottom-0 top-20 z-[9999] hgc-stripe-bg transition-all duration-500 ${mobileOpen
-          ? "opacity-100 pointer-events-auto translate-x-0"
-          : "opacity-0 pointer-events-none translate-x-full"
-          }`}
+        className={`lg:hidden fixed inset-x-0 bottom-0 top-20 z-[9999] hgc-stripe-bg transition-all duration-500 ${
+          mobileOpen
+            ? "opacity-100 pointer-events-auto translate-x-0"
+            : "opacity-0 pointer-events-none translate-x-full"
+        }`}
       >
         <div className="h-full overflow-y-auto px-4 py-6 pb-24 space-y-2">
           {navPaths.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${isActive(link.href)
-                ? "bg-hgc-accent/15 text-hgc-accent border border-hgc-accent/25"
-                : "text-hgc-header-text/80 hover:text-hgc-header-text hover:bg-hgc-header-bg-hover"
-                }`}
+              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${
+                isActive(link.href)
+                  ? "bg-hgc-accent/15 text-hgc-accent border border-hgc-accent/25"
+                  : "text-hgc-header-text/80 hover:text-hgc-header-text hover:bg-hgc-header-bg-hover"
+              }`}
             >
               {t(lang, link.key)}
             </Link>
