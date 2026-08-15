@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useI18n } from "@/components/useI18nStore";
-import { ArrowLeft, Calendar, MapPin, Clock, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, MapPin, Clock, Loader2 } from "lucide-react";
 
 interface EventDetail {
   id: number;
@@ -20,7 +20,8 @@ interface EventDetail {
 }
 
 export default function EventDetailPage() {
-  const { lang } = useI18n();
+  const { lang, dir } = useI18n();
+  const isRtl = lang === "dari" || lang === "pashto";
   const params = useParams();
   const slug = params.slug as string;
 
@@ -90,7 +91,7 @@ export default function EventDetailPage() {
   }
 
   return (
-    <article className="min-h-screen bg-hgc-bg">
+    <article dir={dir} className="min-h-screen bg-hgc-bg">
       {/* Hero Image */}
       <div className="relative h-[50vh] lg:h-[60vh] w-full">
         {event.cover_image ? (
@@ -105,7 +106,7 @@ export default function EventDetailPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-[#0F2B5B] to-[#1a1a2e]" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-hgc-bg via-hgc-bg/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-hgc-bg/40 to-transparent" />
+        <div className={`absolute inset-0 ${isRtl ? "bg-gradient-to-l" : "bg-gradient-to-r"} from-hgc-bg/40 to-transparent`} />
       </div>
 
       {/* Content */}
@@ -114,7 +115,7 @@ export default function EventDetailPage() {
           href="/"
           className="inline-flex items-center gap-2 text-hgc-gold hover:text-hgc-gold-bright transition-colors mb-8"
         >
-          <ArrowLeft className="w-4 h-4" />
+          {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
           {lang === "en"
             ? "Back to Home"
             : lang === "dari"
@@ -134,7 +135,7 @@ export default function EventDetailPage() {
           )}
         </div>
 
-        <h1 className="text-3xl lg:text-5xl font-bold text-hgc-text mb-8 leading-tight">
+        <h1 className="text-3xl lg:text-5xl font-bold text-hgc-text mb-8 leading-tight text-start">
           {event.title}
         </h1>
 
@@ -153,7 +154,7 @@ export default function EventDetailPage() {
           )}
         </div>
 
-        <div className="prose prose-invert prose-lg max-w-none text-hgc-text/80 leading-relaxed">
+        <div className="prose prose-invert prose-lg max-w-none text-hgc-text/80 leading-relaxed text-start">
           <p>{event.description}</p>
         </div>
       </div>
