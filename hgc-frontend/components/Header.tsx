@@ -183,6 +183,7 @@ export default function Header() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loadingCompanies, setLoadingCompanies] = useState(true);
+  const [brokenLogos, setBrokenLogos] = useState<Set<string>>(new Set());
   const pathname = usePathname();
 
   const companiesBtnRef = useRef<HTMLDivElement>(null);
@@ -303,6 +304,14 @@ export default function Header() {
     companiesTimeoutRef.current = setTimeout(() => {
       setCompaniesOpen(false);
     }, 150);
+  };
+
+  const handleLogoError = (slug: string) => {
+    setBrokenLogos((prev) => {
+      const next = new Set(prev);
+      next.add(slug);
+      return next;
+    });
   };
 
   const brandTitle = getLocalizedText(
@@ -535,6 +544,9 @@ export default function Header() {
                     <div className="grid grid-cols-3 gap-2">
                       {companies.map((company) => {
                         const Icon = resolveIcon(company.icon_name);
+                        const showLogo =
+                          company.logo_url && !brokenLogos.has(company.slug);
+
                         return (
                           <Link
                             key={company.slug}
@@ -549,11 +561,12 @@ export default function Header() {
                                 boxShadow: `0 0 0 0 ${company.accent_color}00`,
                               }}
                             >
-                              {company.logo_url ? (
+                              {showLogo ? (
                                 <img
-                                  src={company.logo_url}
+                                  src={company.logo_url!}
                                   alt={company.short_name}
                                   className="w-6 h-6 object-contain"
+                                  onError={() => handleLogoError(company.slug)}
                                 />
                               ) : (
                                 <Icon
@@ -649,6 +662,9 @@ export default function Header() {
               <div className="space-y-1">
                 {companies.map((company) => {
                   const Icon = resolveIcon(company.icon_name);
+                  const showLogo =
+                    company.logo_url && !brokenLogos.has(company.slug);
+
                   return (
                     <Link
                       key={company.slug}
@@ -661,10 +677,19 @@ export default function Header() {
                           backgroundColor: `${company.accent_color}15`,
                         }}
                       >
-                        <Icon
-                          className="w-4 h-4"
-                          style={{ color: company.accent_color }}
-                        />
+                        {showLogo ? (
+                          <img
+                            src={company.logo_url!}
+                            alt={company.short_name}
+                            className="w-5 h-5 object-contain"
+                            onError={() => handleLogoError(company.slug)}
+                          />
+                        ) : (
+                          <Icon
+                            className="w-4 h-4"
+                            style={{ color: company.accent_color }}
+                          />
+                        )}
                       </div>
                       <span className="text-hgc-header-text/80 text-sm">
                         {company.name}
