@@ -34,6 +34,7 @@ export default function CompaniesSection() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [hoveredCompany, setHoveredCompany] = useState<string | null>(null);
+  const [brokenLogos, setBrokenLogos] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -54,6 +55,14 @@ export default function CompaniesSection() {
 
     fetchCompanies();
   }, [lang]);
+
+  const handleLogoError = (slug: string) => {
+    setBrokenLogos((prev) => {
+      const next = new Set(prev);
+      next.add(slug);
+      return next;
+    });
+  };
 
   if (loading) {
     return (
@@ -101,6 +110,9 @@ export default function CompaniesSection() {
           {companies.map((company) => {
             const Icon = iconMap[company.icon_name] || Building2;
             const isHovered = hoveredCompany === company.slug;
+            const showLogo =
+              company.logo_url && !brokenLogos.has(company.slug);
+
             return (
               <Link
                 key={company.slug}
@@ -118,14 +130,26 @@ export default function CompaniesSection() {
                 />
                 <div className="flex items-start gap-4">
                   <div
-                    className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500"
+                    className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 overflow-hidden"
                     style={{
-                      backgroundColor: isHovered 
-                        ? `${company.accent_color}25` 
+                      backgroundColor: isHovered
+                        ? `${company.accent_color}25`
                         : `${company.accent_color}10`,
                     }}
                   >
-                    <Icon className="w-7 h-7 transition-colors duration-300" style={{ color: company.accent_color }} />
+                    {showLogo ? (
+                      <img
+                        src={company.logo_url!}
+                        alt={company.name}
+                        className="w-10 h-10 object-contain"
+                        onError={() => handleLogoError(company.slug)}
+                      />
+                    ) : (
+                      <Icon
+                        className="w-7 h-7 transition-colors duration-300"
+                        style={{ color: company.accent_color }}
+                      />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-hgc-companies-text font-bold text-lg mb-1 group-hover:text-hgc-companies-gold transition-colors">
@@ -136,7 +160,13 @@ export default function CompaniesSection() {
                     </p>
                     <span className="inline-flex items-center gap-1 text-sm text-hgc-companies-gold/70 group-hover:text-hgc-companies-gold transition-colors">
                       {t(lang, "common.visit")}
-                      <ArrowRight className={`w-4 h-4 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
+                      <ArrowRight
+                        className={`w-4 h-4 transition-transform ${
+                          isRtl
+                            ? "rotate-180 group-hover:-translate-x-1"
+                            : "group-hover:translate-x-1"
+                        }`}
+                      />
                     </span>
                   </div>
                 </div>
