@@ -1,33 +1,267 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
-  ChevronDown,
-  Menu,
-  X,
-  Globe,
-  ArrowRight,
+  Building2,
+  Phone,
+  Mail,
+  MapPin,
+  ArrowUpRight,
+  ChevronRight,
   Loader2,
-  Layers,
 } from "lucide-react";
+import { useI18n } from "./useI18nStore";
 import * as LucideIcons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useI18n } from "./useI18nStore";
-import { t, type Lang } from "./translations";
 
-// ── Dynamic Icon Resolver ─────────────────────────────────────────
+// ── Types ───────────────────────────────────────────────────────────
+interface Company {
+  id: number;
+  slug: string;
+  name: string;
+  short_name: string;
+  description: string;
+  accent_color: string;
+  icon_name: string;
+  logo_url: string | null;
+  hero_image_url: string | null;
+}
+
+interface SocialLink {
+  icon: string;
+  label: string;
+  url: string;
+  is_active: boolean;
+}
+
+interface FooterLink {
+  label_en: string;
+  label_dari: string | null;
+  label_pashto: string | null;
+  href: string;
+  sort_order: number;
+}
+
+interface SiteSettings {
+  brandTitleEn: string;
+  brandTitleDari: string | null;
+  brandTitlePashto: string | null;
+  brandSubtitleEn: string;
+  brandSubtitleDari: string | null;
+  brandSubtitlePashto: string | null;
+  brandDescEn: string;
+  brandDescDari: string | null;
+  brandDescPashto: string | null;
+  officeLabelEn: string;
+  officeLabelDari: string | null;
+  officeLabelPashto: string | null;
+  addressEn: string;
+  addressDari: string | null;
+  addressPashto: string | null;
+  phoneLabelEn: string;
+  phoneLabelDari: string | null;
+  phoneLabelPashto: string | null;
+  phonePrimary: string;
+  phoneSecondary: string | null;
+  emailLabelEn: string;
+  emailLabelDari: string | null;
+  emailLabelPashto: string | null;
+  emailAddress: string;
+  socialLinks: SocialLink[];
+  footerLinks: FooterLink[];
+  copyrightEn: string;
+  copyrightDari: string | null;
+  copyrightPashto: string | null;
+  privacyTextEn: string;
+  privacyTextDari: string | null;
+  privacyTextPashto: string | null;
+  termsTextEn: string;
+  termsTextDari: string | null;
+  termsTextPashto: string | null;
+}
+
+// ── Icon Maps ───────────────────────────────────────────────────────
+function resolveCompanyIcon(iconName: string): LucideIcon {
+  const normalized = iconName.charAt(0).toUpperCase() + iconName.slice(1);
+  const Icon = (LucideIcons as Record<string, unknown>)[normalized];
+  return (Icon as LucideIcon) || LucideIcons.Building2;
+}
+
 function resolveIcon(iconName: string): LucideIcon {
   const normalized = iconName
     .split(/[-_]/)
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
     .join("");
   const Icon = (LucideIcons as Record<string, unknown>)[normalized];
-  return (Icon as LucideIcon) || LucideIcons.Building2;
+  return (Icon as LucideIcon) || LucideIcons.Globe;
 }
 
-// ── Brand Title Splitter (matches Footer.tsx) ─────────────────────
+// ── Social Icon Helper ────────────────────────────────────────────
+function getSocialIcon(url: string): React.ReactNode {
+  if (!url) return <LucideIcons.Globe className="w-4 h-4" />;
+
+  let domain = "";
+  try {
+    domain = new URL(url).hostname.toLowerCase();
+  } catch {
+    domain = url.toLowerCase();
+  }
+
+  if (domain.includes("facebook") || domain.includes("fb.me")) {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+      </svg>
+    );
+  }
+
+  if (domain.includes("twitter") || domain.includes("x.com")) {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+    );
+  }
+
+  if (domain.includes("linkedin")) {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    );
+  }
+
+  if (domain.includes("instagram")) {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 11-2.882 0 1.441 1.441 0 012.882 0z" />
+      </svg>
+    );
+  }
+
+  if (domain.includes("youtube") || domain.includes("youtu.be") || domain.includes("yt.be")) {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+      </svg>
+    );
+  }
+
+  if (domain.includes("t.me") || domain.includes("telegram")) {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0011.944 0zm5.509 7.749c.144.288.156.624.012.912l-3.69 8.22c-.216.48-.768.72-1.248.528l-3.36-1.32-1.692 1.656c-.288.288-.696.396-1.068.276-.372-.12-.636-.444-.636-.828V14.52l6.732-6.168-5.292 3.216-2.244-.888c-.468-.18-.732-.696-.612-1.176.12-.48.564-.816 1.056-.828l8.688-.216c.372-.012.732.156.96.468z" />
+      </svg>
+    );
+  }
+
+  if (domain.includes("wa.me") || domain.includes("whatsapp")) {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+      </svg>
+    );
+  }
+
+  return <LucideIcons.Globe className="w-4 h-4" />;
+}
+
+// ── Social Brand Color Helper ───────────────────────────────────────
+function getSocialBrandStyle(url: string) {
+  if (!url) {
+    return {
+      text: "text-hgc-header-text-faint",
+      hoverText: "hover:text-hgc-accent",
+      border: "hover:border-hgc-accent/30",
+      bg: "hover:bg-hgc-accent/5",
+    };
+  }
+
+  let domain = "";
+  try {
+    domain = new URL(url).hostname.toLowerCase();
+  } catch {
+    domain = url.toLowerCase();
+  }
+
+  if (domain.includes("facebook") || domain.includes("fb.me")) {
+    return {
+      text: "text-hgc-social-facebook",
+      hoverText: "hover:text-hgc-social-facebook",
+      border: "hover:border-hgc-social-facebook/30",
+      bg: "hover:bg-hgc-social-facebook/10",
+    };
+  }
+
+  if (domain.includes("twitter") || domain.includes("x.com")) {
+    return {
+      text: "text-hgc-header-text/80",
+      hoverText: "hover:text-hgc-header-text",
+      border: "hover:border-hgc-header-border-hover",
+      bg: "hover:bg-hgc-header-bg-hover",
+    };
+  }
+
+  if (domain.includes("linkedin")) {
+    return {
+      text: "text-hgc-social-linkedin",
+      hoverText: "hover:text-hgc-social-linkedin",
+      border: "hover:border-hgc-social-linkedin/30",
+      bg: "hover:bg-hgc-social-linkedin/10",
+    };
+  }
+
+  if (domain.includes("instagram")) {
+    return {
+      text: "text-hgc-social-instagram",
+      hoverText: "hover:text-hgc-social-instagram",
+      border: "hover:border-hgc-social-instagram/30",
+      bg: "hover:bg-hgc-social-instagram/10",
+    };
+  }
+
+  if (domain.includes("youtube") || domain.includes("youtu.be") || domain.includes("yt.be")) {
+    return {
+      text: "text-hgc-social-youtube",
+      hoverText: "hover:text-hgc-social-youtube",
+      border: "hover:border-hgc-social-youtube/30",
+      bg: "hover:bg-hgc-social-youtube/10",
+    };
+  }
+
+  if (domain.includes("t.me") || domain.includes("telegram")) {
+    return {
+      text: "text-hgc-social-telegram",
+      hoverText: "hover:text-hgc-social-telegram",
+      border: "hover:border-hgc-social-telegram/30",
+      bg: "hover:bg-hgc-social-telegram/10",
+    };
+  }
+
+  if (domain.includes("wa.me") || domain.includes("whatsapp")) {
+    return {
+      text: "text-hgc-social-whatsapp",
+      hoverText: "hover:text-hgc-social-whatsapp",
+      border: "hover:border-hgc-social-whatsapp/30",
+      bg: "hover:bg-hgc-social-whatsapp/10",
+    };
+  }
+
+  return {
+    text: "text-hgc-header-text-faint",
+    hoverText: "hover:text-hgc-accent",
+    border: "hover:border-hgc-accent/30",
+    bg: "hover:bg-hgc-accent/5",
+  };
+}
+
+// ── Kashida helper ──────────────────────────────────────────────────
+function withKashida(w: string): string {
+  return w === "حافظ" ? "حــــــافظ" : w;
+}
+
+// ── Brand Title Splitter ────────────────────────────────────────────
 function splitBrandTitle(title: string, lang: string): { main: string; sub: string } {
   const trimmed = title.trim();
   if (!trimmed) return { main: "", sub: "" };
@@ -55,106 +289,7 @@ function splitBrandTitle(title: string, lang: string): { main: string; sub: stri
   return { main: trimmed, sub: "" };
 }
 
-// ── Kashida helper ────────────────────────────────────────────────
-function withKashida(w: string): string {
-  return w === "حافظ" ? "حــــــــــافظ" : w;
-}
-
-// ── Compact BrandBlock for Header ─────────────────────────────────
-function HeaderBrandBlock({ main, sub, lang }: { main: string; sub: string; lang: string }) {
-  const isDari = lang === "dari";
-  const isEnglish = lang === "en";
-  const isRTL = lang === "dari" || lang === "pashto";
-
-  const topText = isDari ? sub : main;
-  const bottomText = isDari ? main : sub;
-
-  const topWords = topText.trim().split(/\s+/).filter(Boolean);
-  const bottomWords = bottomText.trim().split(/\s+/).filter(Boolean);
-
-  if (!sub) {
-    return (
-      <h1 className="text-hgc-header-text font-bold text-sm lg:text-base leading-tight tracking-wide">
-        {main}
-      </h1>
-    );
-  }
-
-  return (
-    <div className="inline-flex flex-col items-start" dir={isRTL ? "rtl" : "ltr"}>
-      {/* Top line */}
-      <div
-        className={`flex items-baseline whitespace-nowrap gap-2 justify-center ${isDari
-            ? "text-[10px] lg:text-xs font-semibold text-hgc-header-text/90"
-            : isEnglish
-              ? "text-base lg:text-lg font-black text-hgc-header-text"
-              : "text-base lg:text-lg font-black text-hgc-header-text"
-          }`}
-      >
-        {topWords.map((w, i) => (
-          <span key={i} className="inline-block whitespace-nowrap">
-            {withKashida(w)}
-          </span>
-        ))}
-      </div>
-
-      {/* Gold separator */}
-      <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-hgc-gold to-transparent" />
-
-      {/* Bottom line — tight, centered, no justify-between */}
-      <div
-        className={`flex items-baseline whitespace-nowrap gap-1 justify-center ${isDari
-            ? "text-base lg:text-lg font-black text-hgc-header-text"
-            : isEnglish
-              ? "text-[9px] lg:text-[10px] font-semibold text-hgc-accent uppercase tracking-widest"
-              : "text-[10px] lg:text-xs font-semibold text-hgc-accent"
-          }`}
-      >
-        {bottomWords.map((w, i) => (
-          <span key={i} className="inline-block whitespace-nowrap">
-            {withKashida(w)}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-interface Company {
-  id: number;
-  slug: string;
-  name: string;
-  short_name: string;
-  description: string;
-  accent_color: string;
-  icon_name: string;
-  logo_url: string | null;
-  hero_image_url: string | null;
-}
-
-interface SiteSettings {
-  brandTitleEn: string;
-  brandTitleDari: string | null;
-  brandTitlePashto: string | null;
-  brandSubtitleEn: string;
-  brandSubtitleDari: string | null;
-  brandSubtitlePashto: string | null;
-}
-
-const navPaths = [
-  { href: "/", key: "nav.home" },
-  { href: "/about", key: "nav.about" },
-  { href: "/projects", key: "nav.projects" },
-  { href: "/products", key: "nav.products" },
-  { href: "/contact", key: "nav.contact" },
-];
-
-const languages: { code: Lang; label: string }[] = [
-  { code: "en", label: "English" },
-  { code: "dari", label: "دری" },
-  { code: "pashto", label: "پښتو" },
-];
-
+// ── Helpers ───────────────────────────────────────────────────────────
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
 function getLocalizedText(
@@ -168,68 +303,38 @@ function getLocalizedText(
   return en;
 }
 
-export default function Header() {
-  const { lang, setLang, dir } = useI18n();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [companiesOpen, setCompaniesOpen] = useState(false);
-  const [langMenuOpen, setLangMenuOpen] = useState(false);
+// ── Component ─────────────────────────────────────────────────────
+export default function Footer() {
+  const { lang, dir } = useI18n();
+  const [hoveredCompany, setHoveredCompany] = useState<string | null>(null);
+  const [brokenLogos, setBrokenLogos] = useState<Set<string>>(new Set());
+
   const [companies, setCompanies] = useState<Company[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
+
   const [loadingCompanies, setLoadingCompanies] = useState(true);
-  const pathname = usePathname();
+  const [loadingSettings, setLoadingSettings] = useState(true);
 
-  const companiesBtnRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [arrowLeft, setArrowLeft] = useState<number | null>(null);
-
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
-
-  // Fetch companies from API
+  // Fetch companies
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const apiUrl = `${API_BASE}/api/companies?lang=${lang}`;
-        const res = await fetch(apiUrl, {
+        const res = await fetch(`${API_BASE}/api/companies?lang=${lang}`, {
           headers: { Accept: "application/json" },
         });
-
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-        }
-
-        const contentType = res.headers.get("content-type");
-        if (!contentType?.includes("application/json")) {
-          const text = await res.text();
-          throw new Error(`Expected JSON, got: ${text.substring(0, 100)}`);
-        }
-
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        if (json.success) {
-          setCompanies(json.data);
-        }
+        if (json.success) setCompanies(json.data);
       } catch (err) {
-        console.error("Header: Failed to fetch companies:", err);
-        setCompanies([]);
+        console.error("Footer: Failed to fetch companies:", err);
       } finally {
         setLoadingCompanies(false);
       }
     };
-
     fetchCompanies();
   }, [lang]);
 
-  // Fetch site settings for translated brand title
+  // Fetch site settings
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -240,425 +345,378 @@ export default function Header() {
         const json = await res.json();
         if (json.success) setSettings(json.data);
       } catch (err) {
-        console.error("Header: Failed to fetch site settings:", err);
+        console.error("Footer: Failed to fetch site settings:", err);
+      } finally {
+        setLoadingSettings(false);
       }
     };
     fetchSettings();
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    setCompaniesOpen(false);
-    setMobileOpen(false);
-    setLangMenuOpen(false);
-  }, [pathname]);
-
-  // ── Arrow Position Calculator ───────────────────────────────────
-  const updateArrowPosition = useCallback(() => {
-    if (companiesBtnRef.current && dropdownRef.current) {
-      const btnRect = companiesBtnRef.current.getBoundingClientRect();
-      const dropdownRect = dropdownRef.current.getBoundingClientRect();
-
-      const btnCenter = btnRect.left + btnRect.width / 2;
-      const dropdownLeft = dropdownRect.left;
-
-      let pos = btnCenter - dropdownLeft;
-      pos = Math.max(16, Math.min(pos, dropdownRect.width - 16));
-      setArrowLeft(pos);
-    }
-  }, []);
-
-  useEffect(() => {
-    updateArrowPosition();
-    window.addEventListener("resize", updateArrowPosition);
-    return () => window.removeEventListener("resize", updateArrowPosition);
-  }, [updateArrowPosition]);
-
-  useEffect(() => {
-    if (companiesOpen) {
-      const t = setTimeout(updateArrowPosition, 50);
-      return () => clearTimeout(t);
-    }
-  }, [companiesOpen, updateArrowPosition]);
-
-  const isActive = (href: string) => pathname === href;
-
-  const companiesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const openCompanies = () => {
-    if (companiesTimeoutRef.current) clearTimeout(companiesTimeoutRef.current);
-    setCompaniesOpen(true);
-  };
-  const closeCompanies = () => {
-    companiesTimeoutRef.current = setTimeout(() => {
-      setCompaniesOpen(false);
-    }, 150);
+  const handleLogoError = (slug: string) => {
+    setBrokenLogos((prev) => {
+      const next = new Set(prev);
+      next.add(slug);
+      return next;
+    });
   };
 
-  const brandTitle = getLocalizedText(
-    lang,
-    settings?.brandTitleEn ?? "HAFEZ GROUP",
-    settings?.brandTitleDari ?? null,
-    settings?.brandTitlePashto ?? null
-  );
+  // Loading skeleton
+  if (loadingSettings) {
+    return (
+      <footer className="relative hgc-stripe-bg-footer overflow-hidden" dir={dir}>
+        <div className="absolute top-0 left-0 right-0 h-px bg-hgc-accent/30" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="animate-pulse grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-4 space-y-4">
+              <div className="h-14 w-14 bg-hgc-accent/20 rounded-xl" />
+              <div className="h-4 w-48 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-full bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-2/3 bg-hgc-accent/5 rounded" />
+            </div>
+            <div className="lg:col-span-2 space-y-3">
+              <div className="h-4 w-24 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-20 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-20 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-20 bg-hgc-accent/5 rounded" />
+            </div>
+            <div className="lg:col-span-3 space-y-3">
+              <div className="h-4 w-28 bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-full bg-hgc-accent/5 rounded" />
+              <div className="h-3 w-full bg-hgc-accent/5 rounded" />
+            </div>
+            <div className="lg:col-span-3 space-y-3">
+              <div className="h-4 w-24 bg-hgc-accent/5 rounded" />
+              <div className="h-16 w-full bg-hgc-accent/20 rounded-xl" />
+              <div className="h-16 w-full bg-hgc-accent/20 rounded-xl" />
+            </div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
+  if (!settings) {
+    return (
+      <footer className="relative hgc-stripe-bg-footer py-12" dir={dir}>
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="text-hgc-header-text-faint text-sm">Failed to load footer content.</p>
+        </div>
+      </footer>
+    );
+  }
+
+  const brandTitle = getLocalizedText(lang, settings.brandTitleEn, settings.brandTitleDari, settings.brandTitlePashto);
+  const brandDesc = getLocalizedText(lang, settings.brandDescEn, settings.brandDescDari, settings.brandDescPashto);
+  const officeLabel = getLocalizedText(lang, settings.officeLabelEn, settings.officeLabelDari, settings.officeLabelPashto);
+  const address = getLocalizedText(lang, settings.addressEn, settings.addressDari, settings.addressPashto);
+  const phoneLabel = getLocalizedText(lang, settings.phoneLabelEn, settings.phoneLabelDari, settings.phoneLabelPashto);
+  const emailLabel = getLocalizedText(lang, settings.emailLabelEn, settings.emailLabelDari, settings.emailLabelPashto);
+  const copyright = getLocalizedText(lang, settings.copyrightEn, settings.copyrightDari, settings.copyrightPashto);
+  const privacyText = getLocalizedText(lang, settings.privacyTextEn, settings.privacyTextDari, settings.privacyTextPashto);
+  const termsText = getLocalizedText(lang, settings.termsTextEn, settings.termsTextDari, settings.termsTextPashto);
+
   const brandParts = splitBrandTitle(brandTitle, lang);
 
+  const quickLinksTitle = lang === "en" ? "Quick Links" : lang === "dari" ? "لینک‌های سریع" : "چټک لینکونه";
+  const ourCompaniesTitle = lang === "en" ? "Our Companies" : lang === "dari" ? "شرکت‌های ما" : "زموږ شرکتونه";
+  const contactTitle = lang === "en" ? "Contact" : lang === "dari" ? "تماس" : "اړیکه";
+
+  // ── Exact-Width Brand Block ───────────────────────────────────────
+  function BrandBlock({ main, sub, lang }: { main: string; sub: string; lang: string }) {
+    const isDari = lang === "dari";
+    const isEnglish = lang === "en";
+    const isRTL = lang === "dari" || lang === "pashto";
+
+    const topText = isDari ? sub : main;
+    const bottomText = isDari ? main : sub;
+
+    const topWords = topText.trim().split(/\s+/).filter(Boolean);
+    const bottomWords = bottomText.trim().split(/\s+/).filter(Boolean);
+
+    if (!sub) {
+      return (
+        <h2 className="text-hgc-header-text font-black text-[1.65rem] leading-none tracking-tight">
+          {main}
+        </h2>
+      );
+    }
+
+    return (
+      <div className="inline-grid" dir={isRTL ? "rtl" : "ltr"}>
+        {/* Top line */}
+        <div
+          className={`flex items-baseline whitespace-nowrap gap-2 ${topWords.length > 1 ? "justify-between" : ""
+            } ${isDari
+              ? "text-[0.8rem] font-semibold text-hgc-header-text/90"
+              : isEnglish
+                ? "text-[2.4rem] font-black text-hgc-header-text"
+                : "text-[2.4rem] font-black text-hgc-header-text"
+            }`}
+        >
+          {topWords.map((w, i) => (
+            <span key={i} className="inline-block whitespace-nowrap">
+              {withKashida(w)}
+            </span>
+          ))}
+        </div>
+
+        {/* Gold separator */}
+        <div className="my-2 h-px w-full bg-gradient-to-r from-transparent via-hgc-gold to-transparent" />
+
+        {/* Bottom line */}
+        <div
+          className={`flex items-baseline whitespace-nowrap gap-2 ${bottomWords.length > 1 ? "justify-between" : ""
+            } ${isDari
+              ? "text-[2.4rem] font-black text-hgc-header-text"
+              : isEnglish
+                ? "text-[0.7rem] font-semibold text-hgc-accent uppercase"
+                : "text-[0.8rem] font-semibold text-hgc-accent"
+            }`}
+        >
+          {bottomWords.map((w, i) => (
+            <span key={i} className="inline-block whitespace-nowrap">
+              {withKashida(w)}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-            ? "hgc-stripe-bg shadow-2xl shadow-hgc-header-text/10 border-b border-hgc-header-border"
-            : "hgc-stripe-bg border-b border-hgc-header-border"
-          }`}
-        dir={dir}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="flex items-center justify-between h-20 lg:h-24">
-            {/* Logo — styled like Footer logo block */}
-            <Link href="/" className="flex items-center gap-3 group">
+    <footer className="relative hgc-stripe-bg-footer overflow-hidden" dir={dir}>
+      {/* Gold accent top border */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-hgc-accent/30" />
+
+      {/* Ambient glow effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-hgc-accent/5 rounded-full blur-3xl -translate-y-1/2" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-hgc-footer-glow/10 rounded-full blur-3xl translate-y-1/2" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
+
+          {/* ── Column 1: Brand ── */}
+          <div className="lg:col-span-4 space-y-6">
+            <Link href="/" className="inline-flex items-center gap-5 lg:gap-6 group">
+              {/* Logo */}
               <div className="relative shrink-0">
                 <img
                   src="/logo.webp"
                   alt="HGC"
-                  className="w-12 h-12 lg:w-14 lg:h-14 object-contain rounded-xl"
+                  className="w-[92px] h-[92px] object-contain rounded-xl"
                 />
                 <div className="absolute inset-0 rounded-xl ring-1 ring-hgc-accent/15 group-hover:ring-hgc-accent/30 transition-all duration-300" />
               </div>
-              <div className="hidden sm:block">
-                <HeaderBrandBlock
-                  main={brandParts.main}
-                  sub={brandParts.sub}
-                  lang={lang}
-                />
-              </div>
+
+              {/* Brand block */}
+              <BrandBlock
+                main={brandParts.main}
+                sub={brandParts.sub}
+                lang={lang}
+              />
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {navPaths.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg group ${isActive(link.href)
-                      ? "text-hgc-accent"
-                      : "text-hgc-header-text/80 hover:text-hgc-header-text"
-                    }`}
-                >
-                  {t(lang, link.key)}
-                  <span
-                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-hgc-accent transition-all duration-300 rounded-full ${isActive(link.href) ? "w-6" : "w-0 group-hover:w-4"
-                      }`}
-                  />
-                </Link>
-              ))}
+            <p className="text-hgc-header-text-faint text-sm leading-relaxed max-w-xs">{brandDesc}</p>
 
-              {/* Companies Button */}
-              <div
-                ref={companiesBtnRef}
-                className="relative h-full flex items-center"
-                onMouseEnter={openCompanies}
-                onMouseLeave={closeCompanies}
-              >
-                <button
-                  className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${pathname.startsWith("/companies")
-                      ? "text-hgc-accent"
-                      : "text-hgc-header-text/80 hover:text-hgc-header-text"
-                    }`}
-                >
-                  {t(lang, "nav.companies")}
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${companiesOpen ? "rotate-180" : ""
-                      }`}
-                  />
-                </button>
-              </div>
-            </nav>
-
-            {/* Right Side: Language + Mobile */}
+            {/* Social Links */}
             <div className="flex items-center gap-3">
-              {/* Language Dropdown */}
-              <div className="relative w-32">
-                <button
-                  onClick={() => setLangMenuOpen(!langMenuOpen)}
-                  className="flex items-center justify-between w-full px-3 py-1.5 rounded-lg bg-hgc-header-bg-hover border border-hgc-header-border hover:bg-hgc-header-bg-active hover:border-hgc-accent/30 transition-all duration-300 text-sm"
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <Globe className="w-4 h-4 text-hgc-accent shrink-0" />
-                    <span className="text-hgc-header-text font-medium truncate">
-                      {languages.find((l) => l.code === lang)?.label}
-                    </span>
-                  </div>
-                  <ChevronDown
-                    className={`w-3 h-3 text-hgc-header-text/50 transition-transform shrink-0 ${langMenuOpen ? "rotate-180" : ""
-                      }`}
-                  />
-                </button>
-
-                {langMenuOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-10"
-                      onClick={() => setLangMenuOpen(false)}
-                    />
-                    <div className="absolute top-full mt-2 left-0 right-0 z-20 bg-hgc-dropdown-bg/98 backdrop-blur-2xl border border-hgc-dropdown-border rounded-xl shadow-2xl p-1.5 w-full">
-                      <div className="flex flex-col gap-0.5">
-                        {languages.map((l) => (
-                          <button
-                            key={l.code}
-                            onClick={() => {
-                              setLang(l.code);
-                              setLangMenuOpen(false);
-                            }}
-                            dir={l.code === "en" ? "ltr" : "rtl"}
-                            className={`w-full flex items-center justify-start gap-2 px-3 py-2 rounded-lg text-sm transition-all ${lang === l.code
-                                ? "bg-hgc-header-text/10 text-hgc-header-text font-semibold"
-                                : "text-hgc-dropdown-text-muted hover:bg-hgc-header-bg-hover hover:text-hgc-dropdown-text"
-                              }`}
-                          >
-                            <span className="w-full text-start">{l.label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Mobile Toggle */}
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden p-2 rounded-lg bg-hgc-header-bg-hover border border-hgc-header-border hover:bg-hgc-header-bg-active transition-colors"
-              >
-                {mobileOpen ? (
-                  <X className="w-5 h-5 text-hgc-header-text" />
-                ) : (
-                  <Menu className="w-5 h-5 text-hgc-header-text" />
-                )}
-              </button>
+              {settings.socialLinks
+                ?.filter((s) => s.is_active)
+                .map((social) => {
+                  const brand = getSocialBrandStyle(social.url);
+                  return (
+                    <a
+                      key={social.label}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`w-10 h-10 rounded-xl bg-hgc-accent/20 border border-hgc-header-border flex items-center justify-center ${brand.text} ${brand.hoverText} ${brand.border} ${brand.bg} transition-all duration-300 group`}
+                      aria-label={social.label}
+                    >
+                      {getSocialIcon(social.url)}
+                    </a>
+                  );
+                })}
             </div>
           </div>
 
-          {/* ═══════════════════════════════════════════════════════════════
-              MEGA MENU — Companies (3 Columns + Upward Triangle Arrow)
-              ═══════════════════════════════════════════════════════════════ */}
-          <div
-            ref={dropdownRef}
-            className={`hidden lg:block absolute left-1/2 -translate-x-1/2 top-full z-50 transition-all duration-300 ${companiesOpen
-                ? "opacity-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 -translate-y-3 pointer-events-none"
-              }`}
-            onMouseEnter={openCompanies}
-            onMouseLeave={closeCompanies}
-          >
-            <div className="relative">
-              {/* ▼ Arrow Pointer — upward triangle pointing to Companies button */}
-              {/* Border triangle (slightly larger, behind) */}
-              <div
-                className="absolute z-[9] w-0 h-0"
-                style={{
-                  left: arrowLeft !== null ? `${arrowLeft}px` : "50%",
-                  top: "-11px",
-                  transform: "translateX(-50%)",
-                  borderLeft: "11px solid transparent",
-                  borderRight: "11px solid transparent",
-                  borderBottom: "11px solid var(--hgc-dropdown-border, #e5e7eb)",
-                }}
-              />
-              {/* Fill triangle (front) */}
-              <div
-                className="absolute z-10 w-0 h-0"
-                style={{
-                  left: arrowLeft !== null ? `${arrowLeft}px` : "50%",
-                  top: "-10px",
-                  transform: "translateX(-50%)",
-                  borderLeft: "10px solid transparent",
-                  borderRight: "10px solid transparent",
-                  borderBottom: "10px solid var(--hgc-dropdown-bg, #ffffff)",
-                }}
-              />
-
-              <div className="relative z-20 bg-hgc-dropdown-bg/98 backdrop-blur-2xl border border-hgc-dropdown-border rounded-2xl shadow-2xl shadow-hgc-header-text/10 w-[900px] max-w-[95vw] overflow-hidden">
-                {/* Mega Menu Header */}
-                <div className="px-6 py-4 border-b border-hgc-dropdown-border/50 bg-hgc-header-bg-hover/50">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-hgc-gold/15 flex items-center justify-center">
-                      <Layers className="w-5 h-5 text-hgc-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-hgc-header-text font-semibold text-sm">
-                        {t(lang, "footer.ourCompanies") || "Our Companies"}
-                      </h3>
-                      <p className="text-hgc-dropdown-text-muted text-xs mt-0.5">
-                        {lang === "en"
-                          ? "Explore our diverse portfolio of businesses"
-                          : lang === "dari"
-                            ? "مجموعه متنوع کسب و کارهای ما را بررسی کنید"
-                            : "زموږ د سوداګرۍ متنوع پورټ فولیو وپلټئ"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Mega Menu Content — 3 COLUMNS */}
-                <div className="p-4">
-                  {loadingCompanies ? (
-                    <div className="flex items-center justify-center py-10">
-                      <Loader2 className="w-6 h-6 text-hgc-accent animate-spin" />
-                    </div>
-                  ) : companies.length === 0 ? (
-                    <div className="py-8 text-center text-hgc-dropdown-text-muted text-sm">
-                      {lang === "en"
-                        ? "No companies found."
-                        : lang === "dari"
-                          ? "هیچ شرکتی یافت نشد."
-                          : "هیڅ شرکت ونه موندل شو."}
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-3 gap-2">
-                      {companies.map((company) => {
-                        const Icon = resolveIcon(company.icon_name);
-                        return (
-                          <Link
-                            key={company.slug}
-                            href={`/companies/${company.slug}`}
-                            className="group/item flex items-start gap-3 p-3 rounded-xl hover:bg-hgc-header-bg-hover transition-all duration-200 border border-transparent hover:border-hgc-dropdown-border/50"
-                          >
-                            {/* Icon / Logo */}
-                            <div
-                              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 group-hover/item:scale-110 group-hover/item:shadow-lg"
-                              style={{
-                                backgroundColor: `${company.accent_color}18`,
-                                boxShadow: `0 0 0 0 ${company.accent_color}00`,
-                              }}
-                            >
-                              {company.logo_url ? (
-                                <img
-                                  src={company.logo_url}
-                                  alt={company.short_name}
-                                  className="w-6 h-6 object-contain"
-                                />
-                              ) : (
-                                <Icon
-                                  className="w-5 h-5"
-                                  style={{ color: company.accent_color }}
-                                />
-                              )}
-                            </div>
-
-                            {/* Text Content */}
-                            <div className="flex-1 min-w-0 pt-0.5">
-                              <div className="flex items-center gap-1.5">
-                                <p className="text-hgc-dropdown-text text-sm font-semibold truncate group-hover/item:text-hgc-gold transition-colors">
-                                  {company.name}
-                                </p>
-                                <ArrowRight
-                                  className={`w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-200 text-hgc-accent shrink-0 ${dir === "rtl" ? "rotate-180" : ""
-                                    }`}
-                                />
-                              </div>
-                              <p className="text-hgc-dropdown-text-muted text-xs line-clamp-2 mt-1 leading-relaxed">
-                                {company.description}
-                              </p>
-                            </div>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-
-                {/* Mega Menu Footer */}
-                {!loadingCompanies && companies.length > 0 && (
-                  <div className="px-4 py-3 border-t border-hgc-dropdown-border/50 bg-hgc-header-bg-hover/30">
+          {/* ── Column 2: Quick Links ── */}
+          <div className="lg:col-span-2">
+            <h3 className="text-hgc-header-text font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-hgc-accent" />
+              {quickLinksTitle}
+            </h3>
+            <ul className="space-y-2.5">
+              {settings.footerLinks
+                ?.sort((a, b) => a.sort_order - b.sort_order)
+                .map((link) => (
+                  <li key={link.href}>
                     <Link
-                      href="/companies"
-                      className="flex items-center justify-center gap-2 text-xs font-medium text-hgc-accent hover:text-hgc-header-text-muted transition-colors group/all"
+                      href={link.href}
+                      className="group flex items-center gap-2 text-hgc-header-text-faint hover:text-hgc-accent transition-colors duration-200 text-sm"
                     >
-                      <span>
-                        {lang === "en"
-                          ? "View All Companies"
-                          : lang === "dari"
-                            ? "مشاهده همه شرکت‌ها"
-                            : "ټول شرکتونه وګورئ"}
-                      </span>
-                      <ArrowRight
-                        className={`w-3.5 h-3.5 transition-transform duration-200 group-hover/all:translate-x-0.5 ${dir === "rtl" ? "rotate-180" : ""
+                      <ChevronRight
+                        className={`w-3.5 h-3.5 opacity-0 transition-all duration-200 ${dir === "rtl"
+                          ? "-mr-5 group-hover:mr-0 group-hover:opacity-100 rotate-180"
+                          : "-ml-5 group-hover:ml-0 group-hover:opacity-100"
                           }`}
                       />
+                      {getLocalizedText(lang, link.label_en, link.label_dari, link.label_pashto)}
                     </Link>
-                  </div>
-                )}
-              </div>
-            </div>
+                  </li>
+                ))}
+            </ul>
           </div>
-        </div>
-      </header>
 
-      {/* Mobile Menu */}
-      <div
-        className={`lg:hidden fixed inset-x-0 bottom-0 top-20 z-[9999] hgc-stripe-bg transition-all duration-500 ${mobileOpen
-            ? "opacity-100 pointer-events-auto translate-x-0"
-            : "opacity-0 pointer-events-none translate-x-full"
-          }`}
-      >
-        <div className="h-full overflow-y-auto px-4 py-6 pb-24 space-y-2">
-          {navPaths.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${isActive(link.href)
-                  ? "bg-hgc-accent/15 text-hgc-accent border border-hgc-accent/25"
-                  : "text-hgc-header-text/80 hover:text-hgc-header-text hover:bg-hgc-header-bg-hover"
-                }`}
-            >
-              {t(lang, link.key)}
-            </Link>
-          ))}
-
-          <div className="pt-4">
-            <p className="px-4 text-xs uppercase tracking-wider text-hgc-accent/60 mb-3">
-              {t(lang, "footer.ourCompanies")}
-            </p>
+          {/* ── Column 3: Companies ── */}
+          <div className="lg:col-span-3">
+            <h3 className="text-hgc-header-text font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-hgc-accent" />
+              {ourCompaniesTitle}
+            </h3>
             {loadingCompanies ? (
               <div className="flex items-center justify-center py-4">
                 <Loader2 className="w-5 h-5 text-hgc-accent animate-spin" />
               </div>
+            ) : companies.length === 0 ? (
+              <p className="text-hgc-header-text-faint text-sm">
+                {lang === "en" ? "No companies found." : lang === "dari" ? "هیچ شرکتی یافت نشد." : "هیڅ شرکت ونه موندل شو."}
+              </p>
             ) : (
-              <div className="space-y-1">
+              <ul className="space-y-2">
                 {companies.map((company) => {
-                  const Icon = resolveIcon(company.icon_name);
+                  const Icon = resolveCompanyIcon(company.icon_name);
+                  const isHovered = hoveredCompany === company.slug;
+                  const showLogo =
+                    company.logo_url && !brokenLogos.has(company.slug);
+
                   return (
-                    <Link
+                    <li
                       key={company.slug}
-                      href={`/companies/${company.slug}`}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-hgc-header-bg-hover transition-colors"
+                      onMouseEnter={() => setHoveredCompany(company.slug)}
+                      onMouseLeave={() => setHoveredCompany(null)}
                     >
-                      <div
-                        className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                        style={{
-                          backgroundColor: `${company.accent_color}15`,
-                        }}
+                      <Link
+                        href={`/companies/${company.slug}`}
+                        className="group flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-hgc-accent/5 transition-all duration-200"
                       >
-                        <Icon
-                          className="w-4 h-4"
-                          style={{ color: company.accent_color }}
+                        {/* Icon / Logo Container */}
+                        <div
+                          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 border border-white/10 shadow-sm"
+                          style={{
+                            backgroundColor: isHovered
+                              ? `${company.accent_color}30`
+                              : `${company.accent_color}18`,
+                            boxShadow: isHovered
+                              ? `0 0 14px ${company.accent_color}25`
+                              : `inset 0 1px 2px ${company.accent_color}10`,
+                          }}
+                        >
+                          {showLogo ? (
+                            <img
+                              src={company.logo_url!}
+                              alt={company.short_name}
+                              className="w-7 h-7 object-contain p-0.5"
+                              loading="lazy"
+                              onError={() => handleLogoError(company.slug)}
+                            />
+                          ) : (
+                            <Icon
+                              className="w-5 h-5 transition-colors duration-200"
+                              style={{ color: company.accent_color }}
+                            />
+                          )}
+                        </div>
+                        <span className="text-hgc-header-text/60 group-hover:text-hgc-header-text text-sm transition-colors flex-1">
+                          {company.name}
+                        </span>
+                        <ArrowUpRight
+                          className={`w-3.5 h-3.5 transition-all duration-200 ${isHovered
+                              ? "text-hgc-accent opacity-100"
+                              : "text-hgc-accent/20 opacity-0"
+                            }`}
                         />
-                      </div>
-                      <span className="text-hgc-header-text/80 text-sm">
-                        {company.name}
-                      </span>
-                    </Link>
+                      </Link>
+                    </li>
                   );
                 })}
-              </div>
+              </ul>
             )}
+          </div>
+
+          {/* ── Column 4: Contact ── */}
+          <div className="lg:col-span-3">
+            <h3 className="text-hgc-header-text font-semibold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-hgc-accent" />
+              {contactTitle}
+            </h3>
+
+            <div className="space-y-4">
+              {/* Address */}
+              <div className="group p-4 rounded-xl bg-hgc-accent/5 border border-hgc-header-border hover:border-hgc-accent/20 hover:bg-hgc-accent/8 transition-all duration-300">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-hgc-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <MapPin className="w-4 h-4 text-hgc-accent" />
+                  </div>
+                  <div>
+                    <p className="text-hgc-header-text font-medium text-sm mb-1">{officeLabel}</p>
+                    <p className="text-hgc-header-text-faint text-xs leading-relaxed">{address}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="group p-4 rounded-xl bg-hgc-accent/5 border border-hgc-header-border hover:border-hgc-accent/20 hover:bg-hgc-accent/8 transition-all duration-300">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-hgc-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Phone className="w-4 h-4 text-hgc-accent" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-hgc-header-text font-medium text-sm mb-1">{phoneLabel}</p>
+                    <a
+                      href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`}
+                      className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block"
+                    >
+                      <span dir="ltr" className="inline-block">{settings.phonePrimary}</span>
+                    </a>
+                    {settings.phoneSecondary && (
+                      <a
+                        href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`}
+                        className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block"
+                      >
+                        <span dir="ltr" className="inline-block">{settings.phoneSecondary}</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="group p-4 rounded-xl bg-hgc-accent/5 border border-hgc-header-border hover:border-hgc-accent/20 hover:bg-hgc-accent/8 transition-all duration-300">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-hgc-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Mail className="w-4 h-4 text-hgc-accent" />
+                  </div>
+                  <div>
+                    <p className="text-hgc-header-text font-medium text-sm mb-1">{emailLabel}</p>
+                    <a href={`mailto:${settings.emailAddress}`} className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors">
+                      {settings.emailAddress}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Bottom Bar ── */}
+        <div className="mt-12 pt-6 border-t border-hgc-header-border">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-hgc-header-text-ghost text-xs">{copyright}</p>
           </div>
         </div>
       </div>
-    </>
+    </footer>
   );
 }
