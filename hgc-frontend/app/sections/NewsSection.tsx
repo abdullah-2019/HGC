@@ -158,13 +158,6 @@ export default function NewsSection() {
       </>
     );
 
-  const viewAllLabel =
-    lang === "en"
-      ? "View All News"
-      : lang === "dari"
-        ? "مشاهده همه اخبار"
-        : "ټول خبرونه وګورئ";
-
   const readMoreLabel =
     lang === "en" ? "Read Full Story" : lang === "dari" ? "بیشتر بخوانید" : "نور ولولئ";
 
@@ -224,13 +217,6 @@ export default function NewsSection() {
               {sectionTitle}
             </h2>
           </div>
-          <Link
-            href="/news"
-            className="group mt-6 lg:mt-0 inline-flex items-center gap-2 text-hgc-gold font-semibold hover:gap-3 transition-all"
-          >
-            {viewAllLabel}
-            <ArrowRight className={`w-5 h-5 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
-          </Link>
         </motion.div>
 
         {/* Main Carousel */}
