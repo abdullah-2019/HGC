@@ -9,6 +9,8 @@ class WhyChooseFeature extends Model
 {
     use HasFactory;
 
+    protected $table = 'why_choose_features';
+
     protected $fillable = [
         'icon_name',
         'title_en',

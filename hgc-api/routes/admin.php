@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\About\AboutStoryHighlightController;
 use App\Http\Controllers\Admin\HeroSlideController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\SiteVideoController;
+use App\Http\Controllers\Admin\WhyChooseController;
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
@@ -120,5 +121,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // Hero Slides
     Route::resource('hero-slides', HeroSlideController::class)->except(['show']);
 
+    Route::resource('why-us', WhyChooseController::class)
+        ->parameters(['why-us' => 'feature']);
 });
 
