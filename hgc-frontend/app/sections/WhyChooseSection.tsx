@@ -98,11 +98,11 @@ export default function WhyChooseSection() {
             <div className="h-4 w-20 bg-hgc-border rounded-full mx-auto mb-4" />
             <div className="h-12 w-72 bg-hgc-border rounded-lg mx-auto" />
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="bg-hgc-card-alt border border-hgc-border rounded-2xl p-8"
+                className="bg-hgc-card-alt border border-hgc-border rounded-2xl p-8 w-full max-w-sm"
               >
                 <div className="w-16 h-16 rounded-2xl bg-hgc-border mb-6" />
                 <div className="h-6 w-40 bg-hgc-border rounded mb-3" />
@@ -141,14 +141,14 @@ export default function WhyChooseSection() {
           </h2>
         </div>
 
-        {/* Features Grid — dynamically rendered from API */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Features Grid — cards centered on page, content left-aligned inside */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
           {features.map((feature) => {
             const Icon = resolveIcon(feature.icon);
             return (
               <div
                 key={feature.id}
-                className="group relative bg-hgc-card-alt border border-hgc-border rounded-2xl p-8 hover:bg-hgc-card-hover hover:border-hgc-gold/20 transition-all duration-500"
+                className="group relative bg-hgc-card-alt border border-hgc-border rounded-2xl p-8 hover:bg-hgc-card-hover hover:border-hgc-gold/20 transition-all duration-500 w-full max-w-sm"
               >
                 <div className="w-16 h-16 rounded-2xl bg-hgc-gold/10 flex items-center justify-center mb-6 group-hover:bg-hgc-gold/20 group-hover:scale-110 transition-all duration-500">
                   <Icon className="w-8 h-8 text-hgc-gold" />
