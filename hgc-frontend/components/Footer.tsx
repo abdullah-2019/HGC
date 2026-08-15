@@ -258,7 +258,7 @@ function getSocialBrandStyle(url: string) {
 
 // ── Kashida helper ──────────────────────────────────────────────────
 function withKashida(w: string): string {
-  return w === "حافظ" ? "حــــــافظ" : w;
+  return w === "حافظ" ? "حافظ" : w;
 }
 
 // ── Brand Title Splitter ────────────────────────────────────────────
