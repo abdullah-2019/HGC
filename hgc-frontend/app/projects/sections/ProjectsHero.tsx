@@ -41,13 +41,11 @@ export default function ProjectsHero() {
         />
       </div>
 
-      {/* Overlays — dark navy only, no white fade */}
-      <div className="absolute inset-0 bg-hgc-navy/60" />
-      <div
-        className="absolute inset-0"
+      {/* 1. VIGNETTE OVERLAY: Only darkens edges & bottom where text sits, leaving center bright */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "linear-gradient(to bottom, rgba(15,43,91,0.2) 0%, rgba(15,43,91,0.85) 70%, rgba(15,43,91,1) 100%)",
+          background: "radial-gradient(circle, rgba(15,43,91,0) 20%, rgba(15,43,91,0.4) 70%, rgba(15,43,91,0.7) 100%)"
         }}
       />
 
@@ -63,10 +61,12 @@ export default function ProjectsHero() {
         />
       </div>
 
-      {/* Content */}
+      {/* Content Container */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
+        
+        {/* Badge */}
         <div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-hgc-gold/10 border border-hgc-gold/20 mb-6"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/60 backdrop-blur-sm border border-hgc-gold/30 mb-6"
           style={{ animation: "fadeInDown 1s ease-out 0.3s both" }}
         >
           <Briefcase className="w-4 h-4 text-hgc-gold" />
@@ -79,48 +79,51 @@ export default function ProjectsHero() {
           </span>
         </div>
 
+        {/* 2. TITLE: Enhanced Drop Shadow + Text color update to stark white for better separation */}
         <h1
-          className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-hgc-gold mb-6 tracking-tight"
+          className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]"
           style={{
             animation: "fadeInUp 1s ease-out 0.5s both",
-            textShadow: "0 4px 30px rgba(0,0,0,0.3)",
           }}
         >
           {lang === "en" ? (
             <>
-              Our <span className="text-hgc-gold-bright">Projects</span>
+              Our <span className="text-hgc-gold-bright drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">Projects</span>
             </>
           ) : lang === "dari" ? (
             <>
-              <span className="text-hgc-gold-bright">پروژه‌های</span> ما
+              <span className="text-hgc-gold-bright drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">پروژه‌های</span> ما
             </>
           ) : (
             <>
-              زموږ <span className="text-hgc-gold-bright">پروژې</span>
+              زموږ <span className="text-hgc-gold-bright drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">پروژې</span>
             </>
           )}
         </h1>
 
-        <p
-          className="text-lg sm:text-xl text-white/70 max-w-2xl leading-relaxed"
+        {/* 3. DESCRIPTION: Contained within a subtle frosted-glass background plate */}
+        <div 
+          className="px-6 py-4 rounded-2xl bg-slate-900/40 backdrop-blur-[4px] border border-white/5 max-w-2xl mx-auto shadow-lg"
           style={{ animation: "fadeInUp 1s ease-out 0.7s both" }}
         >
-          {lang === "en"
-            ? "From national highways to solar power systems, explore our portfolio of transformative infrastructure across Afghanistan."
-            : lang === "dari"
-              ? "از بزرگراه‌های ملی تا سیستم‌های برق خورشیدی، نمونه کارهای زیرساخت‌های تحول‌آفرین ما را در سراسر افغانستان کاوش کنید."
-              : "له ملي لویو لارو څخه تر سولري برق سیسټمونو پورې، زموږ د بدلون راوړونکو زیربناوونو پورټفولیو په افغانستان کې وګورئ."}
-        </p>
+          <p className="text-white text-base sm:text-lg leading-relaxed font-normal tracking-wide drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+            {lang === "en"
+              ? "From national highways to solar power systems, explore our portfolio of transformative infrastructure across Afghanistan."
+              : lang === "dari"
+                ? "از بزرگراه‌های ملی تا سیستم‌های برق خورشیدی، نمونه کارهای زیرساخت‌های تحول‌آفرین ما را در سراسر افغانستان کاوش کنید."
+                : "له ملي لویو لارو څخه تر سولري برق سیسټمونو پورې، زموږ د بدلون راوړونکو زیربناوونو پورټفولیو په افغانستان کې وګورئ."}
+          </p>
+        </div>
 
         {/* Scroll indicator */}
         <div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           style={{ animation: "fadeInUp 1s ease-out 1.2s both" }}
         >
-          <span className="text-white/50 text-xs tracking-widest uppercase">
+          <span className="text-white/80 text-xs tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
             {lang === "en" ? "Explore" : lang === "dari" ? "کاوش" : "وګورئ"}
           </span>
-          <ChevronDown className="w-5 h-5 text-hgc-gold animate-bounce" />
+          <ChevronDown className="w-5 h-5 text-hgc-gold filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] animate-bounce" />
         </div>
       </div>
 
