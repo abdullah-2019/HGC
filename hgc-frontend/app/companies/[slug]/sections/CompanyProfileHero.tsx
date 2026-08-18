@@ -26,7 +26,7 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
 
   return (
     <section
-      className="relative h-[70vh] min-h-[500px] w-full overflow-hidden"
+      className="relative h-[70vh] min-h-[500px] w-full overflow-hidden bg-[#F8FAFC]"
       dir={dir}
     >
       {/* Background */}
@@ -45,8 +45,24 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
             }}
           />
         )}
-        {/* Dark overlay — no white fade at bottom */}
-        <div className="absolute inset-0 bg-hgc-navy/70" />
+        
+        {/* REMOVED: Full uniform overlay <div className="absolute inset-0 bg-hgc-navy/70" /> */}
+
+        {/* 1. SOFT VIGNETTE: Subtly darkens corners only to draw focus to the center */}
+        <div 
+          className="absolute inset-0 pointer-events-none" 
+          style={{ 
+            background: "radial-gradient(circle, rgba(15,43,91,0) 40%, rgba(15,43,91,0.3) 100%)" 
+          }} 
+        />
+
+        {/* 2. CLEAN FADE MASK: Blends seamlessly into the page background color with zero muddy gray mixing */}
+        <div 
+          className="absolute inset-0 pointer-events-none" 
+          style={{ 
+            background: "linear-gradient(to bottom, rgba(248, 250, 252, 0) 75%, rgba(248, 250, 252, 1) 100%)" 
+          }} 
+        />
       </div>
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4">
@@ -58,7 +74,7 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
         >
           {/* Sector Badge */}
           {company.sector && (
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-hgc-gold/15 border border-hgc-gold/30 px-5 py-2 text-hgc-gold">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-slate-900/60 backdrop-blur-md border border-hgc-gold/30 px-5 py-2 text-hgc-gold shadow-sm">
               <Icon size={18} />
               <span className="text-sm font-medium tracking-wide uppercase">
                 {company.sector}
@@ -66,18 +82,21 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
             </div>
           )}
 
-          {/* Company name — slightly smaller */}
-          <h1 className="mb-6 text-4xl font-bold text-white md:text-5xl lg:text-6xl">
+          {/* 3. TITLE CHANNELS: High-contrast edge isolation via text drop shadow */}
+          <h1 className="mb-6 text-4xl font-bold text-white md:text-5xl lg:text-6xl drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)]">
             {company.name}
           </h1>
 
+          {/* 4. TAGLINE WRAPPER: Framed inside a subtle translucent plate to prevent color conflict */}
           {company.tagline ? (
-            <p
-              className="mx-auto max-w-3xl text-lg md:text-xl leading-relaxed mb-4"
-              style={{ color: `${company.accent_color}cc` }}
-            >
-              {company.tagline}
-            </p>
+            <div className="px-6 py-3 rounded-2xl bg-slate-900/40 backdrop-blur-[4px] border border-white/5 max-w-3xl mx-auto shadow-md">
+              <p
+                className="text-base md:text-lg font-medium leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
+                style={{ color: company.accent_color }}
+              >
+                {company.tagline}
+              </p>
+            </div>
           ) : null}
         </motion.div>
 
@@ -87,7 +106,7 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
           transition={{ delay: 1, duration: 1 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2"
         >
-          <ChevronDown className="w-8 h-8 text-hgc-gold animate-bounce" />
+          <ChevronDown className="w-8 h-8 text-hgc-gold filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] animate-bounce" />
         </motion.div>
       </div>
     </section>
