@@ -258,7 +258,7 @@ function getSocialBrandStyle(url: string) {
 
 // ── Kashida helper ──────────────────────────────────────────────────
 function withKashida(w: string): string {
-  return w === "حافظ" ? "حافظ" : w;
+  return w === "حافظ" ? "حــــــافظ" : w;
 }
 
 // ── Brand Title Splitter ────────────────────────────────────────────
@@ -448,10 +448,10 @@ export default function Footer() {
         <div
           className={`flex items-baseline whitespace-nowrap gap-2 ${topWords.length > 1 ? "justify-between" : ""
             } ${isDari
-              ? "text-[0.8rem] font-semibold text-hgc-header-text/90"
+              ? "text-[0.8rem] font-semibold text-white"
               : isEnglish
-                ? "text-[2.4rem] font-black text-hgc-header-text"
-                : "text-[2.4rem] font-black text-hgc-header-text"
+                ? "text-[2.4rem] font-black text-white"
+                : "text-[2.4rem] font-black text-white"
             }`}
         >
           {topWords.map((w, i) => (
@@ -468,10 +468,10 @@ export default function Footer() {
         <div
           className={`flex items-baseline whitespace-nowrap gap-2 ${bottomWords.length > 1 ? "justify-between" : ""
             } ${isDari
-              ? "text-[2.4rem] font-black text-hgc-header-text"
+              ? "text-[1.5rem] font-black text-white"
               : isEnglish
-                ? "text-[0.7rem] font-semibold text-hgc-accent uppercase"
-                : "text-[0.8rem] font-semibold text-hgc-accent"
+                ? "text-[0.7rem] font-semibold text-white uppercase"
+                : "text-[0.8rem] font-semibold text-white"
             }`}
         >
           {bottomWords.map((w, i) => (
@@ -633,8 +633,8 @@ export default function Footer() {
                         </span>
                         <ArrowUpRight
                           className={`w-3.5 h-3.5 transition-all duration-200 ${isHovered
-                              ? "text-hgc-accent opacity-100"
-                              : "text-hgc-accent/20 opacity-0"
+                            ? "text-hgc-accent opacity-100"
+                            : "text-hgc-accent/20 opacity-0"
                             }`}
                         />
                       </Link>
@@ -674,23 +674,40 @@ export default function Footer() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-hgc-header-text font-medium text-sm mb-1">{phoneLabel}</p>
-                    <a
-                      href={`tel:${settings.phonePrimary.replace(/\s/g, "")}`}
-                      className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block"
-                    >
-                      <span dir="ltr" className="inline-block">{settings.phonePrimary}</span>
-                    </a>
-                    {settings.phoneSecondary && (
-                      <a
-                        href={`tel:${settings.phoneSecondary.replace(/\s/g, "")}`}
-                        className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block"
-                      >
-                        <span dir="ltr" className="inline-block">{settings.phoneSecondary}</span>
-                      </a>
-                    )}
+
+                    {/* Primary Phone Numbers Split by Comma */}
+                    {settings.phonePrimary?.split(",").map((num, idx) => {
+                      const cleanNum = num.trim();
+                      if (!cleanNum) return null;
+                      return (
+                        <a
+                          key={`primary-${idx}`}
+                          href={`tel:${cleanNum.replace(/\s/g, "")}`}
+                          className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block mb-1 last:mb-0"
+                        >
+                          <span dir="ltr" className="inline-block">{cleanNum}</span>
+                        </a>
+                      );
+                    })}
+
+                    {/* Secondary Phone Numbers Split by Comma */}
+                    {settings.phoneSecondary?.split(",").map((num, idx) => {
+                      const cleanNum = num.trim();
+                      if (!cleanNum) return null;
+                      return (
+                        <a
+                          key={`secondary-${idx}`}
+                          href={`tel:${cleanNum.replace(/\s/g, "")}`}
+                          className="text-hgc-header-text-faint text-xs hover:text-hgc-accent transition-colors block mt-1"
+                        >
+                          <span dir="ltr" className="inline-block">{cleanNum}</span>
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
+
 
               {/* Email */}
               <div className="group p-4 rounded-xl bg-hgc-accent/5 border border-hgc-header-border hover:border-hgc-accent/20 hover:bg-hgc-accent/8 transition-all duration-300">
