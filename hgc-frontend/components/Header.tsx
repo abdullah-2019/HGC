@@ -85,10 +85,10 @@ function HeaderBrandBlock({ main, sub, lang }: { main: string; sub: string; lang
       {/* Top line */}
       <div
         className={`flex items-baseline whitespace-nowrap ${isDari
-            ? "text-[10px] lg:text-xs font-semibold text-hgc-header-text/90"
+            ? "text-[10px] lg:text-xs font-semibold text-white"
             : isEnglish
-              ? "text-base lg:text-lg font-black text-hgc-header-text"
-              : "text-base lg:text-lg font-black text-hgc-header-text"
+              ? "text-base lg:text-lg font-black text-white"
+              : "text-base lg:text-lg font-black text-white"
           }`}
       >
         {topWords.map((w, i) => (
@@ -105,7 +105,7 @@ function HeaderBrandBlock({ main, sub, lang }: { main: string; sub: string; lang
       {/* Bottom line */}
       <div
         className={`flex items-baseline whitespace-nowrap ${isDari
-            ? "text-base lg:text-lg font-black text-hgc-header-text"
+            ? "text-base lg:text-lg font-black text-white"
             : isEnglish
               ? "text-[9px] lg:text-[10px] font-semibold text-hgc-accent uppercase tracking-widest"
               : "text-[10px] lg:text-xs font-semibold text-hgc-accent"
