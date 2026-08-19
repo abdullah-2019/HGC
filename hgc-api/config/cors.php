@@ -5,7 +5,7 @@ return [
     'allowed_methods' => ['*'],
     'allowed_origins' => [
         'http://localhost:3000',    // Next.js dev
-        'https://yourdomain.com',   // Production
+        'https://hgc.af',   // Production
     ],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
