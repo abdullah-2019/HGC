@@ -504,7 +504,7 @@ export default function Footer() {
                 <img
                   src="/logo.webp"
                   alt="HGC"
-                  className="w-[92px] h-[92px] object-contain rounded-xl"
+                  className="w-[92px] h-[92px] object-contain rounded-xl bg-white"
                 />
                 <div className="absolute inset-0 rounded-xl ring-1 ring-hgc-accent/15 group-hover:ring-hgc-accent/30 transition-all duration-300" />
               </div>

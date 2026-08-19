@@ -334,7 +334,7 @@ export default function Header() {
                 <img
                   src="/logo.webp"
                   alt="HGC"
-                  className="w-12 h-12 lg:w-14 lg:h-14 object-contain rounded-xl"
+                  className="w-12 h-12 lg:w-14 lg:h-14 object-contain rounded-xl bg-white"
                 />
                 <div className="absolute inset-0 rounded-xl ring-1 ring-hgc-accent/15 group-hover:ring-hgc-accent/30 transition-all duration-300" />
               </div>

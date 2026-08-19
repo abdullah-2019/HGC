@@ -35,7 +35,7 @@ const fallbackHero: HeroData = {
     dari: "میراث excellence بیش از دو دهه — از ساختمان و استخراج معادن تا لوژستیک و خدمات مالی، ما نیروی پشتوانه تحول زیرساخت‌های افغانستان هستیم.",
     pashto: "د دوو لسیزو زیاته د عالي کیفیت میراث — له جوړونې او د کانونو استخراج څخه تر لوجستیک او مالي خدماتو پورې، موږ د افغانستان د زیربنو د بدلون ځواک یو.",
   },
-  backgroundImage: "/images/hero-construction.webp",
+  backgroundImage: "/images/about.jpg",
 };
 
 export default function HeroBanner({ settings }: HeroBannerProps) {
