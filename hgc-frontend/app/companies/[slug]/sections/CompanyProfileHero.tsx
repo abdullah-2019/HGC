@@ -45,26 +45,17 @@ export default function CompanyProfileHero({ company }: CompanyProfileHeroProps)
             }}
           />
         )}
-        
-        {/* REMOVED: Full uniform overlay <div className="absolute inset-0 bg-hgc-navy/70" /> */}
 
-        {/* 1. SOFT VIGNETTE: Subtly darkens corners only to draw focus to the center */}
-        <div 
-          className="absolute inset-0 pointer-events-none" 
-          style={{ 
-            background: "radial-gradient(circle, rgba(15,43,91,0) 40%, rgba(15,43,91,0.3) 100%)" 
-          }} 
+        {/* Soft vignette only */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(circle, rgba(15,43,91,0) 40%, rgba(15,43,91,0.3) 100%)"
+          }}
         />
 
-        {/* 2. CLEAN FADE MASK: Blends seamlessly into the page background color with zero muddy gray mixing */}
-        <div 
-          className="absolute inset-0 pointer-events-none" 
-          style={{ 
-            background: "linear-gradient(to bottom, rgba(248, 250, 252, 0) 75%, rgba(248, 250, 252, 1) 100%)" 
-          }} 
-        />
+        {/* REMOVED: White bottom fade */}
       </div>
-
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
