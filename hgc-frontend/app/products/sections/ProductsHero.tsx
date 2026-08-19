@@ -29,9 +29,9 @@ export default function ProductsHero() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af";
 
   const backgrounds = [
-    `${API_URL}/storage/uploads/hero-construction.webp`,
-    `${API_URL}/storage/uploads/companies/albahrain/hero.webp`,
-    `${API_URL}/storage/uploads/companies/alkoozi/hero.webp`,
+    `${API_URL}/storage/embedded/products/hero/ph1.webp`,
+    `${API_URL}/storage/embedded/products/hero/ph2.jpg`,
+    `${API_URL}/storage/embedded/products/hero/ph3.jpg`,
   ];
 
   const particles = useMemo(() => {
