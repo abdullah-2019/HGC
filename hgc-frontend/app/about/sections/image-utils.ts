@@ -1,26 +1,36 @@
-"use client";
+// components/about/image-utils.ts
+// REMOVE "use client" — this is a pure utility, not a React component
 
 /**
- * Resolves image URLs from Laravel storage to full URLs.
- * Handles both relative paths and already-absolute URLs.
+ * Resolves image URLs from Laravel storage to full, correct URLs.
+ * Fixes the bug where Laravel returns https://hgc.af/... instead of https://api.hgc.af/...
  */
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "https://api.hgc.af";
 
 export function resolveImageUrl(path: string | null | undefined): string {
   if (!path || typeof path !== "string") return "/images/placeholder.png";
 
-  // Already a full URL (starts with http:// or https://)
+  // 1. Already correct API URL — return as-is
+  if (path.startsWith(API_BASE_URL)) {
+    return path;
+  }
+
+  // 2. Wrong domain: https://hgc.af/... → https://api.hgc.af/...
+  if (/^https?:\/\/hgc\.af/.test(path)) {
+    return path.replace(/^https?:\/\/hgc\.af/, API_BASE_URL);
+  }
+
+  // 3. Other absolute URL (external CDN, S3, etc.) — return as-is
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
 
-  // Already starts with / — use as-is
+  // 4. Relative path starting with /storage/... or /uploads/...
   if (path.startsWith("/")) {
-    return path;
+    return `${API_BASE_URL}${path}`;
   }
 
-  // Relative path like "uploads/hero-construction.webp"
-  // Prepend the API base URL + /storage/
-  // const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:8000";
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "https://api.hgc.af";
-  return `${baseUrl}/storage/${path}`;
+  // 5. Bare filename like "uploads/projects/gallery/xxx.jpeg"
+  return `${API_BASE_URL}/storage/${path}`;
 }

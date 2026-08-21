@@ -2,6 +2,7 @@
 
 import { Metadata } from "next";
 import AboutPageClient from "./AboutPageClient";
+import { resolveImageUrl } from "./sections/image-utils";
 export const dynamic = "force-dynamic";
 
 // ─── Types matching Laravel API response ─────────────────
@@ -119,6 +120,40 @@ interface ApiResponse<T> {
   data: T;
 }
 
+// ─── Normalize all image URLs from backend ──────────────
+
+function normalizeAboutData(data: AboutPageData): AboutPageData {
+  // Hero background image
+  if (data.settings?.hero?.backgroundImage) {
+    data.settings.hero.backgroundImage = resolveImageUrl(data.settings.hero.backgroundImage);
+  }
+
+  // Story main image
+  if (data.story?.mainImage) {
+    data.story.mainImage = resolveImageUrl(data.story.mainImage);
+  }
+
+  // Carousel slides
+  if (Array.isArray(data.carousel)) {
+    data.carousel = data.carousel.map((slide) => ({
+      ...slide,
+      image: resolveImageUrl(slide.image),
+    }));
+  }
+
+  // Mission image
+  if (data.mission?.image) {
+    data.mission.image = resolveImageUrl(data.mission.image);
+  }
+
+  // Vision image
+  if (data.vision?.image) {
+    data.vision.image = resolveImageUrl(data.vision.image);
+  }
+
+  return data;
+}
+
 // ─── Fetch function ─────────────────────────────────────
 
 async function fetchAboutPageData(): Promise<AboutPageData> {
@@ -126,25 +161,12 @@ async function fetchAboutPageData(): Promise<AboutPageData> {
   const API_BASE = `${baseUrl}/api`;
   const isDev = process.env.NODE_ENV === "development";
 
-  // Cache-busting query param to bypass both Laravel & Next.js cache in dev
-  const cacheBuster = isDev ? `?_t=${Date.now()}` : "";
-
-  const fetchOptions: RequestInit = {
-    ...(isDev
-      ? { cache: "no-store" as const }
-      : { next: { revalidate: 60, tags: ["about-page"] } }
-    ),
-    headers: {
-      Accept: "application/json",
-      ...(isDev ? { "X-Skip-Cache": "true" } : {}),
-    },
-  };
-
   try {
     const res = await fetch(`${API_BASE}/about`, {
-      cache: "no-store", // Always fresh
+      cache: "no-store",
       headers: { Accept: "application/json" },
     });
+
     if (!res.ok) {
       const errorBody = await res.text();
       console.error("API Error Response:", errorBody);
@@ -164,7 +186,8 @@ async function fetchAboutPageData(): Promise<AboutPageData> {
 
     if (isDev) {
       console.log("[AboutPage] API Response keys:", Object.keys(responseData || {}));
-      console.log("[AboutPage] stats count:", responseData.stats?.length);
+      console.log("[AboutPage] carousel count:", responseData.carousel?.length);
+      console.log("[AboutPage] carousel images:", responseData.carousel?.map((s) => s.image));
     }
 
     return responseData;
@@ -204,13 +227,15 @@ export async function generateMetadata(): Promise<Metadata> {
 // ─── Page Component ─────────────────────────────────────
 
 export default async function AboutPage() {
-  const data = await fetchAboutPageData();
+  const rawData = await fetchAboutPageData();
+  const data = normalizeAboutData(rawData);
 
   if (process.env.NODE_ENV === "development") {
     console.log("[AboutPage] data.settings:", data.settings ? "present" : "null");
     console.log("[AboutPage] data.story:", data.story ? "present" : "null");
     console.log("[AboutPage] data.stats:", Array.isArray(data.stats) ? `array[${data.stats.length}]` : typeof data.stats);
     console.log("[AboutPage] data.carousel:", Array.isArray(data.carousel) ? `array[${data.carousel.length}]` : typeof data.carousel);
+    console.log("[AboutPage] resolved carousel images:", data.carousel?.map((s) => s.image));
     console.log("[AboutPage] data.mission:", data.mission ? "present" : "null");
     console.log("[AboutPage] data.vision:", data.vision ? "present" : "null");
     console.log("[AboutPage] data.coreValues:", data.coreValues ? "present" : "null");
