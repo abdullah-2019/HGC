@@ -46,6 +46,16 @@ const fallback: AboutMissionData = {
   ],
 };
 
+// ── URL fix helper ─────────────────────────────────────────────
+function fixImageUrl(url: string): string {
+  if (!url) return "/images/placeholder.png";
+  // If the API returns https://hgc.af/... rewrite it to https://api.hgc.af/...
+  if (url.startsWith("https://hgc.af/")) {
+    return url.replace("https://hgc.af/", "https://api.hgc.af/");
+  }
+  return url;
+}
+
 export default function MissionSection({ mission }: MissionSectionProps) {
   const { lang } = useI18n();
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -66,7 +76,7 @@ export default function MissionSection({ mission }: MissionSectionProps) {
     sectionLabel: safeObject(mission?.sectionLabel, fallback.sectionLabel),
     title: safeObject(mission?.title, fallback.title),
     description: safeObject(mission?.description, fallback.description),
-    image: safeString(mission?.image, fallback.image),
+    image: fixImageUrl(safeString(mission?.image, fallback.image)),
     quote: safeObject(mission?.quote, fallback.quote),
     points: safeArray(mission?.points, fallback.points),
   };
