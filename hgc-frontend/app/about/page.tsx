@@ -2,6 +2,7 @@
 
 import { Metadata } from "next";
 import AboutPageClient from "./AboutPageClient";
+export const dynamic = "force-dynamic";
 
 // ─── Types matching Laravel API response ─────────────────
 
@@ -140,8 +141,10 @@ async function fetchAboutPageData(): Promise<AboutPageData> {
   };
 
   try {
-    const res = await fetch(`${API_BASE}/about${cacheBuster}`, fetchOptions);
-
+    const res = await fetch(`${API_BASE}/about`, {
+      cache: "no-store", // Always fresh
+      headers: { Accept: "application/json" },
+    });
     if (!res.ok) {
       const errorBody = await res.text();
       console.error("API Error Response:", errorBody);
