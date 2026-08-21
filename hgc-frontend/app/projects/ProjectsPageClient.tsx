@@ -5,7 +5,6 @@ import ProjectsHero from "./sections/ProjectsHero";
 import CompanyFilter from "./sections/CompanyFilter";
 import ProjectsGrid from "./sections/ProjectsGrid";
 
-// const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api`;
 const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "https://api.hgc.af"}/api`;
 
 interface Project {
@@ -29,10 +28,11 @@ interface Project {
 }
 
 interface CompanyFilterItem {
-  id: string;
+  id: string | number;
   slug: string;
-  nameEn: string;
-  nameDari: string;
+  short_name_en: string;
+  short_name_dari?: string;
+  short_name_pashto?: string;
   icon: string;
   color: string;
 }
@@ -52,14 +52,14 @@ export default function ProjectsPageClient() {
         return res.json();
       })
       .then((json: { success: boolean; data?: CompanyFilterItem[] }) => {
-        if (json.success && json.data && json.data.length > 0) {
+        if (json.success && json.data) {
           setCompanies(json.data);
         } else {
           setCompanies([]);
         }
       })
       .catch((err: Error) => {
-        // console.error("Companies API failed:", err.message);
+        console.error("[Companies API] fetch failed:", err.message);
         setCompanies([]);
       });
   }, []);
@@ -108,18 +108,14 @@ export default function ProjectsPageClient() {
         companies={companies}
       />
 
-      {/* API Error */}
       {error && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
-            <p className="text-red-400 text-sm font-medium">
-              ⚠️ {error}
-            </p>
+            <p className="text-red-400 text-sm font-medium">⚠️ {error}</p>
           </div>
         </div>
       )}
 
-      {/* Empty State */}
       {!loading && !error && !hasProjects && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-12">
@@ -131,13 +127,8 @@ export default function ProjectsPageClient() {
         </div>
       )}
 
-      {/* Projects Grid */}
       {hasProjects && (
-        <ProjectsGrid
-          projects={projects}
-          loading={loading}
-          error={error}
-        />
+        <ProjectsGrid projects={projects} loading={loading} error={error} />
       )}
     </main>
   );

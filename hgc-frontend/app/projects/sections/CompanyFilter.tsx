@@ -1,9 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { Building2, Mountain, HardHat, Store, Landmark, Truck } from "lucide-react";
 import { useI18n } from "@/components/useI18nStore";
 
-// Icon mapping
 const iconMap: Record<string, React.ElementType> = {
   Building2,
   Mountain,
@@ -25,33 +25,81 @@ interface CompanyFilterProps {
   companies: any[];
 }
 
-export default function CompanyFilter({ activeCompany, onCompanyChange, companies }: CompanyFilterProps) {
+/** Logo-first renderer: shows the company logo image if available;
+ *  falls back to the mapped Lucide icon on missing URL or load error. */
+function CompanyIcon({
+  company,
+  isActive,
+}: {
+  company: any;
+  isActive: boolean;
+}) {
+  const [imgError, setImgError] = useState(false);
+  const Icon = iconMap[company.icon] || iconMap.default;
+
+  // No logo or image failed → show icon
+  if (!company.logo || imgError) {
+    return (
+      <Icon
+        className="w-4 h-4 shrink-0"
+        style={{ color: isActive ? company.color : "currentColor" }}
+      />
+    );
+  }
+
+  // Logo available → show image
+  return (
+    <img
+      src={company.logo}
+      alt={company.short_name_en || ""}
+      className="w-5 h-5 object-contain shrink-0 rounded"
+      loading="lazy"
+      onError={() => setImgError(true)}
+    />
+  );
+}
+
+export default function CompanyFilter({
+  activeCompany,
+  onCompanyChange,
+  companies,
+}: CompanyFilterProps) {
   const { lang } = useI18n();
   const isRtl = lang === "dari" || lang === "pashto";
 
-  // Fallback if API companies not loaded yet
-  const filterCompanies = companies.length > 0 ? companies : [
-    { id: "all", slug: "all", nameEn: "All Projects", nameDari: "همه پروژه‌ها", namePashto: "ټولې پروژې", icon: "Building2", color: "#D4AF37" },
-    { id: "hcrc", slug: "hcrc", nameEn: "Hafez Construction", nameDari: "حافظ ساختمان", namePashto: "حافظ جوړونه", icon: "Building2", color: "#B22222" },
-    { id: "albahrain", slug: "albahrain", nameEn: "Al-Bahrain Mining", nameDari: "البحرین معادن", namePashto: "البحرین کانونه", icon: "Mountain", color: "#1A237E" },
-    { id: "zainnoorain", slug: "zainnoorain", nameEn: "Zain Noorain", nameDari: "زین نورین", namePashto: "زین نورین", icon: "HardHat", color: "#F57C00" },
-    { id: "almadinah", slug: "almadinah", nameEn: "Al-Madinah Trading", nameDari: "المدینه تجارت", namePashto: "المدینه سوداګري", icon: "Store", color: "#2E7D32" },
-    { id: "haramain", slug: "haramain", nameEn: "Haramain Financial", nameDari: "حرمین مالی", namePashto: "حرمین مالي", icon: "Landmark", color: "#FFD700" },
-    { id: "alkoozi", slug: "alkoozi", nameEn: "Al-Koozi Logistics", nameDari: "الکوزی لوجستیک", namePashto: "الکوزی لوجستیک", icon: "Truck", color: "#00838F" },
-  ];
+  const allOption = {
+    id: "all",
+    slug: "all",
+    short_name_en: "All Projects",
+    short_name_dari: "همه پروژه‌ها",
+    short_name_pashto: "ټولې پروژې",
+    icon: "Building2",
+    color: "#D4AF37",
+    logo: null,
+  };
+
+  const filterCompanies = [allOption, ...companies];
 
   const getName = (company: any) => {
-    if (lang === "en") return company.nameEn;
-    if (lang === "dari") return company.nameDari || company.nameEn;
-    return company.namePashto || company.nameDari || company.nameEn;
+    if (lang === "en") return company.short_name_en || "Unknown";
+    if (lang === "dari")
+      return company.short_name_dari || company.short_name_en || "Unknown";
+    return (
+      company.short_name_pashto ||
+      company.short_name_dari ||
+      company.short_name_en ||
+      "Unknown"
+    );
   };
 
   return (
-    <section dir={isRtl ? "rtl" : "ltr"} className="relative py-8 bg-hgc-bg border-b border-hgc-border sticky top-0 z-40 backdrop-blur-xl">
+    <section
+      dir={isRtl ? "rtl" : "ltr"}
+      className="relative py-8 bg-hgc-bg border-b border-hgc-border sticky top-0 z-40 backdrop-blur-xl"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {filterCompanies.map((company) => {
-            const Icon = iconMap[company.icon] || iconMap.default;
             const isActive = activeCompany === company.slug;
 
             return (
@@ -64,16 +112,19 @@ export default function CompanyFilter({ activeCompany, onCompanyChange, companie
                     : "text-hgc-text-muted hover:text-hgc-text-secondary hover:bg-hgc-surface-elevated"
                 }`}
                 style={{
-                  backgroundColor: isActive ? `${company.color}18` : "transparent",
-                  borderColor: isActive ? `${company.color}40` : "transparent",
+                  backgroundColor: isActive
+                    ? `${company.color}18`
+                    : "transparent",
+                  borderColor: isActive
+                    ? `${company.color}40`
+                    : "transparent",
                   borderWidth: "1px",
-                  boxShadow: isActive ? `0 4px 20px ${company.color}12` : "none",
+                  boxShadow: isActive
+                    ? `0 4px 20px ${company.color}12`
+                    : "none",
                 }}
               >
-                <Icon
-                  className="w-4 h-4 shrink-0"
-                  style={{ color: isActive ? company.color : "currentColor" }}
-                />
+                <CompanyIcon company={company} isActive={isActive} />
                 <span>{getName(company)}</span>
                 {isActive && (
                   <span

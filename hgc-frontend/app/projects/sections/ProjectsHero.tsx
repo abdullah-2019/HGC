@@ -36,13 +36,13 @@ export default function ProjectsHero() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/storage/uploads/project-hero.webp')`
+            backgroundImage: `url('/images/about.jpg')`
           }}
         />
       </div>
 
       {/* 1. VIGNETTE OVERLAY: Only darkens edges & bottom where text sits, leaving center bright */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: "radial-gradient(circle, rgba(15,43,91,0) 20%, rgba(15,43,91,0.4) 70%, rgba(15,43,91,0.7) 100%)"
@@ -63,7 +63,7 @@ export default function ProjectsHero() {
 
       {/* Content Container */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
-        
+
         {/* Badge */}
         <div
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/60 backdrop-blur-sm border border-hgc-gold/30 mb-6"
@@ -102,7 +102,7 @@ export default function ProjectsHero() {
         </h1>
 
         {/* 3. DESCRIPTION: Contained within a subtle frosted-glass background plate */}
-        <div 
+        <div
           className="px-6 py-4 rounded-2xl bg-slate-900/40 backdrop-blur-[4px] border border-white/5 max-w-2xl mx-auto shadow-lg"
           style={{ animation: "fadeInUp 1s ease-out 0.7s both" }}
         >

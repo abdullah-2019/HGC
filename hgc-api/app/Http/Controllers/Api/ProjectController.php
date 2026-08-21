@@ -194,38 +194,45 @@ class ProjectController extends Controller
 
     /**
      * GET /api/companies/for-filter
-     * Returns companies list for the filter bar
+     * Returns ONLY companies that have at least one active project
      */
     public function companiesForFilter(): JsonResponse
     {
+        // Get distinct company IDs from active projects
+        $companyIds = Project::where('is_active', true)
+            ->whereNotNull('company_id')
+            ->distinct()
+            ->pluck('company_id');
+
         $companies = Company::where('is_active', true)
+            ->whereIn('id', $companyIds)
             ->orderBy('sort_order', 'asc')
-            ->get(['id', 'slug', 'name_en', 'name_dari', 'short_name_en', 'accent_color', 'icon_name']);
+            ->get([
+                'id',
+                'slug',
+                'short_name_en',
+                'short_name_dari',
+                'short_name_pashto',
+                'accent_color',
+                'icon_name'
+            ]);
 
         $mapped = $companies->map(function ($company) {
             return [
                 'id' => (string) $company->id,
                 'slug' => $company->slug,
-                'nameEn' => $company->short_name_en ?: $company->name_en,
-                'nameDari' => $company->name_dari,
+                'short_name_en' => $company->short_name_en,
+                'short_name_dari' => $company->short_name_dari,
+                'short_name_pashto' => $company->short_name_pashto,
                 'icon' => $company->icon_name ?? 'Building2',
                 'color' => $company->accent_color ?? '#C9A227',
+                'logo' => $company->logo_url ? $this->storageUrl($company->logo_url) : null,
             ];
         });
 
-        // Prepend "All Projects" option
-        $allOption = [
-            'id' => 'all',
-            'slug' => 'all',
-            'nameEn' => 'All Projects',
-            'nameDari' => 'همه پروژه‌ها',
-            'icon' => 'Building2',
-            'color' => '#C9A227',
-        ];
-
         return response()->json([
             'success' => true,
-            'data' => array_merge([$allOption], $mapped->toArray()),
+            'data' => $mapped->values(),
         ]);
     }
 

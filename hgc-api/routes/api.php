@@ -52,6 +52,7 @@ Route::prefix('products')->group(function () {
 Route::prefix('companies')->group(function () {
     Route::get('/', [CompanyController::class, 'index']);
     Route::get('/featured', [CompanyController::class, 'featured']);
+    Route::get('/for-filter', [ProjectController::class, 'companiesForFilter']);
     Route::get('/{slug}', [CompanyController::class, 'show']);
     Route::get('/{slug}/profile', [CompanyController::class, 'profile']);
     Route::get('/{slug}/stats', [StatController::class, 'byCompany']);
