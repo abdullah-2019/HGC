@@ -121,43 +121,52 @@ interface ApiResponse<T> {
 }
 
 // ─── Normalize all image URLs from backend ──────────────
+// NOTE: This now returns a NEW object (immutable) instead of mutating the raw response.
 
 function normalizeAboutData(data: AboutPageData): AboutPageData {
-  // Hero background image
-  if (data.settings?.hero?.backgroundImage) {
-    data.settings.hero.backgroundImage = resolveImageUrl(data.settings.hero.backgroundImage);
-  }
-
-  // Story main image
-  if (data.story?.mainImage) {
-    data.story.mainImage = resolveImageUrl(data.story.mainImage);
-  }
-
-  // Carousel slides
-  if (Array.isArray(data.carousel)) {
-    data.carousel = data.carousel.map((slide) => ({
-      ...slide,
-      image: resolveImageUrl(slide.image),
-    }));
-  }
-
-  // Mission image
-  if (data.mission?.image) {
-    data.mission.image = resolveImageUrl(data.mission.image);
-  }
-
-  // Vision image
-  if (data.vision?.image) {
-    data.vision.image = resolveImageUrl(data.vision.image);
-  }
-
-  return data;
+  return {
+    ...data,
+    settings: data.settings
+      ? {
+          ...data.settings,
+          hero: {
+            ...data.settings.hero,
+            backgroundImage: resolveImageUrl(data.settings.hero.backgroundImage),
+          },
+        }
+      : data.settings,
+    story: data.story
+      ? {
+          ...data.story,
+          mainImage: resolveImageUrl(data.story.mainImage),
+        }
+      : data.story,
+    carousel: Array.isArray(data.carousel)
+      ? data.carousel.map((slide) => ({
+          ...slide,
+          image: resolveImageUrl(slide.image),
+        }))
+      : data.carousel,
+    mission: data.mission
+      ? {
+          ...data.mission,
+          image: resolveImageUrl(data.mission.image),
+        }
+      : data.mission,
+    vision: data.vision
+      ? {
+          ...data.vision,
+          image: resolveImageUrl(data.vision.image),
+        }
+      : data.vision,
+  };
 }
 
 // ─── Fetch function ─────────────────────────────────────
 
 async function fetchAboutPageData(): Promise<AboutPageData> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "https://api.hgc.af/";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "https://api.hgc.af";
   const API_BASE = `${baseUrl}/api`;
   const isDev = process.env.NODE_ENV === "development";
 
@@ -187,7 +196,7 @@ async function fetchAboutPageData(): Promise<AboutPageData> {
     if (isDev) {
       console.log("[AboutPage] API Response keys:", Object.keys(responseData || {}));
       console.log("[AboutPage] carousel count:", responseData.carousel?.length);
-      console.log("[AboutPage] carousel images:", responseData.carousel?.map((s) => s.image));
+      console.log("[AboutPage] raw carousel images:", responseData.carousel?.map((s) => s.image));
     }
 
     return responseData;
@@ -237,7 +246,9 @@ export default async function AboutPage() {
     console.log("[AboutPage] data.carousel:", Array.isArray(data.carousel) ? `array[${data.carousel.length}]` : typeof data.carousel);
     console.log("[AboutPage] resolved carousel images:", data.carousel?.map((s) => s.image));
     console.log("[AboutPage] data.mission:", data.mission ? "present" : "null");
+    console.log("[AboutPage] resolved mission image:", data.mission?.image);
     console.log("[AboutPage] data.vision:", data.vision ? "present" : "null");
+    console.log("[AboutPage] resolved vision image:", data.vision?.image);
     console.log("[AboutPage] data.coreValues:", data.coreValues ? "present" : "null");
   }
 
