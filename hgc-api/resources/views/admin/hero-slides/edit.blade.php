@@ -42,7 +42,7 @@
 
                         <input type="file" name="image_file" accept="image/webp,image/jpeg,image/png"
                             class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-600 file:text-white hover:file:bg-primary-700 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-colors"
-                            required>
+                            >
                         <p class="mt-1 text-xs text-gray-500">Leave empty to keep current image. Accepted: webp, jpg, png.
                             Max 2MB.</p>
                         @error('image_file')
