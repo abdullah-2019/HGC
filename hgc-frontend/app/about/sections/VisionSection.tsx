@@ -150,8 +150,12 @@ export default function VisionSection({ vision }: VisionSectionProps) {
             }`}
           >
             <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden aspect-[3/4]">
-                <div className="absolute inset-0 bg-cover bg-center img-zoom" style={{ backgroundImage: `url(${data.image})` }} />
+              {/* Changed from aspect-[3/4] to aspect-square */}
+              <div className="relative rounded-2xl overflow-hidden aspect-square">
+                <div
+                  className="absolute inset-0 w-full h-full bg-cover bg-center img-zoom"
+                  style={{ backgroundImage: `url(${data.image})` }}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-hgc-navy-deep/50 via-transparent to-hgc-navy-deep/20" />
               </div>
 
