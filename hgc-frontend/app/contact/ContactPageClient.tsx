@@ -370,17 +370,24 @@ export default function ContactPageClient({ contactInfo, error }: Props) {
                     />
                     <p className="text-hgc-text-secondary leading-relaxed">{address}</p>
                   </div>
-
                   {phones && (
-                    <div className="mt-4 flex items-center gap-3">
-                      <Phone size={18} className="shrink-0 text-hgc-gold" />
-                      <a
-                        href={`tel:${phones.replace(/\s/g, "")}`}
-                        className="text-hgc-text-secondary transition-colors hover:text-hgc-gold"
-                        dir="ltr"
-                      >
-                        {phones}
-                      </a>
+                    <div className="mt-4 flex items-start gap-3">
+                      <Phone size={18} className="mt-1 shrink-0 text-hgc-gold" />
+                      <div className="flex flex-col gap-1">
+                        {phones.split(",").map((phone, idx) => {
+                          const trimmed = phone.trim();
+                          return (
+                            <a
+                              key={idx}
+                              href={`tel:${trimmed.replace(/\s/g, "")}`}
+                              className="text-hgc-text-secondary transition-colors hover:text-hgc-gold"
+                              dir="ltr"
+                            >
+                              {trimmed}
+                            </a>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
 
