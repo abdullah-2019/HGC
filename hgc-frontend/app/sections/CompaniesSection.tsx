@@ -28,6 +28,62 @@ interface Company {
   hero_image_url: string | null;
 }
 
+// Helper: convert Western digits to localized digits
+function localizeNumber(num: number, lang: string): string {
+  const western = "0123456789";
+  const persian = "۰۱۲۳۴۵۶۷۸۹"; // Dari / Pashto
+  const pashto = "۰۱۲۳۴۵۶۷۸۹";  // Same Arabic-Indic digits
+
+  const str = num.toString();
+  if (lang === "en") return str;
+
+  const map = lang === "dari" || lang === "pashto" ? persian : western;
+  return str
+    .split("")
+    .map((ch) => map[western.indexOf(ch)] ?? ch)
+    .join("");
+}
+
+// Helper: dynamic heading text based on count
+function getHeadingText(count: number, lang: string) {
+  const n = localizeNumber(count, lang);
+
+  if (lang === "en") {
+    return (
+      <>
+        {count === 1 ? "One" : n} Specialized{" "}
+        <span className="text-hgc-companies-gold">
+          {count === 1 ? "Company" : "Companies"}
+        </span>
+      </>
+    );
+  }
+
+  if (lang === "dari") {
+    return (
+      <>
+        {n} شرکت{" "}
+        <span className="text-hgc-companies-gold">تخصصی</span>
+      </>
+    );
+  }
+
+  // Pashto
+  return (
+    <>
+      {n}{" "}
+      <span className="text-hgc-companies-gold">تخصصي</span> شرکتونه
+    </>
+  );
+}
+
+// Helper: dynamic sub-label (badge)
+function getBadgeText(count: number, lang: string) {
+  if (lang === "en") return count === 1 ? "Our Company" : "Our Group";
+  if (lang === "dari") return count === 1 ? "شرکت ما" : "گروپ ما";
+  return count === 1 ? "زموږ شرکت" : "زموږ ګروپ";
+}
+
 export default function CompaniesSection() {
   const { lang } = useI18n();
   const isRtl = lang === "dari" || lang === "pashto";
@@ -74,32 +130,22 @@ export default function CompaniesSection() {
     );
   }
 
+  const count = companies.length;
+
   return (
     <section dir={isRtl ? "rtl" : "ltr"} className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--color-hgc-companies-gold)/5_0%,_transparent_50%)]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
           <span className="inline-block px-4 py-1 rounded-full bg-hgc-companies-gold/10 text-hgc-companies-gold text-sm font-medium mb-4">
-            {lang === "en" ? "Our Group" : lang === "dari" ? "گروپ ما" : "زموږ ګروپ"}
+            {getBadgeText(count, lang)}
           </span>
           <h2 className="text-4xl lg:text-5xl font-bold text-hgc-companies-text mb-4">
-            {lang === "en" ? (
-              <>
-                Six Specialized <span className="text-hgc-companies-gold">Companies</span>
-              </>
-            ) : lang === "dari" ? (
-              <>
-                شش شرکت <span className="text-hgc-companies-gold">تخصصی</span>
-              </>
-            ) : (
-              <>
-                شپږ <span className="text-hgc-companies-gold">تخصصي</span> شرکتونه
-              </>
-            )}
+            {getHeadingText(count, lang)}
           </h2>
           <p className="text-hgc-companies-text-secondary max-w-2xl mx-auto">
             {lang === "en"
-              ? "Each company brings unique expertise to deliver comprehensive solutions across Afghanistan."
+              ? `Each company brings unique expertise to deliver comprehensive solutions across Afghanistan.`
               : lang === "dari"
                 ? "هر شرکت تخصص منحصر به فردی را برای ارائه راه حل های جامع در سراسر افغانستان به ارمغان می آورد."
                 : "هر شرکت ځانګړې مهارت راوړي ترڅو په افغانستان کې جامع حلونه وړاندې کړي."}
